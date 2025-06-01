@@ -5,7 +5,7 @@ bringing a more modernized style.
 
 ## Run
 
-To run the game locally, you will need to install [Deno](https://denoland.com).
+To run the game locally, you will need to install [Deno](https://deno.com).
 
 First, run the following command in your terminal (or command line) while being
 inside the checked out repository:
