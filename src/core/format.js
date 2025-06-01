@@ -8,21 +8,15 @@ function isEND() {
   return player.celestials.pelle.doomed && Math.random() < threshold;
 }
 
-window.format = function format(value, places = 0, placesUnder1000 = 0) {
+window.format = function format(value, places = 2, placesUnder1000 = 2) {
   if (isEND()) return "END";
   // eslint-disable-next-line no-param-reassign
   if (!isDecimal(value)) value = new Decimal(value);
-  if (value.lt("e9e15")) return Notations.current.format(value, places, placesUnder1000, 3);
-  return LNotations.current.formatLDecimal(value, places);
+  return formatInternal(value, places)
 };
 
 window.formatInt = function formatInt(value) {
   if (isEND()) return "END";
-  // Suppress painful formatting for Standard because it's the most commonly used and arguably "least painful"
-  // of the painful notations. Prevents numbers like 5004 from appearing imprecisely as "5.00 K" for example
-  if (Notations.current.isPainful && Notations.current.name !== "Standard") {
-    return format(value, 2);
-  }
   if (typeof value === "number") {
     return value > 1e9 ? format(value, 2, 2) : formatWithCommas(value.toFixed(0));
   }
@@ -40,38 +34,11 @@ window.formatFloat = function formatFloat(value, digits) {
 
 window.formatPostBreak = function formatPostBreak(value, places, placesUnder1000) {
   if (isEND()) return "END";
-  const notation = Notations.current;
-  const lNotation = LNotations.current;
-  // This is basically just a copy of the format method from notations library,
-  // with the pre-break case removed.
-  if (typeof value === "number" && !Number.isFinite(value)) {
-    return notation.infinite;
-  }
+  return format(value, places);
+};
 
-  const decimal = Decimal.fromValue_noAlloc(value);
-
-  if (decimal.eq(0)) return notation.formatUnder1000(0, placesUnder1000);
-
-  if (decimal.abs().log10().lt(-300)) {
-    return decimal.sign < 0
-      ? notation.formatVerySmallNegativeDecimal(decimal.abs(), placesUnder1000)
-      : notation.formatVerySmallDecimal(decimal, placesUnder1000);
-  }
-
-  if (decimal.abs().log10().lt(3)) {
-    const number = decimal.toNumber();
-    return number < 0
-      ? notation.formatNegativeUnder1000(Math.abs(number), placesUnder1000)
-      : notation.formatUnder1000(number, placesUnder1000);
-  }
-
-  if (decimal.layer >= 2) {
-    return lNotation.formatLDecimal(decimal, places);
-  }
-
-  return decimal.sign < 0
-    ? notation.formatNegativeDecimal(decimal.abs(), places)
-    : notation.formatDecimal(decimal, places);
+window.formatPlus = function formatX(value, places, placesUnder1000) {
+  return `+${format(value, places, placesUnder1000)}`;
 };
 
 window.formatX = function formatX(value, places, placesUnder1000) {
@@ -268,7 +235,174 @@ window.makeEnumeration = function makeEnumeration(items) {
   if (items.length === 0) return "";
   if (items.length === 1) return items[0];
   if (items.length === 2) return `${items[0]} and ${items[1]}`;
-  const commaSeparated = items.slice(0, items.length - 1).join(", ");
+  const commaSeparated = items.slice(0, - 1).join(", ");
   const last = items[items.length - 1];
   return `${commaSeparated}, and ${last}`;
 };
+
+window.exponentialFormat = function exponentialFormat(num, precision, mantissa = true) {
+    let e = Decimal.log10(num).floor();
+    let m = Decimal.div(num, Decimal.pow(10, e));
+    if (m.toStringWithDecimalPlaces(precision) === "10") {
+        m = new Decimal(1);
+        e = e.add(1);
+    }
+    const eString = e.gte(1e6)
+        ? format(e, Math.max(Math.max(precision, 3), 2))
+        : e.gte(10000)
+          ? commaFormat(e, 0)
+          : e.toStringWithDecimalPlaces(0);
+    if (mantissa) {
+        return m.toStringWithDecimalPlaces(precision) + "e" + eString;
+    } else {
+        return "e" + eString;
+    }
+}
+
+window.commaFormat = function commaFormat(num, precision) {
+    if (num == null) {
+        return "NaN";
+    }
+    num = new Decimal(num);
+    if (num.mag < 0.001) {
+        return (0).toFixed(precision);
+    }
+    const init = num.toStringWithDecimalPlaces(precision);
+    const portions = init.split(".");
+    portions[0] = portions[0].replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
+    if (portions.length === 1) return portions[0];
+    return portions[0] + "." + portions[1];
+}
+
+window.regularFormat = function regularFormat(num, precision) {
+    if (num == null) {
+        return "NaN";
+    }
+    num = new Decimal(num);
+    if (num.mag < 0.0001) {
+        return (0).toFixed(precision);
+    }
+    if (num.mag < 0.1 && precision !== 0) {
+        precision = Math.max(
+            Math.max(precision, num.log10().negate().ceil().toNumber()),
+            2
+        );
+    }
+    return num.toStringWithDecimalPlaces(precision);
+}
+
+const eeee1000 = new Decimal("eeee1000");
+const e100000 = new Decimal("e100000");
+const e1000 = new Decimal("e1000");
+const e9 = new Decimal(1e9);
+const e6 = new Decimal(1e6);
+const e3 = new Decimal(1e3);
+const nearOne = new Decimal(0.98);
+const thousandth = new Decimal(0.001);
+const zero = new Decimal(0);
+function formatInternal(num, precision = 2, small = false) {
+    num = new Decimal(num);
+    if (isNaN(num.sign) || isNaN(num.layer) || isNaN(num.mag)) {
+        return "NaN";
+    }
+    if (num.sign < 0) {
+        return "-" + format(num.neg(), precision);
+    }
+    if (num.mag === Number.POSITIVE_INFINITY) {
+        return "Infinity";
+    }
+    if (num.gte(eeee1000)) {
+        const slog = num.slog();
+        if (slog.gte(e6)) {
+            return "F" + format(slog.floor());
+        } else {
+            return (
+                Decimal.pow(10, slog.sub(slog.floor())).toStringWithDecimalPlaces(3) +
+                "F" +
+                commaFormat(slog.floor(), 0)
+            );
+        }
+    } else if (num.gte("e1e6")) {
+        return exponentialFormat(num, 0, false);
+    } else if (num.gte(e6)) {
+        return exponentialFormat(num, precision);
+    } else if (num.gte(e3)) {
+        return commaFormat(num, 0);
+    } else if (num.gte(thousandth) || !small) {
+        return regularFormat(num, precision);
+    } else if (num.eq(zero)) {
+        return (0).toFixed(precision);
+    }
+
+    num = invertOOM(num);
+    if (num.lt(e1000)) {
+        const val = exponentialFormat(num, precision);
+        return val.replace(/([^(?:e|F)]*)$/, "-$1");
+    } else {
+        return format(num, precision) + "⁻¹";
+    }
+}
+
+window.formatWhole = function formatWhole(num) {
+    num = new Decimal(num);
+    if (num.sign < 0) {
+        return "-" + formatWhole(num.neg());
+    }
+    if (num.gte(e9)) {
+        return format(num);
+    }
+    if (num.lte(nearOne) && !num.eq(zero)) {
+        return format(num);
+    }
+    return format(num, 0);
+}
+
+function toPlaces(x, precision, maxAccepted) {
+    x = new Decimal(x);
+    let result = x.toStringWithDecimalPlaces(precision);
+    if (new Decimal(result).gte(maxAccepted)) {
+        result = Decimal.sub(maxAccepted, Math.pow(0.1, precision)).toStringWithDecimalPlaces(
+            precision
+        );
+    }
+    return result;
+}
+
+// Will also display very small numbers
+window.formatSmall = function formatSmall(x, precision) {
+    return format(x, precision, true);
+}
+
+function invertOOM(x) {
+    let e = Decimal.log10(x).ceil();
+    const m = Decimal.div(x, Decimal.pow(10, e));
+    e = e.neg();
+    x = new Decimal(10).pow(e).times(m);
+
+    return x;
+}
+
+window.formatGain = function formatGain(base, gain, precision = 2) {
+  let difference = gain.div(base);
+  if (difference.lte(1e10)) {
+    return `(+${format(gain, precision)}/sec)`;
+  }
+
+  difference = difference.log10()
+  if (difference.lte(1e10)) {
+    return `(+${format(difference.mul(player.options.updateRate ?? 20), precision)} OoM/sec)`;
+  }
+
+  difference = gain.plus(1).log10().div(base.plus(1).log10())
+  if (difference.lte(1e10)) {
+    return `(+${format(difference.mul(player.options.updateRate ?? 20), precision)} OoM^2/sec)`;
+  }
+
+  difference = gain.plus(1).log10().plus(1).log10().plus(1).log10().div(base.plus(1).log10().plus(1).log10().plus(1).log10())
+  if (difference.lte(1e10)) {
+    return `(+${format(difference.mul(player.options.updateRate ?? 20), precision)} OoM^3/sec)`;
+  }
+
+  difference = gain.plus(10).slog(10).div(base.plus(10).slog(10))
+  return `(+${format(difference.mul(player.options.updateRate ?? 20), precision)} OoM^OoM/sec)`;
+}

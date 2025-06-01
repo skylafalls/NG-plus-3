@@ -1,7 +1,8 @@
 <script>
 import GenericDimensionRowText from "@/components/GenericDimensionRowText";
+import { defineComponent } from "vue";
 
-export default {
+export default defineComponent({
   name: "ModernAntimatterDimensionRow",
   components: {
     GenericDimensionRowText
@@ -30,7 +31,6 @@ export default {
       continuumValue: new Decimal(0),
       isShown: false,
       isCostsAD: false,
-      amountDisplay: "",
       hasTutorial: false,
     };
   },
@@ -88,9 +88,7 @@ export default {
       this.howManyCanBuy.copyFrom(buyUntil10 ? dimension.howManyCanBuy : Decimal.min(dimension.howManyCanBuy, 1));
       this.singleCost.copyFrom(dimension.cost);
       this.until10Cost.copyFrom(dimension.cost.times(Decimal.max(dimension.howManyCanBuy, 1)));
-      if (tier < 8) {
-        this.rateOfChange.copyFrom(dimension.rateOfChange);
-      }
+      this.rateOfChange.copyFrom(dimension.rateOfChange)
       this.isAffordable = dimension.isAffordable;
       this.buyUntil10 = buyUntil10;
       this.isContinuumActive = Laitela.continuumActive;
@@ -98,7 +96,6 @@ export default {
       this.isShown =
         (DimBoost.totalBoosts.gt(0) && DimBoost.totalBoosts.add(3).gte(tier)) || PlayerProgress.infinityUnlocked();
       this.isCostsAD = NormalChallenge(6).isRunning && tier > 2 && !this.isContinuumActive;
-      this.amountDisplay = this.tier < 8 ? format(this.amount, 2) : formatInt(this.amount);
       this.hasTutorial = (tier === 1 && Tutorial.isActive(TUTORIAL_STATE.DIM1)) ||
         (tier === 2 && Tutorial.isActive(TUTORIAL_STATE.DIM2));
     },
@@ -127,7 +124,7 @@ export default {
       };
     }
   }
-};
+});
 </script>
 
 <template>
@@ -140,7 +137,7 @@ export default {
       :tier="tier"
       :name="name"
       :multiplier-text="formatX(multiplier, 2, 2)"
-      :amount-text="amountDisplay"
+      :amount="amount"
       :rate="rateOfChange"
     />
     <div class="l-dim-row-multi-button-container c-modern-dim-tooltip-container">

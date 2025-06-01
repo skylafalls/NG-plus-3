@@ -418,17 +418,20 @@ export const devMigrations = {
       eternityAutobuyer.mode = ["amount", "time", "relative"].indexOf(player.autoEternityMode);
       const condition = new Decimal(old.limit);
       switch (player.autoEternityMode) {
-        case "amount":
+        case 'amount': {
           eternityAutobuyer.amount = condition;
           break;
-        case "time":
+        }
+        case 'time': {
           eternityAutobuyer.time = condition.lt(DC.NUMMAX)
             ? condition.toNumber()
             : eternityAutobuyer.time;
           break;
-        case "relative":
+        }
+        case 'relative': {
           eternityAutobuyer.xLast = condition;
           break;
+        }
       }
 
       delete player.realityBuyer;
@@ -762,7 +765,7 @@ export const devMigrations = {
     player => {
       for (const script of Object.values(player.reality.automator.scripts)) {
         script.content =
-          script.content.replace(/^([ \t]*)(wait|if|while|until)([\t ]+)(completions)/igmu, "$1$2$3pending $4");
+          script.content.replaceAll(/^([ \t]*)(wait|if|while|until)([\t ]+)(completions)/igmu, "$1$2$3pending $4");
       }
     },
     player => {

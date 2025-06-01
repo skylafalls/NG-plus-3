@@ -120,7 +120,7 @@ export const GlyphSelection = {
 };
 
 export function isRealityAvailable() {
-  return player.records.thisReality.maxEP.gte("1e4000") && TimeStudy.reality.isBought;
+  return false;
 }
 
 // Returns the number of "extra" realities from stored real time or Multiversal effects, should be called
@@ -221,22 +221,22 @@ export function processManualReality(sacrifice, glyphID) {
 }
 
 export function runRealityAnimation() {
-  document.getElementById("ui").style.userSelect = "none";
-  document.getElementById("ui").style.animation = "a-realize 10s 1";
-  document.getElementById("realityanimbg").style.animation = "a-realizebg 10s 1";
-  document.getElementById("realityanimbg").style.display = "block";
-  if (Theme.current().isDark()) document.getElementById("realityanimbg").style.filter = "invert(1)";
-  else document.getElementById("realityanimbg").style.filter = "";
+  document.querySelector("#ui").style.userSelect = "none";
+  document.querySelector("#ui").style.animation = "a-realize 10s 1";
+  document.querySelector("#realityanimbg").style.animation = "a-realizebg 10s 1";
+  document.querySelector("#realityanimbg").style.display = "block";
+  if (Theme.current().isDark()) document.querySelector("#realityanimbg").style.filter = "invert(1)";
+  else document.querySelector("#realityanimbg").style.filter = "";
   setTimeout(() => {
-    document.getElementById("realityanimbg").play();
-    document.getElementById("realityanimbg").currentTime = 0;
-    document.getElementById("realityanimbg").play();
+    document.querySelector("#realityanimbg").play();
+    document.querySelector("#realityanimbg").currentTime = 0;
+    document.querySelector("#realityanimbg").play();
   }, 2000);
   setTimeout(() => {
-    document.getElementById("ui").style.userSelect = "auto";
-    document.getElementById("ui").style.animation = "";
-    document.getElementById("realityanimbg").style.animation = "";
-    document.getElementById("realityanimbg").style.display = "none";
+    document.querySelector("#ui").style.userSelect = "auto";
+    document.querySelector("#ui").style.animation = "";
+    document.querySelector("#realityanimbg").style.animation = "";
+    document.querySelector("#realityanimbg").style.display = "none";
   }, 10000);
 }
 

@@ -131,9 +131,7 @@ const Positions = Object.freeze({
 function pelleRiftFill(name, index, textAngle, fillType) {
   let visibleCheck, progressFn, legendFn, percentFn, incompleteClass, nodeFill, connectorFill;
   switch (fillType) {
-    case FILL_STATE.FILL:
-      // The curve starts inside of the node, so we give the completion variable a bit of a headstart so that we can
-      // immediately see some filling even when it's pretty much still empty
+    case FILL_STATE.FILL: {
       visibleCheck = () => riftFillStage(name) === FILL_STATE.FILL;
       progressFn = () => Math.clamp(0.1 + PelleRifts[name.toLowerCase()].realPercentage / 0.9, 1e-6, 1);
       legendFn = () => false;
@@ -142,11 +140,8 @@ function pelleRiftFill(name, index, textAngle, fillType) {
       nodeFill = "crimson";
       connectorFill = "crimson";
       break;
-    case FILL_STATE.DRAIN:
-      // The logarithmic curve code sometimes throws errors if you attempt to draw with complete === 0, so we cheat and
-      // make it a really tiny number that should format to 0 in most notations. We also do a pow in order to make it
-      // visually smoother, because the generator spiral blocks the bottom bit and makes it look static near the end of
-      // the drain
+    }
+    case FILL_STATE.DRAIN: {
       visibleCheck = () => riftFillStage(name) >= FILL_STATE.DRAIN;
       progressFn = () => Math.clamp(Math.sqrt(PelleRifts[name.toLowerCase()].reducedTo), 1e-6, 1);
       legendFn = () => riftFillStage(name) === FILL_STATE.DRAIN && PelleRifts[name.toLowerCase()].reducedTo < 1;
@@ -155,7 +150,8 @@ function pelleRiftFill(name, index, textAngle, fillType) {
       nodeFill = "crimson";
       connectorFill = "#550919";
       break;
-    case FILL_STATE.OVERFILL:
+    }
+    case FILL_STATE.OVERFILL: {
       visibleCheck = () => riftFillStage(name) === FILL_STATE.OVERFILL;
       progressFn = () => Math.clamp(PelleRifts[name.toLowerCase()].percentage - 1, 1e-6, 1);
       percentFn = () => PelleRifts[name.toLowerCase()].percentage;
@@ -164,6 +160,7 @@ function pelleRiftFill(name, index, textAngle, fillType) {
       nodeFill = "#ff7700";
       connectorFill = "#ff9900";
       break;
+    }
   }
 
   return {
@@ -1131,7 +1128,7 @@ export const celestialNavigation = {
     node: {
       clickAction: () => Tab.celestials.ra.show(true),
       incompleteClass: "c-celestial-nav__test-incomplete",
-      symbol: "\uf185",
+      symbol: "\uF185",
       symbolOffset: "2",
       fill: "#9063de",
       position: Positions.raReality,
@@ -1189,7 +1186,7 @@ export const celestialNavigation = {
     drawOrder: -1,
     connector: {
       pathStart: 0.05,
-      pathEnd: 0.70,
+      pathEnd: 0.7,
       path: new LinearPath(Positions.raPetTeresa, Positions.teresa),
       fill: "url(#gradRaTeresa)",
       completeWidth: 6,
@@ -1240,7 +1237,7 @@ export const celestialNavigation = {
     drawOrder: -1,
     connector: {
       pathStart: 0.05,
-      pathEnd: 0.60,
+      pathEnd: 0.6,
       path: new LinearPath(Positions.raPetEffarig, Positions.effarigNode),
       fill: "url(#gradRaEffarig)",
       completeWidth: 6,
@@ -1646,14 +1643,14 @@ export const celestialNavigation = {
     },
     connector: [
       {
-        pathStart: 0.10,
+        pathStart: 0.1,
         pathEnd: 0.89,
         path: new LinearPath(Positions.laitelaFirstLeft, Positions.laitelaSecondCenter),
         fill: "white",
         completeWidth: 6,
         incompleteWidth: 4,
       }, {
-        pathStart: 0.10,
+        pathStart: 0.1,
         pathEnd: 0.89,
         path: new LinearPath(Positions.laitelaFirstRight, Positions.laitelaSecondCenter),
         fill: "white",

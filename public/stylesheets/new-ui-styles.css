@@ -12,6 +12,7 @@
   --color-antimatter--bg: #df50504d;
   --color-infinity--bg: #b67f334d;
   --color-eternity--bg: #b341e04d;
+  --color-quantum--bg: #41e0614d;
 }
 
 :root .t-s12 {
@@ -674,6 +675,14 @@ body.t-s12 {
 
 .l-dimension-row-time-dim:nth-child(even) {
   background-color: var(--color-eternity--bg);
+}
+
+.l-dimension-row-meta-dim:nth-child(even) {
+  background-color: var(--color-quantum--bg);
+}
+
+.c-meta-dim-description__accent {
+  color: var(--color-quantum);
 }
 
 .c-infinity-dim-description__accent {

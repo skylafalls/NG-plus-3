@@ -15,7 +15,7 @@ class DimBoostRequirement {
 
 export class DimBoost {
   static get power() {
-    if (NormalChallenge(8).isRunning) {
+    if (NormalChallenge(8).isRunning || EternityChallenge(13).isRunning) {
       return DC.D1;
     }
 
@@ -26,7 +26,8 @@ export class DimBoost {
       InfinityChallenge(7),
       TimeStudy(81)
     ))
-      .timesEffectsOf(
+    boost = boost.times(MetaDimensions.dimensionBoostMultiplier)
+    boost = boost.timesEffectsOf(
         TimeStudy(83),
         TimeStudy(231),
         Achievement(117),
@@ -102,7 +103,8 @@ export class DimBoost {
     let amount = DC.D20;
     const discount = Effects.sum(
       TimeStudy(211),
-      TimeStudy(222)
+      TimeStudy(222),
+      MasteryStudy(31)
     );
     if (tier === 6 && NormalChallenge(10).isRunning) {
       amount = amount.add(targetResets.sub(3).mul(DC.D20.sub(discount)).round());
@@ -148,7 +150,7 @@ export class DimBoost {
     if (boostEffects === "") return "Dimension Boosts are currently useless";
     const areDimensionsKept = (Perk.antimatterNoReset.isBought || Achievement(111).canBeApplied) &&
       (!Pelle.isDoomed || PelleUpgrade.dimBoostResetsNothing.isBought);
-    if (areDimensionsKept) return boostEffects[0].toUpperCase() + boostEffects.substring(1);
+    if (areDimensionsKept) return boostEffects[0].toUpperCase() + boostEffects.slice(1);
     return `Reset your Dimensions to ${boostEffects}`;
   }
 
@@ -249,7 +251,8 @@ function maxBuyDimBoosts() {
   let amount = DC.D20;
   const discount = Effects.sum(
     TimeStudy(211),
-    TimeStudy(222)
+    TimeStudy(222),
+    MasteryStudy(31)
   );
   let multiplierPerDB;
   if (tier === 6) {

@@ -22,7 +22,13 @@ class GalaxyRequirement {
 
 export class Galaxy {
   static get remoteStart() {
-    return Decimal.max(800, RealityUpgrade(21).effectOrDefault(0));
+    let start = new Decimal(800);
+    start = start.plusEffectsOf(
+      MasteryStudy(21),
+      MasteryStudy(22),
+      MasteryStudy(23),
+    );
+    return start;
   }
 
   static get requirement() {

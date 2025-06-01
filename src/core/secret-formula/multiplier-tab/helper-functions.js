@@ -4,17 +4,15 @@ export const MultiplierTabHelper = {
   // Helper method for counting enabled dimensions
   activeDimCount(type) {
     switch (type) {
-      case "AD":
-        // Technically not 100% correct, but within EC7 any AD8 production is going to be irrelevant compared to AD7
-        // and making the UI behave as if it's inactive produces a better look overall
-        return Math.clamp(AntimatterDimensions.all.filter(ad => ad.isProducing).length,
+      case 'AD': {return Math.clamp(AntimatterDimensions.all.filter(ad => ad.isProducing).length,
           1, EternityChallenge(7).isRunning ? 7 : 8);
-      case "ID":
-        return InfinityDimensions.all.filter(id => id.isProducing).length;
-      case "TD":
-        return TimeDimensions.all.filter(td => td.isProducing).length;
-      default:
-        throw new Error("Unrecognized Dimension type in Multiplier tab GameDB entry");
+      }
+      case 'ID': {return InfinityDimensions.all.filter(id => id.isProducing).length;
+      }
+      case 'TD': {return TimeDimensions.all.filter(td => td.isProducing).length;
+      }
+      default: {throw new Error("Unrecognized Dimension type in Multiplier tab GameDB entry");
+      }
     }
   },
 
@@ -109,43 +107,43 @@ export const MultiplierTabHelper = {
   // expected to be a three-character string "XXN", eg. "AD3" or "TD2"
   achievementDimCheck(ach, dimStr) {
     switch (ach) {
-      case 23:
-        return dimStr === "AD8";
+      case 23: {return dimStr === "AD8";
+      }
       case 28:
       case 31:
       case 68:
-      case 71:
-        return dimStr === "AD1";
-      case 94:
-        return dimStr === "ID1";
-      case 34:
-        return dimStr.substr(0, 2) === "AD" && Number(dimStr.charAt(2)) !== 8;
-      case 64:
-        return dimStr.substr(0, 2) === "AD" && Number(dimStr.charAt(2)) <= 4;
-      default:
-        return true;
+      case 71: {return dimStr === "AD1";
+      }
+      case 94: {return dimStr === "ID1";
+      }
+      case 34: {return dimStr.slice(0, 2) === "AD" && Number(dimStr.charAt(2)) !== 8;
+      }
+      case 64: {return dimStr.slice(0, 2) === "AD" && Number(dimStr.charAt(2)) <= 4;
+      }
+      default: {return true;
+      }
     }
   },
 
   // Helper method to check for whether a time study affects a particular dimension or not, see achievementDimCheck()
   timeStudyDimCheck(ts, dimStr) {
     switch (ts) {
-      case 11:
-        return dimStr === "TD1";
-      case 71:
-        return dimStr.substr(0, 2) === "AD" && Number(dimStr.charAt(2)) !== 8;
-      case 72:
-        return dimStr === "ID4";
-      case 73:
-        return dimStr === "TD3";
-      case 214:
-        return dimStr === "AD8";
-      case 227:
-        return dimStr === "TD4";
-      case 234:
-        return dimStr === "AD1";
-      default:
-        return true;
+      case 11: {return dimStr === "TD1";
+      }
+      case 71: {return dimStr.slice(0, 2) === "AD" && Number(dimStr.charAt(2)) !== 8;
+      }
+      case 72: {return dimStr === "ID4";
+      }
+      case 73: {return dimStr === "TD3";
+      }
+      case 214: {return dimStr === "AD8";
+      }
+      case 227: {return dimStr === "TD4";
+      }
+      case 234: {return dimStr === "AD1";
+      }
+      default: {return true;
+      }
     }
   },
 
@@ -153,15 +151,15 @@ export const MultiplierTabHelper = {
   ICDimCheck(ic, dimStr) {
     switch (ic) {
       case 1:
-      case 6:
-        return dimStr.substr(0, 2) === "ID";
+      case 6: {return dimStr.slice(0, 2) === "ID";
+      }
       case 3:
-      case 4:
-        return dimStr.substr(0, 2) === "AD";
-      case 8:
-        return dimStr.substr(0, 2) === "AD" && Number(dimStr.charAt(2)) > 1 && Number(dimStr.charAt(2)) < 8;
-      default:
-        return false;
+      case 4: {return dimStr.slice(0, 2) === "AD";
+      }
+      case 8: {return dimStr.slice(0, 2) === "AD" && Number(dimStr.charAt(2)) > 1 && Number(dimStr.charAt(2)) < 8;
+      }
+      default: {return false;
+      }
     }
   },
 
@@ -169,17 +167,17 @@ export const MultiplierTabHelper = {
   ECDimCheck(ec, dimStr) {
     switch (ec) {
       case 1:
-      case 10:
-        return dimStr.substr(0, 2) === "TD";
-      case 2:
-        return dimStr === "ID1";
+      case 10: {return dimStr.slice(0, 2) === "TD";
+      }
+      case 2: {return dimStr === "ID1";
+      }
       case 4:
-      case 9:
-        return dimStr.substr(0, 2) === "ID";
-      case 7:
-        return dimStr === "ID8";
-      default:
-        return false;
+      case 9: {return dimStr.slice(0, 2) === "ID";
+      }
+      case 7: {return dimStr === "ID8";
+      }
+      default: {return false;
+      }
     }
   },
 
@@ -202,7 +200,7 @@ export const MultiplierTabHelper = {
   },
 
   pluralizeDimensions(dims) {
-    return dims === 1 ? "Dimension\xa0" : "Dimensions";
+    return dims === 1 ? 'Dimension\u00A0' : "Dimensions";
   },
 
   // All of the following NC12-related functions are to make the parsing within the GameDB entry easier in terms of

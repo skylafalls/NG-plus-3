@@ -1902,7 +1902,7 @@ Rifts once the current cap has been reached.`,
   };
 
   // Very suboptimal code coming up. If anybody has a better solution, PLEASE, implement it.
-  const keyboardify = keybrd => map2dToObject(keybrd.split(",").map(str => str.split("")),
+  const keyboardify = keybrd => map2dToObject(keybrd.split(",").map(str => [...str]),
     key => key, (_key, x, y) => ({ x, y }));
 
   const qwerty = keyboardify(`1234567890,qwertyuiop,asdfghjkl,zxcvbnm`);

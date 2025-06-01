@@ -1150,7 +1150,7 @@ window.AffineTransform = class AffineTransform {
     throw new Error("unsupported operation");
   }
 
-  translated(offX, offY = undefined) {
+  translated(offX, offY) {
     if (offX instanceof Vector) {
       return new AffineTransform(this.a00, this.a01, this.a10, this.a11, this.o0 + offX.x, this.o1 + offX.y);
     }
@@ -1558,7 +1558,7 @@ window.LogarithmicSpiral = class LogarithmicSpiral extends Curve {
 };
 
 window.PiecewisePath = class PiecewisePath {
-  constructor(data = undefined) {
+  constructor(data) {
     this.path = data ? data : [];
   }
 

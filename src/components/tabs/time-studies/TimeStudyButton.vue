@@ -1,7 +1,8 @@
 <script>
 import CostDisplay from "@/components/CostDisplay";
+import { defineComponent } from "vue";
 
-export default {
+export default defineComponent({
   name: "TimeStudyButton",
   components: {
     CostDisplay
@@ -63,25 +64,46 @@ export default {
     },
     pathClass() {
       switch (this.study.type) {
-        case TIME_STUDY_TYPE.NORMAL:
+        case TIME_STUDY_TYPE.NORMAL: {
           switch (this.setup.path) {
-            case TIME_STUDY_PATH.ANTIMATTER_DIM: return "o-time-study-antimatter-dim";
-            case TIME_STUDY_PATH.INFINITY_DIM: return "o-time-study-infinity-dim";
-            case TIME_STUDY_PATH.TIME_DIM: return "o-time-study-time-dim";
-            case TIME_STUDY_PATH.ACTIVE: return "o-time-study-active";
-            case TIME_STUDY_PATH.PASSIVE: return "o-time-study-passive";
-            case TIME_STUDY_PATH.IDLE: return "o-time-study-idle";
-            case TIME_STUDY_PATH.LIGHT: return "o-time-study-light";
-            case TIME_STUDY_PATH.DARK: return "o-time-study-dark";
-            default: return "o-time-study-normal";
+            case TIME_STUDY_PATH.ANTIMATTER_DIM: {
+              return "o-time-study-antimatter-dim";
+            }
+            case TIME_STUDY_PATH.INFINITY_DIM: {
+              return "o-time-study-infinity-dim";
+            }
+            case TIME_STUDY_PATH.TIME_DIM: {
+              return "o-time-study-time-dim";
+            }
+            case TIME_STUDY_PATH.ACTIVE: {
+              return "o-time-study-active";
+            }
+            case TIME_STUDY_PATH.PASSIVE: {
+              return "o-time-study-passive";
+            }
+            case TIME_STUDY_PATH.IDLE: {
+              return "o-time-study-idle";
+            }
+            case TIME_STUDY_PATH.LIGHT: {
+              return "o-time-study-light";
+            }
+            case TIME_STUDY_PATH.DARK: {
+              return "o-time-study-dark";
+            }
+            default: {return "o-time-study-normal";
+            }
           }
-        case TIME_STUDY_TYPE.ETERNITY_CHALLENGE:
+        }
+        case TIME_STUDY_TYPE.ETERNITY_CHALLENGE: {
           return "o-time-study-eternity-challenge";
-        case TIME_STUDY_TYPE.DILATION:
-          if (this.study.id === 6) return "o-time-study-reality";
+        }
+        case TIME_STUDY_TYPE.DILATION: {
+          if (this.study.id === 7) return "o-time-study-reality";
           return "o-time-study-dilation";
-        case TIME_STUDY_TYPE.TRIAD:
+        }
+        case TIME_STUDY_TYPE.TRIAD: {
           return "o-time-study-triad";
+        }
       }
       return "";
     },
@@ -161,7 +183,7 @@ export default {
       if (this.study.purchaseUntil) this.study.purchaseUntil();
     }
   }
-};
+});
 
 export class TimeStudySetup {
   constructor(props) {

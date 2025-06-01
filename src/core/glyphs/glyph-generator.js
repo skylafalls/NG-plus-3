@@ -131,7 +131,7 @@ export const GlyphGenerator = {
     };
   },
 
-  realityGlyph(level = undefined) {
+  realityGlyph(level) {
     // eslint-disable-next-line no-param-reassign
     level = level ?? AlchemyResource.reality.effectValue;
     const str = rarityToStrength(100);
@@ -376,7 +376,7 @@ export const GlyphGenerator = {
     // The function here is an approximation of ^0.65, here is the old code:
     //     return Math.pow(Math.max(rng.normal() + 1, 1), 0.65);
     const x = Math.sqrt(Math.abs(rng.normal(), 0) + 1);
-    return -0.111749606737000 + x * (0.900603878243551 + x * (0.229108274476697 + x * -0.017962545983249));
+    return -0.111749606737 + x * (0.900603878243551 + x * (0.229108274476697 + x * -0.017962545983249));
   },
 
   copy(glyph) {

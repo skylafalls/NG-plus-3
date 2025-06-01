@@ -1,13 +1,13 @@
 <script>
-import { Replicanti } from "../../../core/replicanti";
+import { Replicanti } from "../../../core/replicanti.js";
 
-import wordShift from "@/core/word-shift";
+import wordShift from "@/core/word-shift.js";
 
-import ReplicantiUpgradeButton, { ReplicantiUpgradeButtonSetup } from "./ReplicantiUpgradeButton";
-import PrimaryButton from "@/components/PrimaryButton";
-import ReplicantiGainText from "./ReplicantiGainText";
+import ReplicantiUpgradeButton, { ReplicantiUpgradeButtonSetup } from "./ReplicantiUpgradeButton.vue";
+import PrimaryButton from "@/components/PrimaryButton.vue";
+import ReplicantiGainText from "./ReplicantiGainText.vue";
 
-import ReplicantiGalaxyButton from "./ReplicantiGalaxyButton";
+import ReplicantiGalaxyButton from "./ReplicantiGalaxyButton.vue";
 
 export default {
   name: "ReplicantiTab",

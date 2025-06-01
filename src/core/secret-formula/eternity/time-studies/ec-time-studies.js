@@ -140,5 +140,29 @@ export const ecTimeStudies = [
       path: "Time Dimension",
       forbiddenStudies: [71, 72],
     }
-  }
+  },
+  {
+    id: 13,
+    cost: new Decimal("1e150"),
+    requirement: ["M31", "M32", "M33"],
+    reqType: TS_REQUIREMENT_TYPE.ALL,
+    secondary: {
+      resource: "Dimension Boosts",
+      current: () => player.dimensionBoosts,
+      required: completions => new Decimal("5e5").plus(Decimal.mul(3e4, completions)),
+      formatValue: value => format(value)
+    }
+  },
+  {
+    id: 14,
+    cost: new Decimal("1e150"),
+    requirement: ["M34", "M35", "M36"],
+    reqType: TS_REQUIREMENT_TYPE.ALL,
+    secondary: {
+      resource: "Replicanti Chance",
+      current: () => Replicanti.chance,
+      required: completions => new Decimal("50000").plus(Decimal.mul(3000, completions)),
+      formatValue: value => format(value.mul(100))
+    }
+  },
 ];

@@ -17,23 +17,28 @@ export class ScriptTemplate {
     this.lines = [];
     this.warnings = [];
     switch (templateName) {
-      case "Climb EP":
+      case 'Climb EP': {
         this.templateClimbEP(params);
         break;
-      case "Grind Eternities":
+      }
+      case 'Grind Eternities': {
         this.templateGrindEternities(params);
         break;
-      case "Grind Infinities":
+      }
+      case 'Grind Infinities': {
         this.templateGrindInfinities(params);
         break;
-      case "Complete Eternity Challenge":
+      }
+      case 'Complete Eternity Challenge': {
         this.templateDoEC(params);
         break;
-      case "Unlock Dilation":
+      }
+      case 'Unlock Dilation': {
         this.templateUnlockDilation(params);
         break;
-      default:
-        throw new Error(`Unrecognized template name ${templateName} in ScriptTemplate`);
+      }
+      default: {throw new Error(`Unrecognized template name ${templateName} in ScriptTemplate`);
+      }
     }
   }
 
@@ -89,12 +94,12 @@ export class ScriptTemplate {
    */
   parseAutobuyerProp(mode, value) {
     switch (mode) {
-      case "mult":
-        return `${this.format(value)} x highest`;
-      case "time":
-        return `${this.format(value)} seconds`;
-      default:
-        throw new Error(`Unrecognized autobuyer mode ${mode} in automator script templates`);
+      case 'mult': {return `${this.format(value)} x highest`;
+      }
+      case 'time': {return `${this.format(value)} seconds`;
+      }
+      default: {throw new Error(`Unrecognized autobuyer mode ${mode} in automator script templates`);
+      }
     }
   }
 

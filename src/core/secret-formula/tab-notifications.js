@@ -105,7 +105,7 @@ export const tabNotifications = {
         tab: "studies"
       }
     ],
-    condition: () => !PlayerProgress.realityUnlocked() && TimeStudy.reality.canBeBought,
+    condition: () => false,
     events: [GAME_EVENT.ETERNITY_RESET_AFTER, GAME_EVENT.SAVE_CONVERTED_FROM_PREVIOUS_VERSION,
       GAME_EVENT.OFFLINE_CURRENCY_GAINED, GAME_EVENT.ACHIEVEMENT_UNLOCKED]
   },

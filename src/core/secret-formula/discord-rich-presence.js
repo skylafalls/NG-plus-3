@@ -50,13 +50,13 @@ export const discordRichPresence = {
       activityToken: () => Effarig.isRunning,
       resource: () => {
         switch (Effarig.currentStage) {
-          case EFFARIG_STAGES.INFINITY:
-            return `${format(player.antimatter, 2, 1)} AM`;
-          case EFFARIG_STAGES.ETERNITY:
-            return `${format(player.infinityPoints, 2)} IP`;
+          case EFFARIG_STAGES.INFINITY: {return `${format(player.antimatter, 2, 1)} AM`;
+          }
+          case EFFARIG_STAGES.ETERNITY: {return `${format(player.infinityPoints, 2)} IP`;
+          }
           case EFFARIG_STAGES.REALITY:
-          default:
-            return `${format(player.eternityPoints, 2)} EP`;
+          default: {return `${format(player.eternityPoints, 2)} EP`;
+          }
         }
       },
     },

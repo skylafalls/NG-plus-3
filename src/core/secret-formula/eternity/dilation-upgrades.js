@@ -84,14 +84,32 @@ export const dilationUpgrades = {
     formatCost: value => format(value, 2),
     purchaseCap: DC.BEMAX
   }),
-  doubleGalaxies: {
+  tachyonExponent: rebuyable({
     id: 4,
+    initialCost: 1e8,
+    increment: 1e5,
+    description: () => {
+      return "Increase the exponent of the Tachyon Particle formula";
+    },
+    effect: bought => {
+      let eff = Decimal.mul(0.75, bought);
+      if (eff.gte(8)) {
+        eff = eff.div(8).cbrt().mul(8);
+      }
+      return eff;
+    },
+    formatEffect: value => `+^${format(value, 2)}`,
+    formatCost: value => format(value, 2),
+    purchaseCap: DC.BEMAX
+  }),
+  doubleGalaxies: {
+    id: 5,
     cost: 5e6,
     description: () => `Gain twice as many Tachyon Galaxies, up to ${formatInt(500)} base Galaxies`,
     effect: 2
   },
   tdMultReplicanti: {
-    id: 5,
+    id: 6,
     cost: 1e9,
     description: () => {
       const rep10 = replicantiMult().pLog10();
@@ -108,45 +126,86 @@ export const dilationUpgrades = {
     effect: () => {
       let rep10 = replicantiMult().pLog10().div(10);
       rep10 = rep10.gt(9000) ? new Decimal(9000).add((rep10.sub(9e3)).div(2)) : rep10;
-      return Decimal.pow10(rep10);
+      return EternityChallenge(14).isRunning ? new Decimal(1) : Decimal.pow10(rep10);
     },
     formatEffect: value => formatX(value, 2, 1)
   },
   ndMultDT: {
-    id: 6,
+    id: 7,
     cost: 5e7,
     description: "Antimatter Dimension multiplier based on Dilated Time, unaffected by Time Dilation",
     effect: () => Currency.dilatedTime.value.pow(308).clampMin(1),
     formatEffect: value => formatX(value, 2, 1)
   },
+  dilatedTimeToReplicanti: {
+    id: 8,
+    cost: 1e20,
+    description: "Replicanti increases faster based on Dilated Time",
+    effect: () => Currency.dilatedTime.value.clampMin(1).pow(0.05),
+    formatEffect: value => formatX(value, 2, 1)
+  },
   ipMultDT: {
-    id: 7,
+    id: 9,
     cost: 2e12,
     description: "Gain a multiplier to Infinity Points based on Dilated Time",
-    effect: () => Currency.dilatedTime.value.pow(1000).clampMin(1),
+    effect: () => Currency.dilatedTime.value.clampMin(1).pow(500),
     formatEffect: value => formatX(value, 2, 1),
-    cap: () => Effarig.eternityCap
   },
   timeStudySplit: {
-    id: 8,
+    id: 10,
     cost: 1e10,
     description: "You can buy all three Time Study paths from the Dimension Split"
   },
   dilationPenalty: {
-    id: 9,
+    id: 11,
     cost: 1e11,
     description: () => `Reduce the Dilation penalty (${formatPow(1.05, 2, 2)} after reduction)`,
     effect: 1.05,
   },
+  eternitiesDTSynergy: {
+    id: 12,
+    cost: 1e25,
+    description: () => `Eternities and Dilated Time power up each other`,
+    // The actual effect is handled somewhere else.
+    effect: () => DC.D1,
+    formatEffect: (_value) => `${formatX(Currency.eternities.value.clampMin(1).pow(0.15), 2)} to DT, ${formatX(Currency.dilatedTime.value.clampMin(1).pow(0.1), 2)} to eternities`,
+  },
+  mdMultTickspeed: {
+    id: 13,
+    cost: 1e50,
+    description: "Meta Dimensions gain a multiplier based on tickspeed",
+    effect: () => Tickspeed.perSecond.plus(1).log10().plus(1).log10(),
+    formatEffect: value => `${formatX(value, 2, 1)}`
+  },
+  mdBuffDT: {
+    id: 14,
+    cost: 1e60,
+    description: "Meta-Dimensions Boosts and MD per-10 multiplier are boosted by Dilated Time",
+    effect: () => Currency.dilatedTime.value.plus(1).ln().plus(1).ln(),
+    formatEffect: value => `${formatX(value, 2, 1)}`
+  },
+  mdEffectBuff: {
+    id: 15,
+    cost: 1e80,
+    description: () => `Increase the meta-antimatter effect exponent to ${formatPow(9, 0)}`,
+    effect: 9,
+  },
+  dtMultMA: {
+    id: 16,
+    cost: 1e100,
+    description: () => `Dilated Time production is boosted based on Meta-Antimatter`,
+    effect: () => Currency.metaAntimatter.value.plus(1).log10().pow(0.5),
+    formatEffect: value => formatX(value, 2),
+  },
   ttGenerator: {
-    id: 10,
+    id: 17,
     cost: 1e15,
     description: "Generate Time Theorems based on Tachyon Particles",
     effect: () => Currency.tachyonParticles.value.div(20000),
     formatEffect: value => `${format(value, 2, 1)}/sec`
   },
   dtGainPelle: rebuyable({
-    id: 11,
+    id: 18,
     initialCost: 1e14,
     increment: 100,
     pelleOnly: true,
@@ -157,7 +216,7 @@ export const dilationUpgrades = {
     purchaseCap: DC.BEMAX
   }),
   galaxyMultiplier: rebuyable({
-    id: 12,
+    id: 19,
     initialCost: 1e15,
     increment: 1000,
     pelleOnly: true,
@@ -168,7 +227,7 @@ export const dilationUpgrades = {
     purchaseCap: DC.BEMAX
   }),
   tickspeedPower: rebuyable({
-    id: 13,
+    id: 20,
     initialCost: 1e16,
     increment: 1e4,
     pelleOnly: true,
@@ -179,14 +238,14 @@ export const dilationUpgrades = {
     purchaseCap: DC.BEMAX
   }),
   galaxyThresholdPelle: {
-    id: 14,
+    id: 21,
     cost: 1e45,
     pelleOnly: true,
     description: "Apply a cube root to the Tachyon Galaxy threshold",
     effect: 1 / 3
   },
   flatDilationMult: {
-    id: 15,
+    id: 22,
     cost: 1e55,
     pelleOnly: true,
     description: () => `Gain more Dilated Time based on current EP`,

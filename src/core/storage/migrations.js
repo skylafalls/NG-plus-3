@@ -331,7 +331,7 @@ export const migrations = {
       // will have some slightly weird saves. We don't need to modify the glyph filter settings here because these are
       // migrated above by their effect keys; this properly places them into the correct bit positions automatically
       const updateBitmask = bitmask => {
-        if (bitmask instanceof Array) return bitmask;
+        if (Array.isArray(bitmask)) return bitmask;
         const modifiedBits = [20, 21, 22].map(b => 1 << b).nSum();
         const foundBits = [20, 21, 22].map(b => (bitmask & (1 << b)) !== 0);
         foundBits.push(foundBits.shift());
@@ -489,7 +489,7 @@ export const migrations = {
     function unfuckChallengeId(id) {
       if (!id.startsWith("challenge")) return id;
       wasFucked = true;
-      const legacyId = parseInt(id.substr(9), 10);
+      const legacyId = parseInt(id.slice(9), 10);
       const config = GameDatabase.challenges.normal.find(c => c.legacyId === legacyId);
       return `challenge${config.id}`;
     }
@@ -531,12 +531,12 @@ export const migrations = {
       const newId = parseInt(oldId.slice(1), 10);
       if (isNaN(newId)) throw new Error(`Could not parse achievement id ${oldId}`);
       if (oldId.startsWith("r")) {
-        if (GameDatabase.achievements.normal.find(a => a.id === newId) === undefined) {
+        if (GameDatabase.achievements.normal.some(a => a.id === newId) === undefined) {
           throw new Error(`Unrecognized achievement ${oldId}`);
         }
         player.achievements.add(newId);
       } else if (oldId.startsWith("s")) {
-        if (GameDatabase.achievements.secret.find(a => a.id === newId) === undefined) {
+        if (GameDatabase.achievements.secret.some(a => a.id === newId) === undefined) {
           throw new Error(`Unrecognized secret achievement ${newId}`);
         }
         player.secretAchievements.add(newId);
@@ -875,15 +875,18 @@ export const migrations = {
       autobuyer.mode = ["amount", "time", "relative"].indexOf(player.autoCrunchMode);
       const condition = new Decimal(old.priority);
       switch (player.autoCrunchMode) {
-        case "amount":
+        case 'amount': {
           autobuyer.amount = condition;
           break;
-        case "time":
+        }
+        case 'time': {
           autobuyer.time = condition.lt(DC.NUMMAX) ? condition.toNumber() : autobuyer.time;
           break;
-        case "relative":
+        }
+        case 'relative': {
           autobuyer.xHighest = condition;
           break;
+        }
       }
       autobuyer.isActive = old.isOn;
       autobuyer.lastTick = player.realTimePlayed;

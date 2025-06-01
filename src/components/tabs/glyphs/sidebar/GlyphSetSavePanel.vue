@@ -61,7 +61,7 @@ export default {
       return `Glyph Preset #${id + 1}${name}`;
     },
     saveGlyphSet(id) {
-      if (!this.hasEquipped || player.reality.glyphs.sets[id].glyphs.length) return;
+      if (!this.hasEquipped || player.reality.glyphs.sets[id].glyphs.length > 0) return;
       player.reality.glyphs.sets[id].glyphs = Glyphs.active.compact();
       this.refreshGlyphSets();
       EventHub.dispatch(GAME_EVENT.GLYPH_SET_SAVE_CHANGE);
@@ -72,7 +72,7 @@ export default {
     loadGlyphSet(set, id) {
       if (!this.setLengthValid(set)) return;
       let glyphsToLoad = [...set].sort((a, b) => Decimal.compare(a.level.mul(a.strength), b.level.mul(b.strength)));
-      const activeGlyphs = [...Glyphs.active.filter(g => g)];
+      const activeGlyphs = Glyphs.active.filter(g => g);
 
       // Create an array where each entry contains a single active glyph and all its matches in the preset which it
       // could fill in for, based on the preset loading settings
@@ -154,7 +154,7 @@ export default {
       return toLoad;
     },
     deleteGlyphSet(id) {
-      if (!player.reality.glyphs.sets[id].glyphs.length) return;
+      if (player.reality.glyphs.sets[id].glyphs.length === 0) return;
       if (player.options.confirmations.deleteGlyphSetSave) Modal.glyphSetSaveDelete.show({ glyphSetId: id });
       else {
         player.reality.glyphs.sets[id].glyphs = [];

@@ -46,15 +46,9 @@ export class DilationTimeStudyState extends TimeStudyState {
       TabNotification.dilationAfterUnlock.tryTrigger();
     }
     if (this.id === 6) {
-      // ID 6 is the reality unlock study
-      if (!PlayerProgress.realityUnlocked()) {
-        Modal.message.show(`Reality Machine gain for your first Reality is reduced above ${format("1e6000")} Eternity
-          Points and capped at ${format("1e8000")} Eternity Points. This is due to balance changes made in the Reality
-          update which affect the difficulty of reaching those amounts, such as the increased Time Dimension cost
-          scaling above ${format("1e6000")}.`, {}, 3);
-        EventHub.dispatch(GAME_EVENT.REALITY_FIRST_UNLOCKED);
+      if (!quiet) {
+        Tab.dimensions.meta.show();
       }
-      if (!Perk.autounlockReality.isBought) Tab.reality.glyphs.show();
     }
 
     player.dilation.studies.push(this.id);
@@ -84,7 +78,12 @@ TimeStudy.timeDimension = function(tier) {
 /**
  * @type {DilationTimeStudyState}
  */
-TimeStudy.reality = DilationTimeStudyState.studies[6];
+TimeStudy.metaDimensions = DilationTimeStudyState.studies[6];
+
+/**
+ * @type {DilationTimeStudyState}
+ */
+TimeStudy.masteryStudies = DilationTimeStudyState.studies[7];
 
 TimeStudy.boughtDilationTS = function() {
   return player.dilation.studies.map(id => DilationTimeStudyState.studies[id]);

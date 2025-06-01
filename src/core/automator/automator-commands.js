@@ -58,18 +58,18 @@ function parseConditionalIntoText(ctx) {
 function findLastPrestigeRecord(layer) {
   let addedECs, gainedEP;
   switch (layer) {
-    case "INFINITY":
-      return `${format(player.records.recentInfinities[0][1], 2)} IP`;
-    case "ETERNITY":
+    case 'INFINITY': {return `${format(player.records.recentInfinities[0][1], 2)} IP`;
+    }
+    case 'ETERNITY': {
       addedECs = AutomatorData.lastECCompletionCount;
-      gainedEP = `${format(player.records.recentEternities[0][1], 2)} EP`;
-      return addedECs === 0
+      gainedEP = `${format(player.records.recentEternities[0][1], 2)} EP`;return addedECs === 0
         ? `${gainedEP}`
         : `${gainedEP}, ${addedECs} completions`;
-    case "REALITY":
-      return `${format(player.records.recentRealities[0][1], 2)} RM`;
-    default:
-      throw Error(`Unrecognized prestige ${layer} in Automator event log`);
+    }
+    case 'REALITY': {return `${format(player.records.recentRealities[0][1], 2)} RM`;
+    }
+    default: {throw Error(`Unrecognized prestige ${layer} in Automator event log`);
+    }
   }
 }
 
@@ -881,17 +881,20 @@ export const AutomatorCommands = [
       const prestigeLevel = ctx.PrestigeEvent[0].tokenType.$prestigeLevel;
       let prestigeName;
       switch (ctx.PrestigeEvent[0].tokenType) {
-        case T.Infinity:
+        case T.Infinity: {
           prestigeName = "Infinity";
           break;
-        case T.Eternity:
+        }
+        case T.Eternity: {
           prestigeName = "Eternity";
           break;
-        case T.Reality:
+        }
+        case T.Reality: {
           prestigeName = "Reality";
           break;
-        default:
-          throw Error("Unrecognized prestige layer in until loop");
+        }
+        default: {throw Error("Unrecognized prestige layer in until loop");
+        }
       }
       return {
         run: S => {

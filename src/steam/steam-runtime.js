@@ -152,7 +152,7 @@ function createForceRefreshCanvas() {
   // megawatts of electricity spent on this canvas.
   const canvas = document.createElement("canvas");
   canvas.classList.add("_steam-refresh-canvas");
-  document.body.appendChild(canvas);
+  document.body.append(canvas);
   const ctx = canvas.getContext("2d");
 
   function forceRefresh() {

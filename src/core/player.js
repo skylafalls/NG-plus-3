@@ -165,7 +165,7 @@ window.player = {
       isActive: false,
     },
     dilationUpgrades: {
-      all: Array.range(0, 3).map(() => ({
+      all: Array.range(0, 4).map(() => ({
         isActive: false,
         lastTick: 0,
       })),
@@ -221,7 +221,7 @@ window.player = {
     },
     totalSeen: 0,
   },
-  lastUpdate: new Date().getTime(),
+  lastUpdate: Date.now(),
   backupTimer: 0,
   chall2Pow: DC.D1,
   chall3Pow: DC.D0_01,
@@ -399,6 +399,7 @@ window.player = {
     ipBought: DC.D0,
     epBought: DC.D0,
     studies: [],
+    mastery: [],
     shopMinimized: false,
     preferredPaths: [[], 0],
     presets: new Array(6).fill({
@@ -423,9 +424,10 @@ window.player = {
       1: new Decimal(),
       2: new Decimal(),
       3: new Decimal(),
-      11: new Decimal(),
-      12: new Decimal(),
-      13: new Decimal(),
+      4: new Decimal(),
+      18: new Decimal(),
+      19: new Decimal(),
+      20: new Decimal(),
     },
     lastEP: DC.DM1,
   },
@@ -537,8 +539,7 @@ window.player = {
         followExecution: true,
         stack: [],
       },
-      scripts: {
-      },
+      scripts: {},
       constants: {},
       constantSortOrder: [],
       execTimer: 0,
@@ -928,6 +929,16 @@ window.player = {
       id: false,
     }
   },
+  meta: {
+    antimatter: DC.D0,
+    bestAntimatter: DC.D0,
+    dimensions: Array.range(0, 8).map(() => ({
+      bought: DC.D0,
+      amount: DC.D0
+    })),
+    buyUntil10: true,
+    boosts: DC.D0
+  }
 };
 
 export const Player = {
@@ -1004,7 +1015,7 @@ export const Player = {
     const glyphCount = player.requirementChecks.reality.maxGlyphs;
     // This switch case intentionally falls through because every lower layer should be reset as well
     switch (key) {
-      case "reality":
+      case 'reality': {
         player.requirementChecks.reality = {
           noAM: true,
           noTriads: true,
@@ -1022,24 +1033,27 @@ export const Player = {
           maxGlyphs: glyphCount,
           slowestBH: BlackHoles.areNegative ? player.blackHoleNegative : DC.D1,
         };
+      }
       // eslint-disable-next-line no-fallthrough
-      case "eternity":
+      case 'eternity': {
         player.requirementChecks.eternity = {
           onlyAD1: true,
           onlyAD8: true,
           noAD1: true,
           noRG: true,
         };
+      }
       // eslint-disable-next-line no-fallthrough
-      case "infinity":
+      case 'infinity': {
         player.requirementChecks.infinity = {
           maxAll: false,
           noSacrifice: true,
           noAD8: true,
         };
         break;
-      default:
-        throw Error("Unrecognized prestige layer for requirement reset");
+      }
+      default: {throw Error("Unrecognized prestige layer for requirement reset");
+      }
     }
   }
 };
@@ -1074,7 +1088,7 @@ export function guardFromNaNValues(obj) {
             throw new Error("Non-Number assignment to Number player property");
           }
           if (!Decimal.isFinite(newValue)) {
-            throw new Error("NaN player property assignment");
+            throw new TypeError("NaN player property assignment");
           }
           value = newValue;
         }
@@ -1095,7 +1109,7 @@ export function guardFromNaNValues(obj) {
             throw new Error("Non-Decimal assignment to Decimal player property");
           }
           if (!isFinite(newValue.mag) || !isFinite(newValue.sign) || !isFinite(newValue.layer)) {
-            throw new Error("NaN player property assignment");
+            throw new TypeError("NaN player property assignment");
           }
           value = newValue;
         }

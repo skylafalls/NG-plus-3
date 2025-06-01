@@ -104,67 +104,53 @@ function generateGradient(data, color, glyph, isCircular) {
   let borders, scaleFn, centers, specialData, isColor = false;
   const entries = [], elements = [];
   switch (data.lineType) {
-    case "linear":
-      // Produces stripes at the specified angle, where color sharply switches between the specified color and
-      // transparent at each percentage in lines
+    case 'linear': {
       borders = [0, ...data.colorSplit, 100];
-      scaleFn = perc => (isCircular ? 50 + 0.7 * (perc - 50) : perc);
-      for (const angle of data.angles) {
+      scaleFn = perc => (isCircular ? 50 + 0.7 * (perc - 50) : perc);for (const angle of data.angles) {
         for (let i = 0; i < borders.length - 1; i++) {
           entries.push(`${isColor ? color : "transparent"} ${scaleFn(borders[i])}% ${scaleFn(borders[i + 1])}%`);
           isColor = !isColor;
         }
         elements.push(`repeating-linear-gradient(${angle}deg, ${entries.join(",")})`);
-      }
-      return elements.join(",");
-    case "bump":
-      // Produces four bumps on the cardinal directions of the glyph border, with specified color fade distances.
-      // These bumps overlap some dots on effarig glyphs, so we conditionally make them more transparent (effectively
-      // shrinking them so they don't overlap)
+      }return elements.join(",");
+    }
+    case 'bump': {
       specialData = glyph.type === "effarig"
         ? `${color}60`
         : color;
       centers = ["50% -25%", "50% 125%", "-25% 50%", "125% 50%"];
-      scaleFn = perc => (isCircular ? perc : 0.9 * perc);
-      for (let i = 0; i < 4; i++) {
+      scaleFn = perc => (isCircular ? perc : 0.9 * perc);for (let i = 0; i < 4; i++) {
         entries.push(`radial-gradient(at ${centers[i]}, transparent, ${specialData} ${scaleFn(data.colorSplit[0])}%,
           transparent ${scaleFn(data.colorSplit[1])}%)`);
-      }
-      return entries.join(",");
-    case "radial":
-      // Produces a centered circle that only shades within a certain radial distance
+      }return entries.join(",");
+    }
+    case 'radial': {
       borders = [50, ...data.colorSplit, 100];
-      scaleFn = perc => (isCircular ? 0.9 * perc : 100 - (100 - perc) / 2);
-      for (const border of borders) {
+      scaleFn = perc => (isCircular ? 0.9 * perc : 100 - (100 - perc) / 2);for (const border of borders) {
         entries.push(`${isColor ? color : "transparent"} ${scaleFn(border)}%`);
         isColor = !isColor;
-      }
-      return `radial-gradient(${entries.join(",")})`;
-    case "spike":
-      // Produces a single spike at the specified center, spanning between the specified angles with 5deg blur
+      }return `radial-gradient(${entries.join(",")})`;
+    }
+    case 'spike': {
       entries.push(`transparent ${data.angles[0] - 5}deg`);
       entries.push(`${color}b0 ${data.angles[0] + 5}deg`);
       entries.push(`${color}b0 ${data.angles[1] - 5}deg`);
-      entries.push(`transparent ${data.angles[1] + 5}deg`);
-      return `conic-gradient(from 0deg at ${data.center[0]}% ${data.center[1]}%, ${entries.join(",")})`;
-    case "companion":
-      // Special case to make the companion border look like a heart
+      entries.push(`transparent ${data.angles[1] + 5}deg`);return `conic-gradient(from 0deg at ${data.center[0]}% ${data.center[1]}%, ${entries.join(",")})`;
+    }
+    case 'companion': {
       borders = [0, 30, 330, 360];
-      specialData = [color, "transparent", "transparent", color];
-      for (let i = 0; i < 4; i++) {
+      specialData = [color, "transparent", "transparent", color];for (let i = 0; i < 4; i++) {
         entries.push(`${specialData[i]} ${borders[i]}deg`);
       }
       elements.push(`conic-gradient(${entries.join(",")})`);
-
       centers = ["125% 125%", "-25% 125%"];
-      scaleFn = perc => (isCircular ? 0.9 * (perc + 10) : perc);
-      for (let i = 0; i < 2; i++) {
+      scaleFn = perc => (isCircular ? 0.9 * (perc + 10) : perc);for (let i = 0; i < 2; i++) {
         elements.push(`radial-gradient(at ${centers[i]}, transparent, ${color} ${scaleFn(30)}%,
           transparent ${scaleFn(50)}%)`);
-      }
-      return elements.join(",");
-    default:
-      throw new Error("Unrecognized glyph border data");
+      }return elements.join(",");
+    }
+    default: {throw new Error("Unrecognized glyph border data");
+    }
   }
 }
 
@@ -397,16 +383,16 @@ export default {
       let directionID = this.$viewModel.tabs.reality.glyphTooltipDirection;
       if (this.flipTooltip) directionID += 1;
       switch (directionID) {
-        case -1:
-          return "l-glyph-tooltip--down-left";
-        case 0:
-          return "l-glyph-tooltip--down-right";
-        case 1:
-          return "l-glyph-tooltip--up-left";
-        case 2:
-          return "l-glyph-tooltip--up-right";
-        default:
-          return "l-glyph-tooltip--down-left";
+        case -1: {return "l-glyph-tooltip--down-left";
+        }
+        case 0: {return "l-glyph-tooltip--down-right";
+        }
+        case 1: {return "l-glyph-tooltip--up-left";
+        }
+        case 2: {return "l-glyph-tooltip--up-right";
+        }
+        default: {return "l-glyph-tooltip--down-left";
+        }
       }
     },
     // This finds all the effects of a glyph and shifts all their IDs so that type's lowest-ID effect is 0 and all
@@ -443,21 +429,21 @@ export default {
 
       const typeEnum = GlyphInfoVue.types;
       switch (options.glyphInfoType) {
-        case typeEnum.LEVEL:
-          this.updateDisplayLevel();
-          return formatInt(this.displayLevel.eq(0) ? this.glyph.level : this.displayLevel);
-        case typeEnum.RARITY:
-          return formatRarity(strengthToRarity(Pelle.isDoomed ? Pelle.glyphStrength : this.glyph.strength));
-        case typeEnum.SAC_VALUE:
-          return format(this.sacrificeReward, 2, 2);
-        case typeEnum.FILTER_SCORE:
-          return format(AutoGlyphProcessor.filterValue(this.glyph), 1, 1);
-        case typeEnum.CURRENT_REFINE:
-          return `${format(this.refineReward, 2, 2)} ${this.symbol}`;
-        case typeEnum.MAX_REFINE:
-          return `${format(this.uncappedRefineReward, 2, 2)} ${this.symbol}`;
-        default:
-          throw new Error("Unrecognized Glyph info type in info text");
+        case typeEnum.LEVEL: {
+          this.updateDisplayLevel();return formatInt(this.displayLevel.eq(0) ? this.glyph.level : this.displayLevel);
+        }
+        case typeEnum.RARITY: {return formatRarity(strengthToRarity(Pelle.isDoomed ? Pelle.glyphStrength : this.glyph.strength));
+        }
+        case typeEnum.SAC_VALUE: {return format(this.sacrificeReward, 2, 2);
+        }
+        case typeEnum.FILTER_SCORE: {return format(AutoGlyphProcessor.filterValue(this.glyph), 1, 1);
+        }
+        case typeEnum.CURRENT_REFINE: {return `${format(this.refineReward, 2, 2)} ${this.symbol}`;
+        }
+        case typeEnum.MAX_REFINE: {return `${format(this.uncappedRefineReward, 2, 2)} ${this.symbol}`;
+        }
+        default: {throw new Error("Unrecognized Glyph info type in info text");
+        }
       }
     },
     showBorders() {

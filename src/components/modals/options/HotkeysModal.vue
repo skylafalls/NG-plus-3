@@ -68,10 +68,10 @@ export default {
     },
     format(x) {
       switch (x) {
-        case "mod":
-          return "CTRL/⌘";
-        default:
-          return x.toUpperCase();
+        case 'mod': {return "CTRL/⌘";
+        }
+        default: {return x.toUpperCase();
+        }
       }
     }
   },

@@ -1,0 +1,70 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "categories": {
+    "correctness": "error",
+    "suspicious": "error",
+    "perf": "warn",
+    "pedantic": "warn"
+  },
+  "plugins": [
+    "typescript",
+    "unicorn",
+    "oxc",
+    "import",
+    "jsdoc",
+    "promise",
+    "node",
+    "jsx-a11y"
+  ],
+  "env": {
+    "builtin": true,
+    "node": true,
+    "browser": true,
+    "es2022": true
+  },
+  "rules": {
+    "eslint/max-depth": ["warn", 4],
+    "eslint/max-lines-per-function": ["warn", 250],
+    "eslint/eqeqeq": "error",
+    "eslint/no-var": "error",
+    "eslint/max-nested-callbacks": ["warn", 3],
+    "eslint/max-lines": ["warn", 1000],
+    "unicorn/filename-case": ["warn", {
+      "case": "kebab-case"
+    }],
+    "eslint/func-style": "off",
+    "eslint/no-magic-numbers": "off",
+    "eslint/no-ternary": "off",
+    "eslint/no-nested-ternary": "error",
+    "eslint/no-unused-vars": "off",
+    "eslint/max-classes-per-file": "off",
+    "typescript/consistent-type-definitions": "error",
+    "typescript/consistent-type-imports": "error",
+    "typescript/no-empty-interface": "error",
+    "typescript/no-inferrable-types": "warn",
+    "typescript/prefer-for-of": "error",
+    "typescript/prefer-function-type": "error",
+    "typescript/no-unused-vars": "error",
+    "unicorn/empty-brace-spaces": "error",
+    "unicorn/error-message": "error",
+    "unicorn/no-unreadable-array-destructuring": "error",
+    "unicorn/no-zero-fractions": "error",
+    "unicorn/number-literal-case": "error",
+    "unicorn/prefer-array-flat-map": "error",
+    "unicorn/prefer-includes": "error",
+    "unicorn/prefer-negative-index": "error",
+    "unicorn/prefer-optional-catch-binding": "error",
+    "unicorn/prefer-spread": "warn",
+    "unicorn/prefer-structured-clone": "error",
+    "unicorn/require-array-join-separator": "error",
+    "unicorn/switch-case-braces": "error"
+  },
+  "overrides": [
+    {
+      "files": ["**/*.vue"],
+      "rules": {
+        "unicorn/filename-case": "off"
+      }
+    }
+  ]
+}

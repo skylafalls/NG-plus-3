@@ -1,4 +1,4 @@
-import * as ADNotations from "adnot-beport-small";
+import * as ADNotations from "@antimatter-dimensions/notations-small";
 
 import { DEV } from "@/env";
 import { devMigrations } from "./dev-migrations";
@@ -219,21 +219,21 @@ export const GameStorage = {
         const prop = obj[key];
         let thisNaN;
         switch (typeof prop) {
-          case "object":
+          case 'object': {
             thisNaN = checkNaN(prop, `${path}.${key}`);
             hasNaN = hasNaN || thisNaN;
             break;
-          case "number":
+          }
+          case 'number': {
             thisNaN = Number.isNaN(prop);
-            hasNaN = hasNaN || thisNaN;
-            if (thisNaN) invalidProps.push(`${path}.${key}`);
+            hasNaN = hasNaN || thisNaN;if (thisNaN) invalidProps.push(`${path}.${key}`);
             break;
-          case "string":
-            // If we're attempting to import, all NaN entries will still be strings
+          }
+          case 'string': {
             thisNaN = prop === "NaN";
-            hasNaN = hasNaN || thisNaN;
-            if (thisNaN) invalidProps.push(`${path}.${key}`);
+            hasNaN = hasNaN || thisNaN;if (thisNaN) invalidProps.push(`${path}.${key}`);
             break;
+          }
         }
       }
       return hasNaN;

@@ -1,5 +1,5 @@
 export const PerformanceStats = {
-  container: document.getElementById("performance-stats"),
+  container: document.querySelector("#performance-stats"),
   samplePeriod: 10 * 1000,
   isOn: false,
   currentBlocks: [],

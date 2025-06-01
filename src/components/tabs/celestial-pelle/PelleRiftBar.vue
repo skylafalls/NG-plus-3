@@ -93,7 +93,7 @@ export default {
         return { dist, m };
       });
 
-      if (milestonesCloseTo.length) {
+      if (milestonesCloseTo.length > 0) {
         this.selectedHoverMilestone = milestonesCloseTo.sort((a, b) => a.dist - b.dist)[0].m;
       }
     },

@@ -139,6 +139,7 @@ export function totalReplicantiSpeedMult(overCap) {
   const preCelestialEffects = Effects.product(
     TimeStudy(62),
     TimeStudy(213),
+    DilationUpgrade.dilatedTimeToReplicanti,
     RealityUpgrade(2),
     RealityUpgrade(6),
     RealityUpgrade(23),
@@ -295,7 +296,7 @@ class ReplicantiUpgradeState {
   /** @abstract */
   set baseCost(value) { throw new NotImplementedError(); }
 
-  get cap() { return undefined; }
+  get cap() { return; }
   get isCapped() { return false; }
 
   /** @abstract */
@@ -343,7 +344,8 @@ export const ReplicantiUpgrade = {
 
     get cap() {
       // Chance never goes over 100%.
-      return DC.D1;
+      // That was a lie
+      return MasteryStudy(35).isBought ? DC.BEMAX : DC.D1;
     }
 
     get isCapped() {
@@ -435,7 +437,7 @@ export const ReplicantiUpgrade = {
 
     get costIncrease() {
       const galaxies = this.value;
-      let increase = EternityChallenge(6).isRunning
+      let increase = EternityChallenge(6).isRunning || MasteryStudy(36).isBought
         ? DC.E2.pow(galaxies).times(DC.E2)
         : DC.E5.pow(galaxies).times(DC.E25);
       if (galaxies.gte(this.distantRGStart)) {
@@ -458,8 +460,8 @@ export const ReplicantiUpgrade = {
     bulkPurchaseCalc() {
       // Copypasted constants
       const logBase = new Decimal(170);
-      const logBaseIncrease = EternityChallenge(6).isRunning ? DC.D2 : new Decimal(25);
-      const logCostScaling = EternityChallenge(6).isRunning ? DC.D2 : DC.D5;
+      const logBaseIncrease = (EternityChallenge(6).isRunning || MasteryStudy(36).isBought) ? DC.D2 : new Decimal(25);
+      const logCostScaling = (EternityChallenge(6).isRunning || MasteryStudy(36).isBought) ? DC.D2 : DC.D5;
       const distantReplicatedGalaxyStart = GlyphInfo.replication.sacrificeInfo.effect().add(100);
       const remoteReplicatedGalaxyStart = GlyphInfo.replication.sacrificeInfo.effect().add(1000);
       const logDistantScaling = new Decimal(50);

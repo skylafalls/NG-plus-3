@@ -81,7 +81,7 @@ Decimal.prototype.expEquiv = function(decimal, floor = false) {
 
 window.copyToClipboard = (function() {
   const el = document.createElement("textarea");
-  document.body.appendChild(el);
+  document.body.append(el);
   el.style.position = "absolute";
   el.style.left = "-9999999px";
   el.setAttribute("readonly", "");
@@ -275,7 +275,7 @@ Set.prototype.find = function(predicate) {
   for (const item of this) {
     if (predicate(item)) return item;
   }
-  return undefined;
+  return;
 };
 
 Set.prototype.some = function(predicate) {

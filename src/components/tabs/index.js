@@ -42,6 +42,8 @@ import TimeDimensionsTab from "./time-dimensions/TimeDimensionsTab";
 import TimeStudiesTab from "./time-studies/TimeStudiesTab";
 import VTab from "./celestial-v/VTab";
 
+import MetaDimensionsTab from "./meta-dimensions/MetaDimensionsTab.vue";
+
 const TabComponents = {
   AntimatterDimensionsTab,
   InfinityDimensionsTab,
@@ -84,7 +86,9 @@ const TabComponents = {
   AlchemyTab,
   CelestialNavigationTab,
   ShopTab,
-  MultiplierBreakdownTab
+  MultiplierBreakdownTab,
+
+  MetaDimensionsTab,
 };
 
 export default TabComponents;

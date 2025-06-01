@@ -111,10 +111,10 @@ export const Pelle = {
 
     // Force unhide MOST subtabs, although some of the tabs get ignored since they don't contain any
     // meaningful interactable gameplay elements in Doomed
-    const tabsToIgnore = ["statistics", "achievements", "reality", "celestials"];
-    const ignoredIDs = GameDatabase.tabs.filter(t => tabsToIgnore.includes(t.key)).map(t => t.id);
+    const tabsToIgnore = new Set(["statistics", "achievements", "reality", "celestials"]);
+    const ignoredIDs = new Set(GameDatabase.tabs.filter(t => tabsToIgnore.has(t.key)).map(t => t.id));
     for (let tabIndex = 0; tabIndex < GameDatabase.tabs.length; tabIndex++) {
-      player.options.hiddenSubtabBits[tabIndex] &= ignoredIDs.includes(tabIndex) ? -1 : 0;
+      player.options.hiddenSubtabBits[tabIndex] &= ignoredIDs.has(tabIndex) ? -1 : 0;
     }
     Pelle.quotes.initial.show();
     GameStorage.save(true);
@@ -233,29 +233,29 @@ export const Pelle = {
   },
   getSpecialGlyphEffectDescription(type) {
     switch (type) {
-      case "infinity":
-        return `Infinity Point gain ${player.challenge.eternity.current <= 8
+      case 'infinity': {return `Infinity Point gain ${player.challenge.eternity.current <= 8
           ? formatX(Currency.infinityPoints.value.plus(1).pow(0.2), 2)
           : formatX(DC.D1, 2)} (based on current IP)`;
-      case "time":
-        return `Eternity Point gain ${formatX(Currency.eternityPoints.value.plus(1).pow(0.3), 2)}
+      }
+      case 'time': {return `Eternity Point gain ${formatX(Currency.eternityPoints.value.plus(1).pow(0.3), 2)}
           (based on current EP)`;
-      case "replication":
-        return `Replication speed ${formatX(10 ** 53 ** (PelleRifts.vacuum.percentage), 2)} \
+      }
+      case 'replication': {return `Replication speed ${formatX(10 ** 53 ** (PelleRifts.vacuum.percentage), 2)} \
         (based on ${wordShift.wordCycle(PelleRifts.vacuum.name)})`;
-      case "dilation":
-        return `Dilated Time gain ${formatX(Decimal.pow(player.dilation.totalTachyonGalaxies, 1.5).max(1), 2)}
+      }
+      case 'dilation': {return `Dilated Time gain ${formatX(Decimal.pow(player.dilation.totalTachyonGalaxies, 1.5).max(1), 2)}
           (based on Tachyon Galaxies)`;
-      case "power":
-        return `Galaxies are ${formatPercents(0.02)} stronger`;
-      case "companion":
-        return `You feel ${formatPercents(0.34)} better`;
+      }
+      case 'power': {return `Galaxies are ${formatPercents(0.02)} stronger`;
+      }
+      case 'companion': {return `You feel ${formatPercents(0.34)} better`;
+      }
       // Undefined means that there is no glyph equipped, needs to be here since this function is used in
       // both Current Glyph Effects and Glyph Tooltip
-      case undefined:
-        return "No Glyph equipped!";
-      default:
-        return "You cannot equip this Glyph while Doomed!";
+      case undefined: {return "No Glyph equipped!";
+      }
+      default: {return "You cannot equip this Glyph while Doomed!";
+      }
     }
   },
 

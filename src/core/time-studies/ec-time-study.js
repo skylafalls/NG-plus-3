@@ -72,7 +72,7 @@ export class ECTimeStudyState extends TimeStudyState {
     if (player.challenge.eternity.unlocked !== 0) {
       return false;
     }
-    if (!this.config.requirement.some(s => TimeStudy(s).isBought)) {
+    if (!this.config.requirement.some(s => typeof s === "string" ? MasteryStudy(s.slice(1, 3)).isBought : TimeStudy(s).isBought)) {
       return false;
     }
     return this.allSecondaryRequirementsMet;

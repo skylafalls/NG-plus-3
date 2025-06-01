@@ -15,7 +15,6 @@ export default {
       isContinuumActive: false,
       continuumValue: 0,
       hasTutorial: false,
-      hasRealityButton: false,
       isEC9: false,
     };
   },
@@ -47,7 +46,6 @@ export default {
   },
   methods: {
     update() {
-      this.hasRealityButton = PlayerProgress.realityUnlocked() || TimeStudy.reality.isBought;
       this.purchasedTickspeed.copyFrom(player.totalTickBought);
       this.freeTickspeed.copyFrom(FreeTickspeed.amount);
       this.isEC9 = EternityChallenge(9).isRunning;
@@ -106,12 +104,6 @@ export default {
       >
         Buy Max
       </button>
-    </div>
-    <div
-      v-if="hasRealityButton"
-      class="tickspeed-labels"
-    >
-      {{ tickspeedDisplay }} | {{ multiplierDisplay }}
     </div>
   </div>
 </template>

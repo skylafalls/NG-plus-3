@@ -132,7 +132,7 @@ if (!Array.prototype.find) {
       }
 
       // 7. Return undefined.
-      return undefined;
+      return;
     }
   });
 }

@@ -41,11 +41,6 @@ export default {
     name() {
       return `${AntimatterDimension(this.tier).shortDisplayName} Antimatter Dimension`;
     },
-    amountText() {
-      if (this.formattedAmount) return this.formattedAmount;
-      const amount = this.tier < 8 ? format(this.amount, 2) : formatInt(this.amount);
-      return `${amount} (${formatInt(this.boughtBefore10)})`;
-    },
     singleText() {
       if (this.isCapped) return "Capped";
       const prefix = this.showCostTitle(this.singleCost) ? "Cost: " : "";
@@ -103,9 +98,7 @@ export default {
       this.boughtBefore10.copyFrom(dimension.boughtBefore10);
       this.singleCost.copyFrom(dimension.cost);
       this.until10Cost.copyFrom(dimension.costUntil10);
-      if (tier < 8) {
-        this.rateOfChange.copyFrom(dimension.rateOfChange);
-      }
+      this.rateOfChange.copyFrom(dimension.rateOfChange)
       this.isAffordable = dimension.isAffordable;
       this.isAffordableUntil10 = dimension.isAffordableUntil10;
       this.isContinuumActive = Laitela.continuumActive;
@@ -150,7 +143,7 @@ export default {
       :tier="tier"
       :name="name"
       :multiplier-text="formatX(multiplier, 2, 2)"
-      :amount-text="amountText"
+      :amount="amount"
       :rate="rateOfChange"
     />
     <div class="l-dim-row-multi-button-container">

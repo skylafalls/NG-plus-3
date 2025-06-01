@@ -36,8 +36,8 @@ class Validator extends BaseVisitor {
         startLine: err.line,
         startOffset: err.offset,
         endOffset: err.offset + err.length,
-        info: `Unexpected characters: ${this.rawText.substr(err.offset, err.length)}`,
-        tip: `${this.rawText.substr(err.offset, err.length)} cannot be part of a command, remove them`
+        info: `Unexpected characters: ${this.rawText.slice(err.offset, err.length)}`,
+        tip: `${this.rawText.slice(err.offset, err.length)} cannot be part of a command, remove them`
       });
     }
   }
@@ -145,18 +145,18 @@ class Validator extends BaseVisitor {
         continue;
       }
 
-      if (err.info.match(/EOF but found.*\}/gu)) {
+      if (/EOF but found.*\}/gu.test(err.info)) {
         err.info = err.info.replaceAll("--> ", "[").replaceAll(" <--", "]");
         err.tip = "Remove }. Parser halted at this line and may miss errors farther down the script.";
-      } else if (err.info.match(/found.*\}/gu)) {
+      } else if (/found.*\}/gu.test(err.info)) {
         err.info = err.info.replaceAll("--> ", "[").replaceAll(" <--", "]");
         err.tip = "Remove }";
-      } else if (err.info.match(/Expecting/gu)) {
+      } else if (/Expecting/gu.test(err.info)) {
         err.info = err.info.replaceAll("--> ", "[").replaceAll(" <--", "]");
         err.tip = "Use the appropriate type of data in the command as specified in the command help";
-      } else if (err.info.match(/End of line/gu)) {
+      } else if (/End of line/gu.test(err.info)) {
         err.tip = "Provide the remaining arguments to complete the incomplete command";
-      } else if (err.info.match(/EOF but found:/gu)) {
+      } else if (/EOF but found:/gu.test(err.info)) {
         err.tip = "Remove extra command argument";
       } else {
         err.tip = "This error's cause is unclear";
@@ -195,16 +195,17 @@ class Validator extends BaseVisitor {
     if (!Object.keys(constants).includes(varName)) {
       this.addError(identifier, `Variable ${varName} has not been defined`,
         `Use the definition panel to define ${varName} in order to reference it, or check for typos`);
-      return undefined;
+      return;
     }
     const value = constants[varName];
 
     let tree;
     switch (type) {
-      case AUTOMATOR_VAR_TYPES.NUMBER:
+      case AUTOMATOR_VAR_TYPES.NUMBER: {
         varInfo.value = new Decimal(value);
         break;
-      case AUTOMATOR_VAR_TYPES.STUDIES:
+      }
+      case AUTOMATOR_VAR_TYPES.STUDIES: {
         tree = new TimeStudyTree(value);
         varInfo.value = {
           normal: tree.selectedStudies.map(ts => ts.id),
@@ -212,11 +213,13 @@ class Validator extends BaseVisitor {
           startEC: tree.startEC,
         };
         break;
-      case AUTOMATOR_VAR_TYPES.DURATION:
+      }
+      case AUTOMATOR_VAR_TYPES.DURATION: {
         varInfo.value = parseInt(1000 * value, 10);
         break;
-      default:
-        throw new Error("Unrecognized variable format in automator constant lookup");
+      }
+      default: {throw new Error("Unrecognized variable format in automator constant lookup");
+      }
     }
 
     return varInfo;
@@ -229,17 +232,14 @@ class Validator extends BaseVisitor {
     const value = constants[varName];
 
     switch (type) {
-      case AUTOMATOR_VAR_TYPES.NUMBER:
-        // We can't rely on native Decimal parsing here because it largely just discards input past invalid
-        // characters and constructs something based on the start of the input string. Notably, this makes
-        // things like new Decimal("11,21,31") return 11 instead of something indicating an error.
-        return value.match(/^-?(0|[1-9]\d*)(\.\d+)?([eE][+-]?\d+)?$/u);
-      case AUTOMATOR_VAR_TYPES.STUDIES:
-        return TimeStudyTree.isValidImportString(value);
-      case AUTOMATOR_VAR_TYPES.DURATION:
-        return !Number.isNaN(parseInt(1000 * value, 10));
-      default:
-        throw new Error("Unrecognized variable format in automator constant lookup");
+      case AUTOMATOR_VAR_TYPES.NUMBER: {return value.match(/^-?(0|[1-9]\d*)(\.\d+)?([eE][+-]?\d+)?$/u);
+      }
+      case AUTOMATOR_VAR_TYPES.STUDIES: {return TimeStudyTree.isValidImportString(value);
+      }
+      case AUTOMATOR_VAR_TYPES.DURATION: {return !Number.isNaN(parseInt(1000 * value, 10));
+      }
+      default: {throw new Error("Unrecognized variable format in automator constant lookup");
+      }
     }
   }
 
@@ -247,12 +247,12 @@ class Validator extends BaseVisitor {
     if (ctx.$value) return ctx.$value;
     if (!ctx.TimeUnit || ctx.TimeUnit[0].isInsertedInRecovery) {
       this.addError(ctx, "Missing time unit", "Provide a unit of time (eg. seconds or minutes)");
-      return undefined;
+      return;
     }
     const value = parseFloat(ctx.NumberLiteral[0].image) * ctx.TimeUnit[0].tokenType.$scale;
     if (isNaN(value)) {
       this.addError(ctx, "Error parsing duration", "Provide a properly-formatted number for time");
-      return undefined;
+      return;
     }
     ctx.$value = value;
     return ctx.$value;
@@ -262,7 +262,7 @@ class Validator extends BaseVisitor {
     if (ctx.$value) return ctx.$value;
     if (!ctx.NumberLiteral || ctx.NumberLiteral[0].isInsertedInRecovery) {
       this.addError(ctx, "Missing multiplier", "Provide a multiplier to set the autobuyer to");
-      return undefined;
+      return;
     }
     ctx.$value = new Decimal(ctx.NumberLiteral[0].image);
     return ctx.$value;
@@ -272,7 +272,7 @@ class Validator extends BaseVisitor {
     if (ctx.$value) return ctx.$value;
     if (!ctx.NumberLiteral || ctx.NumberLiteral[0].isInsertedInRecovery) {
       this.addError(ctx, "Missing amount", "Provide a threshold to set the autobuyer to");
-      return undefined;
+      return;
     }
     ctx.$value = new Decimal(ctx.NumberLiteral[0].image);
     return ctx.$value;
@@ -321,7 +321,7 @@ class Validator extends BaseVisitor {
     const positionRange = Validator.getPositionRange(ctx);
     ctx.$cached = {
       normal: studiesOut,
-      image: this.rawText.substr(positionRange.startOffset, positionRange.endOffset - positionRange.startOffset + 1),
+      image: this.rawText.slice(positionRange.startOffset, positionRange.endOffset - positionRange.startOffset + 1),
       ec: 0,
       startEC: false,
     };
@@ -380,7 +380,7 @@ class Validator extends BaseVisitor {
   eternityChallenge(ctx) {
     let errToken, ecNumber;
     if (ctx.ECLiteral) {
-      ecNumber = parseFloat(ctx.ECLiteral[0].image.substr(2));
+      ecNumber = parseFloat(ctx.ECLiteral[0].image.slice(2));
       errToken = ctx.ECLiteral[0];
     } else if (ctx.NumberLiteral) {
       ecNumber = parseFloat(ctx.NumberLiteral[0].image);
@@ -545,7 +545,7 @@ export function compile(input, validateOnly = false) {
 }
 
 export function hasCompilationErrors(input) {
-  return compile(input, true).errors.length !== 0;
+  return compile(input, true).errors.length > 0;
 }
 
 export function blockifyTextAutomator(input) {

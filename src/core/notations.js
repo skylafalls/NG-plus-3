@@ -1,5 +1,5 @@
-import * as ADLNotations from "adnot-beport-large";
-import * as ADNotations from "adnot-beport-small";
+import * as ADLNotations from "@antimatter-dimensions/notations-large";
+import * as ADNotations from "@antimatter-dimensions/notations-small";
 
 import { DC } from "./constants";
 

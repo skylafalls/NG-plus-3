@@ -480,3 +480,20 @@ Currency.galaxyGeneratorGalaxies = new class extends DecimalCurrency {
       player.celestials.pelle.galaxyGenerator.spentGalaxies.add(spent);
   }
 }();
+
+Currency.metaAntimatter = new class extends DecimalCurrency {
+  get value() { return player.meta.antimatter; }
+
+  set value(value) {
+    player.meta.antimatter = value;
+    player.meta.bestAntimatter = player.meta.bestAntimatter.max(value);
+  }
+
+  get productionPerSecond() {
+    return MetaDimension(1).productionPerRealSecond;
+  }
+
+  get startingValue() {
+    return new Decimal(10);
+  }
+}();

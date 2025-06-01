@@ -127,7 +127,7 @@ export default {
       :tier="tier"
       :name="name"
       :multiplier-text="formatX(multiplier, 2, 1)"
-      :amount-text="format(amount, 2)"
+      :amount="amount"
       :rate="rateOfChange"
     />
     <div class="l-dim-row-multi-button-container">

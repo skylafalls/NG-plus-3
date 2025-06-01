@@ -61,6 +61,7 @@ export * from "./tickspeed";
 export * from "./dimensions/antimatter-dimension";
 export * from "./dimensions/infinity-dimension";
 export * from "./dimensions/time-dimension";
+export * from "./dimensions/meta-dimension.js";
 
 export * from "./time-studies";
 

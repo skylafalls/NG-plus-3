@@ -1,4 +1,5 @@
 import { BitPurchasableMechanicState, RebuyableMechanicState } from "./game-mechanics";
+import { isRealityAvailable } from "./reality";
 
 class RealityUpgradeState extends BitPurchasableMechanicState {
   constructor(config) {
@@ -81,7 +82,7 @@ class RealityUpgradeState extends BitPurchasableMechanicState {
   }
 
   tryUnlock() {
-    const realityReached = PlayerProgress.realityUnlocked() || TimeStudy.reality.isBought;
+    const realityReached = isRealityAvailable();
     if (!realityReached || this.isAvailableForPurchase || !this.config.checkRequirement()) return;
     player.reality.upgReqs |= (1 << this.id);
     GameUI.notify.reality(`You've unlocked a Reality Upgrade: ${this.config.name}`);

@@ -93,7 +93,7 @@ export const AutobuyerInputFunctions = {
     formatValue: value => Notation.scientific.format(value, 2, 2),
     copyValue: value => new Decimal(value),
     tryParse: input => {
-      if (!input) return undefined;
+      if (!input) return;
       try {
         let decimal;
         if (/^e\d*[.]?\d+$/u.test(input.replaceAll(",", ""))) {
@@ -108,8 +108,8 @@ export const AutobuyerInputFunctions = {
           decimal = Decimal.fromString(input.replaceAll(",", ""));
         }
         return isNaN(decimal.mag) || isNaN(decimal.layer) || isNaN(decimal.sign) ? undefined : decimal;
-      } catch (e) {
-        return undefined;
+      } catch {
+        return;
       }
     }
   },
@@ -127,10 +127,10 @@ export const AutobuyerInputFunctions = {
     formatValue: value => value.toString(),
     copyValue: value => value,
     tryParse: input => {
-      if (!input) return undefined;
+      if (!input) return;
       // We explicitly check formatting here instead of letting parseInt handle the whole thing because otherwise the
       // fact that parseInt removes extraneous letters means junk like "361ebqv3" registers as valid and parses as 361
-      if (!/^\d+$/u.test(input.replaceAll(",", ""))) return undefined;
+      if (!/^\d+$/u.test(input.replaceAll(",", ""))) return;
       const int = parseInt(input, 10);
       return isNaN(int) || !Number.isInteger(int) ? undefined : int;
     }

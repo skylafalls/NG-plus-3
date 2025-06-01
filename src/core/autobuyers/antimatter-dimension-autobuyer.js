@@ -112,14 +112,15 @@ export class AntimatterDimensionAutobuyerState extends UpgradeableAutobuyerState
 
   tick() {
     super.tick();
-    const tier = this.tier;
     switch (this.mode) {
-      case AUTOBUYER_MODE.BUY_SINGLE:
-        buyOneDimension(tier);
+      case AUTOBUYER_MODE.BUY_SINGLE: {
+        buyOneDimension(this.tier);
         break;
-      case AUTOBUYER_MODE.BUY_10:
-        buyMaxDimension(tier, this.bulk);
+      }
+      case AUTOBUYER_MODE.BUY_10: {
+        buyMaxDimension(this.tier, this.bulk);
         break;
+      }
     }
   }
 

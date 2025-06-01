@@ -54,9 +54,9 @@ export default {
       const stepRGB = [
         [255, 0, 0],
         [
-          parseInt(textHexCode.substring(0, 2), 16),
-          parseInt(textHexCode.substring(2, 4), 16),
-          parseInt(textHexCode.substring(4), 16)
+          parseInt(textHexCode.slice(0, 2), 16),
+          parseInt(textHexCode.slice(2, 4), 16),
+          parseInt(textHexCode.slice(4), 16)
         ],
         [0, 255, 0]
       ];
@@ -137,9 +137,7 @@ export default {
       const gainedEP = gainedEternityPoints();
       this.currentEP.copyFrom(Currency.eternityPoints);
       this.gainedEP.copyFrom(gainedEP);
-      const hasNewContent = !PlayerProgress.realityUnlocked() &&
-        Currency.eternityPoints.value.max(1).log10().gte(4000) &&
-        !TimeStudy.reality.isBought;
+      const hasNewContent = false;
       if (this.isDilation) {
         this.type = hasNewContent
           ? EP_BUTTON_DISPLAY_TYPE.DILATION_EXPLORE_NEW_CONTENT

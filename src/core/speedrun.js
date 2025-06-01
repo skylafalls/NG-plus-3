@@ -19,37 +19,36 @@ export const Speedrun = {
     player.speedrun.seedSelection = key;
     let newSeed;
     switch (key) {
-      case SPEEDRUN_SEED_STATE.FIXED:
+      case SPEEDRUN_SEED_STATE.FIXED: {
         player.reality.initialSeed = this.officialFixedSeed;
-        player.speedrun.initialSeed = this.officialFixedSeed;
-        return;
-      case SPEEDRUN_SEED_STATE.RANDOM:
-        // This gives seeds of roughly the same magnitude that the first-run Date.now() would give
+        player.speedrun.initialSeed = this.officialFixedSeed;return;
+      }
+      case SPEEDRUN_SEED_STATE.RANDOM: {
         newSeed = Math.floor(1e13 * Math.random());
         player.reality.initialSeed = newSeed;
-        player.speedrun.initialSeed = newSeed;
-        return;
-      case SPEEDRUN_SEED_STATE.PLAYER:
+        player.speedrun.initialSeed = newSeed;return;
+      }
+      case SPEEDRUN_SEED_STATE.PLAYER: {
         player.reality.initialSeed = seed;
-        player.speedrun.initialSeed = seed;
-        return;
-      default:
-        throw new Error("Unrecognized speedrun seed setting option");
+        player.speedrun.initialSeed = seed;return;
+      }
+      default: {throw new Error("Unrecognized speedrun seed setting option");
+      }
     }
   },
   seedModeText(rec) {
     const record = rec ?? player.speedrun;
     switch (record.seedSelection) {
-      case SPEEDRUN_SEED_STATE.UNKNOWN:
-        return `No seed data (old save)`;
-      case SPEEDRUN_SEED_STATE.FIXED:
-        return `Official fixed seed (${record.initialSeed})`;
-      case SPEEDRUN_SEED_STATE.RANDOM:
-        return `Random seed (${record.initialSeed})`;
-      case SPEEDRUN_SEED_STATE.PLAYER:
-        return `Player seed (${record.initialSeed})`;
-      default:
-        throw new Error("Unrecognized speedrun seed option in seedModeText");
+      case SPEEDRUN_SEED_STATE.UNKNOWN: {return `No seed data (old save)`;
+      }
+      case SPEEDRUN_SEED_STATE.FIXED: {return `Official fixed seed (${record.initialSeed})`;
+      }
+      case SPEEDRUN_SEED_STATE.RANDOM: {return `Random seed (${record.initialSeed})`;
+      }
+      case SPEEDRUN_SEED_STATE.PLAYER: {return `Player seed (${record.initialSeed})`;
+      }
+      default: {throw new Error("Unrecognized speedrun seed option in seedModeText");
+      }
     }
   },
   // If a name isn't given, choose a somewhat-likely-to-be-unique big number instead

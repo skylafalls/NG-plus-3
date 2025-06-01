@@ -257,9 +257,9 @@ export default {
       const dir = this.tooltipDir || (this.direction === 'vertical' ? 'left' : 'top')
       if (Array.isArray(dir)) {
         return this.isRange ? dir : dir[1]
-      } else {
-        return this.isRange ? [dir, dir] : dir
       }
+        return this.isRange ? [dir, dir] : dir
+      
     },
     tooltipStatus() {
       return this.tooltip === 'hover' && this.flag ? 'ad-slider-always' : this.tooltip ? `ad-slider-${this.tooltip}` : ''
@@ -321,16 +321,16 @@ export default {
     currentIndex() {
       if (this.isRange) {
         return this.data ? this.currentValue : [this.getIndexByValue(this.currentValue[0]), this.getIndexByValue(this.currentValue[1])]
-      } else {
-        return this.getIndexByValue(this.currentValue)
       }
+        return this.getIndexByValue(this.currentValue)
+      
     },
     indexRange() {
       if (this.isRange) {
         return this.currentIndex
-      } else {
-        return [0, this.currentIndex]
       }
+        return [0, this.currentIndex]
+      
     },
     maximum() {
       return this.data ? (this.data.length - 1) : this.max
@@ -345,7 +345,7 @@ export default {
     total() {
       if (this.data) {
         return this.data.length - 1
-      } else if (Math.floor((this.maximum - this.minimum) * this.multiple) % (this.interval * this.multiple) !== 0) {
+      }if (Math.floor((this.maximum - this.minimum) * this.multiple) % (this.interval * this.multiple) !== 0) {
         this.printError('Prop[interval] is illegal, Please make sure that the interval can be divisible')
       }
       return (this.maximum - this.minimum) / this.interval
@@ -359,9 +359,9 @@ export default {
     position() {
       if (this.isRange) {
         return [(this.currentValue[0] - this.minimum) / this.spacing * this.gap + this.dotAxialSizePx / 2, (this.currentValue[1] - this.minimum) / this.spacing * this.gap + this.dotAxialSizePx / 2]
-      } else {
-        return ((this.currentValue - this.minimum) / this.spacing * this.gap + this.dotAxialSizePx / 2)
       }
+        return ((this.currentValue - this.minimum) / this.spacing * this.gap + this.dotAxialSizePx / 2)
+      
     },
     isFixed() {
       return this.fixed || this.minRange
@@ -370,12 +370,12 @@ export default {
       if (this.isRange) {
         if (this.isFixed) {
           return [[this.dotAxialSizePx / 2, this.dotAxialSizePx / 2 + (this.total - this.fixedValue) * this.gap], [this.fixedValue * this.gap + this.dotAxialSizePx / 2, this.size - this.dotAxialSizePx / 2]]
-        } else {
-          return [[this.dotAxialSizePx / 2, this.position[1]], [this.position[0], this.size - this.dotAxialSizePx / 2]];
         }
-      } else {
-        return [this.dotAxialSizePx / 2, this.size - this.dotAxialSizePx / 2];
+          return [[this.dotAxialSizePx / 2, this.position[1]], [this.position[0], this.size - this.dotAxialSizePx / 2]];
+        
       }
+        return [this.dotAxialSizePx / 2, this.size - this.dotAxialSizePx / 2];
+      
     },
     valueLimit() {
       return this.isRange ? this.isFixed ? [[this.minimum, this.maximum - (this.fixedValue * (this.spacing * this.multiple)) / this.multiple], [this.minimum + (this.fixedValue * (this.spacing * this.multiple)) / this.multiple, this.maximum]] : [[this.minimum, this.currentValue[1]], [this.currentValue[0], this.maximum]] : [this.minimum, this.maximum]
@@ -398,7 +398,7 @@ export default {
     sliderStyles() {
       if (Array.isArray(this.sliderStyle)) {
         return this.isRange ? this.sliderStyle : this.sliderStyle[1]
-      } else if (typeof this.sliderStyle === 'function') {
+      }if (typeof this.sliderStyle === 'function') {
         return this.sliderStyle(this.val, this.currentIndex)
       } else {
         return this.isRange ? [this.sliderStyle, this.sliderStyle] : this.sliderStyle
@@ -407,7 +407,7 @@ export default {
     focusStyles() {
       if (Array.isArray(this.focusStyle)) {
         return this.isRange ? this.focusStyle : this.focusStyle[1]
-      } else if (typeof this.focusStyle === 'function') {
+      }if (typeof this.focusStyle === 'function') {
         return this.focusStyle(this.val, this.currentIndex)
       } else {
         return this.isRange ? [this.focusStyle, this.focusStyle] : this.focusStyle
@@ -417,7 +417,7 @@ export default {
       const disabledStyle = this.disabledDotStyle
       if (Array.isArray(disabledStyle)) {
         return disabledStyle
-      } else if (typeof disabledStyle === 'function') {
+      }if (typeof disabledStyle === 'function') {
         const style = disabledStyle(this.val, this.currentIndex)
         return Array.isArray(style) ? style : [style, style]
       } else if (disabledStyle) {
@@ -433,7 +433,7 @@ export default {
     tooltipStyles() {
       if (Array.isArray(this.tooltipStyle)) {
         return this.isRange ? this.tooltipStyle : this.tooltipStyle[1]
-      } else if (typeof this.tooltipStyle === 'function') {
+      }if (typeof this.tooltipStyle === 'function') {
         return this.tooltipStyle(this.val, this.currentIndex)
       } else {
         return this.isRange ? [this.tooltipStyle, this.tooltipStyle] : this.tooltipStyle
@@ -585,19 +585,21 @@ export default {
       }
       switch (e.keyCode) {
         case 37:
-        case 40:
+        case 40: {
           e.preventDefault()
           this.keydownFlag = true
           this.flag = true
           this.changeFocusSlider(this.actionsKeyboard[0])
           break
+        }
         case 38:
-        case 39:
+        case 39: {
           e.preventDefault()
           this.keydownFlag = true
           this.flag = true
           this.changeFocusSlider(this.actionsKeyboard[1])
           break
+        }
       }
     },
     handleKeyup() {
@@ -638,11 +640,11 @@ export default {
       return typeof this.xformatter === 'string' ? this.xformatter.replace(/\{value\}/, value) : this.xformatter(value)
     },
     mergeFormatting(value1, value2) {
-      return typeof this.mergeFormatter === 'string' ? this.mergeFormatter.replace(/\{(value1|value2)\}/g, (_, key) => key === 'value1' ? value1 : value2) : this.mergeFormatter(value1, value2)
+      return typeof this.mergeFormatter === 'string' ? this.mergeFormatter.replaceAll(/\{(value1|value2)\}/g, (_, key) => key === 'value1' ? value1 : value2) : this.mergeFormatter(value1, value2)
     },
     getPos(e) {
       this.realTime && this.getStaticData()
-      var rect = this.$refs.elem.getBoundingClientRect();
+      const rect = this.$refs.elem.getBoundingClientRect();
       return this.direction === 'vertical' ? (this.reverse ? (e.clientY - rect.top) : (this.size - (e.clientY - rect.top))) : (this.reverse ? (this.size - (e.clientX - rect.left)) : (e.clientX - rect.left))
     },
     processClick(e) {
@@ -789,7 +791,7 @@ export default {
     isDiff(a, b) {
       if (Object.prototype.toString.call(a) !== Object.prototype.toString.call(b)) {
         return true
-      } else if (Array.isArray(a) && a.length === b.length) {
+      }if (Array.isArray(a) && a.length === b.length) {
         return a.some((v, i) => v !== b[i])
       }
       return a !== b
@@ -917,7 +919,7 @@ export default {
         if (v < this.min) {
           this.printError(`The value of the slider is ${val}, the minimum value is ${this.min}, the value of this slider can not be less than the minimum value`)
           return this.min
-        } else if (v > this.max) {
+        }if (v > this.max) {
           this.printError(`The value of the slider is ${val}, the maximum value is ${this.max}, the value of this slider can not be greater than the maximum value`)
           return this.max
         }
@@ -925,9 +927,9 @@ export default {
       }
       if (this.isRange) {
         return val.map((v) => inRange(v))
-      } else {
-        return inRange(val)
       }
+        return inRange(val)
+      
     },
     isActive(index) {
       return index >= this.indexRange[0] && index <= this.indexRange[1]
@@ -985,7 +987,7 @@ export default {
     handleDisplayMergedTooltip(show) {
       const tooltip0 = this.$refs.tooltip0
       const tooltip1 = this.$refs.tooltip1
-      const mergedTooltip = this.$refs.process.getElementsByClassName('vue-merged-tooltip')[0]
+      const mergedTooltip = this.$refs.process.querySelectorAll('.vue-merged-tooltip')[0]
       if (show) {
         tooltip0.style.visibility = 'hidden'
         tooltip1.style.visibility = 'hidden'

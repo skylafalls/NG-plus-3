@@ -324,8 +324,9 @@ export function buyMaxDimension(tier, bulk = Infinity) {
   }
   let buying = maxBought.quantity;
   if (buying.gt(bulkLeft)) buying = new Decimal(bulkLeft);
-  dimension.amount = dimension.amount.plus(buying.times(10));
-  dimension.bought = dimension.bought.add(buying.times(10));
+  // For some reason it was adding 10x more purchases then it should so i fixed it
+  dimension.amount = dimension.amount.plus(buying);
+  dimension.bought = dimension.bought.add(buying);
   dimension.currencyAmount = dimension.currencyAmount.minus(Decimal.pow10(maxBought.logPrice)).max(0);
 }
 
@@ -391,7 +392,7 @@ class AntimatterDimensionState extends DimensionState {
 
   get howManyCanBuy() {
     const ratio = this.currencyAmount.dividedBy(this.cost);
-    return Decimal.floor(Decimal.max(Decimal.min(ratio, DC.E1.sub(this.boughtBefore10)), 0));
+    return ratio.min(this.remainingUntil10).max(0).floor();
   }
 
   /**
@@ -400,17 +401,17 @@ class AntimatterDimensionState extends DimensionState {
   get infinityUpgrade() {
     switch (this.tier) {
       case 1:
-      case 8:
-        return InfinityUpgrade.dim18mult;
+      case 8: {return InfinityUpgrade.dim18mult;
+      }
       case 2:
-      case 7:
-        return InfinityUpgrade.dim27mult;
+      case 7: {return InfinityUpgrade.dim27mult;
+      }
       case 3:
-      case 6:
-        return InfinityUpgrade.dim36mult;
+      case 6: {return InfinityUpgrade.dim36mult;
+      }
       case 4:
-      case 5:
-        return InfinityUpgrade.dim45mult;
+      case 5: {return InfinityUpgrade.dim45mult;
+      }
     }
     return false;
   }
@@ -434,7 +435,7 @@ class AntimatterDimensionState extends DimensionState {
     } else {
       toGain = AntimatterDimension(tier + 1).productionPerSecond;
     }
-    return toGain.times(10).dividedBy(this.amount.max(1)).times(getGameSpeedupForDisplay());
+    return toGain.times(getGameSpeedupForDisplay()).mul((player.options.updateRate ?? 20) / 300);
   }
 
   /**
@@ -669,6 +670,7 @@ export const AntimatterDimensions = {
     if (AntimatterDimension(1).amount.gt(0)) {
       player.requirementChecks.eternity.noAD1 = false;
     }
+
     AntimatterDimension(1).produceCurrency(Currency.antimatter, diff);
     if (NormalChallenge(12).isRunning) {
       AntimatterDimension(2).produceCurrency(Currency.antimatter, diff);

@@ -78,6 +78,7 @@ html {
   --color-infinity: #b67f33;
   --color-eternity: #b341e0;
   --color-dilation: #64dd17;
+  --color-quantum: #12ff26;
   --color-reality: #0ba00e;
   --color-reality-light: #d5ffd7;
   --color-reality-dark: #0a790c;
@@ -2640,6 +2641,11 @@ br {
 /* #region c-infinity-dim-description__accent */
 
 .c-infinity-dim-description__accent {
+  font-size: 3.5rem;
+  color: black;
+}
+
+.c-meta-dim-description__accent {
   font-size: 3.5rem;
   color: black;
 }

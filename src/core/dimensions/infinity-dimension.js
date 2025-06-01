@@ -120,12 +120,11 @@ class InfinityDimensionState extends DimensionState {
     } else {
       toGain = InfinityDimension(tier + 1).productionPerSecond;
     }
-    const current = Decimal.max(this.amount, 1);
-    return toGain.times(10).dividedBy(current).times(getGameSpeedupForDisplay());
+    return toGain.times(getGameSpeedupForDisplay()).div(player.options.updateRate ?? 20);
   }
 
   get productionPerSecond() {
-    if (EternityChallenge(2).isRunning || EternityChallenge(10).isRunning ||
+    if (EternityChallenge(2).isRunning || EternityChallenge(10).isRunning || EternityChallenge(13).isRunning ||
       (Laitela.isRunning && this.tier > Laitela.maxAllowedDimension)) {
       return DC.D0;
     }
@@ -401,7 +400,7 @@ export const InfinityDimensions = {
     const unlockedDimensions = this.all.filter(dimension => dimension.unlock());
 
     // Try to buy single from the highest affordable new dimensions
-    unlockedDimensions.slice().reverse().forEach(dimension => {
+    [...unlockedDimensions].reverse().forEach(dimension => {
       if (dimension.purchases === 0) dimension.buySingle();
     });
 

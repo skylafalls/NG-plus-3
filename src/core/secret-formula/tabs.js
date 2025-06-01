@@ -37,6 +37,16 @@ export const tabs = [
         id: 2,
         hidable: true,
       },
+      {
+        key: "meta",
+        name: "Meta Dimensions",
+        hideAt: 2.5,
+        symbol: "⚛",
+        component: "MetaDimensionsTab",
+        condition: () => TimeStudy.metaDimensions.isBought,
+        id: 3,
+        hidable: true,
+      },
     ]
   },
   {
@@ -341,7 +351,7 @@ export const tabs = [
     name: "Reality",
     hideAt: 2.3,
     UIClass: "o-tab-btn--reality",
-    condition: () => PlayerProgress.realityUnlocked() || TimeStudy.reality.isBought,
+    condition: () => false,
     id: 8,
     hidable: true,
     subtabs: [
@@ -403,7 +413,7 @@ export const tabs = [
     name: "Celestials",
     hideAt: 2.4,
     UIClass: "o-tab-btn--celestial",
-    condition: () => Teresa.isUnlocked,
+    condition: () => false,
     id: 9,
     hidable: true,
     subtabs: [
@@ -435,7 +445,7 @@ export const tabs = [
       {
         key: "enslaved",
         name: "The Nameless Ones",
-        symbol: "<div class='o-tab-btn--cel3'>\uf0c1</div>",
+        symbol: "<div class='o-tab-btn--cel3'>\uF0C1</div>",
         component: "EnslavedTab",
         condition: () => EffarigUnlock.eternity.isUnlocked,
         id: 3,

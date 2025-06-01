@@ -45,13 +45,16 @@ export const dilationTimeStudies = [
   },
   {
     id: 6,
-    description: () => (Pelle.isDoomed
-      ? "You cannot escape a Doomed Reality"
-      : "Unlock Reality"),
+    description: "Unlock Meta Dimensions",
     cost: DC.D1,
     requirement: () => TimeStudy.timeDimension(8).isBought &&
-      player.records.thisReality.maxEP.add(1).log10().gte(4000) &&
-      (Perk.firstPerk.isBought || Achievements.preReality.every(a => a.isUnlocked)) &&
-      !Pelle.isDoomed
+      player.records.thisReality.maxEP.add(1).gte(DC.NUMMAX)
+  },
+  {
+    id: 7,
+    description: "Unlock Mastery Studies",
+    cost: DC.D1,
+    requirement: () => TimeStudy.metaDimensions.isBought &&
+      DilationUpgrade.dtMultMA.isBought
   }
 ];

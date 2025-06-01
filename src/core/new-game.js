@@ -1,4 +1,4 @@
-import * as ADNotations from "adnot-beport-small";
+import * as ADNotations from "@antimatter-dimensions/notations-small";
 
 export const NG = {
   startNewGame() {

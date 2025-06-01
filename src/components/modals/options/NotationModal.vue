@@ -1,10 +1,11 @@
 <script>
-import * as ADNotations from "adnot-beport-small";
+import * as ADNotations from "@antimatter-dimensions/notations-small";
 
 import ModalWrapper from "@/components/modals/ModalWrapper";
 import SliderComponent from "@/components/SliderComponent";
+import { defineComponent } from "vue";
 
-export default {
+export default defineComponent({
   name: "NotationModal",
   components: {
     ModalWrapper,
@@ -20,7 +21,7 @@ export default {
     sampleNums() {
       const largestExponent = "123456789012345";
       const numbers = [];
-      for (let digits = 4; digits < 16; digits++) numbers.push(Decimal.pow10(largestExponent.substring(0, digits)));
+      for (let digits = 4; digits < 16; digits++) numbers.push(Decimal.pow10(largestExponent.slice(0, digits)));
       return numbers;
     },
     sliderProps() {
@@ -68,7 +69,7 @@ export default {
       if (value < this.commaDigits) this.adjustSliderComma(value);
     }
   },
-};
+});
 </script>
 
 <template>

@@ -52,14 +52,14 @@ export default {
     slotType() {
       const formattedTime = this.slotData.intervalStr?.();
       switch (this.slotData.type) {
-        case BACKUP_SLOT_TYPE.ONLINE:
-          return `Saves every ${formattedTime} online`;
-        case BACKUP_SLOT_TYPE.OFFLINE:
-          return `Saves after ${formattedTime} offline`;
-        case BACKUP_SLOT_TYPE.RESERVE:
-          return "Pre-loading save";
-        default:
-          throw new Error("Unrecognized backup save type");
+        case BACKUP_SLOT_TYPE.ONLINE: {return `Saves every ${formattedTime} online`;
+        }
+        case BACKUP_SLOT_TYPE.OFFLINE: {return `Saves after ${formattedTime} offline`;
+        }
+        case BACKUP_SLOT_TYPE.RESERVE: {return "Pre-loading save";
+        }
+        default: {throw new Error("Unrecognized backup save type");
+        }
       }
     },
     lastSaved() {

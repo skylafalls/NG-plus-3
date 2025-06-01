@@ -297,8 +297,7 @@ class TimeDimensionState extends DimensionState {
       return DC.D0;
     }
     const toGain = TimeDimension(tier + 1).productionPerSecond;
-    const current = Decimal.max(this.amount, 1);
-    return toGain.times(10).dividedBy(current).times(getGameSpeedupForDisplay());
+    return toGain.times(getGameSpeedupForDisplay()).div(player.options.updatedRate ?? 20);
   }
 
   get isProducing() {

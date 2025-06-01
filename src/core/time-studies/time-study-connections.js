@@ -1,4 +1,5 @@
 import { TimeStudy } from "./normal-time-study";
+import { MasteryStudy } from "./mastery-studies.js";
 
 export class TimeStudyConnection {
   constructor(from, to, override) {
@@ -29,6 +30,7 @@ export class TimeStudyConnection {
  */
 TimeStudy.allConnections = (function() {
   const TS = id => TimeStudy(id);
+  const MS = id => MasteryStudy(id);
   const EC = id => TimeStudy.eternityChallenge(id);
   const connections = [
     [TS(11), TS(21)],
@@ -153,7 +155,26 @@ TimeStudy.allConnections = (function() {
     [TimeStudy.timeDimension(5), TimeStudy.timeDimension(6)],
     [TimeStudy.timeDimension(6), TimeStudy.timeDimension(7)],
     [TimeStudy.timeDimension(7), TimeStudy.timeDimension(8)],
-    [TimeStudy.timeDimension(8), TimeStudy.reality]
+    [TimeStudy.timeDimension(8), TimeStudy.metaDimensions],
+    [TimeStudy.metaDimensions, TimeStudy.masteryStudies],
+
+    [MS(11), MS(21)],
+    [MS(11), MS(22)],
+    [MS(11), MS(23)],
+
+    [MS(21), MS(31)],
+    [MS(21), MS(32)],
+    [MS(22), MS(33)],
+    [MS(22), MS(34)],
+    [MS(23), MS(35)],
+    [MS(23), MS(36)],
+
+    [EC(13), MS(31)],
+    [EC(13), MS(32)],
+    [EC(13), MS(33)],
+    [EC(14), MS(34)],
+    [EC(14), MS(35)],
+    [EC(14), MS(36)],
   ].map(props => new TimeStudyConnection(props[0], props[1], props[2]));
 
   return connections;

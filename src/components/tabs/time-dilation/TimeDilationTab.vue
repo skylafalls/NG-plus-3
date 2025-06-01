@@ -1,8 +1,9 @@
 <script>
+import { defineComponent } from "vue";
 import DilationButton from "./DilationButton";
 import DilationUpgradeButton from "./DilationUpgradeButton";
 
-export default {
+export default defineComponent({
   name: "TimeDilationTab",
   components: {
     DilationButton,
@@ -29,7 +30,8 @@ export default {
       return [
         DilationUpgrade.dtGain,
         DilationUpgrade.galaxyThreshold,
-        DilationUpgrade.tachyonGain
+        DilationUpgrade.tachyonGain,
+        DilationUpgrade.tachyonExponent,
       ];
     },
     upgrades() {
@@ -37,13 +39,21 @@ export default {
         [
           DilationUpgrade.doubleGalaxies,
           DilationUpgrade.tdMultReplicanti,
-          DilationUpgrade.ndMultDT
+          DilationUpgrade.ndMultDT,
+          DilationUpgrade.dilatedTimeToReplicanti,
         ],
         [
           DilationUpgrade.ipMultDT,
           DilationUpgrade.timeStudySplit,
-          DilationUpgrade.dilationPenalty
+          DilationUpgrade.dilationPenalty,
+          DilationUpgrade.eternitiesDTSynergy,
         ],
+        [
+          DilationUpgrade.mdMultTickspeed,
+          DilationUpgrade.mdBuffDT,
+          DilationUpgrade.mdEffectBuff,
+          DilationUpgrade.dtMultMA
+        ]
       ];
     },
     // This might be negative due to rift drain, so we need to add "+" iff the value is positive. The actual
@@ -123,7 +133,7 @@ export default {
       else this.toMaxTooltip = estimateText.startsWith("<") ? "Currently Increasing" : estimateText;
     }
   }
-};
+});
 </script>
 
 <template>

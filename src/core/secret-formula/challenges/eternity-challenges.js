@@ -205,5 +205,30 @@ export const eternityChallenges = [
       effect: completions => 1 - completions * 0.008,
       formatEffect: value => `x${formatPow(value, 3, 3)}`
     }
+  },
+  {
+    id: 13,
+    description: () =>  `Infinity Dimensions are disabled and nullify Dimension Boost's effect to Antimatter Dimensions.`,
+    goal: new Decimal("1e3.85e6"),
+    pelleGoal: DC.BEMAX,
+    goalIncrease: new Decimal("e5.555e5"),
+    reward: {
+      description: "Increase the exponent of the Meta-Antimatter effect.",
+      effect: completions => completions / 5,
+      formatEffect: value => `+${formatPow(value, 3)}`
+    }
+  },
+  {
+    id: 14,
+    description: () =>  `You are stuck in IC3, and all replicanti boosts except to ID are nullified.
+      Free tickspeed upgrades count five times as much towards the IC3 boost, and meta-antimatter is disabled.`,
+    goal: new Decimal("1e1e6"),
+    pelleGoal: DC.BEMAX,
+    goalIncrease: new Decimal("e2.25e5"),
+    reward: {
+      description: "Free tickspeed upgrades from Time Shards boosts the IC3 reward.",
+      effect: completions => Decimal.pow(FreeTickspeed.amount, completions / 20),
+      formatEffect: value => `${formatX(value, 3)}`
+    }
   }
 ];

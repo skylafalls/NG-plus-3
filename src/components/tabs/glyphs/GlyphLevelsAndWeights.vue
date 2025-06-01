@@ -223,7 +223,7 @@ export default {
       this.lastAdjusted = null;
     },
     factorString(source) {
-      const name = this.adjustVisible ? source.name.substring(0, 4) : source.name;
+      const name = this.adjustVisible ? source.name.slice(0, 4) : source.name;
       return `${format(source.coeff, 2, 4)}×${name}^${format(source.exp, 2, 3)}`;
     }
   }

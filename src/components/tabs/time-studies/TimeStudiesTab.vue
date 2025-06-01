@@ -1,17 +1,18 @@
 <script>
-import { STUDY_TREE_LAYOUT_TYPE, TimeStudyTreeLayout } from "./time-study-tree-layout";
+import { STUDY_TREE_LAYOUT_TYPE, TimeStudyTreeLayout } from "./time-study-tree-layout.js";
 
-import DilationTimeStudy from "./DilationTimeStudy";
-import ECTimeStudy from "./ECTimeStudy";
-import EnslavedTimeStudy from "./EnslavedTimeStudy";
-import HiddenTimeStudyConnection from "./HiddenTimeStudyConnection";
-import NormalTimeStudy from "./NormalTimeStudy";
-import PrimaryButton from "@/components/PrimaryButton";
-import SecretTimeStudy from "./SecretTimeStudy";
-import TimeStudyConnection from "./TimeStudyConnection";
-import TriadTimeStudy from "./TriadTimeStudy";
+import DilationTimeStudy from "./DilationTimeStudy.vue";
+import ECTimeStudy from "./ECTimeStudy.vue";
+import EnslavedTimeStudy from "./EnslavedTimeStudy.vue";
+import HiddenTimeStudyConnection from "./HiddenTimeStudyConnection.vue";
+import NormalTimeStudy from "./NormalTimeStudy.vue";
+import PrimaryButton from "@/components/PrimaryButton.vue";
+import SecretTimeStudy from "./SecretTimeStudy.vue";
+import TimeStudyConnection from "./TimeStudyConnection.vue";
+import TriadTimeStudy from "./TriadTimeStudy.vue";
+import { defineComponent } from "vue";
 
-export default {
+export default defineComponent({
   name: "TimeStudiesTab",
   components: {
     PrimaryButton,
@@ -115,12 +116,20 @@ export default {
     },
     studyComponent(study) {
       switch (study.type) {
-        case TIME_STUDY_TYPE.NORMAL: return NormalTimeStudy;
-        case TIME_STUDY_TYPE.ETERNITY_CHALLENGE: return ECTimeStudy;
-        case TIME_STUDY_TYPE.DILATION: return DilationTimeStudy;
-        case TIME_STUDY_TYPE.TRIAD: return TriadTimeStudy;
+        case TIME_STUDY_TYPE.NORMAL: {
+          return NormalTimeStudy;
+        }
+        case TIME_STUDY_TYPE.ETERNITY_CHALLENGE: {
+          return ECTimeStudy;
+        }
+        case TIME_STUDY_TYPE.DILATION: {
+          return DilationTimeStudy;
+        }
+        case TIME_STUDY_TYPE.TRIAD: {
+          return TriadTimeStudy;
+        }
       }
-      throw "Unknown Time Study type";
+      throw new TypeError("Unknown Time Study type");
     },
     exportStudyTree() {
       if (player.timestudy.studies.length === 0) {
@@ -131,7 +140,7 @@ export default {
       }
     }
   }
-};
+});
 </script>
 
 <template>

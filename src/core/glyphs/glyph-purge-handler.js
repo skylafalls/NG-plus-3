@@ -23,12 +23,12 @@ export const GlyphSacrificeHandler = {
   },
   handleSpecialGlyphTypes(glyph) {
     switch (glyph.type) {
-      case "companion":
-        Modal.deleteCompanion.show();
-        return true;
-      case "cursed":
-        Glyphs.removeFromInventory(glyph);
-        return true;
+      case 'companion': {
+        Modal.deleteCompanion.show();return true;
+      }
+      case 'cursed': {
+        Glyphs.removeFromInventory(glyph);return true;
+      }
     }
     return false;
   },

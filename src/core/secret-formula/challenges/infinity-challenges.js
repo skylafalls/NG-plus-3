@@ -38,9 +38,15 @@ export const infinityChallenges = [
     formatEffect: value => formatX(value, 2, 2),
     reward: {
       description: `Antimatter Dimension multiplier based on Antimatter Galaxies and Tickspeed purchases`,
-      effect: () => (Laitela.continuumActive
+      effect: () => {
+        let eff = (Laitela.continuumActive
         ? Decimal.pow(player.galaxies.times(0.005).add(1.05), Tickspeed.continuumValue)
-        : Decimal.pow(player.galaxies.times(0.005).add(1.05), player.totalTickBought)),
+        : Decimal.pow(player.galaxies.times(0.005).add(1.05), player.totalTickBought));
+        if (EternityChallenge(14).isRunning) {
+          eff = eff.mul(Decimal.pow(player.galaxies.times(0.005).add(1.05), FreeTickspeed.amount.mul(5)));
+        }
+        return eff;
+      },
       formatEffect: value => formatX(value, 2, 2),
     },
     unlockAM: DC.E12000,
