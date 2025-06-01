@@ -1,7 +1,0 @@
-{
-  "private": true,
-  "scripts": {
-    "build": "cd large && deno task build && cd ../small && deno task build"
-  },
-  "workspaces": ["./small", "./large"]
-}

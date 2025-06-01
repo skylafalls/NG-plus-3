@@ -1,9 +1,9 @@
-const fs = require("fs");
-const path = require("path");
-const proc = require("child_process");
+import { execSync } from "node:child_process";
+import { writeFileSync } from "node:fs";
+import { resolve } from "node:path";
 
 function executeCommand(command) {
-  return proc.execSync(command).toString().trim();
+  return execSync(command).toString().trim();
 }
 
 const commit = {
@@ -14,4 +14,4 @@ const commit = {
 
 const json = JSON.stringify(commit);
 
-fs.writeFileSync(path.resolve(__dirname, "../dist/commit.json"), json);
+writeFileSync(resolve(import.meta.dirname, "../dist/commit.json"), json);
