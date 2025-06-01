@@ -90,7 +90,8 @@ export default defineComponent({
             case TIME_STUDY_PATH.DARK: {
               return "o-time-study-dark";
             }
-            default: {return "o-time-study-normal";
+            default: {
+              return "o-time-study-normal";
             }
           }
         }
@@ -100,6 +101,9 @@ export default defineComponent({
         case TIME_STUDY_TYPE.DILATION: {
           if (this.study.id === 7) return "o-time-study-reality";
           return "o-time-study-dilation";
+        }
+        case TIME_STUDY_TYPE.QUANTUM: {
+          return "o-time-study-quantum";
         }
         case TIME_STUDY_TYPE.TRIAD: {
           return "o-time-study-triad";

@@ -241,6 +241,17 @@
   animation: a-time-study-dilation 10s infinite;
 }
 
+.o-time-study-quantum--available {
+  color: #29ff29;
+  background-color: black;
+  border-color: #29ff29;
+}
+
+.o-time-study-quantum--available:hover {
+  color: #29ff29;
+  background-color: white;
+}
+
 .o-time-study-reality--available {
   color: var(--color-reality);
   background-color: white;
@@ -321,6 +332,10 @@
 
 .o-time-study-dilation--unavailable {
   background-color: #9ca894;
+}
+
+.o-time-study-quantum--unavailable {
+  background-color: #8faa8e;
 }
 
 .o-time-study-reality--unavailable {
@@ -413,6 +428,12 @@
 .o-time-study-dilation--bought {
   color: black;
   background-color: #64dd17;
+  border-color: black;
+}
+
+.o-time-study-quantum--bought {
+  color: black;
+  background-color: #09ff00;
   border-color: black;
 }
 

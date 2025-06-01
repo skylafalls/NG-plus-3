@@ -1,9 +1,10 @@
 <script>
-import PrimaryToggleButton from "@/components/PrimaryToggleButton";
-import TimeStudySaveLoadButton from "./TimeStudySaveLoadButton";
-import TimeTheoremBuyButton from "./TimeTheoremBuyButton";
+import PrimaryToggleButton from "@/components/PrimaryToggleButton.vue";
+import TimeStudySaveLoadButton from "./TimeStudySaveLoadButton.vue";
+import TimeTheoremBuyButton from "./TimeTheoremBuyButton.vue";
+import { defineComponent } from "vue";
 
-export default {
+export default defineComponent({
   name: "TimeTheoremShop",
   components: {
     PrimaryToggleButton,
@@ -137,7 +138,7 @@ export default {
       this.invertTTgenDisplay = !this.invertTTgenDisplay;
     }
   },
-};
+});
 </script>
 
 <template>

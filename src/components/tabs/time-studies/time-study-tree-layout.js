@@ -49,7 +49,6 @@ export class TimeStudyTreeLayout {
     const wideRow = (...items) => new TimeStudyRow(wideRowLayout, items, true);
 
     const TS = id => (TimeStudy(id).isUnlocked ? TimeStudy(id) : null);
-    const MS = id => (MasteryStudy(id).isUnlocked ? MasteryStudy(id) : null);
     const EC = id => TimeStudy.eternityChallenge(id);
 
     /**
@@ -126,14 +125,6 @@ export class TimeStudyTreeLayout {
       normalRow(                       TimeStudy.metaDimensions                       ),
       normalRow(                       TimeStudy.masteryStudies                       )
     );
-
-    // Mastery Studies
-    this.rows.push(
-      normalRow(                               MS(11)                                 ),
-      normalRow(              MS(21),          MS(22),          MS(23)                ),
-      wideRow  (    MS(31),    MS(32),    MS(33),    MS(34),    MS(35),    MS(36),    ),
-      normalRow(              EC(13),                             EC(14)              ),
-    )
     /* eslint-enable no-multi-spaces, space-in-parens, func-call-spacing */
 
     /**

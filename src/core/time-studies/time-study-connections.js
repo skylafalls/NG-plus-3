@@ -157,7 +157,18 @@ TimeStudy.allConnections = (function() {
     [TimeStudy.timeDimension(7), TimeStudy.timeDimension(8)],
     [TimeStudy.timeDimension(8), TimeStudy.metaDimensions],
     [TimeStudy.metaDimensions, TimeStudy.masteryStudies],
+  ].map(props => new TimeStudyConnection(props[0], props[1], props[2]));
 
+  return connections;
+}());
+
+/**
+ * @type {TimeStudyConnection[]}
+ */
+MasteryStudy.allConnections = (function() {
+  const MS = id => MasteryStudy(id);
+  const EC = id => TimeStudy.eternityChallenge(id);
+  const connections = [
     [MS(11), MS(21)],
     [MS(11), MS(22)],
     [MS(11), MS(23)],

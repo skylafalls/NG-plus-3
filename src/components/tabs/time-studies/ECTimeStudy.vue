@@ -1,6 +1,6 @@
 <script>
-import HintText from "@/components/HintText";
-import TimeStudyButton from "./TimeStudyButton";
+import HintText from "@/components/HintText.vue";
+import TimeStudyButton from "./TimeStudyButton.vue";
 
 export default {
   name: "ECTimeStudy",
@@ -61,7 +61,7 @@ export default {
       this.showTotalCompletions = !Enslaved.isRunning || id !== 1;
       this.isRunning = EternityChallenge.current?.id === id;
       this.isUnlocked = ec.isUnlocked;
-      if (!this.hasRequirement || id > 10) return;
+      if (!this.hasRequirement || id === 11 || id === 12) return;
       const requirement = this.requirement;
       if (this.hasNumberRequirement) {
         requirement.total = study.requirementTotal;

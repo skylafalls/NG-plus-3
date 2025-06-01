@@ -1,17 +1,17 @@
 <script>
-import CelestialQuoteHistoryDisplay from "@/components/modals/celestial-quotes/CelestialQuoteHistoryDisplay";
-import CelestialQuoteModal from "@/components/modals/celestial-quotes/CelestialQuoteModal";
-import CreditsContainer from "@/components/tabs/celestial-pelle/CreditsContainer";
-import FadeAway from "@/components/tabs/celestial-pelle/FadeAway";
-import HowToPlay from "@/components/HowToPlay";
-import ModalProgressBar from "@/components/modals/ModalProgressBar";
-import ModernSidebar from "@/components/ui-modes/modern/ModernSidebar";
-import NewGame from "@/components/tabs/celestial-pelle/NewGame";
-import PopupModal from "@/components/modals/PopupModal";
-import SaveTimer from "@/components/SaveTimer";
-import SpectateGame from "@/components/SpectateGame";
-import SpeedrunStatus from "@/components/SpeedrunStatus";
-import TimeTheoremShop from "@/components/tabs/time-studies/tt-shop/TimeTheoremShop";
+import CelestialQuoteHistoryDisplay from "@/components/modals/celestial-quotes/CelestialQuoteHistoryDisplay.vue";
+import CelestialQuoteModal from "@/components/modals/celestial-quotes/CelestialQuoteModal.vue";
+import CreditsContainer from "@/components/tabs/celestial-pelle/CreditsContainer.vue";
+import FadeAway from "@/components/tabs/celestial-pelle/FadeAway.vue";
+import HowToPlay from "@/components/HowToPlay.vue";
+import ModalProgressBar from "@/components/modals/ModalProgressBar.vue";
+import ModernSidebar from "@/components/ui-modes/modern/ModernSidebar.vue";
+import NewGame from "@/components/tabs/celestial-pelle/NewGame.vue";
+import PopupModal from "@/components/modals/PopupModal.vue";
+import SaveTimer from "@/components/SaveTimer.vue";
+import SpectateGame from "@/components/SpectateGame.vue";
+import SpeedrunStatus from "@/components/SpeedrunStatus.vue";
+import TimeTheoremShop from "@/components/tabs/time-studies/tt-shop/TimeTheoremShop.vue";
 
 export default {
   name: "GameUiComponentFixed",
@@ -66,7 +66,7 @@ export default {
     />
     <HowToPlay :style="hideIfMatoFullscreen" />
     <TimeTheoremShop
-      v-if="view.subtab === 'studies'"
+      v-if="view.subtab === 'studies' || view.subtab === 'masteryStudies'"
       class="l-time-studies-tab__tt-shop"
     />
     <ModernSidebar

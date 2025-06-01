@@ -1,10 +1,12 @@
 <script>
+import { defineComponent } from 'vue'
+
 /**
  * This slotted component manages a context menu that is accessible both
  * by right clicking and by hovering; this is mostly about wrangling timers.
  */
 
-export default {
+export default defineComponent({
   name: "HoverMenu",
   props: {
     saveslot: {
@@ -77,7 +79,7 @@ export default {
       }
     },
   },
-};
+});
 </script>
 
 <template>

@@ -320,6 +320,15 @@ export const tabs = [
         hidable: true,
       },
       {
+        key: "masteryStudies",
+        name: "Mastery Studies",
+        symbol: "<i class='fas fa-book'></i>",
+        component: "MasteryStudiesTab",
+        condition: () => TimeStudy.masteryStudies.isBought,
+        id: 4,
+        hidable: true,
+      },
+      {
         key: "upgrades",
         name: "Eternity Upgrades",
         symbol: "<i class='fas fa-arrow-up'></i>",
