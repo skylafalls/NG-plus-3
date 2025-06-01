@@ -1,6 +1,6 @@
 <script>
-import S12Subtabs from "./S12Subtabs";
-import TaskbarIcon from "./TaskbarIcon";
+import S12Subtabs from "./S12Subtabs.vue";
+import TaskbarIcon from "./TaskbarIcon.vue";
 
 import { S12Windows } from "./windows";
 
@@ -38,7 +38,7 @@ export default {
     <div class="c-taskbar">
       <img
         class="c-start-icon"
-        src="images/s12/win7-start-menu-inactive.png"
+        src="/images/s12/win7-start-menu-inactive.png"
         @click="startupSound.play()"
       >
       <template

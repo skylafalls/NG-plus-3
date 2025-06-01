@@ -1,12 +1,12 @@
 <script>
 import svgPanZoom from "svg-pan-zoom";
 
-import { CELESTIAL_NAV_DRAW_ORDER } from "@/core/secret-formula/celestials/navigation";
+import { CELESTIAL_NAV_DRAW_ORDER } from "@/core/secret-formula/celestials/navigation.js";
 
-import NodeBackground from "./NodeBackground";
-import NodeOverlay from "./NodeOverlay";
-import NodeRing from "./NodeRing";
-import ProgressConnector from "./ProgressConnector";
+import NodeBackground from "./NodeBackground.vue";
+import NodeOverlay from "./NodeOverlay.vue";
+import NodeRing from "./NodeRing.vue";
+import ProgressConnector from "./ProgressConnector.vue";
 
 export default {
   name: "CelestialNavigationTab",
@@ -84,7 +84,7 @@ export default {
   },
   mounted() {
     // eslint-disable-next-line no-unused-vars
-    const panLimiter = function(oldPan, newPan) {
+    const panLimiter = (oldPan, newPan) => {
       // In the callback context, "this" is the svgPanZoom object.
       // eslint-disable-next-line no-invalid-this
       const sizes = this.getSizes();
@@ -391,7 +391,7 @@ const CelestialNavigationViewportCache = {
         y="-350"
         height="1503"
         width="1503"
-        href="images/celestial-navigation-bg.webp"
+        href="/images/celestial-navigation-bg.webp"
       />
       <g
         v-for="(obj, index) in drawOrder"
