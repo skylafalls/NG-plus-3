@@ -94,7 +94,7 @@ export const dilationUpgrades = {
     effect: bought => {
       let eff = Decimal.mul(0.75, bought);
       if (eff.gte(8)) {
-        eff = eff.div(8).cbrt().mul(8);
+        eff = eff.div(8).pow(0.4).mul(8);
       }
       return eff;
     },
@@ -174,7 +174,7 @@ export const dilationUpgrades = {
     id: 13,
     cost: 1e50,
     description: "Meta Dimensions gain a multiplier based on tickspeed",
-    effect: () => Tickspeed.perSecond.plus(1).log10().plus(1).log10(),
+    effect: () => Tickspeed.perSecond.plus(1).log10().pow(0.15),
     formatEffect: value => `${formatX(value, 2, 1)}`
   },
   mdBuffDT: {

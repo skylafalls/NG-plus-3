@@ -54,7 +54,7 @@ export default defineComponent({
     buttonValue() {
       if (this.isCapped) return "";
       const prefix = this.showCostTitle(this.buyUntil10 ? this.until10Cost : this.singleCost) ? "Cost: " : "";
-      const suffix = this.isCostsAD ? this.costUnit : "M-AM";
+      const suffix = this.isCostsAD ? this.costUnit : "MA";
       return `${prefix}${this.costDisplay} ${suffix}`;
     },
     hasLongText() {

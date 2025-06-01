@@ -219,9 +219,6 @@ export const FreeTickspeed = {
 
   get softcap() {
     let softcap = FreeTickspeed.BASE_SOFTCAP;
-    if (Enslaved.has(ENSLAVED_UNLOCKS.FREE_TICKSPEED_SOFTCAP)) {
-      softcap = softcap.add(1e5);
-    }
     return softcap;
   },
 
