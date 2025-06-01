@@ -1,6 +1,6 @@
-import { execSync } from "node:child_process";
-import { writeFileSync } from "node:fs";
-import { resolve } from "node:path";
+import { execSync } from "child_process";
+import { writeFileSync } from "fs";
+import { resolve } from "path";
 
 function executeCommand(command) {
   return execSync(command).toString().trim();

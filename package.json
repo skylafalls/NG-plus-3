@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "vite",
-    "build": "deno run -A build/pre-build.js && vite build && deno run -A build/post-build.js",
+    "build": "node build/pre-build.js && vite build && node build/post-build.js",
     "preview": "vite preview",
     "lint": "oxlint . --fix && eslint --cache --fix --ext='.vue' src/"
   },
@@ -37,8 +37,7 @@
     "vuedraggable": "^2.24.3"
   },
   "devDependencies": {
-    "@types/bun": "^1.2.15",
-    "@types/deno": "^2.3.0",
+    "@types/node": "^22.15.29",
     "@vitejs/plugin-vue2": "^2.3.3",
     "browserslist-useragent-regexp": "^3.0.2",
     "eslint": "^9.28.0",

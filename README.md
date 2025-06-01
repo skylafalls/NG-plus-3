@@ -5,19 +5,19 @@ bringing a more modernized style.
 
 ## Run
 
-To run the game locally, you will need to install [Deno](https://deno.com).
+To run the game locally, you will need to install [Node.js](https://nodejs.org).
 
 First, run the following command in your terminal (or command line) while being
 inside the checked out repository:
 
 ```
-deno install
+npm ci
 ```
 
 After all the packages are installed, start up the game:
 
 ```
-deno task dev
+npm run dev
 ```
 
 This will make the game served via your localhost, and the playable link will
