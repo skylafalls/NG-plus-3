@@ -1,5 +1,5 @@
 /* eslint-disable import/extensions */
-import pako from "pako/dist/pako.esm.mjs";
+import { deflateSync, inflateSync, strFromU8, strToU8 } from "fflate";
 /* eslint-enable import/extensions */
 
 export const GameSaveSerializer = {
@@ -27,9 +27,6 @@ export const GameSaveSerializer = {
       return;
     }
   },
-  // Define these now so we don't keep creating new ones, which vaguely seems bad.
-  encoder: new TextEncoder(),
-  decoder: new TextDecoder(),
   // These are magic strings that savefiles/automator scripts should start with.
   // Due to the way atob/btoa work, old saves (before the reality update and for
   // a significant part of its development) always started with eYJ even though
@@ -55,7 +52,7 @@ export const GameSaveSerializer = {
   // This should always be three characters long, and should ideally go AAA, AAB, AAC, etc.
   // so that we can do inequality tests on it to compare versions (though skipping a version
   // shouldn't be a problem).
-  version: "AAB",
+  version: "AAC",
   // Steps are given in encoding order.
   // Export and cloud save use the same steps because the maximum ~15% saving
   // from having them be different seems not to be worth it.
@@ -70,9 +67,9 @@ export const GameSaveSerializer = {
   // It wouldn't be too hard to allow steps to depend on version though.
   steps: [
     // This step transforms saves into unsigned 8-bit arrays, as pako requires.
-    { encode: x => GameSaveSerializer.encoder.encode(x), decode: x => GameSaveSerializer.decoder.decode(x) },
+    { encode: x => strToU8(x), decode: x => strFromU8(x) },
     // This step is  where the compression actually happens. The pako library works with unsigned 8-bit arrays.
-    { encode: x => pako.deflate(x), decode: x => pako.inflate(x) },
+    { encode: x => deflateSync(x), decode: x => inflateSync(x) },
     // This step converts from unsigned 8-bit arrays to strings with codepoints less than 256.
     // We need to do this outselves because GameSaveSerializer.decoder would give us unicode sometimes.
     {
