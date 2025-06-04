@@ -5,11 +5,10 @@ import { DC } from "@/core/constants";
 
 import TypeSacrifice from "./TypeSacrifice";
 
-
 export default {
   name: "SacrificedGlyphs",
   components: {
-    TypeSacrifice
+    TypeSacrifice,
   },
   data() {
     return {
@@ -56,7 +55,7 @@ export default {
     },
     hasSeenRealityGlyph() {
       return player.reality.glyphs.createdRealityGlyph;
-    }
+    },
   },
   created() {
     this.on$(GAME_EVENT.GLYPH_VISUAL_CHANGE, () => {
@@ -73,31 +72,43 @@ export default {
       this.lastMachinesTeresa.copyFrom(player.celestials.teresa.lastRepeatedMachines);
     },
     dragover(event) {
-      if (Pelle.isDoomed) return;
-      if (!event.dataTransfer.types.includes(GLYPH_MIME_TYPE)) return;
+      if (Pelle.isDoomed) {
+        return;
+      }
+      if (!event.dataTransfer.types.includes(GLYPH_MIME_TYPE)) {
+        return;
+      }
       event.preventDefault();
       this.hasDragover = true;
     },
     dragleave(event) {
       if (
-        this.isDoomed ||
-        !event.relatedTarget ||
-        !event.relatedTarget.classList ||
-        event.relatedTarget.classList.contains("c-current-glyph-effects") ||
-        event.relatedTarget.classList.contains("c-sacrificed-glyphs__header") ||
-        event.relatedTarget.classList.contains("l-sacrificed-glyphs__type") ||
-        event.relatedTarget.classList.contains("l-sacrificed-glyphs__type-symbol") ||
-        event.relatedTarget.classList.contains("l-sacrificed-glyphs__type-amount") ||
-        event.relatedTarget.classList.contains("c-sacrificed-glyphs__type-new-amount") ||
-        event.relatedTarget.classList.length === 0) return;
+        this.isDoomed
+        || !event.relatedTarget
+        || !event.relatedTarget.classList
+        || event.relatedTarget.classList.contains("c-current-glyph-effects")
+        || event.relatedTarget.classList.contains("c-sacrificed-glyphs__header")
+        || event.relatedTarget.classList.contains("l-sacrificed-glyphs__type")
+        || event.relatedTarget.classList.contains("l-sacrificed-glyphs__type-symbol")
+        || event.relatedTarget.classList.contains("l-sacrificed-glyphs__type-amount")
+        || event.relatedTarget.classList.contains("c-sacrificed-glyphs__type-new-amount")
+        || event.relatedTarget.classList.length === 0) {
+        return;
+      }
       this.hasDragover = false;
     },
     drop(event) {
-      if (this.isDoomed || !event.dataTransfer.types.includes(GLYPH_MIME_TYPE)) return;
+      if (this.isDoomed || !event.dataTransfer.types.includes(GLYPH_MIME_TYPE)) {
+        return;
+      }
       const id = parseInt(event.dataTransfer.getData(GLYPH_MIME_TYPE), 10);
-      if (isNaN(id)) return;
+      if (isNaN(id)) {
+        return;
+      }
       const glyph = Glyphs.findById(id);
-      if (!glyph) return;
+      if (!glyph) {
+        return;
+      }
       GlyphSacrificeHandler.sacrificeGlyph(glyph, true);
       this.hasDragover = false;
     },
@@ -106,8 +117,8 @@ export default {
     },
     glyphSymbol(type) {
       return GlyphInfo[type].regularGlyphSymbol;
-    }
-  }
+    },
+  },
 };
 </script>
 

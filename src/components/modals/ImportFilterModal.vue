@@ -9,7 +9,7 @@ export default {
   components: {
     ModalWrapperChoice,
     PrimaryButton,
-    ImportFilterSingleType
+    ImportFilterSingleType,
   },
   data() {
     return {
@@ -28,14 +28,18 @@ export default {
       }
     },
     parsedSettings() {
-      if (!this.inputIsValid) return null;
+      if (!this.inputIsValid) {
+        return null;
+      }
 
       const decoded = GameSaveSerializer.decodeText(this.input, "glyph filter");
       const parts = decoded.split("|");
       const typeInfo = {};
       let partIndex = 3;
       for (const type of GlyphInfo.alchemyGlyphTypes) {
-        if (!type) continue;
+        if (!type) {
+          continue;
+        }
         const subparts = parts[partIndex].split(",");
         typeInfo[type] = {
           rarity: Number(subparts[0]),
@@ -67,13 +71,12 @@ export default {
     },
     // Hide effarig if it hasn't been unlocked yet
     availableTypes() {
-      // eslint-disable-next-line max-len
       return GlyphInfo.alchemyGlyphTypes.filter(t => GlyphInfo[t.type].isGenerated && GlyphInfo[t.type].generationRequirement);
     },
     settingTooltipText() {
       return `Mouseover each box for more details. ✔ and ✘ symbols denote an effect
         selected/unselected for Specified Effect mode.`;
-    }
+    },
   },
   mounted() {
     this.$refs.input.select();
@@ -83,11 +86,15 @@ export default {
       this.currentSettings = JSON.parse(JSON.stringify(player.reality.glyphs.filter));
     },
     changedValue(oldVal, newVal, applyFn) {
-      if (oldVal === newVal) return "(No change)";
+      if (oldVal === newVal) {
+        return "(No change)";
+      }
       return `${applyFn(oldVal)} ➜ ${applyFn(newVal)}`;
     },
     importFilter() {
-      if (this.parsedSettings === null) return;
+      if (this.parsedSettings === null) {
+        return;
+      }
       this.emitClose();
       player.reality.glyphs.filter = this.parsedSettings;
     },

@@ -6,7 +6,7 @@ export default {
   name: "GlyphLevelsAndWeights",
   components: {
     ToggleButton,
-    SliderComponent
+    SliderComponent,
   },
   data() {
     return {
@@ -18,7 +18,7 @@ export default {
       isAutoAdjustWeightsOn: false,
       factors: getGlyphLevelInputs(),
       shardsGained: 0,
-      weights: Object.assign({}, player.celestials.effarig.glyphWeights),
+      weights: { ...player.celestials.effarig.glyphWeights },
       rows: 3,
     };
   },
@@ -27,7 +27,7 @@ export default {
       // Column specifications: {factor_name, math_operator, factor_value, weight_adjustment, padding}
       const columns = this.adjustVisible ? "30% 3% 17% 48% 2%" : "80% 5% 15%";
       return {
-        width: "100%",
+        "width": "100%",
         "-ms-grid-columns": columns,
         "grid-template-columns": columns,
         "grid-auto-rows": "1fr",
@@ -42,19 +42,19 @@ export default {
     },
     sliderProps() {
       return {
-        min: 0,
-        max: 100,
-        interval: 1,
-        disabled: this.isAutoAdjustWeightsOn,
+        "min": 0,
+        "max": 100,
+        "interval": 1,
+        "disabled": this.isAutoAdjustWeightsOn,
         "dot-width": "2.2rem",
         "dot-height": "1.6rem",
-        width: "13.5rem",
-        tooltip: false,
+        "width": "13.5rem",
+        "tooltip": false,
         "value-in-dot": true,
         "plus-minus-buttons": true,
         "dot-class": "c-glyph-levels-and-weights__slider-handle",
         "bg-class": "c-glyph-levels-and-weights__slider-bg",
-        "process-class": "c-glyph-levels-and-weights__slider-process"
+        "process-class": "c-glyph-levels-and-weights__slider-process",
       };
     },
     totalWeights() {
@@ -63,13 +63,27 @@ export default {
     // The order that elements gets pushed in this method determines the display order
     visibleRows() {
       const rows = ["ep", "replicanti", "dt"];
-      if (this.eternityVisible) rows.push("eternities");
-      if (this.perkShopVisible) rows.push("perk shop");
-      if (this.shardVisible) rows.push("shards");
-      if (this.singularityVisible) rows.push("singularities");
-      if (this.penaltyVisible) rows.push("instability");
-      if (this.rowVisible) rows.push("upgrade rows");
-      if (this.achievementVisible) rows.push("achievements");
+      if (this.eternityVisible) {
+        rows.push("eternities");
+      }
+      if (this.perkShopVisible) {
+        rows.push("perk shop");
+      }
+      if (this.shardVisible) {
+        rows.push("shards");
+      }
+      if (this.singularityVisible) {
+        rows.push("singularities");
+      }
+      if (this.penaltyVisible) {
+        rows.push("instability");
+      }
+      if (this.rowVisible) {
+        rows.push("upgrade rows");
+      }
+      if (this.achievementVisible) {
+        rows.push("achievements");
+      }
       rows.push("level");
       rows.push("info");
       rows.push("info2");
@@ -86,12 +100,12 @@ export default {
     },
     singularityVisible() {
       return SingularityMilestone.glyphLevelFromSingularities.canBeApplied;
-    }
+    },
   },
   watch: {
     isAutoAdjustWeightsOn(newValue) {
       player.celestials.effarig.autoAdjustGlyphWeights = newValue;
-    }
+    },
   },
   created() {
     this.glyphWeightFields = Object.keys(player.celestials.effarig.glyphWeights);
@@ -99,7 +113,9 @@ export default {
     this.resetSavedWeights();
     // Used to debounce this row disappearing
     this.lastInstability = 0;
-    if (Glyphs.factorsOpen) this.$parent.$emit("openrequest");
+    if (Glyphs.factorsOpen) {
+      this.$parent.$emit("openrequest");
+    }
   },
   mounted() {
     // Effarig unlock sets a flag to open this dropdown
@@ -125,7 +141,9 @@ export default {
         this.penaltyVisible = true;
         this.lastInstability = Date.now();
       } else if (this.penaltyVisible) {
-        if (Date.now() - this.lastInstability > 2000) this.penaltyVisible = false;
+        if (Date.now() - this.lastInstability > 2000) {
+          this.penaltyVisible = false;
+        }
       }
       this.rows = this.visibleRows.length;
       if (this.adjustVisible && this.rows < 6) {
@@ -135,8 +153,10 @@ export default {
       this.factors = glyphFactors;
       this.shardsGained = Effarig.shardsGained;
       let same = true;
-      this.glyphWeightFields.forEach(e => {
-        if (this.weights[e] !== player.celestials.effarig.glyphWeights[e]) same = false;
+      this.glyphWeightFields.forEach((e) => {
+        if (this.weights[e] !== player.celestials.effarig.glyphWeights[e]) {
+          same = false;
+        }
         this.weights[e] = player.celestials.effarig.glyphWeights[e];
       });
       if (!same) {
@@ -150,7 +170,9 @@ export default {
     rowStyle(factor) {
       const row = this.visibleRows.findIndex(r => r === factor) + 1;
       // A bit of a hack, if we can't find the resource then factor is actually a number for the padding div
-      if (row === 0) return this.makeRowStyle(factor);
+      if (row === 0) {
+        return this.makeRowStyle(factor);
+      }
       return this.makeRowStyle(row);
     },
     formatFactor(x) {
@@ -174,7 +196,7 @@ export default {
     resetWeightsButtonClass() {
       return {
         "c-glyph-levels-and-weights__reset-btn": true,
-        "c-glyph-levels-and-weights__reset-btn-clickable": !this.isAutoAdjustWeightsOn
+        "c-glyph-levels-and-weights__reset-btn-clickable": !this.isAutoAdjustWeightsOn,
       };
     },
     resetWeights() {
@@ -182,7 +204,9 @@ export default {
       this.resetSavedWeights();
     },
     adjustSlider(which, value) {
-      if (this.weights[which] === value) return;
+      if (this.weights[which] === value) {
+        return;
+      }
       if (which !== this.lastAdjusted) {
         this.resetSavedWeights();
         // If we make the saved weight for the current adjustment be 0, there's less math to do later
@@ -197,20 +221,20 @@ export default {
         // integer values. So, a single increment will change just one other weight. In order for
         // the sum to be 100:   100 == value + restSum * k   --->  k == (100-value)/restSum
         // Except we use the saved values instead of the current ones:
-        const savedRestSum =
-          this.savedWeights.ep +
-          this.savedWeights.repl +
-          this.savedWeights.dt +
-          this.savedWeights.eternities;
+        const savedRestSum
+          = this.savedWeights.ep
+            + this.savedWeights.repl
+            + this.savedWeights.dt
+            + this.savedWeights.eternities;
         const reduceRatio = (100 - value) / savedRestSum;
         const newWeights = [];
-        this.glyphWeightFields.forEach(x => {
+        this.glyphWeightFields.forEach((x) => {
           if (x !== which) {
             newWeights.push(this.savedWeights[x] * reduceRatio);
           }
         });
         roundPreservingSum(newWeights);
-        this.glyphWeightFields.forEach(x => {
+        this.glyphWeightFields.forEach((x) => {
           if (x !== which) {
             player.celestials.effarig.glyphWeights[x] = newWeights.shift();
           }
@@ -219,14 +243,14 @@ export default {
       player.celestials.effarig.glyphWeights[which] = value;
     },
     resetSavedWeights() {
-      this.savedWeights = Object.assign({}, player.celestials.effarig.glyphWeights);
+      this.savedWeights = { ...player.celestials.effarig.glyphWeights };
       this.lastAdjusted = null;
     },
     factorString(source) {
       const name = this.adjustVisible ? source.name.slice(0, 4) : source.name;
       return `${format(source.coeff, 2, 4)}×${name}^${format(source.exp, 2, 3)}`;
-    }
-  }
+    },
+  },
 };
 
 // This function takes an array of data (3 elements), which add up to an integer, but
@@ -250,7 +274,9 @@ function roundPreservingSum(data) {
       }
     }
     // Everything is an integer
-    if (closest === -1) break;
+    if (closest === -1) {
+      break;
+    }
     let err = data[closest] - Math.round(data[closest]);
     data[closest] = Math.round(data[closest]);
     if (nonIntegers === 1) {

@@ -21,9 +21,11 @@ class SubtabState {
   }
 
   get isHidden() {
-    if (Enslaved.isRunning || Pelle.hasGalaxyGenerator) return false;
-    return ((player.options.hiddenSubtabBits[this._parent.id] & (1 << this.id)) !== 0) &&
-      this.hidable;
+    if (Enslaved.isRunning || Pelle.hasGalaxyGenerator) {
+      return false;
+    }
+    return ((player.options.hiddenSubtabBits[this._parent.id] & (1 << this.id)) !== 0)
+      && this.hidable;
   }
 
   get isUnlocked() {
@@ -56,7 +58,9 @@ class SubtabState {
   }
 
   toggleVisibility() {
-    if (this._parent.id === Tabs.current.id && this.id === Tabs.current._currentSubtab.id) return;
+    if (this._parent.id === Tabs.current.id && this.id === Tabs.current._currentSubtab.id) {
+      return;
+    }
     player.options.hiddenSubtabBits[this._parent.id] ^= (1 << this.id);
 
     checkTabVisibilityForSecretAchievement();
@@ -116,7 +120,9 @@ class TabState {
   }
 
   get isHidden() {
-    if (Enslaved.isRunning || Pelle.hasGalaxyGenerator) return false;
+    if (Enslaved.isRunning || Pelle.hasGalaxyGenerator) {
+      return false;
+    }
     const hasVisibleSubtab = this.subtabs.some(t => t.isAvailable);
     return (((player.options.hiddenTabBits & (1 << this.id)) !== 0) || !hasVisibleSubtab) && this.hidable;
   }
@@ -138,9 +144,13 @@ class TabState {
   }
 
   show(manual, subtab) {
-    if (!manual && !player.options.automaticTabSwitching || Quote.isOpen) return;
+    if (!manual && !player.options.automaticTabSwitching || Quote.isOpen) {
+      return;
+    }
     if (subtab !== undefined) {
-      if (!Enslaved.isRunning) subtab.unhideTab();
+      if (!Enslaved.isRunning) {
+        subtab.unhideTab();
+      }
       this._currentSubtab = subtab;
     } else if (ui.view.tab === this.key && ui.view.initialized && manual) {
       this._currentSubtab = cycleThroughSubtabs(this.subtabs, this._currentSubtab);
@@ -148,15 +158,23 @@ class TabState {
       this._currentSubtab = findLastOpenSubtab(this.id, this.subtabs);
     }
 
-    if (!this._currentSubtab.isUnlocked) this.resetToUnlocked();
-    if (!this._currentSubtab.isAvailable) this.resetToAvailable();
+    if (!this._currentSubtab.isUnlocked) {
+      this.resetToUnlocked();
+    }
+    if (!this._currentSubtab.isAvailable) {
+      this.resetToAvailable();
+    }
 
     ui.view.tab = this.key;
     ui.view.subtab = this._currentSubtab.key;
     const tabNotificationKey = this.key + this._currentSubtab.key;
-    if (player.tabNotifications.has(tabNotificationKey)) player.tabNotifications.delete(tabNotificationKey);
+    if (player.tabNotifications.has(tabNotificationKey)) {
+      player.tabNotifications.delete(tabNotificationKey);
+    }
 
-    if (manual) Modal.hideAll();
+    if (manual) {
+      Modal.hideAll();
+    }
     EventHub.dispatch(GAME_EVENT.TAB_CHANGED, this, this._currentSubtab);
   }
 
@@ -165,7 +183,9 @@ class TabState {
   }
 
   toggleVisibility() {
-    if (this.id === Tabs.current.id) return;
+    if (this.id === Tabs.current.id) {
+      return;
+    }
     player.options.hiddenTabBits ^= (1 << this.id);
 
     checkTabVisibilityForSecretAchievement();
@@ -186,10 +206,10 @@ class TabState {
 
 export const Tab = GameDatabase.tabs.mapToObject(
   config => config.key,
-  config => new TabState(config)
+  config => new TabState(config),
 );
 
-export const Tabs = (function() {
+export const Tabs = (function () {
   return {
     all: Object.values(Tab),
     get current() {
@@ -227,7 +247,9 @@ export const Tabs = (function() {
 
 const checkTabVisibilityForSecretAchievement = () => {
   // Checks if every unlocked tab that is hidable is hidden
-  if (Tabs.all.filter(t => t.isUnlocked && t.hidable).every(t => t.isHidden)) SecretAchievement(47).unlock();
+  if (Tabs.all.filter(t => t.isUnlocked && t.hidable).every(t => t.isHidden)) {
+    SecretAchievement(47).unlock();
+  }
 };
 
 EventHub.logic.on(GAME_EVENT.TAB_CHANGED, () => {

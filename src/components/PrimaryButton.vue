@@ -1,21 +1,23 @@
 <script>
-export default {
+import { defineComponent } from "vue";
+
+export default defineComponent({
   name: "PrimaryButton",
   props: {
     enabled: {
       type: Boolean,
       required: false,
-      default: true
-    }
+      default: true,
+    },
   },
   computed: {
     classObject() {
       return {
         "o-primary-btn--disabled": !this.enabled,
       };
-    }
-  }
-};
+    },
+  },
+});
 </script>
 
 <template>
@@ -27,4 +29,3 @@ export default {
     <slot />
   </button>
 </template>
-

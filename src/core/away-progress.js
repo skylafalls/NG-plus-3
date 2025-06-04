@@ -33,7 +33,9 @@ class AwayProgress {
   }
 
   get formatName() {
-    if (this.forcedName) return this.forcedName;
+    if (this.forcedName) {
+      return this.forcedName;
+    }
     // Format the camelCase name to Title Case, with spaces added before the capital letters
     return this.name
       .replaceAll(/[A-Z]/gu, match => ` ${match}`)
@@ -62,6 +64,10 @@ for (let index = 0; index < GameDatabase.awayProgressTypes.length; index++) {
   const name = entry.name;
   AwayProgressTypes.all[name] = entry;
   AwayProgressTypes.index.push(name);
-  if (entry.showOption) AwayProgressTypes.showOption.push(name);
-  if (entry.appearsInAwayModal) AwayProgressTypes.appearsInAwayModal.push(name);
+  if (entry.showOption) {
+    AwayProgressTypes.showOption.push(name);
+  }
+  if (entry.appearsInAwayModal) {
+    AwayProgressTypes.appearsInAwayModal.push(name);
+  }
 }

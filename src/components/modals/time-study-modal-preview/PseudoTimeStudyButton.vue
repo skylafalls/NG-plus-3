@@ -6,16 +6,16 @@ export default {
   props: {
     setup: {
       type: Object,
-      required: true
+      required: true,
     },
     forceIsBought: {
       type: Number,
-      default: 1
+      default: 1,
     },
     isNewFromImport: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     return {
@@ -31,7 +31,7 @@ export default {
     styleObject() {
       return {
         top: `${this.setup.top}rem`,
-        left: `${this.setup.left}rem`
+        left: `${this.setup.left}rem`,
       };
     },
     classObject() {
@@ -44,53 +44,73 @@ export default {
         "o-pseudo-time-study--small": this.setup.isSmall,
         "o-time-study--unavailable": !this.isBought && !this.isUseless,
         "o-time-study--bought": this.isBought && !this.isUseless,
-        "o-time-study--new-import": this.isNewFromImport && !this.isBought
+        "o-time-study--new-import": this.isNewFromImport && !this.isBought,
       };
     },
     pathClass() {
       switch (this.study.type) {
-        case TIME_STUDY_TYPE.NORMAL: {switch (this.setup.path) {
-            case TIME_STUDY_PATH.ANTIMATTER_DIM: {return "o-time-study-antimatter-dim";
+        case TIME_STUDY_TYPE.NORMAL: {
+          switch (this.setup.path) {
+            case TIME_STUDY_PATH.ANTIMATTER_DIM: {
+              return "o-time-study-antimatter-dim";
             }
-            case TIME_STUDY_PATH.INFINITY_DIM: {return "o-time-study-infinity-dim";
+            case TIME_STUDY_PATH.INFINITY_DIM: {
+              return "o-time-study-infinity-dim";
             }
-            case TIME_STUDY_PATH.TIME_DIM: {return "o-time-study-time-dim";
+            case TIME_STUDY_PATH.TIME_DIM: {
+              return "o-time-study-time-dim";
             }
-            case TIME_STUDY_PATH.ACTIVE: {return "o-time-study-active";
+            case TIME_STUDY_PATH.ACTIVE: {
+              return "o-time-study-active";
             }
-            case TIME_STUDY_PATH.PASSIVE: {return "o-time-study-passive";
+            case TIME_STUDY_PATH.PASSIVE: {
+              return "o-time-study-passive";
             }
-            case TIME_STUDY_PATH.IDLE: {return "o-time-study-idle";
+            case TIME_STUDY_PATH.IDLE: {
+              return "o-time-study-idle";
             }
-            case TIME_STUDY_PATH.LIGHT: {return "o-time-study-light";
+            case TIME_STUDY_PATH.LIGHT: {
+              return "o-time-study-light";
             }
-            case TIME_STUDY_PATH.DARK: {return "o-time-study-dark";
+            case TIME_STUDY_PATH.DARK: {
+              return "o-time-study-dark";
             }
-            default: {return "o-time-study-normal";
+            default: {
+              return "o-time-study-normal";
             }
           }
         }
-        case TIME_STUDY_TYPE.ETERNITY_CHALLENGE: {return "o-time-study-eternity-challenge";
+        case TIME_STUDY_TYPE.ETERNITY_CHALLENGE: {
+          return "o-time-study-eternity-challenge";
         }
-        case TIME_STUDY_TYPE.DILATION: {if (this.study.id === 6) return "o-time-study-reality";return "o-time-study-dilation";
+        case TIME_STUDY_TYPE.DILATION: {
+          if (this.study.id === 6) {
+            return "o-time-study-reality";
+          } return "o-time-study-dilation";
         }
-        case TIME_STUDY_TYPE.TRIAD: {return "o-time-study-triad";
+        case TIME_STUDY_TYPE.TRIAD: {
+          return "o-time-study-triad";
         }
       }
       return "";
     },
     studyClass() {
-      if (this.isUseless) return "";
+      if (this.isUseless) {
+        return "";
+      }
       return `${this.pathClass}--${this.isBought ? "bought" : "unavailable"}`;
     },
     studyString() {
       switch (this.study.type) {
-        case TIME_STUDY_TYPE.NORMAL: case TIME_STUDY_TYPE.TRIAD: {return `${this.study.id}`;}
-        case TIME_STUDY_TYPE.ETERNITY_CHALLENGE: {return `EC${this.study.id}`;
+        case TIME_STUDY_TYPE.NORMAL: case TIME_STUDY_TYPE.TRIAD: {
+          return `${this.study.id}`;
+        }
+        case TIME_STUDY_TYPE.ETERNITY_CHALLENGE: {
+          return `EC${this.study.id}`;
         }
       }
       return "";
-    }
+    },
   },
   methods: {
     update() {
@@ -99,7 +119,7 @@ export default {
       this.isBought = ForceBoughtState.getState(this.forceIsBought, study.isBought);
       this.doomedRealityStudy = study.type === TIME_STUDY_TYPE.DILATION && study.id === 6 && Pelle.isDoomed;
     },
-  }
+  },
 };
 </script>
 
@@ -133,7 +153,6 @@ export default {
 .o-time-study-dark--bought {
   color: white;
 }
-
 
 .o-time-study--new-import::before {
   content: "";

@@ -4,7 +4,7 @@ import GlyphSetPreview from "@/components/GlyphSetPreview";
 export default {
   name: "LaitelaRunButton",
   components: {
-    GlyphSetPreview
+    GlyphSetPreview,
   },
   data() {
     return {
@@ -19,7 +19,9 @@ export default {
   },
   computed: {
     completionTime() {
-      if (this.tierNotCompleted) return "Not completed at this tier";
+      if (this.tierNotCompleted) {
+        return "Not completed at this tier";
+      }
       return `Fastest Completion: ${TimeSpan.fromSeconds(new Decimal(this.realityTime)).toStringShort()}`;
     },
     runEffects() {
@@ -41,13 +43,15 @@ export default {
       this.tierNotCompleted = this.realityTime.eq(3600) || (this.realityTime.eq(300) && this.maxDimTier < 8);
     },
     startRun() {
-      if (this.isDoomed) return;
+      if (this.isDoomed) {
+        return;
+      }
       Modal.celestials.show({ name: "Lai'tela's", number: 5 });
     },
     classObject() {
       return {
         "o-laitela-run-button": true,
-        "o-laitela-run-button--large": !this.singularitiesUnlocked
+        "o-laitela-run-button--large": !this.singularitiesUnlocked,
       };
     },
     runButtonClassObject() {
@@ -55,10 +59,10 @@ export default {
         "o-laitela-run-button__icon": true,
         "o-laitela-run-button__icon--running": this.isRunning,
         "c-celestial-run-button--clickable": !this.isDoomed,
-        "o-pelle-disabled-pointer": this.isDoomed
+        "o-pelle-disabled-pointer": this.isDoomed,
       };
     },
-  }
+  },
 };
 </script>
 

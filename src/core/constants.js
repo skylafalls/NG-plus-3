@@ -9,9 +9,11 @@ window.PRESTIGE_EVENT = {
 };
 
 function deepFreeze(obj) {
-  Object.keys(obj).forEach(prop => {
+  Object.keys(obj).forEach((prop) => {
     const reference = obj[prop];
-    if (typeof reference === "object") deepFreeze(reference);
+    if (typeof reference === "object") {
+      deepFreeze(reference);
+    }
   });
   return Object.freeze(obj);
 }
@@ -24,7 +26,7 @@ export const DC = deepFreeze({
   // C: Calculation. D - .div, P - .pow
   // There are special values
 
-  /* eslint-disable key-spacing */
+  /* eslint-disable @stylistic/key-spacing */
   DM1:                  new Decimal("-1"),
   D0:                   new Decimal("0"),
 
@@ -223,7 +225,7 @@ export const DC = deepFreeze({
   NUMSAFE:              new Decimal(Number.MAX_SAFE_INTEGER),
   NUMMAX:               new Decimal(Number.MAX_VALUE),
   BIMAX:                new Decimal("e9e15"),
-  BEMAX:                new Decimal("10^^9000000000000000")
+  BEMAX:                new Decimal("10^^9000000000000000"),
 });
 
 window.AUTOBUYER_MODE = {
@@ -235,13 +237,13 @@ window.AUTOBUYER_MODE = {
 window.AUTO_CRUNCH_MODE = {
   AMOUNT: 0,
   TIME: 1,
-  X_HIGHEST: 2
+  X_HIGHEST: 2,
 };
 
 window.AUTO_ETERNITY_MODE = {
   AMOUNT: 0,
   TIME: 1,
-  X_HIGHEST: 2
+  X_HIGHEST: 2,
 };
 
 window.AUTO_REALITY_MODE = {
@@ -272,7 +274,7 @@ window.GLYPH_BG_SETTING = {
 window.ALTERATION_TYPE = {
   ADDITION: 1,
   EMPOWER: 2,
-  BOOST: 3
+  BOOST: 3,
 };
 
 window.BLACK_HOLE_PAUSE_MODE = {
@@ -295,7 +297,7 @@ window.AUTO_GLYPH_SCORE = {
   SPECIFIED_EFFECT: 3,
   EFFECT_SCORE: 4,
   LOWEST_ALCHEMY: 5,
-  ALCHEMY_VALUE: 6
+  ALCHEMY_VALUE: 6,
 };
 
 window.AUTO_GLYPH_REJECT = {
@@ -313,7 +315,7 @@ window.TIME_STUDY_PATH = {
   PASSIVE: 5,
   IDLE: 6,
   LIGHT: 7,
-  DARK: 8
+  DARK: 8,
 };
 
 window.TIME_STUDY_TYPE = {
@@ -351,7 +353,7 @@ window.ALCHEMY_RESOURCE = {
   BOUNDLESS: 17,
   MULTIVERSAL: 18,
   UNPREDICTABILITY: 19,
-  REALITY: 20
+  REALITY: 20,
 };
 
 window.SINGULARITY_MILESTONE_RESOURCE = {

@@ -6,11 +6,13 @@ export class DimBoostAutobuyerState extends UpgradeableAutobuyerState {
   }
 
   get name() {
-    return `Dimension Boost`;
+    return "Dimension Boost";
   }
 
   get isUnlocked() {
-    if (Pelle.isDisabled("dimBoostAutobuyer")) return false;
+    if (Pelle.isDisabled("dimBoostAutobuyer")) {
+      return false;
+    }
     return this.canBeUpgraded;
   }
 
@@ -100,7 +102,9 @@ export class DimBoostAutobuyerState extends UpgradeableAutobuyerState {
   tick() {
     if (this.isBuyMaxUnlocked) {
       const galaxyCondition = !this.limitUntilGalaxies || player.galaxies.gte(this.galaxies);
-      if (!DimBoost.canUnlockNewDimension && !galaxyCondition) return;
+      if (!DimBoost.canUnlockNewDimension && !galaxyCondition) {
+        return;
+      }
       requestDimensionBoost(true);
       super.tick();
       return;

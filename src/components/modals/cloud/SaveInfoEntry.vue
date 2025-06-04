@@ -23,7 +23,7 @@ export default {
     saveType: {
       type: String,
       required: true,
-    }
+    },
   },
   computed: {
     timePlayed() {
@@ -37,7 +37,7 @@ export default {
         ["pelleAM", "totalAntimatter"],
         ["Total Doomed Antimatter:", "Total Antimatter:"],
         [format, format],
-        ""
+        "",
       );
     },
     prestigeCount() {
@@ -45,7 +45,7 @@ export default {
         ["remnants", "realities", "eternities", "infinities"],
         ["Remnants:", "Realities:", "Eternities:", "Infinities:"],
         [format, this.formatSmall, this.formatSmall, this.formatSmall],
-        "(No prestige layers reached yet.)"
+        "(No prestige layers reached yet.)",
       );
     },
     prestigeResource() {
@@ -53,7 +53,7 @@ export default {
         ["realityShards", "imaginaryMachines", "realityMachines", "eternityPoints", "infinityPoints"],
         ["Reality Shards:", "Reality Machines:", "Reality Machines:", "Eternity Points:", "Infinity Points:"],
         [format, x => formatMachines(this.saveData.realityMachines, x), format, format, format],
-        ""
+        "",
       );
     },
     // This is a slight workaround to hide DT/level once Doomed
@@ -62,7 +62,7 @@ export default {
         ["pelleLore", "bestLevel", "dilatedTime"],
         ["Your Reality is Doomed.", "Best Glyph Level:", "Dilated Time:"],
         [() => "", formatInt, format],
-        ""
+        "",
       );
     },
     name() {
@@ -71,7 +71,9 @@ export default {
   },
   methods: {
     formatSmall(number) {
-      if (Decimal.gt(number, 1e4)) return format(number, 2);
+      if (Decimal.gt(number, 1e4)) {
+        return format(number, 2);
+      }
       return formatInt(number);
     },
     // Compares a list of properties in order, going through the array parameters until one of them is nonzero.
@@ -79,7 +81,7 @@ export default {
     // layer and we only style the number. If one of them is zero, then they're different layers and we color the
     // whole line instead. If every layer results in zero, we default to a given fallback string.
     // Properties here are drawn in values returned from getSaveInfo() in modal.js
-    // eslint-disable-next-line max-params
+
     compareLayeredValues(propArray, nameArray, formatArray, fallbackString) {
       // Determine if they're on the same layer and if it's better or worse
       let isSameLayer, isBetter;
@@ -119,13 +121,15 @@ export default {
       }
 
       // Style it appropriately
-      if (isBetter === 0) return `${layerName} ${layerValue}`;
+      if (isBetter === 0) {
+        return `${layerName} ${layerValue}`;
+      }
       const parseColor = color => getComputedStyle(document.body).getPropertyValue(`--color-${color}`).split("#")[1];
       const colorTag = `<span style="color:#${parseColor(isBetter === 1 ? "good" : "infinity")}">`;
       return isSameLayer
         ? `${layerName} ${colorTag}${layerValue}</span>`
         : `${colorTag}${layerName} ${layerValue}</span>`;
-    }
+    },
   },
 };
 </script>

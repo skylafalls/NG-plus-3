@@ -14,7 +14,9 @@ export const Teresa = {
     return Achievement(147).isUnlocked;
   },
   pourRM(diff) {
-    if (this.pouredAmount >= Teresa.pouredAmountCap) return;
+    if (this.pouredAmount >= Teresa.pouredAmountCap) {
+      return;
+    }
     this.timePoured += diff;
     const rm = Currency.realityMachines.value.max(1e100);
     const rmPoured = Math.min((this.pouredAmount + 1e6) * 0.01 * Math.pow(this.timePoured, 2), rm.toNumber());
@@ -121,15 +123,22 @@ class PerkShopUpgradeState extends RebuyableMechanicState {
     // Fill the inventory with music glyphs
     if (this.id === 5 && !Pelle.isDoomed) {
       const toCreate = GameCache.glyphInventorySpace.value;
-      for (let count = 0; count < toCreate; count++) Glyphs.addToInventory(GlyphGenerator.musicGlyph());
+      for (let count = 0; count < toCreate; count++) {
+        Glyphs.addToInventory(GlyphGenerator.musicGlyph());
+      }
       GameUI.notify.success(`Created ${quantifyInt("Music Glyph", toCreate)}`);
     }
   }
 }
 
 class TeresaUnlockState extends BitUpgradeState {
-  get bits() { return player.celestials.teresa.unlockBits; }
-  set bits(value) { player.celestials.teresa.unlockBits = value; }
+  get bits() {
+    return player.celestials.teresa.unlockBits;
+  }
+
+  set bits(value) {
+    player.celestials.teresa.unlockBits = value;
+  }
 
   get price() {
     return this.config.price;
@@ -158,16 +167,18 @@ class TeresaUnlockState extends BitUpgradeState {
 
 export const TeresaUnlocks = mapGameDataToObject(
   GameDatabase.celestials.teresa.unlocks,
-  config => new TeresaUnlockState(config)
+  config => new TeresaUnlockState(config),
 );
 
 export const PerkShopUpgrade = mapGameDataToObject(
   GameDatabase.celestials.perkShop,
-  config => new PerkShopUpgradeState(config)
+  config => new PerkShopUpgradeState(config),
 );
 
 EventHub.logic.on(GAME_EVENT.TAB_CHANGED, () => {
-  if (Tab.celestials.teresa.isOpen) Teresa.quotes.initial.show();
+  if (Tab.celestials.teresa.isOpen) {
+    Teresa.quotes.initial.show();
+  }
 });
 
 EventHub.logic.on(GAME_EVENT.GAME_LOAD, () => Teresa.checkForUnlocks());

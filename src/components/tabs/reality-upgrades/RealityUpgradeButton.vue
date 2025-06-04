@@ -12,13 +12,13 @@ export default {
     DescriptionDisplay,
     EffectDisplay,
     CostDisplay,
-    HintText
+    HintText,
   },
   props: {
     upgrade: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {
@@ -49,7 +49,7 @@ export default {
     },
     requirementConfig() {
       return {
-        description: this.config.requirement
+        description: this.config.requirement,
       };
     },
     canLock() {
@@ -62,7 +62,7 @@ export default {
   watch: {
     isAutobuyerOn(newValue) {
       Autobuyer.realityUpgrade(this.upgrade.id).isActive = newValue;
-    }
+    },
   },
   methods: {
     update() {
@@ -76,13 +76,17 @@ export default {
       this.isAutoUnlocked = Ra.unlocks.instantECAndRealityUpgradeAutobuyers.canBeApplied;
       this.canBeLocked = upgrade.config.canLock && !this.isAvailableForPurchase;
       this.hasRequirementLock = upgrade.hasPlayerLock;
-      if (this.isRebuyable) this.isAutobuyerOn = Autobuyer.realityUpgrade(upgrade.id).isActive;
+      if (this.isRebuyable) {
+        this.isAutobuyerOn = Autobuyer.realityUpgrade(upgrade.id).isActive;
+      }
     },
     toggleLock(upgrade) {
-      if (this.isRebuyable) return;
+      if (this.isRebuyable) {
+        return;
+      }
       upgrade.toggleMechanicLock();
-    }
-  }
+    },
+  },
 };
 </script>
 

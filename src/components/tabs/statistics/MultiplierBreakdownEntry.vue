@@ -11,13 +11,13 @@ const nerfBlacklist = new Set(["IP_base", "EP_base", "TP_base"]);
 function padPercents(percents) {
   // Add some padding to percents to prevent text flicker
   // Max length is for "-100.0%"
-  return percents.padStart(7, '\u00A0');
+  return percents.padStart(7, "\u00A0");
 }
 
 export default {
   name: "MultiplierBreakdownEntry",
   components: {
-    PrimaryToggleButton
+    PrimaryToggleButton,
   },
   props: {
     resource: {
@@ -28,7 +28,7 @@ export default {
       type: Boolean,
       required: false,
       default: false,
-    }
+    },
   },
   data() {
     return {
@@ -74,9 +74,11 @@ export default {
       return !this.isRecent(this.lastNotEmptyAt);
     },
     disabledText() {
-      if (!this.resource.isBase) return `Total effect inactive, disabled, or reduced to ${formatX(1)}`;
+      if (!this.resource.isBase) {
+        return `Total effect inactive, disabled, or reduced to ${formatX(1)}`;
+      }
       return Decimal.eq(this.resource.mult, 0)
-        ? `You cannot gain this resource (prestige requirement not reached)`
+        ? "You cannot gain this resource (prestige requirement not reached)"
         : `You have no multipliers for this resource (will gain ${format(1)} on prestige)`;
     },
     // IC4 is the first time the player sees a power-based effect, not counting how infinity power is handled.
@@ -157,7 +159,7 @@ export default {
 
         // This is clamped to a minimum of something that's still nonzero in order to show it at <0.1% instead of 0%
         percentList.push(
-          [entry.ignoresNerfPowers, nerfBlacklist.has(entry.key) ? Decimal.clampMin(perc, 0.0001) : perc]
+          [entry.ignoresNerfPowers, nerfBlacklist.has(entry.key) ? Decimal.clampMin(perc, 0.0001) : perc],
         );
       }
 
@@ -171,7 +173,7 @@ export default {
       const totalPerc = percentList.filter(p => p[1] > 0).map(p => p[1]).sum();
       const nerfedPerc = percentList.filter(p => p[1] > 0)
         .reduce((x, y) => x + (y[0] ? y[1] : y[1] * totalNegPow), 0);
-      percentList = percentList.map(p => {
+      percentList = percentList.map((p) => {
         if (p[1] > 0) {
           return (p[0] ? p[1] : p[1] * totalNegPow) / nerfedPerc;
         }
@@ -190,14 +192,14 @@ export default {
       const percents = this.averagedPercentList[index];
       const barSize = perc => (perc > 0 ? perc * netPerc : -perc);
       return {
-        position: "absolute",
-        top: `${100 * this.averagedPercentList.slice(0, index).map(p => barSize(p)).sum()}%`,
-        height: `${100 * barSize(percents)}%`,
-        width: "100%",
+        "position": "absolute",
+        "top": `${100 * this.averagedPercentList.slice(0, index).map(p => barSize(p)).sum()}%`,
+        "height": `${100 * barSize(percents)}%`,
+        "width": "100%",
         "transition-duration": this.isRecent(this.lastLayoutChange) ? undefined : "0.2s",
-        border: percents === 0 ? "" : "0.1rem solid var(--color-text)",
-        color: iconObj?.textColor ?? "black",
-        background: isNerf
+        "border": percents === 0 ? "" : "0.1rem solid var(--color-text)",
+        "color": iconObj?.textColor ?? "black",
+        "background": isNerf
           ? `repeating-linear-gradient(-45deg, var(--color-bad), ${iconObj?.color} 0.8rem)`
           : iconObj?.color,
       };
@@ -222,7 +224,7 @@ export default {
     },
     expandIconStyle(index) {
       return {
-        opacity: this.hasChildEntries(index) ? 1 : 0
+        opacity: this.hasChildEntries(index) ? 1 : 0,
       };
     },
     entryString(index) {
@@ -234,11 +236,17 @@ export default {
       // We want to handle very small numbers carefully to distinguish between "disabled/inactive" and
       // "too small to be relevant"
       let percString;
-      if (percents === 0) percString = formatPercents(0);
-      else if (percents === 1) percString = formatPercents(1);
-      else if (percents < 0.001) percString = `<${formatPercents(0.001, 1)}`;
-      else if (percents > 0.9995) percString = `~${formatPercents(1)}`;
-      else percString = formatPercents(percents, 1);
+      if (percents === 0) {
+        percString = formatPercents(0);
+      } else if (percents === 1) {
+        percString = formatPercents(1);
+      } else if (percents < 0.001) {
+        percString = `<${formatPercents(0.001, 1)}`;
+      } else if (percents > 0.9995) {
+        percString = `~${formatPercents(1)}`;
+      } else {
+        percString = formatPercents(percents, 1);
+      }
       percString = padPercents(percString);
 
       // Display both multiplier and powers, but make sure to give an empty string if there's neither
@@ -248,10 +256,11 @@ export default {
       }
       const overrideStr = entry.displayOverride;
       let valueStr;
-      if (overrideStr) valueStr = `(${overrideStr})`;
-      else {
+      if (overrideStr) {
+        valueStr = `(${overrideStr})`;
+      } else {
         const values = [];
-        const formatFn = x => {
+        const formatFn = (x) => {
           const isDilated = entry.isDilated;
           if (isDilated && this.dilationExponent !== 1) {
             const undilated = this.applyDilationExp(x, 1 / this.dilationExponent);
@@ -269,8 +278,12 @@ export default {
           const equivMult = this.totalMultiplier.pow((this.totalPositivePower - 1) * powFrac);
           values.push(formatFn(entry.data.mult.times(equivMult)));
         } else {
-          if (Decimal.neq(entry.data.mult, 1)) values.push(formatFn(entry.data.mult));
-          if (entry.data.pow !== 1) values.push(formatPow(entry.data.pow, 2, 3));
+          if (Decimal.neq(entry.data.mult, 1)) {
+            values.push(formatFn(entry.data.mult));
+          }
+          if (entry.data.pow !== 1) {
+            values.push(formatPow(entry.data.pow, 2, 3));
+          }
         }
         valueStr = values.length === 0 ? "" : `(${values.join(", ")})`;
       }
@@ -288,8 +301,9 @@ export default {
         ? x => format(x, 2, 2)
         : x => `/${format(x.reciprocal(), 2, 2)}`;
 
-      if (overrideStr) valueStr = `(${overrideStr})`;
-      else {
+      if (overrideStr) {
+        valueStr = `(${overrideStr})`;
+      } else {
         const values = [];
         if (this.replacePowers && entry.data.pow !== 1) {
           const finalMult = this.resource.fakeValue ?? this.resource.mult;
@@ -298,7 +312,9 @@ export default {
           if (Decimal.neq(entry.data.mult, 1)) {
             values.push(formatFn(entry.data.mult));
           }
-          if (entry.data.pow !== 1) values.push(formatPow(entry.data.pow, 2, 3));
+          if (entry.data.pow !== 1) {
+            values.push(formatPow(entry.data.pow, 2, 3));
+          }
         }
         valueStr = values.length === 0 ? "" : `(${values.join(", ")})`;
       }
@@ -309,7 +325,9 @@ export default {
       const resource = this.resource;
       const name = resource.name;
       const overrideStr = resource.displayOverride;
-      if (overrideStr) return `${name}: ${overrideStr}`;
+      if (overrideStr) {
+        return `${name}: ${overrideStr}`;
+      }
 
       const val = resource.mult;
       return resource.isBase
@@ -350,7 +368,7 @@ export default {
     },
     isRecent(date) {
       return (this.now - date) < 200;
-    }
+    },
   },
 };
 </script>

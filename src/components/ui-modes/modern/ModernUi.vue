@@ -8,7 +8,6 @@ import NewsTicker from "../NewsTicker";
 
 import GameSpeedDisplay from "@/components/GameSpeedDisplay";
 
-
 export default {
   name: "ModernUi",
   components: {
@@ -33,7 +32,7 @@ export default {
     },
     topMargin() {
       return this.$viewModel.news ? "" : "margin-top: 3.9rem";
-    }
+    },
   },
   methods: {
     update() {
@@ -45,9 +44,12 @@ export default {
       this.newGameKey = Pelle.isDoomed;
     },
     handleClick() {
-      if (PlayerProgress.infinityUnlocked()) manualBigCrunchResetRequest();
-      else Modal.bigCrunch.show();
-    }
+      if (PlayerProgress.infinityUnlocked()) {
+        manualBigCrunchResetRequest();
+      } else {
+        Modal.bigCrunch.show();
+      }
+    },
   },
 };
 </script>

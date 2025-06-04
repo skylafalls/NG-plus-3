@@ -6,17 +6,19 @@ import ModalWrapperChoice from "@/components/modals/ModalWrapperChoice";
 export default {
   name: "ExitDilationModal",
   components: {
-    ModalWrapperChoice
+    ModalWrapperChoice,
   },
   data() {
     return {
       tachyonGain: new Decimal(0),
-      isDoomed: false
+      isDoomed: false,
     };
   },
   computed: {
     gainText() {
-      if (this.tachyonGain.lte(0)) return `not gain anything`;
+      if (this.tachyonGain.lte(0)) {
+        return "not gain anything";
+      }
       return `gain ${quantify("Tachyon Particle", this.tachyonGain, 2, 1)}`;
     },
     isInEC() {
@@ -24,18 +26,22 @@ export default {
     },
     confirmText() {
       return this.isDoomed ? "Okay" : "Exit";
-    }
+    },
   },
   methods: {
     update() {
       // We force-close the modal if dilation is inactive because there are a few edge cases which allow it to be
       // opened while switching between dilated/regular. The only thing this results in is an incorrect TP gain value
-      if (!player.dilation.active) this.emitClose();
+      if (!player.dilation.active) {
+        this.emitClose();
+      }
       this.tachyonGain.copyFrom(getTachyonGain(true));
       this.isDoomed = Pelle.isDoomed;
     },
     handleYesClick() {
-      if (!player.dilation.active) return;
+      if (!player.dilation.active) {
+        return;
+      }
       const playAnimation = player.options.animations.dilation && !FullScreenAnimationHandler.isDisplaying;
       if (playAnimation) {
         animateAndUndilate();

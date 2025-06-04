@@ -7,7 +7,7 @@ export function metaDimensionCommonMultiplier() {
   multiplier = multiplier.times(Achievements.power);
   multiplier = multiplier.timesEffectsOf(
     DilationUpgrade.mdMultTickspeed,
-    MasteryStudy(32)
+    MasteryStudy(32),
   );
 
   return multiplier;
@@ -41,8 +41,8 @@ class MetaDimensionState extends DimensionState {
     return new ExponentialCostScaling({
       baseCost: this._baseCost,
       baseIncrease: this._baseCostMultiplier,
-      costScale: new Decimal(10),
-      scalingCostThreshold: DC.NUMMAX
+      costScale: new Decimal(100),
+      scalingCostThreshold: DC.NUMMAX,
     });
   }
 
@@ -54,9 +54,14 @@ class MetaDimensionState extends DimensionState {
   }
 
   /** @returns {number} */
-  get costBumps() { return this.data.costBumps; }
+  get costBumps() {
+    return this.data.costBumps;
+  }
+
   /** @param {number} value */
-  set costBumps(value) { this.data.costBumps = value; }
+  set costBumps(value) {
+    this.data.costBumps = value;
+  }
 
   /**
    * @returns {number}
@@ -94,7 +99,7 @@ class MetaDimensionState extends DimensionState {
     }
 
     let toGain = MetaDimension(tier + 1).productionPerSecond;
-    return toGain.times(getGameSpeedupForDisplay()).mul((player.options.updateRate ?? 20) / 300);
+    return toGain.times(getGameSpeedupForDisplay()).div(10);
   }
 
   /**
@@ -122,10 +127,9 @@ class MetaDimensionState extends DimensionState {
    * @returns {number}
    */
   get continuumValue() {
-    if (!this.isAvailableForPurchase) return DC.D0;
-    // Nameless limits dim 8 purchases to 1 only
-    // Continuum should be no different
-    if (this.tier === 8 && Enslaved.isRunning) return DC.D1;
+    if (!this.isAvailableForPurchase) {
+      return DC.D0;
+    }
     // It's safe to use dimension.currencyAmount because this is
     // a dimension-only method (so don't just copy it over to tickspeed).
     // We need to use dimension.currencyAmount here because of different costs in NC6.
@@ -162,9 +166,13 @@ class MetaDimensionState extends DimensionState {
   }
 
   get isAvailableForPurchase() {
-    if (MetaDimensions.boost.totalBoosts.add(4).lt(this.tier)) return false;
+    if (MetaDimensions.boost.totalBoosts.add(4).lt(this.tier)) {
+      return false;
+    }
     const hasPrevTier = this.tier === 1 || MetaDimension(this.tier - 1).totalAmount.gt(0);
-    if (!hasPrevTier) return false;
+    if (!hasPrevTier) {
+      return false;
+    }
     return this.tier < 7 || !NormalChallenge(10).isRunning;
   }
 
@@ -225,7 +233,9 @@ export const MetaDimensions = {
 
   get dimensionBoostMultiplier() {
     let multiplier = player.meta.bestAntimatter.sub(10).pow(this.metaAMtoDimBoostExponent).max(1);
-    if (EternityChallenge(14).isRunning) return new Decimal(1);
+    if (EternityChallenge(14).isRunning) {
+      return new Decimal(1);
+    }
     return multiplier;
   },
 
@@ -258,7 +268,9 @@ export const MetaDimensions = {
 
   buyOne(tier) {
     const dimension = MetaDimension(tier);
-    if (!dimension.isAvailableForPurchase || !dimension.isAffordable) return false;
+    if (!dimension.isAvailableForPurchase || !dimension.isAffordable) {
+      return false;
+    }
 
     const cost = dimension.cost;
 
@@ -273,7 +285,9 @@ export const MetaDimensions = {
 
   buyMany(tier) {
     const dimension = MetaDimension(tier);
-    if (!dimension.isAvailableForPurchase || !dimension.isAffordableUntil10) return false;
+    if (!dimension.isAvailableForPurchase || !dimension.isAffordableUntil10) {
+      return false;
+    }
     const cost = dimension.costUntil10;
 
     dimension.currencyAmount = dimension.currencyAmount.minus(cost).max(0);
@@ -287,7 +301,9 @@ export const MetaDimensions = {
 
   buyAsManyAsYouCanBuy(tier) {
     const dimension = MetaDimension(tier);
-    if (!dimension.isAvailableForPurchase || !dimension.isAffordable) return false;
+    if (!dimension.isAvailableForPurchase || !dimension.isAffordable) {
+      return false;
+    }
     const howMany = dimension.howManyCanBuy;
     const cost = dimension.cost.times(howMany);
 
@@ -302,7 +318,9 @@ export const MetaDimensions = {
 
   buyMax(tier, bulk = Infinity) {
     const dimension = MetaDimension(tier);
-    if (!dimension.isAvailableForPurchase || !dimension.isAffordableUntil10) return;
+    if (!dimension.isAvailableForPurchase || !dimension.isAffordableUntil10) {
+      return;
+    }
     const cost = dimension.costUntil10;
     let bulkLeft = new Decimal(bulk);
 
@@ -313,17 +331,21 @@ export const MetaDimensions = {
       bulkLeft = bulkLeft.sub(1);
     }
 
-    if (bulkLeft.lte(0)) return;
+    if (bulkLeft.lte(0)) {
+      return;
+    }
 
     // This is the bulk-buy math, explicitly ignored if abnormal cost increases are active
     const maxBought = dimension.costScale.getMaxBought(
-      Decimal.floor(dimension.bought.div(10)).add(dimension.costBumps), dimension.currencyAmount, DC.E1
+      Decimal.floor(dimension.bought.div(10)).add(dimension.costBumps), dimension.currencyAmount, DC.E1,
     );
     if (maxBought === null) {
       return;
     }
     let buying = maxBought.quantity;
-    if (buying.gt(bulkLeft)) buying = new Decimal(bulkLeft);
+    if (buying.gt(bulkLeft)) {
+      buying = new Decimal(bulkLeft);
+    }
     dimension.amount = dimension.amount.plus(buying);
     dimension.bought = dimension.bought.add(buying);
     dimension.currencyAmount = dimension.currencyAmount.minus(Decimal.pow10(maxBought.logPrice)).max(0);
@@ -360,7 +382,9 @@ export const MetaDimensions = {
     },
 
     get canBeBought() {
-      if (MetaDimensions.boost.purchasedBoosts.gte(this.maxBoosts)) return false;
+      if (MetaDimensions.boost.purchasedBoosts.gte(this.maxBoosts)) {
+        return false;
+      }
       return true;
     },
 
@@ -384,7 +408,9 @@ export const MetaDimensions = {
     },
 
     get unlockedByBoost() {
-      if (MetaDimensions.boost.lockText !== null) return MetaDimensions.boost.lockText;
+      if (MetaDimensions.boost.lockText !== null) {
+        return MetaDimensions.boost.lockText;
+      }
       const boosts = MetaDimensions.boost.purchasedBoosts;
       const allNDUnlocked = EternityMilestone.unlockAllND.isReached;
 
@@ -394,18 +420,30 @@ export const MetaDimensions = {
       }
 
       const formattedMultText = `give a ${formatX(MetaDimensions.boost.power, 2, 1)} multiplier `;
-      let dimensionRange = `to the 1st Dimension`;
-      if (boosts.gt(0)) dimensionRange = `to Dimensions 1-${Decimal.min(boosts.add(1), 8)}`;
-      if (boosts.gte(MetaDimensions.boost.maxDimensionsUnlockable - 1)) dimensionRange = `to all Dimensions`;
+      let dimensionRange = "to the 1st Dimension";
+      if (boosts.gt(0)) {
+        dimensionRange = `to Dimensions 1-${Decimal.min(boosts.add(1), 8)}`;
+      }
+      if (boosts.gte(MetaDimensions.boost.maxDimensionsUnlockable - 1)) {
+        dimensionRange = "to all Dimensions";
+      }
 
       let boostEffects;
-      if (NormalChallenge(8).isRunning) boostEffects = newUnlock;
-      else if (newUnlock === "") boostEffects = `${formattedMultText} ${dimensionRange}`;
-      else boostEffects = `${newUnlock} and ${formattedMultText} ${dimensionRange}`;
+      if (NormalChallenge(8).isRunning) {
+        boostEffects = newUnlock;
+      } else if (newUnlock === "") {
+        boostEffects = `${formattedMultText} ${dimensionRange}`;
+      } else {
+        boostEffects = `${newUnlock} and ${formattedMultText} ${dimensionRange}`;
+      }
 
-      if (boostEffects === "") return "Dimension Boosts are currently useless";
+      if (boostEffects === "") {
+        return "Dimension Boosts are currently useless";
+      }
       const areDimensionsKept = false;
-      if (areDimensionsKept) return boostEffects[0].toUpperCase() + boostEffects.slice(1);
+      if (areDimensionsKept) {
+        return boostEffects[0].toUpperCase() + boostEffects.slice(1);
+      }
       return `Reset your Dimensions to ${boostEffects}`;
     },
 
@@ -422,26 +460,41 @@ export const MetaDimensions = {
     },
 
     manualRequest(bulk) {
-      if (!MetaDimensions.boost.requirement.isSatisfied) return false;
-      if (!MetaDimensions.boost.canBeBought) return false;
+      if (!MetaDimensions.boost.requirement.isSatisfied) {
+        return false;
+      }
+      if (!MetaDimensions.boost.canBeBought) {
+        return false;
+      }
       this.request(bulk);
     },
 
     request(bulk) {
-      if (!MetaDimensions.boost.requirement.isSatisfied) return false;
-      if (!MetaDimensions.boost.canBeBought) return false;
-      if (bulk > 1) this.maxBuy();
-      else this.dimensionBoostReset(1);
+      if (!MetaDimensions.boost.requirement.isSatisfied) {
+        return false;
+      }
+      if (!MetaDimensions.boost.canBeBought) {
+        return false;
+      }
+      if (bulk > 1) {
+        this.maxBuy();
+      } else {
+        this.dimensionBoostReset(1);
+      }
     },
 
     maxBuy() {
       // Boosts that unlock new dims are bought one at a time, unlocking the next dimension
       if (this.canUnlockNewDimension) {
-        if (this.requirement.isSatisfied) this.dimensionBoostReset(1);
+        if (this.requirement.isSatisfied) {
+          this.dimensionBoostReset(1);
+        }
         return;
       }
       const req1 = this.bulkRequirement(1);
-      if (!req1.isSatisfied) return;
+      if (!req1.isSatisfied) {
+        return;
+      }
       const req2 = this.bulkRequirement(2);
       if (!req2.isSatisfied) {
         this.dimensionBoostReset(1);
@@ -460,7 +513,9 @@ export const MetaDimensions = {
       // Dimension boosts 1-4 dont use 8th dims, 1-2 dont use 6th dims, so add those extras afterwards.
 
       // Add one cause (x-b)/i is off by one otherwise
-      if (calcBoosts.floor().add(1).lte(this.purchasedBoosts)) return;
+      if (calcBoosts.floor().add(1).lte(this.purchasedBoosts)) {
+        return;
+      }
       calcBoosts = calcBoosts.sub(this.purchasedBoosts);
       const minBoosts = Decimal.min(DC.BEMAX, calcBoosts.floor().add(1));
 
@@ -472,6 +527,6 @@ export const MetaDimensions = {
       player.meta.boosts = (Decimal.max(DC.D0, player.meta.boosts.add(bulk)));
       MetaDimensions.reset();
       Currency.metaAntimatter.reset();
-    }
-  }
+    },
+  },
 };

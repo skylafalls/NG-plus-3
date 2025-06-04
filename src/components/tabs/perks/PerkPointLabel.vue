@@ -4,7 +4,7 @@ import PrimaryButton from "@/components/PrimaryButton";
 export default {
   name: "PerkPointLabel",
   components: {
-    PrimaryButton
+    PrimaryButton,
   },
   data() {
     return {
@@ -21,7 +21,7 @@ export default {
     physicsText() {
       const enableStr = (this.physicsOverride ?? this.physicsEnabled) ? "Enabled" : "Disabled";
       return `${enableStr}${this.physicsOverride === undefined ? "" : " (fixed)"}`;
-    }
+    },
   },
   created() {
     this.treeLayout = player.options.perkLayout;
@@ -33,14 +33,16 @@ export default {
       this.physicsEnabled = player.options.perkPhysicsEnabled;
     },
     togglePhysics() {
-      if (this.physicsOverride !== undefined) return;
+      if (this.physicsOverride !== undefined) {
+        return;
+      }
       player.options.perkPhysicsEnabled = !player.options.perkPhysicsEnabled;
       PerkNetwork.setPhysics(player.options.perkPhysicsEnabled);
     },
     physicsClassObject() {
       return {
         "o-primary-btn c-button-physics": true,
-        "o-primary-btn--disabled": this.physicsOverride !== undefined
+        "o-primary-btn--disabled": this.physicsOverride !== undefined,
       };
     },
     centerTree() {
@@ -63,8 +65,8 @@ export default {
       PerkNetwork.currentLayout = PerkLayouts[this.treeLayout];
       PerkNetwork.setPhysics(player.options.perkPhysicsEnabled);
       PerkNetwork.moveToDefaultLayoutPositions(this.treeLayout);
-    }
-  }
+    },
+  },
 };
 </script>
 

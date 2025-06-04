@@ -37,7 +37,9 @@ class CosmeticGlyphType {
 
   get currentSymbol() {
     const custom = player.reality.glyphs.cosmetics.symbolMap[this.id];
-    if (!player.reality.glyphs.cosmetics.active || !custom) return this.defaultSymbol;
+    if (!player.reality.glyphs.cosmetics.active || !custom) {
+      return this.defaultSymbol;
+    }
     return {
       symbol: custom,
       blur: !(this.preventBlur || GlyphAppearanceHandler.unblurredSymbols.includes(custom)),
@@ -46,7 +48,9 @@ class CosmeticGlyphType {
 
   get currentColor() {
     const custom = player.reality.glyphs.cosmetics.colorMap[this.id];
-    if (!player.reality.glyphs.cosmetics.active || !custom) return this.defaultColor;
+    if (!player.reality.glyphs.cosmetics.active || !custom) {
+      return this.defaultColor;
+    }
     const colorProps = GlyphAppearanceHandler.getColorProps(custom);
     return {
       ...colorProps,
@@ -62,19 +66,21 @@ class CosmeticGlyphType {
 function getGlyphTypes() {
   const v = { ...GlyphInfo };
   for (const item in GlyphInfo) {
-    if (!GlyphInfo.glyphTypes.includes(item)) delete v[item];
+    if (!GlyphInfo.glyphTypes.includes(item)) {
+      delete v[item];
+    }
   }
   return v;
 }
 
 const functionalGlyphs = mapGameDataToObject(
   getGlyphTypes(),
-  config => new CosmeticGlyphType(config, false)
+  config => new CosmeticGlyphType(config, false),
 );
 
 const cosmeticGlyphs = mapGameDataToObject(
   GameDatabase.reality.cosmeticGlyphs,
-  config => new CosmeticGlyphType(config, true)
+  config => new CosmeticGlyphType(config, true),
 );
 
 export const CosmeticGlyphTypes = {
@@ -111,20 +117,26 @@ export const GlyphAppearanceHandler = {
       .filter(s => this.unlockedSets.includes(s.id))
       .flatMap(s => s.color)
       .sort((a, b) => {
-        const getHue = hex => {
+        const getHue = (hex) => {
           const parts = hex.split("#");
           const color = parts[1];
           const rgb = [
             parseInt(color.slice(0, 2), 16) / 255,
             parseInt(color.slice(2, 4), 16) / 255,
-            parseInt(color.slice(4), 16) / 255
+            parseInt(color.slice(4), 16) / 255,
           ];
           const min = Math.min(...rgb), max = Math.max(...rgb);
-          if (max - min < 0.3) return max;
+          if (max - min < 0.3) {
+            return max;
+          }
           let rawHue;
-          if (rgb[0] === max) rawHue = (rgb[1] - rgb[2]) / (max - min);
-          else if (rgb[1] === max) rawHue = 2 + (rgb[2] - rgb[1]) / (max - min);
-          else rawHue = 4 + (rgb[0] - rgb[1]) / (max - min);
+          if (rgb[0] === max) {
+            rawHue = (rgb[1] - rgb[2]) / (max - min);
+          } else if (rgb[1] === max) {
+            rawHue = 2 + (rgb[2] - rgb[1]) / (max - min);
+          } else {
+            rawHue = 4 + (rgb[0] - rgb[1]) / (max - min);
+          }
           return 6 + ((rawHue + 6) % 6);
         };
         return getHue(a) - getHue(b);
@@ -140,8 +152,11 @@ export const GlyphAppearanceHandler = {
     const shorter = blackArr.length > whiteArr.length ? whiteArr : blackArr;
     const combined = [];
     for (let index = 0; index < longer.length; index++) {
-      if (index < shorter.length) combined.push([longer[index], shorter[index]]);
-      else combined.push([longer[index]]);
+      if (index < shorter.length) {
+        combined.push([longer[index], shorter[index]]);
+      } else {
+        combined.push([longer[index]]);
+      }
     }
 
     return combined;
@@ -165,18 +180,24 @@ export const GlyphAppearanceHandler = {
   // Returns true for "light" BG glyphs and false for "dark" BG glyphs
   get isLightBG() {
     switch (player.options.glyphBG) {
-      case GLYPH_BG_SETTING.AUTO: {return !Theme.current().isDark();
+      case GLYPH_BG_SETTING.AUTO: {
+        return !Theme.current().isDark();
       }
-      case GLYPH_BG_SETTING.LIGHT: {return true;
+      case GLYPH_BG_SETTING.LIGHT: {
+        return true;
       }
-      case GLYPH_BG_SETTING.DARK: {return false;
+      case GLYPH_BG_SETTING.DARK: {
+        return false;
       }
-      default: {throw new Error("Unrecognized Glyph BG setting");
+      default: {
+        throw new Error("Unrecognized Glyph BG setting");
       }
     }
   },
   getBorderColor(type) {
-    if (type === "cursed" && !CosmeticGlyphTypes.cursed.currentColor.str) return this.isLightBG ? "#ffffff" : "#000000";
+    if (type === "cursed" && !CosmeticGlyphTypes.cursed.currentColor.str) {
+      return this.isLightBG ? "#ffffff" : "#000000";
+    }
     return CosmeticGlyphTypes[type].currentColor.border;
   },
   getRarityColor(strength, type) {
@@ -202,7 +223,9 @@ export const GlyphAppearanceHandler = {
   // Only used to ensure readable glyph tooltips
   getBaseColor(isInverted) {
     const isNormallyDark = !this.isLightBG;
-    if (isInverted) return isNormallyDark ? "white" : "black";
+    if (isInverted) {
+      return isNormallyDark ? "white" : "black";
+    }
     return isNormallyDark ? "black" : "white";
   },
 
@@ -268,18 +291,28 @@ export const GlyphAppearanceHandler = {
     const allSymbols = new Set(GlyphAppearanceHandler.availableSymbols.flat());
     const allColors = new Set(GlyphAppearanceHandler.availableSymbols.flat());
     for (const glyph of allGlyphs) {
-      if (!allSymbols.has(glyph.symbol)) glyph.symbol = undefined;
-      if (!allColors.has(glyph.color)) glyph.color = undefined;
-      if (!GlyphAppearanceHandler.availableTypes.includes(glyph.cosmetic)) glyph.cosmetic = undefined;
+      if (!allSymbols.has(glyph.symbol)) {
+        glyph.symbol = undefined;
+      }
+      if (!allColors.has(glyph.color)) {
+        glyph.color = undefined;
+      }
+      if (!GlyphAppearanceHandler.availableTypes.includes(glyph.cosmetic)) {
+        glyph.cosmetic = undefined;
+      }
     }
     const cosmetics = player.reality.glyphs.cosmetics;
     for (const key of Object.keys(cosmetics.symbolMap)) {
       const selectedSymbol = cosmetics.symbolMap[key];
-      if (!allSymbols.has(selectedSymbol)) cosmetics.symbolMap[key] = undefined;
+      if (!allSymbols.has(selectedSymbol)) {
+        cosmetics.symbolMap[key] = undefined;
+      }
     }
     for (const key of Object.keys(cosmetics.colorMap)) {
       const selectedColor = cosmetics.symbolMap[key];
-      if (!allColors.has(selectedColor)) cosmetics.colorMap[key] = undefined;
+      if (!allColors.has(selectedColor)) {
+        cosmetics.colorMap[key] = undefined;
+      }
     }
-  }
+  },
 };

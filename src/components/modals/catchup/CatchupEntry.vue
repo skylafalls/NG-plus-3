@@ -4,7 +4,7 @@ export default {
   props: {
     info: {
       type: Object,
-      required: true
+      required: true,
     },
   },
   data() {
@@ -24,9 +24,13 @@ export default {
   methods: {
     isFocusedResource(info) {
       this.focusedResourceId = info.id;
-      if (this.focusedResourceId === -1) return true;
+      if (this.focusedResourceId === -1) {
+        return true;
+      }
       const focusedResourceName = GameDatabase.catchupResources[this.focusedResourceId].name;
-      if (focusedResourceName !== info.name) return true;
+      if (focusedResourceName !== info.name) {
+        return true;
+      }
       return this.tabToOpen = focusedResourceName;
     },
     showHowTo() {

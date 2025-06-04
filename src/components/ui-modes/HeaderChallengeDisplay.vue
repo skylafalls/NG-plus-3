@@ -6,7 +6,7 @@ export default {
   name: "HeaderChallengeDisplay",
   components: {
     FailableEcText,
-    PrimaryButton
+    PrimaryButton,
   },
   data() {
     return {
@@ -40,22 +40,22 @@ export default {
         {
           name: () => "Time Dilation",
           isActive: token => token,
-          activityToken: () => player.dilation.active
+          activityToken: () => player.dilation.active,
         },
         {
           name: token => `Eternity Challenge ${token}`,
           isActive: token => token > 0,
-          activityToken: () => player.challenge.eternity.current
+          activityToken: () => player.challenge.eternity.current,
         },
         {
           name: token => `Infinity Challenge ${token}`,
           isActive: token => token > 0,
-          activityToken: () => player.challenge.infinity.current
+          activityToken: () => player.challenge.infinity.current,
         },
         {
           name: token => `${NormalChallenge(token).config.name} Challenge`,
           isActive: token => token > 0,
-          activityToken: () => player.challenge.normal.current
+          activityToken: () => player.challenge.normal.current,
         },
       ];
     },
@@ -64,7 +64,9 @@ export default {
       for (let i = 0; i < this.activityTokens.length; i++) {
         const token = this.activityTokens[i];
         const part = this.parts[i];
-        if (!part.isActive(token)) continue;
+        if (!part.isActive(token)) {
+          continue;
+        }
         if (part.name(token).includes("Eternity Challenge")) {
           const currEC = player.challenge.eternity.current;
           const nextCompletion = EternityChallenge(currEC).completions + 1;
@@ -72,7 +74,7 @@ export default {
           if (Enslaved.isRunning && currEC === 1) {
             completionText = `(${formatInt(nextCompletion)}/???)`;
           } else if (nextCompletion === 6) {
-            completionText = `(already completed)`;
+            completionText = "(already completed)";
           } else {
             completionText = `(${formatInt(nextCompletion)}/${formatInt(5)})`;
           }
@@ -93,7 +95,9 @@ export default {
       if (this.inPelle && this.activeChallengeNames.length > 0) {
         return `${this.activeChallengeNames.join(" + ")} in a Doomed Reality. Good luck.`;
       }
-      if (this.inPelle) return "a Doomed Reality. Good luck.";
+      if (this.inPelle) {
+        return "a Doomed Reality. Good luck.";
+      }
       if (this.activeChallengeNames.length === 0) {
         return "the Antimatter Universe (no active challenges)";
       }
@@ -121,8 +125,11 @@ export default {
       // Dilation and ECs can't be exited independently and we have a special dilation-exit modal, so we have
       // to treat that particular case differently. The dilation modal itself will account for EC state
       if (player.dilation.active && (!Player.isInAnyChallenge || isEC)) {
-        if (player.options.confirmations.dilation) Modal.exitDilation.show();
-        else startDilatedEternityRequest();
+        if (player.options.confirmations.dilation) {
+          Modal.exitDilation.show();
+        } else {
+          startDilatedEternityRequest();
+        }
         return;
       }
 
@@ -134,7 +141,9 @@ export default {
         clickFn = () => {
           const oldChall = Player.anyChallenge;
           Player.anyChallenge.exit(false);
-          if (player.options.retryChallenge) oldChall.requestStart();
+          if (player.options.retryChallenge) {
+            oldChall.requestStart();
+          }
         };
       } else {
         names = { chall: this.activeChallengeNames[0], normal: "Reality" };
@@ -147,8 +156,8 @@ export default {
             challengeName: names.chall,
             normalName: names.normal,
             hasHigherLayers: this.inPelle || this.activeChallengeNames.length > 1,
-            exitFn: clickFn
-          }
+            exitFn: clickFn,
+          },
         );
       } else {
         clickFn();
@@ -156,30 +165,46 @@ export default {
     },
     // Bring the player to the tab related to the innermost challenge
     textClicked() {
-      if (this.activeChallengeNames.length === 0) return;
+      if (this.activeChallengeNames.length === 0) {
+        return;
+      }
 
       // Iterating back-to-front and breaking ensures we get the innermost restriction
       let fullName = "", celestial = "";
       for (let i = this.activityTokens.length - 1; i >= 0; i--) {
         const token = this.activityTokens[i];
         const part = this.parts[i];
-        if (!part.isActive(token)) continue;
+        if (!part.isActive(token)) {
+          continue;
+        }
         fullName = part.name(token);
         celestial = part.tabName?.();
         break;
       }
 
       // Normal challenges are matched with an end-of-string metacharacter
-      if (fullName.match(" Challenge$")) Tab.challenges.normal.show(true);
-      else if (fullName.match("Infinity Challenge")) Tab.challenges.infinity.show(true);
-      else if (fullName.match("Eternity Challenge")) Tab.challenges.eternity.show(true);
-      else if (player.dilation.active) Tab.eternity.dilation.show(true);
-      else Tab.celestials[celestial].show(true);
+      if (fullName.match(" Challenge$")) {
+        Tab.challenges.normal.show(true);
+      } else if (fullName.match("Infinity Challenge")) {
+        Tab.challenges.infinity.show(true);
+      } else if (fullName.match("Eternity Challenge")) {
+        Tab.challenges.eternity.show(true);
+      } else if (player.dilation.active) {
+        Tab.eternity.dilation.show(true);
+      } else {
+        Tab.celestials[celestial].show(true);
+      }
     },
     exitDisplay() {
-      if (Player.isInAnyChallenge) return player.options.retryChallenge ? "Retry Challenge" : "Exit Challenge";
-      if (player.dilation.active) return "Exit Dilation";
-      if (this.resetCelestial) return "Restart Reality";
+      if (Player.isInAnyChallenge) {
+        return player.options.retryChallenge ? "Retry Challenge" : "Exit Challenge";
+      }
+      if (player.dilation.active) {
+        return "Exit Dilation";
+      }
+      if (this.resetCelestial) {
+        return "Restart Reality";
+      }
       return "Exit Reality";
     },
     textClassObject() {
@@ -187,7 +212,7 @@ export default {
         "l-challenge-display": true,
         "l-challenge-display--clickable": this.activeChallengeNames.length > 0,
       };
-    }
+    },
   },
 };
 </script>

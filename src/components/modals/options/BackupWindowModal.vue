@@ -11,7 +11,7 @@ export default {
   components: {
     ModalWrapper,
     BackupEntry,
-    PrimaryButton
+    PrimaryButton,
   },
   data() {
     return {
@@ -37,7 +37,7 @@ export default {
     offlineOptionClass() {
       return {
         "c-modal__confirmation-toggle__checkbox": true,
-        "c-modal__confirmation-toggle__checkbox--active": this.ignoreOffline
+        "c-modal__confirmation-toggle__checkbox--active": this.ignoreOffline,
       };
     },
     toggleOffline() {
@@ -45,15 +45,17 @@ export default {
     },
     importAsFile(event) {
       // This happens if the file dialog is canceled instead of a file being selected
-      if (event.target.files.length === 0) return;
+      if (event.target.files.length === 0) {
+        return;
+      }
 
       const reader = new FileReader();
-      reader.onload = function() {
+      reader.onload = function () {
         GameStorage.importBackupsFromFile(reader.result);
       };
       reader.readAsText(event.target.files[0]);
     },
-  }
+  },
 };
 </script>
 

@@ -5,7 +5,7 @@ import { defineComponent } from "vue";
 export default defineComponent({
   name: "ClassicMetaDimensionsTabHeader",
   components: {
-    PrimaryButton
+    PrimaryButton,
   },
   data() {
     return {
@@ -26,8 +26,8 @@ export default defineComponent({
     },
     maxAll() {
       maxAll();
-    }
-  }
+    },
+  },
 });
 </script>
 

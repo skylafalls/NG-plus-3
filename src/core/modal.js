@@ -98,21 +98,33 @@ export class Modal {
       GAME_EVENT.ETERNITY_RESET_AFTER, GAME_EVENT.REALITY_RESET_AFTER];
     let shouldClose = false;
     for (const prestige of prestigeOrder) {
-      if (prestige === closeEvent) shouldClose = true;
-      if (shouldClose) EventHub.ui.on(prestige, () => this.removeFromQueue(), this._component);
+      if (prestige === closeEvent) {
+        shouldClose = true;
+      }
+      if (shouldClose) {
+        EventHub.ui.on(prestige, () => this.removeFromQueue(), this._component);
+      }
     }
 
     // In a few cases we want to trigger a close based on a non-prestige event, so if the specified event wasn't in
     // the prestige array above, we just add it on its own
-    if (!shouldClose) EventHub.ui.on(closeEvent, () => this.removeFromQueue(), this._component);
+    if (!shouldClose) {
+      EventHub.ui.on(closeEvent, () => this.removeFromQueue(), this._component);
+    }
   }
 
   show(modalConfig) {
-    if (!GameUI.initialized) return;
+    if (!GameUI.initialized) {
+      return;
+    }
     this._uniqueID = nextModalID++;
-    this._props = Object.assign({}, modalConfig || {});
-    if (this._closeEvent) this.applyCloseListeners(this._closeEvent);
-    if (modalConfig?.closeEvent) this.applyCloseListeners(modalConfig.closeEvent);
+    this._props = { ...modalConfig };
+    if (this._closeEvent) {
+      this.applyCloseListeners(this._closeEvent);
+    }
+    if (modalConfig?.closeEvent) {
+      this.applyCloseListeners(modalConfig.closeEvent);
+    }
 
     const modalQueue = ui.view.modal.queue;
     // Add this modal to the front of the queue and sort based on priority to ensure priority is maintained.
@@ -139,8 +151,11 @@ export class Modal {
   removeFromQueue() {
     EventHub.ui.offAll(this._component);
     ui.view.modal.queue = ui.view.modal.queue.filter(m => m._uniqueID !== this._uniqueID);
-    if (ui.view.modal.queue.length === 0) ui.view.modal.current = undefined;
-    else ui.view.modal.current = ui.view.modal.queue[0];
+    if (ui.view.modal.queue.length === 0) {
+      ui.view.modal.current = undefined;
+    } else {
+      ui.view.modal.current = ui.view.modal.queue[0];
+    }
   }
 
   static sortModalQueue() {
@@ -153,15 +168,22 @@ export class Modal {
   }
 
   static hide() {
-    if (!GameUI.initialized) return;
+    if (!GameUI.initialized) {
+      return;
+    }
     ui.view.modal.queue.shift();
-    if (ui.view.modal.queue.length === 0) ui.view.modal.current = undefined;
-    else ui.view.modal.current = ui.view.modal.queue[0];
+    if (ui.view.modal.queue.length === 0) {
+      ui.view.modal.current = undefined;
+    } else {
+      ui.view.modal.current = ui.view.modal.queue[0];
+    }
     ui.view.modal.cloudConflict = [];
   }
 
   static hideAll() {
-    if (!GameUI.initialized) return;
+    if (!GameUI.initialized) {
+      return;
+    }
     while (ui.view.modal.queue.length > 0) {
       if (ui.view.modal.queue[0].hide) {
         ui.view.modal.queue[0].hide();
@@ -318,39 +340,46 @@ function getSaveInfo(save) {
 Modal.cloudSaveConflict = new Modal(CloudSaveConflictModal);
 Modal.cloudLoadConflict = new Modal(CloudLoadConflictModal);
 Modal.cloudInvalidData = new Modal(CloudInvalidDataModal);
-// eslint-disable-next-line max-params
-Modal.addCloudConflict = function(saveId, saveComparison, cloudSave, localSave, onAccept) {
+
+Modal.addCloudConflict = function (saveId, saveComparison, cloudSave, localSave, onAccept) {
   Modal.hide();
   ui.view.modal.cloudConflict = {
     saveId,
     saveComparison,
     cloud: getSaveInfo(cloudSave),
     local: getSaveInfo(localSave),
-    onAccept
+    onAccept,
   };
 };
 
-Modal.addImportConflict = function(importingSave, currentSave) {
+Modal.addImportConflict = function (importingSave, currentSave) {
   Modal.hide();
   ui.view.modal.cloudConflict = {
     importingSave: getSaveInfo(importingSave),
-    currentSave: getSaveInfo(currentSave)
+    currentSave: getSaveInfo(currentSave),
   };
 };
 
 Modal.message = new class extends Modal {
   show(text, props = {}, messagePriority = 0) {
-    if (!GameUI.initialized) return;
+    if (!GameUI.initialized) {
+      return;
+    }
     // It might be zero, so explicitly check for undefined
-    if (this.currPriority === undefined) this.currPriority = messagePriority;
-    else if (messagePriority < this.currPriority) return;
+    if (this.currPriority === undefined) {
+      this.currPriority = messagePriority;
+    } else if (messagePriority < this.currPriority) {
+      return;
+    }
 
     super.show();
     this.message = text;
     this.callback = props.callback;
     this.closeButton = props.closeButton ?? false;
     EventHub.ui.offAll(this._component);
-    if (props.closeEvent) this.applyCloseListeners(props.closeEvent);
+    if (props.closeEvent) {
+      this.applyCloseListeners(props.closeEvent);
+    }
   }
 
   hide() {

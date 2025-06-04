@@ -5,7 +5,7 @@ export default {
     return {
       sidebarID: 0,
       resourceName: "",
-      resourceValue: new Decimal(0)
+      resourceValue: new Decimal(0),
     };
   },
   computed: {
@@ -22,7 +22,7 @@ export default {
     displayValue() {
       // RM + iM seems to cause strange, undesirable linebreaks
       return this.resource.formatValue(this.resourceValue).replace(" + ", "+");
-    }
+    },
   },
   methods: {
     update() {
@@ -34,7 +34,9 @@ export default {
       const oldID = this.sidebarID;
       this.sidebarID = (this.sidebarID + this.numDBEntries + dir) % this.numDBEntries;
       while (this.sidebarID !== oldID) {
-        if (this.resource.isAvailable()) break;
+        if (this.resource.isAvailable()) {
+          break;
+        }
         this.sidebarID = (this.sidebarID + this.numDBEntries + dir) % this.numDBEntries;
       }
       player.options.sidebarResourceID = this.sidebarID;
@@ -50,7 +52,7 @@ export default {
       return {
         transform: `scale(${strLen < 10 ? 1 : 10 / strLen})`,
       };
-    }
+    },
   },
 };
 </script>

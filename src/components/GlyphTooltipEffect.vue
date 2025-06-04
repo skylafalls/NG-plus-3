@@ -4,20 +4,20 @@ export default {
   props: {
     effect: {
       type: String,
-      required: true
+      required: true,
     },
     value: {
       type: [Number, Object],
-      required: true
-    }
+      required: true,
+    },
   },
   computed: {
     effectConfig() {
       return GlyphEffects[this.effect];
     },
     boostColor() {
-      return (this.effectConfig.alterationType !== undefined &&
-        this.effectConfig.alterationType !== ALTERATION_TYPE.ADDITION)
+      return (this.effectConfig.alterationType !== undefined
+        && this.effectConfig.alterationType !== ALTERATION_TYPE.ADDITION)
         ? this.effectConfig.alteredColor()
         : undefined;
     },
@@ -41,7 +41,9 @@ export default {
     textSplits() {
       const firstSplit = this.effectStringTemplate.split("{value}");
       const secondSplit = firstSplit[1] ? firstSplit[1].split("{value2}") : "";
-      if (secondSplit.length !== 1) return [firstSplit[0]].concat(secondSplit);
+      if (secondSplit.length !== 1) {
+        return [firstSplit[0]].concat(secondSplit);
+      }
       return firstSplit;
     },
     hasValue() {
@@ -55,16 +57,20 @@ export default {
     },
     convertedParts() {
       const parts = [];
-      for (const text of this.textSplits) parts.push(this.convertToHTML(text));
+      for (const text of this.textSplits) {
+        parts.push(this.convertToHTML(text));
+      }
       return parts;
     },
     valueStyle() {
-      return this.boostColor ? {
-        color: this.boostColor,
-        "text-shadow": `0 0 0.4rem ${this.boostColor}`
-      } : {
-        color: "#76EE76",
-      };
+      return this.boostColor
+        ? {
+            "color": this.boostColor,
+            "text-shadow": `0 0 0.4rem ${this.boostColor}`,
+          }
+        : {
+            color: "#76EE76",
+          };
     },
     textShadowColor() {
       return GlyphAppearanceHandler.getBaseColor(true);
@@ -79,10 +85,10 @@ export default {
           "[", `<span style="${GlyphAppearanceHandler.isLightBG
             ? ""
             : "text-shadow: white 0 0 0.6rem;"}
-            font-weight: bold;">`
+            font-weight: bold;">`,
         );
-    }
-  }
+    },
+  },
 };
 </script>
 

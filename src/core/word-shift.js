@@ -36,7 +36,9 @@ export default {
     }
 
     v = this.randomCrossWords(v, 0.1 * Math.pow(mod5 - 2.5, 4) - 0.6);
-    if (noBuffer) return v;
+    if (noBuffer) {
+      return v;
+    }
 
     const maxWordLen = Math.max(...list.map(x => x.length));
     const bufferSpace = (maxWordLen - v.length) / 2;
@@ -48,7 +50,9 @@ export default {
   // Note that while frac may appear to specify the proportion of letters randomized, it may end up being slightly less
   // depending on the specific string length and random output sometimes giving outputs which aren't coprime
   randomCrossWords(str, frac = 0.7) {
-    if (frac <= 0) return str;
+    if (frac <= 0) {
+      return str;
+    }
     const x = [...str];
     for (let i = 0; i < x.length * frac; i++) {
       const randomIndex = Math.floor(predictableRandom(Math.floor(Date.now() / 500) % 964372 + 1.618 * i) * x.length);
@@ -60,9 +64,13 @@ export default {
   // of the output may look bad. Blends two strings together to produce a string of intermediate length, taking a
   // specifed fraction (param, 0 to 1) from the first word and the rest (1 - param) from the second
   blendWords(first, second, param) {
-    if (param <= 0) return first;
-    if (param >= 1) return second;
-    return first.slice(0, first.length * (1 - param)) +
-      second.slice(second.length * (1 - param));
-  }
+    if (param <= 0) {
+      return first;
+    }
+    if (param >= 1) {
+      return second;
+    }
+    return first.slice(0, first.length * (1 - param))
+      + second.slice(second.length * (1 - param));
+  },
 };

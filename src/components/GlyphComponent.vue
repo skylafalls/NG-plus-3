@@ -14,27 +14,27 @@ const rarityBorderStyles = {
       lineType: "linear",
       angles: [45],
       colorSplit: [14, 16, 84, 86],
-    }
+    },
   ],
   rare: [
     {
       lineType: "linear",
       angles: [45, 135],
       colorSplit: [14, 16, 84, 86],
-    }
+    },
   ],
   epic: [
     {
       lineType: "linear",
       angles: [45, 135],
       colorSplit: [12, 14, 16, 18, 82, 84, 86, 88],
-    }
+    },
   ],
   legendary: [
     {
       lineType: "bump",
       colorSplit: [15, 25],
-    }
+    },
   ],
   mythical: [
     {
@@ -45,7 +45,7 @@ const rarityBorderStyles = {
       lineType: "linear",
       angles: [45, 135],
       colorSplit: [10, 13, 87, 90],
-    }
+    },
   ],
   transcendent: [
     {
@@ -56,7 +56,7 @@ const rarityBorderStyles = {
       lineType: "linear",
       angles: [45, 135],
       colorSplit: [10, 12, 14, 16, 84, 86, 88, 90],
-    }
+    },
   ],
   celestial: [
     {
@@ -94,62 +94,63 @@ const rarityBorderStyles = {
     {
       lineType: "companion",
     },
-  ]
+  ],
 };
 
 // This function does all the parsing of the above gradient specifications
-// eslint-disable-next-line max-params
+
 function generateGradient(data, color, glyph, isCircular) {
   // The undefined declarations here are mostly to make ESLint happy, and aren't necessarily used in all cases
   let borders, scaleFn, centers, specialData, isColor = false;
   const entries = [], elements = [];
   switch (data.lineType) {
-    case 'linear': {
+    case "linear": {
       borders = [0, ...data.colorSplit, 100];
-      scaleFn = perc => (isCircular ? 50 + 0.7 * (perc - 50) : perc);for (const angle of data.angles) {
+      scaleFn = perc => (isCircular ? 50 + 0.7 * (perc - 50) : perc); for (const angle of data.angles) {
         for (let i = 0; i < borders.length - 1; i++) {
           entries.push(`${isColor ? color : "transparent"} ${scaleFn(borders[i])}% ${scaleFn(borders[i + 1])}%`);
           isColor = !isColor;
         }
         elements.push(`repeating-linear-gradient(${angle}deg, ${entries.join(",")})`);
-      }return elements.join(",");
+      } return elements.join(",");
     }
-    case 'bump': {
+    case "bump": {
       specialData = glyph.type === "effarig"
         ? `${color}60`
         : color;
       centers = ["50% -25%", "50% 125%", "-25% 50%", "125% 50%"];
-      scaleFn = perc => (isCircular ? perc : 0.9 * perc);for (let i = 0; i < 4; i++) {
+      scaleFn = perc => (isCircular ? perc : 0.9 * perc); for (let i = 0; i < 4; i++) {
         entries.push(`radial-gradient(at ${centers[i]}, transparent, ${specialData} ${scaleFn(data.colorSplit[0])}%,
           transparent ${scaleFn(data.colorSplit[1])}%)`);
-      }return entries.join(",");
+      } return entries.join(",");
     }
-    case 'radial': {
+    case "radial": {
       borders = [50, ...data.colorSplit, 100];
-      scaleFn = perc => (isCircular ? 0.9 * perc : 100 - (100 - perc) / 2);for (const border of borders) {
+      scaleFn = perc => (isCircular ? 0.9 * perc : 100 - (100 - perc) / 2); for (const border of borders) {
         entries.push(`${isColor ? color : "transparent"} ${scaleFn(border)}%`);
         isColor = !isColor;
-      }return `radial-gradient(${entries.join(",")})`;
+      } return `radial-gradient(${entries.join(",")})`;
     }
-    case 'spike': {
+    case "spike": {
       entries.push(`transparent ${data.angles[0] - 5}deg`);
       entries.push(`${color}b0 ${data.angles[0] + 5}deg`);
       entries.push(`${color}b0 ${data.angles[1] - 5}deg`);
-      entries.push(`transparent ${data.angles[1] + 5}deg`);return `conic-gradient(from 0deg at ${data.center[0]}% ${data.center[1]}%, ${entries.join(",")})`;
+      entries.push(`transparent ${data.angles[1] + 5}deg`); return `conic-gradient(from 0deg at ${data.center[0]}% ${data.center[1]}%, ${entries.join(",")})`;
     }
-    case 'companion': {
+    case "companion": {
       borders = [0, 30, 330, 360];
-      specialData = [color, "transparent", "transparent", color];for (let i = 0; i < 4; i++) {
+      specialData = [color, "transparent", "transparent", color]; for (let i = 0; i < 4; i++) {
         entries.push(`${specialData[i]} ${borders[i]}deg`);
       }
       elements.push(`conic-gradient(${entries.join(",")})`);
       centers = ["125% 125%", "-25% 125%"];
-      scaleFn = perc => (isCircular ? 0.9 * (perc + 10) : perc);for (let i = 0; i < 2; i++) {
+      scaleFn = perc => (isCircular ? 0.9 * (perc + 10) : perc); for (let i = 0; i < 2; i++) {
         elements.push(`radial-gradient(at ${centers[i]}, transparent, ${color} ${scaleFn(30)}%,
           transparent ${scaleFn(50)}%)`);
-      }return elements.join(",");
+      } return elements.join(",");
     }
-    default: {throw new Error("Unrecognized glyph border data");
+    default: {
+      throw new Error("Unrecognized glyph border data");
     }
   }
 }
@@ -157,52 +158,52 @@ function generateGradient(data, color, glyph, isCircular) {
 export default {
   name: "GlyphComponent",
   components: {
-    GlyphTooltip
+    GlyphTooltip,
   },
   props: {
     glyph: {
       type: Object,
-      required: true
+      required: true,
     },
     isInModal: {
       type: Boolean,
       required: false,
-      default: false
+      default: false,
     },
     isNew: {
       type: Boolean,
       required: false,
-      default: false
+      default: false,
     },
     isUnequipped: {
       type: Boolean,
       required: false,
-      default: false
+      default: false,
     },
     showSacrifice: {
       type: Boolean,
       required: false,
-      default: false
+      default: false,
     },
     ignoreModifiedLevel: {
       type: Boolean,
       required: false,
-      default: false
+      default: false,
     },
     realityGlyphBoost: {
       type: Decimal,
       required: false,
-      default: () => new Decimal()
+      default: () => new Decimal(),
     },
     isInventoryGlyph: {
       type: Boolean,
       required: false,
-      default: false
+      default: false,
     },
     isActiveGlyph: {
       type: Boolean,
       required: false,
-      default: false
+      default: false,
     },
     size: {
       type: String,
@@ -212,22 +213,22 @@ export default {
     glowBlur: {
       type: String,
       required: false,
-      default: "1rem"
+      default: "1rem",
     },
     glowSpread: {
       type: String,
       required: false,
-      default: "0.2rem"
+      default: "0.2rem",
     },
     bottomPadding: {
       type: String,
       required: false,
-      default: "0.3rem"
+      default: "0.3rem",
     },
     textProportion: {
       type: Number,
       required: false,
-      default: 0.5
+      default: 0.5,
     },
     circular: {
       type: Boolean,
@@ -243,7 +244,7 @@ export default {
       type: Boolean,
       required: false,
       default: false,
-    }
+    },
   },
   data() {
     return {
@@ -279,15 +280,23 @@ export default {
     symbol() {
       const symbol = this.glyph.symbol;
       // \uE019 = :blobheart:
-      if (this.isBlobHeart) return "\uE019";
-      if (symbol) return symbol;
+      if (this.isBlobHeart) {
+        return "\uE019";
+      }
+      if (symbol) {
+        return symbol;
+      }
       return (this.$viewModel.theme === "S4" && !this.glyph.cosmetic)
         ? GlyphInfo[this.glyph.type].cancerGlyphSymbol
         : this.cosmeticConfig.currentSymbol.symbol;
     },
     symbolBlur() {
-      if (this.isBlobHeart) return false;
-      if (!this.glyph.symbol) return this.cosmeticConfig.currentSymbol.blur;
+      if (this.isBlobHeart) {
+        return false;
+      }
+      if (!this.glyph.symbol) {
+        return this.cosmeticConfig.currentSymbol.blur;
+      }
       return !GlyphAppearanceHandler.unblurredSymbols.includes(this.symbol);
     },
     zIndexStyle() {
@@ -295,7 +304,9 @@ export default {
     },
     colorObj() {
       let overrideColor;
-      if (this.glyph.color) overrideColor = GlyphAppearanceHandler.getColorProps(this.glyph.color);
+      if (this.glyph.color) {
+        overrideColor = GlyphAppearanceHandler.getColorProps(this.glyph.color);
+      }
       if (this.glyph.cosmetic) {
         if (this.glyph.cosmetic === this.glyph.type) {
           overrideColor = this.glyph.type === "cursed"
@@ -307,8 +318,9 @@ export default {
       }
 
       let symbolColor;
-      if (this.isRealityGlyph && this.realityColor) symbolColor = this.realityColor;
-      else {
+      if (this.isRealityGlyph && this.realityColor) {
+        symbolColor = this.realityColor;
+      } else {
         symbolColor = this.cosmeticConfig.ignoreRarityColor
           ? GlyphAppearanceHandler.getBorderColor(this.glyph.type)
           : GlyphAppearanceHandler.getRarityColor(this.glyph.strength, this.glyph.type);
@@ -317,7 +329,7 @@ export default {
       return {
         border: overrideColor?.border ?? GlyphAppearanceHandler.getBorderColor(this.glyph.type),
         symbol: overrideColor?.border ?? symbolColor,
-        bg: overrideColor?.bg ?? this.cosmeticConfig.currentColor.bg
+        bg: overrideColor?.bg ?? this.cosmeticConfig.currentColor.bg,
       };
     },
     symbolColor() {
@@ -331,9 +343,9 @@ export default {
     },
     overStyle() {
       return {
-        width: this.size,
-        height: this.size,
-        position: "absolute",
+        "width": this.size,
+        "height": this.size,
+        "position": "absolute",
         "background-color": "rgba(0, 0, 0, 0)",
         "box-shadow": `0 0 ${this.glowBlur} calc(${this.glowSpread} + 0.1rem) ${this.borderColor} inset`,
         "border-radius": this.circular ? "50%" : "0",
@@ -341,36 +353,38 @@ export default {
     },
     outerStyle() {
       return {
-        width: this.size,
-        height: this.size,
+        "width": this.size,
+        "height": this.size,
         "background-color": this.borderColor,
         "box-shadow": `0 0 ${this.glowBlur} ${this.glowSpread} ${this.borderColor}`,
         "border-radius": this.circular ? "50%" : "0",
-        "-webkit-user-drag": this.draggable ? "" : "none"
+        "-webkit-user-drag": this.draggable ? "" : "none",
       };
     },
     innerStyle() {
       const color = this.symbolColor;
       return {
-        width: `calc(${this.size} - 0.2rem)`,
-        height: `calc(${this.size} - 0.2rem)`,
+        "width": `calc(${this.size} - 0.2rem)`,
+        "height": `calc(${this.size} - 0.2rem)`,
         "font-size": `calc( ${this.size} * ${this.textProportion} )`,
         color,
         "text-shadow": this.symbolBlur ? `-0.04em 0.04em 0.08em ${color}` : undefined,
         "border-radius": this.circular ? "50%" : "0",
         "padding-bottom": this.bottomPadding,
-        background: this.bgColor
+        "background": this.bgColor,
       };
     },
     mouseEventHandlers() {
-      const handlers = this.hasTooltip ? {
-        mouseenter: this.mouseEnter,
-        "&mousemove": this.mouseMove,
-        mouseleave: this.mouseLeave,
-        mousedown: this.mouseDown,
-        touchstart: this.touchStart,
-        touchend: this.touchEnd
-      } : {};
+      const handlers = this.hasTooltip
+        ? {
+            "mouseenter": this.mouseEnter,
+            "&mousemove": this.mouseMove,
+            "mouseleave": this.mouseLeave,
+            "mousedown": this.mouseDown,
+            "touchstart": this.touchStart,
+            "touchend": this.touchEnd,
+          }
+        : {};
       if (this.hasTooltip || this.draggable) {
         handlers.touchmove = this.touchMove;
       }
@@ -381,17 +395,24 @@ export default {
     },
     tooltipDirectionClass() {
       let directionID = this.$viewModel.tabs.reality.glyphTooltipDirection;
-      if (this.flipTooltip) directionID += 1;
+      if (this.flipTooltip) {
+        directionID += 1;
+      }
       switch (directionID) {
-        case -1: {return "l-glyph-tooltip--down-left";
+        case -1: {
+          return "l-glyph-tooltip--down-left";
         }
-        case 0: {return "l-glyph-tooltip--down-right";
+        case 0: {
+          return "l-glyph-tooltip--down-right";
         }
-        case 1: {return "l-glyph-tooltip--up-left";
+        case 1: {
+          return "l-glyph-tooltip--up-left";
         }
-        case 2: {return "l-glyph-tooltip--up-right";
+        case 2: {
+          return "l-glyph-tooltip--up-right";
         }
-        default: {return "l-glyph-tooltip--down-left";
+        default: {
+          return "l-glyph-tooltip--down-left";
         }
       }
     },
@@ -399,10 +420,12 @@ export default {
     // other effects count up to 3 (or 6 for effarig). Used to add dots in unique positions on glyphs to show effects.
     glyphEffects() {
       // Get intIDs, then subtract smallest in next code
-      if (!this.glyph.effects) return {};
+      if (!this.glyph.effects) {
+        return {};
+      }
       const subVal = Object.values(GlyphInfo[this.glyph.type].effects().mapToObject(x => x.intID, x => x.intID)).nMin();
       const glyphEffects = GlyphInfo[this.glyph.type].effects().filter(e => this.glyph.effects.includes(e.id));
-      // eslint-disable-next-line consistent-return
+
       return glyphEffects.mapToObject(x => x.intID - subVal, x => x.id);
     },
     isRealityGlyph() {
@@ -419,42 +442,52 @@ export default {
     },
     displayedInfo() {
       const blacklist = ["companion", "cursed"];
-      if (!this.isInventoryGlyph || blacklist.includes(this.glyph.type)) return null;
+      if (!this.isInventoryGlyph || blacklist.includes(this.glyph.type)) {
+        return null;
+      }
 
       const options = player.options.showHintText;
-      if (options.glyphInfoType === GlyphInfoVue.types.NONE ||
-        (!options.showGlyphInfoByDefault && !this.$viewModel.shiftDown)) {
+      if (options.glyphInfoType === GlyphInfoVue.types.NONE
+        || (!options.showGlyphInfoByDefault && !this.$viewModel.shiftDown)) {
         return null;
       }
 
       const typeEnum = GlyphInfoVue.types;
       switch (options.glyphInfoType) {
         case typeEnum.LEVEL: {
-          this.updateDisplayLevel();return formatInt(this.displayLevel.eq(0) ? this.glyph.level : this.displayLevel);
+          this.updateDisplayLevel(); return formatInt(this.displayLevel.eq(0) ? this.glyph.level : this.displayLevel);
         }
-        case typeEnum.RARITY: {return formatRarity(strengthToRarity(Pelle.isDoomed ? Pelle.glyphStrength : this.glyph.strength));
+        case typeEnum.RARITY: {
+          return formatRarity(strengthToRarity(Pelle.isDoomed ? Pelle.glyphStrength : this.glyph.strength));
         }
-        case typeEnum.SAC_VALUE: {return format(this.sacrificeReward, 2, 2);
+        case typeEnum.SAC_VALUE: {
+          return format(this.sacrificeReward, 2, 2);
         }
-        case typeEnum.FILTER_SCORE: {return format(AutoGlyphProcessor.filterValue(this.glyph), 1, 1);
+        case typeEnum.FILTER_SCORE: {
+          return format(AutoGlyphProcessor.filterValue(this.glyph), 1, 1);
         }
-        case typeEnum.CURRENT_REFINE: {return `${format(this.refineReward, 2, 2)} ${this.symbol}`;
+        case typeEnum.CURRENT_REFINE: {
+          return `${format(this.refineReward, 2, 2)} ${this.symbol}`;
         }
-        case typeEnum.MAX_REFINE: {return `${format(this.uncappedRefineReward, 2, 2)} ${this.symbol}`;
+        case typeEnum.MAX_REFINE: {
+          return `${format(this.uncappedRefineReward, 2, 2)} ${this.symbol}`;
         }
-        default: {throw new Error("Unrecognized Glyph info type in info text");
+        default: {
+          throw new Error("Unrecognized Glyph info type in info text");
         }
       }
     },
     showBorders() {
       return player.options.glyphBorders;
-    }
+    },
   },
   watch: {
     logTotalSacrifice() {
       this.tooltipLoaded = false;
-      if (this.isCurrentTooltip) this.showTooltip();
-    }
+      if (this.isCurrentTooltip) {
+        this.showTooltip();
+      }
+    },
   },
   created() {
     this.on$(GAME_EVENT.GLYPH_VISUAL_CHANGE, () => {
@@ -477,8 +510,12 @@ export default {
     setTimeout(() => this.tooltipEnabled = true, 10);
   },
   beforeDestroy() {
-    if (this.isCurrentTooltip) this.hideTooltip();
-    if (this.$viewModel.draggingUIID === this.componentID) this.$viewModel.draggingUIID = -1;
+    if (this.isCurrentTooltip) {
+      this.hideTooltip();
+    }
+    if (this.$viewModel.draggingUIID === this.componentID) {
+      this.$viewModel.draggingUIID = -1;
+    }
   },
   methods: {
     update() {
@@ -495,7 +532,9 @@ export default {
       this.refineReward = GlyphInfo[this.glyph.type].hasAlchemyResource
         ? GlyphSacrificeHandler.glyphRefinementGain(this.glyph)
         : new Decimal();
-      if (this.tooltipLoaded) this.updateDisplayLevel();
+      if (this.tooltipLoaded) {
+        this.updateDisplayLevel();
+      }
     },
     updateDisplayLevel() {
       if (this.ignoreModifiedLevel) {
@@ -513,9 +552,11 @@ export default {
       // - All other glyphs should never apply effects from the current game state, and should in fact only apply the
       //   reality glyph boost based on the rest of its existing set (which is passed in via realityGlyphBoost) and
       //   nothing else. This case applies to glyphs appearing in presets, records, and previews.
-      if (this.isActiveGlyph) this.displayLevel = getAdjustedGlyphLevel(this.glyph);
-      else if (this.isInventoryGlyph) this.displayLevel = getAdjustedGlyphLevel(this.glyph, new Decimal());
-      else {
+      if (this.isActiveGlyph) {
+        this.displayLevel = getAdjustedGlyphLevel(this.glyph);
+      } else if (this.isInventoryGlyph) {
+        this.displayLevel = getAdjustedGlyphLevel(this.glyph, new Decimal());
+      } else {
         this.displayLevel = this.glyph.level
           .add(GlyphInfo[this.glyph.type].isBasic ? this.realityGlyphBoost : new Decimal());
       }
@@ -527,7 +568,9 @@ export default {
       this.$viewModel.tabs.reality.currentGlyphTooltip = -1;
     },
     showTooltip() {
-      if (!this.tooltipEnabled) return;
+      if (!this.tooltipEnabled) {
+        return;
+      }
       Glyphs.removeVisualFlag("unseen", this.glyph);
       Glyphs.removeVisualFlag("unequipped", this.glyph);
       this.tooltipLoaded = true;
@@ -538,8 +581,8 @@ export default {
       glyphInfo.refineValue = GlyphSacrificeHandler.glyphRawRefinementGain(this.glyph);
       this.$viewModel.tabs.reality.currentGlyphTooltip = this.componentID;
       if (
-        AutoGlyphProcessor.sacMode === AUTO_GLYPH_REJECT.SACRIFICE ||
-        (AutoGlyphProcessor.sacMode === AUTO_GLYPH_REJECT.REFINE_TO_CAP && this.refineReward.eq(new Decimal()))
+        AutoGlyphProcessor.sacMode === AUTO_GLYPH_REJECT.SACRIFICE
+        || (AutoGlyphProcessor.sacMode === AUTO_GLYPH_REJECT.REFINE_TO_CAP && this.refineReward.eq(new Decimal()))
       ) {
         this.currentAction = "sacrifice";
       } else {
@@ -549,9 +592,13 @@ export default {
     },
     moveTooltipTo(x, y) {
       // If we are just creating the tooltip now, we can't move it yet.
-      if (!this.$refs.tooltip) return;
+      if (!this.$refs.tooltip) {
+        return;
+      }
       const tooltipEl = this.$refs.tooltip.$el;
-      if (!tooltipEl) return;
+      if (!tooltipEl) {
+        return;
+      }
       const rect = document.body.getBoundingClientRect();
       tooltipEl.style.left = `${x - rect.left}px`;
       tooltipEl.style.top = `${y - rect.top}px`;
@@ -565,7 +612,9 @@ export default {
       }
     },
     mouseEnter(ev) {
-      if (this.$viewModel.draggingUIID !== -1) return;
+      if (this.$viewModel.draggingUIID !== -1) {
+        return;
+      }
       this.moveTooltipTo(ev.clientX, ev.clientY);
       this.showTooltip();
     },
@@ -575,11 +624,15 @@ export default {
       }
     },
     mouseDown() {
-      if (this.isTouched) return;
+      if (this.isTouched) {
+        return;
+      }
       this.hideTooltip();
     },
     mouseMove(ev) {
-      if (this.isTouched) return;
+      if (this.isTouched) {
+        return;
+      }
       this.moveTooltipTo(ev.clientX, ev.clientY);
     },
     dragStart(ev) {
@@ -603,7 +656,9 @@ export default {
       const dragInfo = this.$viewModel.tabs.reality.draggingGlyphInfo;
       dragInfo.id = -1;
       dragInfo.type = "";
-      if (this.$viewModel.draggingUIID === this.componentID) this.$viewModel.draggingUIID = -1;
+      if (this.$viewModel.draggingUIID === this.componentID) {
+        this.$viewModel.draggingUIID = -1;
+      }
     },
     drag(ev) {
       // It looks like dragging off the bottom of the window sometimes fires these
@@ -650,9 +705,11 @@ export default {
     // Translates 0...3 into equally-spaced coordinates around a circle 90deg apart (0...6 and 45deg for effarig)
     effectIconPos(id) {
       // Place dots clockwise starting from the bottom left
-      // eslint-disable-next-line max-len
+
       let numOfEffects = GlyphInfo[this.glyph.type].effects().length;
-      if (numOfEffects > 6) numOfEffects += 1;
+      if (numOfEffects > 6) {
+        numOfEffects += 1;
+      }
       // Take the smallest power of 2, greater than the number of effects
       const angle = (Math.PI / (numOfEffects / 2)) * (parseInt(id, 10) + (numOfEffects / 8));
       const scale = 0.28 * this.size.replace("rem", "");
@@ -661,39 +718,48 @@ export default {
       return { dx, dy };
     },
     glyphEffectDots(id) {
-      if (["companion", "cursed"].includes(this.glyph.type)) return {};
+      if (["companion", "cursed"].includes(this.glyph.type)) {
+        return {};
+      }
       const pos = this.effectIconPos(id);
 
       return {
-        position: "absolute",
-        width: "0.3rem",
-        height: "0.3rem",
+        "position": "absolute",
+        "width": "0.3rem",
+        "height": "0.3rem",
         "border-radius": "50%",
-        background: this.symbolColor,
-        transform: `translate(${pos.dx - 0.15 * 0.3}rem, ${pos.dy - 0.15 * 0.3}rem)`,
-        opacity: Theme.current().name === "S9" ? 0 : 0.8
+        "background": this.symbolColor,
+        "transform": `translate(${pos.dx - 0.15 * 0.3}rem, ${pos.dy - 0.15 * 0.3}rem)`,
+        "opacity": Theme.current().name === "S9" ? 0 : 0.8,
       };
     },
     glyphBorderStyle() {
-      if (!this.showBorders) return null;
+      if (!this.showBorders) {
+        return null;
+      }
       let borderAttrs;
-      if (this.isCursedGlyph) borderAttrs = rarityBorderStyles.cursed;
-      else if (this.isCompanionGlyph) borderAttrs = rarityBorderStyles.companion;
-      else if (rarityBorderStyles[getRarity(this.glyph.strength).name.toLowerCase()] === undefined) return null;
-      else borderAttrs = rarityBorderStyles[getRarity(this.glyph.strength).name.toLowerCase()];
+      if (this.isCursedGlyph) {
+        borderAttrs = rarityBorderStyles.cursed;
+      } else if (this.isCompanionGlyph) {
+        borderAttrs = rarityBorderStyles.companion;
+      } else if (rarityBorderStyles[getRarity(this.glyph.strength).name.toLowerCase()] === undefined) {
+        return null;
+      } else {
+        borderAttrs = rarityBorderStyles[getRarity(this.glyph.strength).name.toLowerCase()];
+      }
       const lines = borderAttrs.map(attr => generateGradient(attr, this.borderColor, this.glyph, this.circular));
 
       return {
-        position: "absolute",
-        left: "2%",
-        width: "96%",
-        height: "96%",
+        "position": "absolute",
+        "left": "2%",
+        "width": "96%",
+        "height": "96%",
         "border-radius": this.circular ? "50%" : "0",
         // Some cases will have undefined lines which need to be removed to combine everything together properly
-        background: lines.filter(l => l).join(",")
+        "background": lines.filter(l => l).join(","),
       };
-    }
-  }
+    },
+  },
 };
 </script>
 

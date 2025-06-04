@@ -9,7 +9,7 @@ export const EFFARIG_STAGES = {
   INFINITY: 1,
   ETERNITY: 2,
   REALITY: 3,
-  COMPLETED: 4
+  COMPLETED: 4,
 };
 
 export const Effarig = {
@@ -38,12 +38,15 @@ export const Effarig = {
   },
   get currentStageName() {
     switch (this.currentStage) {
-      case EFFARIG_STAGES.INFINITY: {return "Infinity";
+      case EFFARIG_STAGES.INFINITY: {
+        return "Infinity";
       }
-      case EFFARIG_STAGES.ETERNITY: {return "Eternity";
+      case EFFARIG_STAGES.ETERNITY: {
+        return "Eternity";
       }
       case EFFARIG_STAGES.REALITY:
-      default: {return "Reality";
+      default: {
+        return "Reality";
       }
     }
   },
@@ -52,18 +55,23 @@ export const Effarig = {
   },
   get glyphLevelCap() {
     switch (this.currentStage) {
-      case EFFARIG_STAGES.INFINITY: {return new Decimal(DC.E2);
+      case EFFARIG_STAGES.INFINITY: {
+        return new Decimal(DC.E2);
       }
-      case EFFARIG_STAGES.ETERNITY: {return new Decimal(1500);
+      case EFFARIG_STAGES.ETERNITY: {
+        return new Decimal(1500);
       }
       case EFFARIG_STAGES.REALITY:
-      default: {return new Decimal(2000);
+      default: {
+        return new Decimal(2000);
       }
     }
   },
 
   get shardsGained() {
-    if (!TeresaUnlocks.effarig.canBeApplied) return DC.D0;
+    if (!TeresaUnlocks.effarig.canBeApplied) {
+      return DC.D0;
+    }
     return Decimal.floor(Decimal.pow(Currency.eternityPoints.value.add(1).log10().div(7500),
       getActiveGlyphEffects().length)).times(AlchemyResource.effarig.effectValue);
   },
@@ -123,8 +131,13 @@ export const Effarig = {
 };
 
 class EffarigUnlockState extends BitUpgradeState {
-  get bits() { return player.celestials.effarig.unlockBits; }
-  set bits(value) { player.celestials.effarig.unlockBits = value; }
+  get bits() {
+    return player.celestials.effarig.unlockBits;
+  }
+
+  set bits(value) {
+    player.celestials.effarig.unlockBits = value;
+  }
 
   get cost() {
     return this.config.cost;
@@ -135,7 +148,9 @@ class EffarigUnlockState extends BitUpgradeState {
   }
 
   purchase() {
-    if (this.isUnlocked || !Currency.relicShards.purchase(this.cost)) return;
+    if (this.isUnlocked || !Currency.relicShards.purchase(this.cost)) {
+      return;
+    }
     this.unlock();
     this.config.onPurchased?.();
   }
@@ -143,19 +158,25 @@ class EffarigUnlockState extends BitUpgradeState {
 
 export const EffarigUnlock = mapGameDataToObject(
   GameDatabase.celestials.effarig.unlocks,
-  config => new EffarigUnlockState(config)
+  config => new EffarigUnlockState(config),
 );
 
 EventHub.logic.on(GAME_EVENT.TAB_CHANGED, () => {
-  if (Tab.celestials.effarig.isOpen) Effarig.quotes.initial.show();
+  if (Tab.celestials.effarig.isOpen) {
+    Effarig.quotes.initial.show();
+  }
 });
 
 EventHub.logic.on(GAME_EVENT.BIG_CRUNCH_BEFORE, () => {
-  if (!Effarig.isRunning) return;
+  if (!Effarig.isRunning) {
+    return;
+  }
   Effarig.quotes.completeInfinity.show();
 });
 
 EventHub.logic.on(GAME_EVENT.ETERNITY_RESET_BEFORE, () => {
-  if (!Effarig.isRunning) return;
+  if (!Effarig.isRunning) {
+    return;
+  }
   Effarig.quotes.completeEternity.show();
 });

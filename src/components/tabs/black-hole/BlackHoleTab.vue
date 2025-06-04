@@ -11,7 +11,7 @@ export default {
     BlackHoleUpgradeRow,
     BlackHoleStateRow,
     BlackHoleChargingSliders,
-    BlackHoleUnlockButton
+    BlackHoleUnlockButton,
   },
   data() {
     return {
@@ -32,13 +32,17 @@ export default {
     blackHoles: () => BlackHoles.list,
     pauseModeString() {
       switch (this.pauseMode) {
-        case BLACK_HOLE_PAUSE_MODE.NO_PAUSE: {return "Do not pause";
+        case BLACK_HOLE_PAUSE_MODE.NO_PAUSE: {
+          return "Do not pause";
         }
-        case BLACK_HOLE_PAUSE_MODE.PAUSE_BEFORE_BH1: {return this.hasBH2 ? "Before BH1" : "Before activation";
+        case BLACK_HOLE_PAUSE_MODE.PAUSE_BEFORE_BH1: {
+          return this.hasBH2 ? "Before BH1" : "Before activation";
         }
-        case BLACK_HOLE_PAUSE_MODE.PAUSE_BEFORE_BH2: {return "Before BH2";
+        case BLACK_HOLE_PAUSE_MODE.PAUSE_BEFORE_BH2: {
+          return "Before BH2";
         }
-        default: {throw new Error("Unrecognized BH offline pausing mode");
+        default: {
+          throw new Error("Unrecognized BH offline pausing mode");
         }
       }
     },
@@ -47,7 +51,9 @@ export default {
     this.startAnimation();
   },
   destroyed() {
-    if (this.animation) this.animation.unmount();
+    if (this.animation) {
+      this.animation.unmount();
+    }
   },
   methods: {
     update() {
@@ -56,7 +62,9 @@ export default {
       this.isPaused = BlackHoles.arePaused;
       // If stop running enslaved, re-mount the black hole animation as it reappears
       if (this.isEnslaved && !Enslaved.isRunning) {
-        if (this.animation) this.animation.unmount();
+        if (this.animation) {
+          this.animation.unmount();
+        }
         this.startAnimation();
       }
       this.isEnslaved = Enslaved.isRunning;
@@ -68,8 +76,11 @@ export default {
         BlackHole(2).duration.div(BlackHole(2).cycleLength)];
       this.detailedBH2 = this.bh2Status();
 
-      if (player.blackHoleNegative.lt(1) && !this.isLaitela) this.stateChange = this.isPaused ? "Uninvert" : "Invert";
-      else this.stateChange = this.isPaused ? "Unpause" : "Pause";
+      if (player.blackHoleNegative.lt(1) && !this.isLaitela) {
+        this.stateChange = this.isPaused ? "Uninvert" : "Invert";
+      } else {
+        this.stateChange = this.isPaused ? "Unpause" : "Pause";
+      }
     },
     bh2Status() {
       const bh1Remaining = BlackHole(1).timeWithPreviousActiveToNextStateChange;
@@ -130,7 +141,8 @@ export default {
           steps = 1;
           break;
         }
-        default: {throw new Error("Unrecognized BH offline pausing mode");
+        default: {
+          throw new Error("Unrecognized BH offline pausing mode");
         }
       }
       player.blackHoleAutoPauseMode = (this.pauseMode + steps) % Object.values(BLACK_HOLE_PAUSE_MODE).length;

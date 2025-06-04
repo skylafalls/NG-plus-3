@@ -24,18 +24,22 @@ export class DimBoost {
       InfinityUpgrade.dimboostMult,
       InfinityChallenge(7).reward,
       InfinityChallenge(7),
-      TimeStudy(81)
-    ))
-    boost = boost.times(MetaDimensions.dimensionBoostMultiplier)
+      TimeStudy(81),
+    ));
+    if (TimeStudy.metaDimensions.isBought) {
+      boost = boost.times(MetaDimensions.dimensionBoostMultiplier);
+    }
     boost = boost.timesEffectsOf(
-        TimeStudy(83),
-        TimeStudy(231),
-        Achievement(117),
-        Achievement(142),
-        GlyphEffect.dimBoostPower,
-        PelleRifts.recursion.milestones[0]
-      ).powEffectsOf(InfinityUpgrade.dimboostMult.chargedEffect);
-    if (GlyphAlteration.isAdded("effarig")) boost = boost.pow(getSecondaryGlyphEffect("effarigforgotten"));
+      TimeStudy(83),
+      TimeStudy(231),
+      Achievement(117),
+      Achievement(142),
+      GlyphEffect.dimBoostPower,
+      PelleRifts.recursion.milestones[0],
+    ).powEffectsOf(InfinityUpgrade.dimboostMult.chargedEffect);
+    if (GlyphAlteration.isAdded("effarig")) {
+      boost = boost.pow(getSecondaryGlyphEffect("effarigforgotten"));
+    }
     return boost;
   }
 
@@ -78,17 +82,27 @@ export class DimBoost {
   }
 
   static get canBeBought() {
-    if (DimBoost.purchasedBoosts.gte(this.maxBoosts)) return false;
-    if (player.records.thisInfinity.maxAM.gt(Player.infinityGoal) &&
-       (!player.break || Player.isInAntimatterChallenge)) return false;
+    if (DimBoost.purchasedBoosts.gte(this.maxBoosts)) {
+      return false;
+    }
+    if (player.records.thisInfinity.maxAM.gt(Player.infinityGoal)
+      && (!player.break || Player.isInAntimatterChallenge)) {
+      return false;
+    }
     return true;
   }
 
   static get lockText() {
     if (DimBoost.purchasedBoosts.gte(this.maxBoosts)) {
-      if (Ra.isRunning) return "Locked (Ra's Reality)";
-      if (InfinityChallenge(1).isRunning) return "Locked (Infinity Challenge 1)";
-      if (NormalChallenge(8).isRunning) return "Locked (8th Antimatter Dimension Autobuyer Challenge)";
+      if (Ra.isRunning) {
+        return "Locked (Ra's Reality)";
+      }
+      if (InfinityChallenge(1).isRunning) {
+        return "Locked (Infinity Challenge 1)";
+      }
+      if (NormalChallenge(8).isRunning) {
+        return "Locked (8th Antimatter Dimension Autobuyer Challenge)";
+      }
     }
     return null;
   }
@@ -104,7 +118,7 @@ export class DimBoost {
     const discount = Effects.sum(
       TimeStudy(211),
       TimeStudy(222),
-      MasteryStudy(31)
+      MasteryStudy(31),
     );
     if (tier === 6 && NormalChallenge(10).isRunning) {
       amount = amount.add(targetResets.sub(3).mul(DC.D20.sub(discount)).round());
@@ -116,7 +130,9 @@ export class DimBoost {
     }
 
     amount = amount.sub(Effects.sum(InfinityUpgrade.resetBoost));
-    if (InfinityChallenge(5).isCompleted) amount = amount.sub(1);
+    if (InfinityChallenge(5).isCompleted) {
+      amount = amount.sub(1);
+    }
 
     amount = amount.times(InfinityUpgrade.resetBoost.chargedEffect.effectOrDefault(1));
 
@@ -126,7 +142,9 @@ export class DimBoost {
   }
 
   static get unlockedByBoost() {
-    if (DimBoost.lockText !== null) return DimBoost.lockText;
+    if (DimBoost.lockText !== null) {
+      return DimBoost.lockText;
+    }
     const boosts = DimBoost.purchasedBoosts;
     const allNDUnlocked = EternityMilestone.unlockAllND.isReached;
 
@@ -138,19 +156,31 @@ export class DimBoost {
     }
 
     const formattedMultText = `give a ${formatX(DimBoost.power, 2, 1)} multiplier `;
-    let dimensionRange = `to the 1st Dimension`;
-    if (boosts.gt(0)) dimensionRange = `to Dimensions 1-${Decimal.min(boosts.add(1), 8)}`;
-    if (boosts.gte(DimBoost.maxDimensionsUnlockable - 1)) dimensionRange = `to all Dimensions`;
+    let dimensionRange = "to the 1st Dimension";
+    if (boosts.gt(0)) {
+      dimensionRange = `to Dimensions 1-${Decimal.min(boosts.add(1), 8)}`;
+    }
+    if (boosts.gte(DimBoost.maxDimensionsUnlockable - 1)) {
+      dimensionRange = "to all Dimensions";
+    }
 
     let boostEffects;
-    if (NormalChallenge(8).isRunning) boostEffects = newUnlock;
-    else if (newUnlock === "") boostEffects = `${formattedMultText} ${dimensionRange}`;
-    else boostEffects = `${newUnlock} and ${formattedMultText} ${dimensionRange}`;
+    if (NormalChallenge(8).isRunning) {
+      boostEffects = newUnlock;
+    } else if (newUnlock === "") {
+      boostEffects = `${formattedMultText} ${dimensionRange}`;
+    } else {
+      boostEffects = `${newUnlock} and ${formattedMultText} ${dimensionRange}`;
+    }
 
-    if (boostEffects === "") return "Dimension Boosts are currently useless";
-    const areDimensionsKept = (Perk.antimatterNoReset.isBought || Achievement(111).canBeApplied) &&
-      (!Pelle.isDoomed || PelleUpgrade.dimBoostResetsNothing.isBought);
-    if (areDimensionsKept) return boostEffects[0].toUpperCase() + boostEffects.slice(1);
+    if (boostEffects === "") {
+      return "Dimension Boosts are currently useless";
+    }
+    const areDimensionsKept = (Perk.antimatterNoReset.isBought || Achievement(111).canBeApplied)
+      && (!Pelle.isDoomed || PelleUpgrade.dimBoostResetsNothing.isBought);
+    if (areDimensionsKept) {
+      return boostEffects[0].toUpperCase() + boostEffects.slice(1);
+    }
     return `Reset your Dimensions to ${boostEffects}`;
   }
 
@@ -169,17 +199,26 @@ export class DimBoost {
   }
 
   static get startingDimensionBoosts() {
-    if (InfinityUpgrade.skipResetGalaxy.isBought) return DC.D4;
-    if (InfinityUpgrade.skipReset3.isBought) return DC.D3;
-    if (InfinityUpgrade.skipReset2.isBought) return DC.D2;
-    if (InfinityUpgrade.skipReset1.isBought) return DC.D1;
+    if (InfinityUpgrade.skipResetGalaxy.isBought) {
+      return DC.D4;
+    }
+    if (InfinityUpgrade.skipReset3.isBought) {
+      return DC.D3;
+    }
+    if (InfinityUpgrade.skipReset2.isBought) {
+      return DC.D2;
+    }
+    if (InfinityUpgrade.skipReset1.isBought) {
+      return DC.D1;
+    }
     return DC.D0;
   }
 }
 
-// eslint-disable-next-line max-params
 export function softReset(tempBulk, forcedADReset = false, forcedAMReset = false, enteringAntimatterChallenge = false) {
-  if (Currency.antimatter.gt(Player.infinityLimit)) return;
+  if (Currency.antimatter.gt(Player.infinityLimit)) {
+    return;
+  }
   const bulk = Decimal.min(tempBulk, DimBoost.maxBoosts.sub(player.dimensionBoosts));
   EventHub.dispatch(GAME_EVENT.DIMBOOST_BEFORE, bulk);
   player.dimensionBoosts = (Decimal.max(DC.D0, player.dimensionBoosts.add(bulk)));
@@ -205,19 +244,33 @@ export function softReset(tempBulk, forcedADReset = false, forcedAMReset = false
 }
 
 export function skipResetsIfPossible(enteringAntimatterChallenge) {
-  if (enteringAntimatterChallenge || Player.isInAntimatterChallenge) return;
+  if (enteringAntimatterChallenge || Player.isInAntimatterChallenge) {
+    return;
+  }
   if (InfinityUpgrade.skipResetGalaxy.isBought && player.dimensionBoosts.lt(4)) {
     player.dimensionBoosts = DC.D4;
-    if (player.galaxies.lt(1)) player.galaxies = DC.D1;
-  } else if (InfinityUpgrade.skipReset3.isBought && player.dimensionBoosts.lt(3)) player.dimensionBoosts = DC.D3;
-  else if (InfinityUpgrade.skipReset2.isBought && player.dimensionBoosts.lt(2)) player.dimensionBoosts = DC.D2;
-  else if (InfinityUpgrade.skipReset1.isBought && player.dimensionBoosts.lt(1)) player.dimensionBoosts = DC.D1;
+    if (player.galaxies.lt(1)) {
+      player.galaxies = DC.D1;
+    }
+  } else if (InfinityUpgrade.skipReset3.isBought && player.dimensionBoosts.lt(3)) {
+    player.dimensionBoosts = DC.D3;
+  } else if (InfinityUpgrade.skipReset2.isBought && player.dimensionBoosts.lt(2)) {
+    player.dimensionBoosts = DC.D2;
+  } else if (InfinityUpgrade.skipReset1.isBought && player.dimensionBoosts.lt(1)) {
+    player.dimensionBoosts = DC.D1;
+  }
 }
 
 export function manualRequestDimensionBoost(bulk) {
-  if (Currency.antimatter.gt(Player.infinityLimit) || !DimBoost.requirement.isSatisfied) return;
-  if (!DimBoost.canBeBought) return;
-  if (GameEnd.creditsEverClosed) return;
+  if (Currency.antimatter.gt(Player.infinityLimit) || !DimBoost.requirement.isSatisfied) {
+    return;
+  }
+  if (!DimBoost.canBeBought) {
+    return;
+  }
+  if (GameEnd.creditsEverClosed) {
+    return;
+  }
   if (player.options.confirmations.dimensionBoost) {
     Modal.dimensionBoost.show({ bulk });
     return;
@@ -226,21 +279,32 @@ export function manualRequestDimensionBoost(bulk) {
 }
 
 export function requestDimensionBoost(bulk) {
-  if (Currency.antimatter.gt(Player.infinityLimit) || !DimBoost.requirement.isSatisfied) return;
-  if (!DimBoost.canBeBought) return;
+  if (Currency.antimatter.gt(Player.infinityLimit) || !DimBoost.requirement.isSatisfied) {
+    return;
+  }
+  if (!DimBoost.canBeBought) {
+    return;
+  }
   Tutorial.turnOffEffect(TUTORIAL_STATE.DIMBOOST);
-  if (BreakInfinityUpgrade.autobuyMaxDimboosts.isBought && bulk) maxBuyDimBoosts();
-  else softReset(1);
+  if (BreakInfinityUpgrade.autobuyMaxDimboosts.isBought && bulk) {
+    maxBuyDimBoosts();
+  } else {
+    softReset(1);
+  }
 }
 
 function maxBuyDimBoosts() {
   // Boosts that unlock new dims are bought one at a time, unlocking the next dimension
   if (DimBoost.canUnlockNewDimension) {
-    if (DimBoost.requirement.isSatisfied) softReset(1);
+    if (DimBoost.requirement.isSatisfied) {
+      softReset(1);
+    }
     return;
   }
   const req1 = DimBoost.bulkRequirement(1);
-  if (!req1.isSatisfied) return;
+  if (!req1.isSatisfied) {
+    return;
+  }
   const req2 = DimBoost.bulkRequirement(2);
   if (!req2.isSatisfied) {
     softReset(1);
@@ -252,7 +316,7 @@ function maxBuyDimBoosts() {
   const discount = Effects.sum(
     TimeStudy(211),
     TimeStudy(222),
-    MasteryStudy(31)
+    MasteryStudy(31),
   );
   let multiplierPerDB;
   if (tier === 6) {
@@ -262,7 +326,9 @@ function maxBuyDimBoosts() {
   }
 
   amount = amount.sub(Effects.sum(InfinityUpgrade.resetBoost));
-  if (InfinityChallenge(5).isCompleted) amount = amount.sub(1);
+  if (InfinityChallenge(5).isCompleted) {
+    amount = amount.sub(1);
+  }
 
   multiplierPerDB = multiplierPerDB.times(InfinityUpgrade.resetBoost.chargedEffect.effectOrDefault(1));
   amount = amount.times(InfinityUpgrade.resetBoost.chargedEffect.effectOrDefault(1));
@@ -270,7 +336,6 @@ function maxBuyDimBoosts() {
   const ad = AntimatterDimension(tier).totalAmount;
   let calcBoosts;
   calcBoosts = ad.sub(amount).div(multiplierPerDB);
-
 
   if (EternityChallenge(5).isRunning) {
     calcBoosts = decimalCubicSolution(DC.D1, DC.D1.neg(), multiplierPerDB.add(2), ad.add(18).neg());
@@ -280,7 +345,9 @@ function maxBuyDimBoosts() {
   // Dimension boosts 1-4 dont use 8th dims, 1-2 dont use 6th dims, so add those extras afterwards.
 
   // Add one cause (x-b)/i is off by one otherwise
-  if (calcBoosts.floor().add(1).lte(DimBoost.purchasedBoosts)) return;
+  if (calcBoosts.floor().add(1).lte(DimBoost.purchasedBoosts)) {
+    return;
+  }
   calcBoosts = calcBoosts.sub(DimBoost.purchasedBoosts);
   const minBoosts = Decimal.min(DC.BEMAX, calcBoosts.floor().add(1));
 

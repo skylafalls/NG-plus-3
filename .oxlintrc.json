@@ -3,8 +3,8 @@
   "categories": {
     "correctness": "error",
     "suspicious": "error",
-    "perf": "warn",
-    "pedantic": "warn"
+    "pedantic": "error",
+    "perf": "warn"
   },
   "plugins": [
     "typescript",
@@ -29,15 +29,27 @@
     "eslint/no-var": "error",
     "eslint/max-nested-callbacks": ["warn", 3],
     "eslint/max-lines": ["warn", 1000],
-    "unicorn/filename-case": ["warn", {
-      "case": "kebab-case"
-    }],
     "eslint/func-style": "off",
     "eslint/no-magic-numbers": "off",
     "eslint/no-ternary": "off",
     "eslint/no-nested-ternary": "error",
-    "eslint/no-unused-vars": "off",
+    "eslint/no-unused-vars": "error",
     "eslint/max-classes-per-file": "off",
+    "eslint/no-empty": "error",
+    "eslint/no-empty-function": "error",
+    "eslint/no-eq-null": "error",
+    "eslint/no-unused-expressions": "error",
+    "eslint/curly": "warn",
+    "eslint/default-case-last": "warn",
+    "eslint/default-param-last": "error",
+    "eslint/grouped-accessor-pairs": "error",
+    "eslint/guard-for-in": "error",
+    "eslint/no-duplicate-imports": "error",
+    "eslint/no-multi-assign": "error",
+    "eslint/operator-assignment": "error",
+    "eslint/prefer-object-spread": "error",
+    "eslint/getter-return": "error",
+    "eslint/no-unreachable": "error",
     "typescript/consistent-type-definitions": "error",
     "typescript/consistent-type-imports": "error",
     "typescript/no-empty-interface": "error",
@@ -45,6 +57,10 @@
     "typescript/prefer-for-of": "error",
     "typescript/prefer-function-type": "error",
     "typescript/no-unused-vars": "error",
+    "typescript/no-dynamic-delete": "error",
+    "typescript/prefer-literal-enum-member": "error",
+    "typescript/adjacent-overload-signatures": "error",
+    "typescript/consistent-generic-constructors": "error",
     "unicorn/empty-brace-spaces": "error",
     "unicorn/error-message": "error",
     "unicorn/no-unreadable-array-destructuring": "error",
@@ -57,7 +73,21 @@
     "unicorn/prefer-spread": "warn",
     "unicorn/prefer-structured-clone": "error",
     "unicorn/require-array-join-separator": "error",
-    "unicorn/switch-case-braces": "error"
+    "unicorn/switch-case-braces": "error",
+    "unicorn/filename-case": ["warn", {
+      "case": "kebab-case"
+    }],
+    "import/no-cycle": "error",
+    "import/no-dynamic-require": "error",
+    "import/unambiguous": "error",
+    "import/consistent-type-specifier-style": ["error", "prefer-inline"],
+    "import/first": "error",
+    "import/export": "error",
+    "oxc/no-const-enum": "error",
+    "oxc/no-map-spread": "error",
+    "oxc/bad-bitwise-operator": "error",
+    "promise/no-nesting": "error",
+    "promise/no-return-in-finally": "error"
   },
   "overrides": [
     {

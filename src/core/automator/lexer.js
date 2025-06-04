@@ -1,6 +1,5 @@
 // Note: chevrotain doesn't play well with unicode regex
-/* eslint-disable require-unicode-regexp */
-/* eslint-disable camelcase */
+
 import { createToken, Lexer } from "chevrotain";
 
 import { DC } from "../constants";
@@ -9,10 +8,12 @@ const createCategory = name => createToken({ name, pattern: Lexer.NA, longer_alt
 
 // Shorthand for creating tokens and adding them to a list
 const tokenLists = {};
-// eslint-disable-next-line max-params
+
 const createInCategory = (category, name, pattern, props = {}) => {
   const categories = [category];
-  if (props.extraCategories) categories.push(...props.extraCategories);
+  if (props.extraCategories) {
+    categories.push(...props.extraCategories);
+  }
   const token = createToken({
     name,
     pattern,
@@ -20,10 +21,14 @@ const createInCategory = (category, name, pattern, props = {}) => {
     longer_alt: Identifier,
   });
   const categoryName = Array.isArray(category) ? category[0].name : category.name;
-  if (tokenLists[categoryName] === undefined) tokenLists[categoryName] = [];
+  if (tokenLists[categoryName] === undefined) {
+    tokenLists[categoryName] = [];
+  }
   tokenLists[categoryName].push(token);
   const patternWord = pattern.toString().match(/^\/([a-zA-Z0-9]*)\/[a-zA-Z]*$/ui);
-  if (patternWord && patternWord[1]) token.$autocomplete = patternWord[1];
+  if (patternWord && patternWord[1]) {
+    token.$autocomplete = patternWord[1];
+  }
   Object.assign(token, props);
   return token;
 };
@@ -31,7 +36,7 @@ const createInCategory = (category, name, pattern, props = {}) => {
 const HSpace = createToken({
   name: "HSpace",
   pattern: /[ \t]+/,
-  group: Lexer.SKIPPED
+  group: Lexer.SKIPPED,
 });
 
 const EOL = createToken({
@@ -121,18 +126,18 @@ createInCategory(AutomatorCurrency, "RM", /rm/i, { $getter: () => Currency.reali
 createInCategory(AutomatorCurrency, "infinities", /infinities/i, { $getter: () => Currency.infinities.value });
 createInCategory(AutomatorCurrency, "bankedInfinities", /banked[ \t]+infinities/i, {
   $autocomplete: "banked infinities",
-  $getter: () => Currency.infinitiesBanked.value
+  $getter: () => Currency.infinitiesBanked.value,
 });
 createInCategory(AutomatorCurrency, "eternities", /eternities/i, { $getter: () => Currency.eternities.value });
 createInCategory(AutomatorCurrency, "realities", /realities/i, { $getter: () => Currency.realities.value });
 
 createInCategory(AutomatorCurrency, "PendingIP", /pending[ \t]+ip/i, {
   $autocomplete: "pending IP",
-  $getter: () => (Player.canCrunch ? gainedInfinityPoints() : DC.D0)
+  $getter: () => (Player.canCrunch ? gainedInfinityPoints() : DC.D0),
 });
 createInCategory(AutomatorCurrency, "PendingEP", /pending[ \t]+ep/i, {
   $autocomplete: "pending EP",
-  $getter: () => (Player.canEternity ? gainedEternityPoints() : DC.D0)
+  $getter: () => (Player.canEternity ? gainedEternityPoints() : DC.D0),
 });
 createInCategory(AutomatorCurrency, "PendingTP", /pending[ \t]+tp/i, {
   $autocomplete: "pending TP",
@@ -140,7 +145,7 @@ createInCategory(AutomatorCurrency, "PendingTP", /pending[ \t]+tp/i, {
 });
 createInCategory(AutomatorCurrency, "PendingRM", /pending[ \t]+rm/i, {
   $autocomplete: "pending RM",
-  $getter: () => (isRealityAvailable() ? MachineHandler.gainedRealityMachines : DC.D0)
+  $getter: () => (isRealityAvailable() ? MachineHandler.gainedRealityMachines : DC.D0),
 });
 createInCategory(AutomatorCurrency, "PendingGlyphLevel", /pending[ \t]+glyph[ \t]+level/i, {
   $autocomplete: "pending Glyph level",
@@ -170,16 +175,20 @@ createInCategory(AutomatorCurrency, "PendingCompletions", /pending[ \t]+completi
   $getter: () => {
     // If we are not in an EC, pretend like we have a ton of completions so any check for sufficient
     // completions returns true
-    if (!EternityChallenge.isRunning) return DC.NUMMAX;
+    if (!EternityChallenge.isRunning) {
+      return DC.NUMMAX;
+    }
     return EternityChallenge.current.gainedCompletionStatus.totalCompletions;
-  }
+  },
 });
 
 createInCategory(AutomatorCurrency, "FilterScore", /filter[ \t]+score/i, {
   $autocomplete: "filter score",
   $getter: () => {
     // If the filter isn't unlocked somehow, return the most negative number in order to ensure it's nonblocking
-    if (!EffarigUnlock.glyphFilter.isUnlocked) return -Number.MAX_VALUE;
+    if (!EffarigUnlock.glyphFilter.isUnlocked) {
+      return -Number.MAX_VALUE;
+    }
     const choices = GlyphSelection.glyphList(GlyphSelection.choiceCount, gainedGlyphLevel(),
       { isChoosingGlyph: false });
     const bestGlyph = AutoGlyphProcessor.pick(choices);
@@ -206,8 +215,8 @@ for (let i = 1; i <= 12; ++i) {
   const id = i;
   createInCategory(AutomatorCurrency, `EC${i}`, new RegExp(`ec${i} completions`, "i"), {
     $autocomplete: `ec${i} completions`,
-    // eslint-disable-next-line no-loop-func
-    $getter: () => EternityChallenge(id).completions
+
+    $getter: () => EternityChallenge(id).completions,
   });
 }
 
@@ -284,7 +293,9 @@ const Keyword = createToken({
 const keywordTokens = [];
 const createKeyword = (name, pattern, props = {}) => {
   const categories = [Keyword];
-  if (props.extraCategories) categories.push(...props.extraCategories);
+  if (props.extraCategories) {
+    categories.push(...props.extraCategories);
+  }
   const token = createToken({
     name,
     pattern,
@@ -379,7 +390,7 @@ Comma.LABEL = "❟";
 
 export const lexer = new Lexer(automatorTokens, {
   positionTracking: "full",
-  ensureOptimizations: true
+  ensureOptimizations: true,
 });
 
 // The lexer uses an ID system that's separate from indices into the token array
@@ -393,9 +404,11 @@ export const tokenMap = automatorTokens.mapToObject(e => e.name, e => e);
 
 const automatorCurrencyNames = new Set(tokenLists.AutomatorCurrency.map(i => i.$autocomplete.toUpperCase()));
 
-export const standardizeAutomatorValues = function(x) {
+export const standardizeAutomatorValues = function (x) {
   try {
-    if (automatorCurrencyNames.has(x.toUpperCase())) return x.toUpperCase();
+    if (automatorCurrencyNames.has(x.toUpperCase())) {
+      return x.toUpperCase();
+    }
   } catch {
     // This only happens if the input is a number or Decimal, in which case we don't attempt to change any formatting
     // and simply return

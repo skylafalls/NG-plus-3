@@ -7,41 +7,41 @@ export default {
     constant: {
       type: String,
       required: false,
-      default: ""
+      default: "",
     },
     block: {
       type: Object,
-      required: true
+      required: true,
     },
     blockTarget: {
       type: String,
       required: false,
-      default: ""
+      default: "",
     },
     updateFunction: {
       type: Function,
-      required: true
+      required: true,
     },
     initialSelection: {
       type: String,
       required: false,
-      default: ""
+      default: "",
     },
     patterns: {
       type: Array,
       required: false,
-      default: () => []
+      default: () => [],
     },
     recursive: {
       type: Boolean,
       required: false,
-      default: false
+      default: false,
     },
     currentPath: {
       type: String,
       required: false,
-      default: ""
-    }
+      default: "",
+    },
   },
   data() {
     return {
@@ -90,14 +90,16 @@ export default {
     // phrases in String format, so we want to give some extra room
     hasLongTextInput() {
       return this.block.cmd === "NOTIFY" || this.block.cmd === "COMMENT";
-    }
+    },
   },
   created() {
     this.scriptID = player.reality.automator.state.editorScript;
     this.b = this.block;
     this.lineNumber = BlockAutomator.lineNumber(BlockAutomator._idArray.indexOf(this.block.id) + 1);
     BlockAutomator.updateIdArray();
-    if (this.constant) return;
+    if (this.constant) {
+      return;
+    }
     if (this.isBoolTarget) {
       this.dropdownOptions = [this.blockTarget.toUpperCase()];
       this.dropdownSelection = this.block[this.blockTarget] ? this.blockTarget.toUpperCase() : "";
@@ -110,7 +112,9 @@ export default {
         .filter(s => s.startsWith(this.currentPath) && s.length > this.currentPath.length)
         .map(s => s.charAt(this.currentPath.length));
       for (const node of availableOptions) {
-        if (this.pathRef[node]) continue;
+        if (this.pathRef[node]) {
+          continue;
+        }
         const entries = this.block[node];
         this.pathRef[node] = entries;
         this.dropdownOptions.push(...entries);
@@ -151,8 +155,8 @@ export default {
   //   but we still need to verify error count and parse the script again since we avoid doing that within
   //   changeBlock() for performance reasons
   destroyed() {
-    if (player.reality.automator.type === AUTOMATOR_TYPE.TEXT || Tabs.current._currentSubtab.key !== "automator" ||
-      this.scriptID !== player.reality.automator.state.editorScript) {
+    if (player.reality.automator.type === AUTOMATOR_TYPE.TEXT || Tabs.current._currentSubtab.key !== "automator"
+      || this.scriptID !== player.reality.automator.state.editorScript) {
       return;
     }
 
@@ -161,7 +165,9 @@ export default {
     if (this.lineNumber !== newLineNum) {
       const newErrors = [];
       for (const error of AutomatorData.cachedErrors) {
-        if (error.startLine !== this.lineNumber) newErrors.push(error);
+        if (error.startLine !== this.lineNumber) {
+          newErrors.push(error);
+        }
       }
       newErrors.sort((a, b) => a.startLine - b.startLine);
       AutomatorData.cachedErrors = newErrors;
@@ -175,7 +181,9 @@ export default {
     update() {
       this.errors = AutomatorData.cachedErrors;
       this.hasError = this.errors.some(e => e.startLine === this.lineNumber);
-      if (this.dropdownSelection.startsWith("*")) this.isTextInput = true;
+      if (this.dropdownSelection.startsWith("*")) {
+        this.isTextInput = true;
+      }
       this.calculatePath();
     },
     calculatePath() {
@@ -193,7 +201,7 @@ export default {
     validateInput() {
       let validator, lines;
       if (this.b.nest) {
-        const clone = Object.assign({}, this.b);
+        const clone = { ...this.b };
         clone.nest = [];
         lines = BlockAutomator.parseLines([clone]);
         validator = validateLine(lines.join("\n"));
@@ -205,7 +213,9 @@ export default {
       // Yes, the odd structure of this check is intentional. Something odd happens within parseLines under certain
       // conditions which seem hard to pin down, which causes this evaluate to an array with the string "undefined"
       // being its only element. These cases all seem to be false positives
-      if (lines[0] === "undefined") return;
+      if (lines[0] === "undefined") {
+        return;
+      }
 
       // We're actually validating only this single line, so we reconstruct the error list by removing everything on
       // this line and adding anything new that was found. We only take the first error from this line (if there are
@@ -234,9 +244,13 @@ export default {
       this.updateFunction(this.block, this.block.id);
       if (this.blockTarget) {
         let newValue;
-        if (this.isBoolTarget) newValue = this.dropdownSelection !== "";
-        else if (this.isTextInput) newValue = this.textContents;
-        else newValue = this.dropdownSelection;
+        if (this.isBoolTarget) {
+          newValue = this.dropdownSelection !== "";
+        } else if (this.isTextInput) {
+          newValue = this.textContents;
+        } else {
+          newValue = this.dropdownSelection;
+        }
 
         // eslint-disable-next-line vue/no-mutating-props
         this.block[this.blockTarget] = newValue;
@@ -264,7 +278,9 @@ export default {
       }
     },
     errorTooltip() {
-      if (!this.hasError || this.suppressTooltip) return;
+      if (!this.hasError || this.suppressTooltip) {
+        return;
+      }
 
       // We want to keep the verbose error info for the error panel, but we need to shorten it for the tooltips here
       // The problematic errors all seem to have the same format, which we can explicitly modify
@@ -280,7 +296,7 @@ export default {
         html: true,
         trigger: "manual",
         show: true,
-        classes: ["c-block-automator-error-container", "general-tooltip"]
+        classes: ["c-block-automator-error-container", "general-tooltip"],
       };
     },
     textInputClassObject() {
@@ -303,8 +319,8 @@ export default {
       this.isTextInput = false;
       this.dropdownSelection = "";
       this.textContents = "";
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -1,12 +1,13 @@
 <script>
-import AntimatterDimensionProgressBar from "./AntimatterDimensionProgressBar";
-import AntimatterDimensionRow from "@/components/tabs/antimatter-dimensions/ModernAntimatterDimensionRow";
-import AntimatterGalaxyRow from "@/components/tabs/antimatter-dimensions/ModernAntimatterGalaxyRow";
-import DimensionBoostRow from "@/components/tabs/antimatter-dimensions/ModernDimensionBoostRow";
-import PrimaryButton from "@/components/PrimaryButton";
-import TickspeedRow from "@/components/tabs/antimatter-dimensions/TickspeedRow";
+import AntimatterDimensionProgressBar from "./AntimatterDimensionProgressBar.vue";
+import AntimatterDimensionRow from "@/components/tabs/antimatter-dimensions/ModernAntimatterDimensionRow.vue";
+import AntimatterGalaxyRow from "@/components/tabs/antimatter-dimensions/ModernAntimatterGalaxyRow.vue";
+import DimensionBoostRow from "@/components/tabs/antimatter-dimensions/ModernDimensionBoostRow.vue";
+import PrimaryButton from "@/components/PrimaryButton.vue";
+import TickspeedRow from "@/components/tabs/antimatter-dimensions/TickspeedRow.vue";
+import { defineComponent } from "vue";
 
-export default {
+export default defineComponent({
   name: "ModernAntimatterDimensionsTab",
   components: {
     PrimaryButton,
@@ -14,7 +15,7 @@ export default {
     AntimatterDimensionRow,
     AntimatterGalaxyRow,
     DimensionBoostRow,
-    TickspeedRow
+    TickspeedRow,
   },
   data() {
     return {
@@ -69,7 +70,9 @@ export default {
       }
     },
     getUntil10Display() {
-      if (this.isContinuumActive) return "Continuum";
+      if (this.isContinuumActive) {
+        return "Continuum";
+      }
       return this.buyUntil10 ? "Until 10" : "Buy 1";
     },
     update() {
@@ -85,10 +88,12 @@ export default {
       this.buy10Mult.copyFrom(AntimatterDimensions.buyTenMultiplier);
 
       this.multiplierText = `Buy 10 Dimension purchase multiplier: ${formatX(this.buy10Mult, 2, 2)}`;
-      if (!isSacrificeUnlocked) return;
+      if (!isSacrificeUnlocked) {
+        return;
+      }
       this.isSacrificeAffordable = Sacrifice.canSacrifice;
-      this.isFullyAutomated = Autobuyer.sacrifice.isActive && Achievement(118).isEffectActive &&
-        (this.isSacrificeAffordable || Sacrifice.nextBoost.lte(1));
+      this.isFullyAutomated = Autobuyer.sacrifice.isActive && Achievement(118).isEffectActive
+        && (this.isSacrificeAffordable || Sacrifice.nextBoost.lte(1));
       this.currentSacrifice.copyFrom(Sacrifice.totalBoost);
       this.sacrificeBoost.copyFrom(Sacrifice.nextBoost);
       this.disabledCondition = Sacrifice.disabledCondition;
@@ -96,9 +101,9 @@ export default {
         ? ` | Dimensional Sacrifice multiplier: ${formatX(this.currentSacrifice, 2, 2)}`
         : "";
       this.multiplierText += sacText;
-    }
-  }
-};
+    },
+  },
+});
 </script>
 
 <template>

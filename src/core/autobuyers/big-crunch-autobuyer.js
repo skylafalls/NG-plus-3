@@ -6,7 +6,7 @@ export class BigCrunchAutobuyerState extends UpgradeableAutobuyerState {
   }
 
   get name() {
-    return `Infinity`;
+    return "Infinity";
   }
 
   get isUnlocked() {
@@ -73,11 +73,11 @@ export class BigCrunchAutobuyerState extends UpgradeableAutobuyerState {
   }
 
   autoInfinitiesAvailable(considerMilestoneReached) {
-    return (considerMilestoneReached || EternityMilestone.autoInfinities.isReached) &&
-      !EternityChallenge(4).isRunning && !EternityChallenge(12).isRunning && !Player.isInAntimatterChallenge &&
-      player.auto.autobuyersOn && this.data.isActive &&
-      !Autobuyer.eternity.isActive && this.mode === AUTO_CRUNCH_MODE.TIME && this.time <= 5 &&
-      !Autobuyer.eternity.autoEternitiesAvailable();
+    return (considerMilestoneReached || EternityMilestone.autoInfinities.isReached)
+      && !EternityChallenge(4).isRunning && !EternityChallenge(12).isRunning && !Player.isInAntimatterChallenge
+      && player.auto.autobuyersOn && this.data.isActive
+      && !Autobuyer.eternity.isActive && this.mode === AUTO_CRUNCH_MODE.TIME && this.time <= 5
+      && !Autobuyer.eternity.autoEternitiesAvailable();
   }
 
   upgradeInterval(free) {
@@ -108,27 +108,36 @@ export class BigCrunchAutobuyerState extends UpgradeableAutobuyerState {
   }
 
   get willInfinity() {
-    if (!player.break || Player.isInAntimatterChallenge) return true;
+    if (!player.break || Player.isInAntimatterChallenge) {
+      return true;
+    }
 
     switch (this.mode) {
-      case AUTO_CRUNCH_MODE.AMOUNT: {return gainedInfinityPoints().gte(this.amount);
+      case AUTO_CRUNCH_MODE.AMOUNT: {
+        return gainedInfinityPoints().gte(this.amount);
       }
-      case AUTO_CRUNCH_MODE.TIME: {return Time.thisInfinityRealTime.totalSeconds.toNumber() > this.time;
+      case AUTO_CRUNCH_MODE.TIME: {
+        return Time.thisInfinityRealTime.totalSeconds.toNumber() > this.time;
       }
       case AUTO_CRUNCH_MODE.X_HIGHEST:
-      default: {return gainedInfinityPoints().gte(this.highestPrevPrestige.times(this.xHighest));
+      default: {
+        return gainedInfinityPoints().gte(this.highestPrevPrestige.times(this.xHighest));
       }
     }
   }
 
   tick() {
     super.tick();
-    if (this.willInfinity) bigCrunchResetRequest(true);
+    if (this.willInfinity) {
+      bigCrunchResetRequest(true);
+    }
   }
 
   reset() {
     super.reset();
-    if (EternityMilestone.bigCrunchModes.isReached) return;
+    if (EternityMilestone.bigCrunchModes.isReached) {
+      return;
+    }
     this.mode = AUTO_CRUNCH_MODE.AMOUNT;
   }
 }

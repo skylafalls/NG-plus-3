@@ -7,36 +7,38 @@ export const MatterScale = {
   proton: new Decimal("2.82e-45"),
 
   estimate(matter) {
-    if (!matter) return ["There is no antimatter yet."];
+    if (!matter) {
+      return ["There is no antimatter yet."];
+    }
     if (matter.gt(DC.BIMAX)) {
       return [
-        `You have alot of antimatter`
+        "You have alot of antimatter",
       ];
     }
     if (matter.gt(DC.E1_5E12)) {
       return [
         `It would take ${roundAndStr(matter.log10().div(2437102080 * 3))}%`,
-        "of the current age of the Universe to write out your antimatter count"
+        "of the current age of the Universe to write out your antimatter count",
       ];
     }
     if (matter.gt(new Decimal("1e7200000000"))) {
       return [
         `If you wrote ${formatInt(3)} numbers a second, it would take you`,
-        // eslint-disable-next-line max-len
-        `${roundAndStr(matter.log10().div(2437102080 * 3))} average American lifespans to write down your antimatter amount.`
+
+        `${roundAndStr(matter.log10().div(2437102080 * 3))} average American lifespans to write down your antimatter amount.`,
       ];
     }
     if (matter.gt(DC.E1E7)) {
       return [
         `It would take ${roundAndStr(matter.log10().div(2437102080 * 3))}%`,
-        " of the average American lifespan to write out your antimatter count"
+        " of the average American lifespan to write out your antimatter count",
       ];
     }
     if (matter.gt(DC.E10000)) {
       return [
         `If you wrote ${formatInt(3)} numbers a second, it would take you`,
         TimeSpan.fromSeconds(matter.log10().div(3)).toString(),
-        "to write down your antimatter amount."
+        "to write down your antimatter amount.",
       ];
     }
     const planck = new Decimal("4.22419e-105");
@@ -66,7 +68,9 @@ export const MatterScale = {
   macroScale(matter) {
     const macro = this.macroObjects;
     const last = macro.last();
-    if (matter.gte(last.amount)) return last;
+    if (matter.gte(last.amount)) {
+      return last;
+    }
     let low = 0;
     let high = macro.length;
     while (low !== high) {
@@ -84,7 +88,7 @@ export const MatterScale = {
     { amount: new Decimal("1e-54"), name: "attometers cubed" },
     { amount: new Decimal("1e-63"), name: "zeptometers cubed" },
     { amount: new Decimal("1e-72"), name: "yoctometers cubed" },
-    { amount: new Decimal("4.22419e-105"), name: "planck volumes" }
+    { amount: new Decimal("4.22419e-105"), name: "planck volumes" },
   ],
 
   macroObjects: [
@@ -117,5 +121,5 @@ export const MatterScale = {
     { amount: new Decimal("3.4e80"), name: "observable universes", verb: "make" },
     { amount: new Decimal("1e113"), name: "Dimensions", verb: "make" },
     { amount: DC.C2P1024, name: "Infinity Dimensions", verb: "make" },
-  ]
+  ],
 };

@@ -11,13 +11,13 @@ export default defineComponent({
     DescriptionDisplay,
     EffectDisplay,
     HintText,
-    TimeStudyButton
+    TimeStudyButton,
   },
   props: {
     setup: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
   data: () => ({
     showCost: true,
@@ -35,7 +35,7 @@ export default defineComponent({
     update() {
       this.showCost = true;
     },
-  }
+  },
 });
 </script>
 

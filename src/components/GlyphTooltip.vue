@@ -6,24 +6,24 @@ import GlyphTooltipEffect from "@/components/GlyphTooltipEffect";
 export default {
   name: "GlyphTooltip",
   components: {
-    GlyphTooltipEffect
+    GlyphTooltipEffect,
   },
   props: {
     type: {
       type: String,
-      required: true
+      required: true,
     },
     strength: {
       type: Decimal,
-      required: true
+      required: true,
     },
     level: {
       type: Decimal,
-      required: true
+      required: true,
     },
     effects: {
       type: Array,
-      required: true
+      required: true,
     },
     id: {
       type: Number,
@@ -47,11 +47,11 @@ export default {
     },
     currentAction: {
       type: String,
-      required: true
+      required: true,
     },
     scoreMode: {
       type: Number,
-      required: true
+      required: true,
     },
     showDeletionText: {
       type: Boolean,
@@ -65,13 +65,13 @@ export default {
     },
     changeWatcher: {
       type: Number,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {
       showChaosText: false,
-      chaosDescription: ""
+      chaosDescription: "",
     };
   },
   computed: {
@@ -102,19 +102,23 @@ export default {
       const cursedColor = GlyphAppearanceHandler.isLightBG ? "white" : "black";
       return {
         color: this.type === "cursed" ? cursedColor : color,
-        animation: this.type === "reality" ? "a-reality-glyph-name-cycle 10s infinite" : undefined
+        animation: this.type === "reality" ? "a-reality-glyph-name-cycle 10s infinite" : undefined,
       };
     },
     description() {
       const glyphName = `${this.type.capitalize()}`;
       switch (this.type) {
-        case 'companion': {return "Companion Glyph";
+        case "companion": {
+          return "Companion Glyph";
         }
-        case 'cursed': {return "Cursed Glyph";
+        case "cursed": {
+          return "Cursed Glyph";
         }
-        case 'reality': {return `Pure Glyph of ${glyphName}`;
+        case "reality": {
+          return `Pure Glyph of ${glyphName}`;
         }
-        default: {return `${this.rarityInfo.name} Glyph of ${glyphName}`;
+        default: {
+          return `${this.rarityInfo.name} Glyph of ${glyphName}`;
         }
       }
     },
@@ -125,18 +129,22 @@ export default {
       return this.displayLevel.neq(0) && this.displayLevel.gt(this.level);
     },
     rarityText() {
-      if (!GlyphInfo[this.type].hasRarity) return "";
+      if (!GlyphInfo[this.type].hasRarity) {
+        return "";
+      }
       const strength = Pelle.isDoomed ? Pelle.glyphStrength : this.strength;
       return `| Rarity:
         <span style="color: ${this.descriptionStyle.color}">${formatRarity(strengthToRarity(strength))}</span>`;
     },
     levelText() {
-      if (this.type === "companion") return "";
-      // eslint-disable-next-line no-nested-ternary
+      if (this.type === "companion") {
+        return "";
+      }
+
       const arrow = this.isLevelCapped
         ? "<i class='fas fa-sort-down'></i>"
         : (this.isLevelBoosted ? "<i class='fas fa-sort-up'></i>" : "");
-      // eslint-disable-next-line no-nested-ternary
+
       const color = this.isLevelCapped
         ? "#ff4444"
         : (this.isLevelBoosted ? "#44FF44" : undefined);
@@ -145,11 +153,13 @@ export default {
               </span>`;
     },
     eventHandlers() {
-      return GameUI.touchDevice ? {
-        touchstart: this.touchStart,
-        dragstart: this.dragStart,
-        dragEnd: this.dragEnd,
-      } : {};
+      return GameUI.touchDevice
+        ? {
+            touchstart: this.touchStart,
+            dragstart: this.dragStart,
+            dragEnd: this.dragEnd,
+          }
+        : {};
     },
     glyphTooltipStyle() {
       // With computer mice, it's nice to just totally disable mouse events on the tooltip,
@@ -159,9 +169,9 @@ export default {
         "pointer-events": this.onTouchDevice ? undefined : "none",
         "border-color": borderColor,
         "box-shadow": `0 0 0.5rem ${borderColor}, 0 0 0.5rem ${borderColor} inset`,
-        animation: this.type === "reality" ? "a-reality-glyph-tooltip-cycle 10s infinite" : undefined,
-        color: this.textColor,
-        background: this.baseColor
+        "animation": this.type === "reality" ? "a-reality-glyph-tooltip-cycle 10s infinite" : undefined,
+        "color": this.textColor,
+        "background": this.baseColor,
       };
     },
     glyphHeaderStyle() {
@@ -169,21 +179,25 @@ export default {
       const isReality = this.type === "reality";
 
       let color = GlyphAppearanceHandler.getRarityColor(this.strength, this.type);
-      if (isCursed) color = this.textColor;
-      if (this.type === "companion") color = GlyphAppearanceHandler.getBorderColor(this.type);
+      if (isCursed) {
+        color = this.textColor;
+      }
+      if (this.type === "companion") {
+        color = GlyphAppearanceHandler.getBorderColor(this.type);
+      }
       return {
         "border-color": color,
         "box-shadow": `0 0 0.5rem 0.1rem ${color}, 0 0 0.8rem ${color} inset`,
-        animation: isReality ? "a-reality-glyph-tooltip-header-cycle 10s infinite" : undefined,
-        color: this.textColor,
-        background: this.baseColor
+        "animation": isReality ? "a-reality-glyph-tooltip-header-cycle 10s infinite" : undefined,
+        "color": this.textColor,
+        "background": this.baseColor,
       };
-    }
+    },
   },
   watch: {
     changeWatcher() {
       this.$recompute("sortedEffects");
-    }
+    },
   },
   mounted() {
     // By attaching the tooltip to the body element, we make sure it ends up on top of anything
@@ -227,7 +241,9 @@ export default {
       return Theme.current().isDark() ? "#cccccc" : "black";
     },
     sacrificeText() {
-      if (!GlyphInfo[this.type].hasSacrifice) return "";
+      if (!GlyphInfo[this.type].hasSacrifice) {
+        return "";
+      }
       const powerText = `${format(this.sacrificeReward, 2, 2)}`;
       const isCurrentAction = this.currentAction === "sacrifice";
       return `<span style="font-weight: ${isCurrentAction ? "bold" : ""};">
@@ -235,11 +251,14 @@ export default {
               </span>`;
     },
     refineText() {
-      if (!GlyphInfo[this.type].hasAlchemyResource) return "";
-      if (!AlchemyResource[this.type].isUnlocked) return "";
+      if (!GlyphInfo[this.type].hasAlchemyResource) {
+        return "";
+      }
+      if (!AlchemyResource[this.type].isUnlocked) {
+        return "";
+      }
       let refinementText = `${format(this.uncappedRefineReward, 2, 2)} ${GlyphInfo[this.type].regularGlyphSymbol}`;
       if (this.uncappedRefineReward.neq(this.refineReward)) {
-        // eslint-disable-next-line max-len
         refinementText += ` (Actual value due to cap: ${format(this.refineReward, 2, 2)} ${GlyphInfo[this.type].regularGlyphSymbol})`;
       }
       const isCurrentAction = this.currentAction === "refine";
@@ -248,12 +267,16 @@ export default {
               </span>`;
     },
     scoreText() {
-      if (this.type === "companion" || this.type === "cursed" || this.type === "reality") return "";
+      if (this.type === "companion" || this.type === "cursed" || this.type === "reality") {
+        return "";
+      }
       const showFilterScoreModes = [AUTO_GLYPH_SCORE.SPECIFIED_EFFECT, AUTO_GLYPH_SCORE.EFFECT_SCORE];
-      if (!showFilterScoreModes.includes(this.scoreMode)) return "";
+      if (!showFilterScoreModes.includes(this.scoreMode)) {
+        return "";
+      }
       return `Score: ${format(AutoGlyphProcessor.filterValue(this.$parent.glyph), 1, 1)}`;
-    }
-  }
+    },
+  },
 };
 </script>
 

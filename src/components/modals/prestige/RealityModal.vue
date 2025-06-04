@@ -50,10 +50,10 @@ export default {
       }
 
       if (this.hasFilter && this.selectedGlyph === undefined) {
-        return `If you do not choose a Glyph, one will be automatically selected using your Glyph filter.`;
+        return "If you do not choose a Glyph, one will be automatically selected using your Glyph filter.";
       }
       return this.selectedGlyph === undefined
-        ? `You must select a Glyph in order to continue.`
+        ? "You must select a Glyph in order to continue."
         : null;
     },
     gained() {
@@ -69,7 +69,9 @@ export default {
     levelStats() {
       // Bit annoying to read due to needing >, <, and =, with = needing a different format.
       return `You will get a level ${formatInt(this.level)} Glyph on Reality, which is
-        ${this.level.eq(this.bestLevel) ? "equal to" : `
+        ${this.level.eq(this.bestLevel)
+          ? "equal to"
+          : `
         ${quantifyInt("level", this.levelDifference)}
         ${this.level.gt(this.bestLevel) ? "higher" : "lower"} than`} your best.`;
     },
@@ -78,7 +80,7 @@ export default {
     },
     canConfirm() {
       return this.firstReality || this.selectedGlyph !== undefined || this.hasFilter;
-    }
+    },
   },
   created() {
     this.getGlyphs();
@@ -97,13 +99,17 @@ export default {
       this.realityMachines.copyFrom(simRMGained.clampMax(MachineHandler.distanceToRMCap));
       this.shardsGained = simulatedRealityCount(false).add(1).mul(Effarig.shardsGained);
       this.willAutoPurge = player.reality.autoAutoClean;
-      if (this.firstReality) return;
+      if (this.firstReality) {
+        return;
+      }
       for (let i = 0; i < this.glyphs.length; ++i) {
         const currentGlyph = this.glyphs[i];
         const newGlyph = GlyphSelection.glyphList(
-          GlyphSelection.choiceCount, gainedGlyphLevel(), { isChoosingGlyph: false }
+          GlyphSelection.choiceCount, gainedGlyphLevel(), { isChoosingGlyph: false },
         )[i];
-        if (currentGlyph.level === newGlyph.level) continue;
+        if (currentGlyph.level === newGlyph.level) {
+          continue;
+        }
         currentGlyph.level = newGlyph.level;
         currentGlyph.effects = newGlyph.effects;
       }
@@ -124,13 +130,15 @@ export default {
       this.selectedGlyph = index;
     },
     confirmModal(sacrifice) {
-      if (!this.canConfirm) return;
+      if (!this.canConfirm) {
+        return;
+      }
       if (sacrifice) {
         // Sac isn't passed through confirm so we have to close it manually
         this.emitClose();
       }
       startManualReality(sacrifice, this.selectedGlyph);
-    }
+    },
   },
 };
 </script>

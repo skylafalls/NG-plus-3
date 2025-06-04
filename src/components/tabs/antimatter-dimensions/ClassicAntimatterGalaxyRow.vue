@@ -4,7 +4,7 @@ import PrimaryButton from "@/components/PrimaryButton";
 export default {
   name: "ClassicAntimatterGalaxyRow",
   components: {
-    PrimaryButton
+    PrimaryButton,
   },
   data() {
     return {
@@ -12,11 +12,11 @@ export default {
       galaxies: {
         normal: new Decimal(),
         replicanti: new Decimal(),
-        dilation: new Decimal()
+        dilation: new Decimal(),
       },
       requirement: {
         tier: 1,
-        amount: new Decimal()
+        amount: new Decimal(),
       },
       canBeBought: false,
       distantStart: new Decimal(),
@@ -37,18 +37,28 @@ export default {
       return AntimatterDimension(this.requirement.tier).displayName;
     },
     buttonText() {
-      if (this.lockText !== null) return this.lockText;
+      if (this.lockText !== null) {
+        return this.lockText;
+      }
       const reset = [];
-      if (!Achievement(111).isUnlocked) reset.push("Dimensions");
-      if (!Achievement(143).isUnlocked) reset.push("Dimension Boosts");
+      if (!Achievement(111).isUnlocked) {
+        reset.push("Dimensions");
+      }
+      if (!Achievement(143).isUnlocked) {
+        reset.push("Dimension Boosts");
+      }
       return reset.length === 0
-        ? `Increase the power of Tickspeed upgrades`
+        ? "Increase the power of Tickspeed upgrades"
         : `Reset your ${makeEnumeration(reset)} to increase the power of Tickspeed upgrades`;
     },
     sumText() {
       const parts = [Decimal.max(this.galaxies.normal, 0)];
-      if (this.galaxies.replicanti.gt(0)) parts.push(this.galaxies.replicanti);
-      if (this.galaxies.dilation.gt(0)) parts.push(this.galaxies.dilation);
+      if (this.galaxies.replicanti.gt(0)) {
+        parts.push(this.galaxies.replicanti);
+      }
+      if (this.galaxies.dilation.gt(0)) {
+        parts.push(this.galaxies.dilation);
+      }
       const sum = parts.map(this.formatGalaxies).join(" + ");
       if (parts.length >= 2) {
         return `${sum} = ${this.formatGalaxies(parts.sum())}`;
@@ -80,7 +90,7 @@ export default {
         case GALAXY_TYPE.REMOTE: {
           const scalings = [
             { type: "distant", function: "quadratic", amount: this.distantStart },
-            { type: "remote", function: "exponential", amount: this.remoteStart }
+            { type: "remote", function: "exponential", amount: this.remoteStart },
           ];
           return `Increased Galaxy cost scaling: ${scalings.sort((a, b) => a.amount.compare(b.amount))
             .map(scaling => `${scaling.function} scaling past ${this.formatGalaxies(scaling.amount)} (${scaling.type})`)
@@ -95,7 +105,7 @@ export default {
         "tutorial--glow": this.canBeBought && this.hasTutorial,
         "o-pelle-disabled-pointer": this.creditsClosed,
       };
-    }
+    },
   },
   methods: {
     update() {
@@ -115,13 +125,15 @@ export default {
       this.hasTutorial = Tutorial.isActive(TUTORIAL_STATE.GALAXY);
     },
     buyGalaxy(bulk) {
-      if (!this.canBeBought) return;
+      if (!this.canBeBought) {
+        return;
+      }
       manualRequestGalaxyReset(this.canBulkBuy && bulk);
     },
     formatGalaxies(num) {
       return num.gt(1e8) ? format(num, 2) : formatInt(num);
     },
-  }
+  },
 };
 </script>
 

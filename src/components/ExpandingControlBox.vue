@@ -10,12 +10,12 @@ export default {
     containerClass: {
       type: String,
       required: false,
-      default: undefined
+      default: undefined,
     },
     label: {
       type: String,
       required: false,
-      default: undefined
+      default: undefined,
     },
     widthSource: {
       // Content sizes the width based on what's in the dropdown.
@@ -33,7 +33,7 @@ export default {
       type: Boolean,
       required: false,
       default: false,
-    }
+    },
   },
   data() {
     return {
@@ -55,12 +55,14 @@ export default {
       CLOSING: { name: "CLOSING", transition: true, visibility: true, height: "closed" },
     }),
     maxHeight() {
-      if (this.state.height === "open") return this.openHeight;
+      if (this.state.height === "open") {
+        return this.openHeight;
+      }
       return this.state.height === "closed" ? this.closedHeight : null;
     },
     rootClassObject() {
       return {
-        "l-expanding-control-box--controls-width": this.widthSource !== undefined
+        "l-expanding-control-box--controls-width": this.widthSource !== undefined,
       };
     },
     containerStyle() {
@@ -71,7 +73,7 @@ export default {
     },
     containerClassObject() {
       const classes = {
-        "l-expanding-control-box__container--transition": this.state?.transition
+        "l-expanding-control-box__container--transition": this.state?.transition,
       };
       classes[this.containerClass] = true;
       return classes;
@@ -81,7 +83,7 @@ export default {
         "c-indicator-arrow": true,
         "c-indicator-arrow--flipped": this.state === this.states.OPENING || this.state === this.states.OPEN,
       };
-    }
+    },
   },
   watch: {
     state(newState) {
@@ -127,7 +129,9 @@ export default {
   methods: {
     update() {
       const secSinceMouseOff = this.hasMouse ? 0 : (Date.now() - this.closeTime) / 1000;
-      if (this.autoClose && this.state === this.states.OPEN && secSinceMouseOff > 1) this.openRequest = false;
+      if (this.autoClose && this.state === this.states.OPEN && secSinceMouseOff > 1) {
+        this.openRequest = false;
+      }
     },
     processRequest(state, request) {
       if (request && (state === this.states.CLOSED || state === this.states.CLOSE_REQUESTED)) {
@@ -151,7 +155,9 @@ export default {
       this.openHeight = `${headerHeight + this.$refs.dropdown.offsetHeight}px`;
     },
     transitionEnd(event) {
-      if (event.propertyName !== "max-height") return;
+      if (event.propertyName !== "max-height") {
+        return;
+      }
       if (this.state === this.states.OPENING) {
         this.state = this.states.OPEN;
       } else if (this.state === this.states.CLOSING) {
@@ -168,8 +174,8 @@ export default {
     mouseOff() {
       this.hasMouse = false;
       this.closeTime = Date.now();
-    }
-  }
+    },
+  },
 };
 </script>
 

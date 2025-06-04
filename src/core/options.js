@@ -7,7 +7,6 @@ import { DEV } from "@/env";
 import FullScreenAnimationHandler from "./full-screen-animation-handler";
 
 export class GameOptions {
-
   static toggleNews() {
     player.options.news.enabled = !player.options.news.enabled;
     ui.view.news = player.options.news.enabled;
@@ -71,21 +70,26 @@ export function tryImportSecret(data) {
   switch (index) {
     case 0: {
       FullScreenAnimationHandler.display("a-barrel-roll", 5);
-      SecretAchievement(15).unlock();return true;
+      SecretAchievement(15).unlock(); return true;
     }
     case 1: {
-      SecretAchievement(14).unlock();return true;
+      SecretAchievement(14).unlock(); return true;
     }
     case 2: {
-      SecretAchievement(37).unlock();return true;
+      SecretAchievement(37).unlock(); return true;
     }
-    case 3: {if (player.records.fullGameCompletions > 0 || DEV) Speedrun.unlock();
-      else GameUI.notify.error("Complete the game at least once first!", 15000);return true;
+    case 3: {
+      if (player.records.fullGameCompletions > 0 || DEV) {
+        Speedrun.unlock();
+      } else {
+        GameUI.notify.error("Complete the game at least once first!", 15000);
+      } return true;
     }
     case 4: {
-      SecretAchievement(33).unlock();return true;
+      SecretAchievement(33).unlock(); return true;
     }
-    default: {return false;
+    default: {
+      return false;
     }
   }
 }

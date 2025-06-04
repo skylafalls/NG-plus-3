@@ -40,8 +40,11 @@ class ImaginaryUpgradeState extends BitPurchasableMechanicState {
   }
 
   set hasPlayerLock(value) {
-    if (value) player.reality.reqLock.imaginary |= 1 << this.bitIndex;
-    else player.reality.reqLock.imaginary &= ~(1 << this.bitIndex);
+    if (value) {
+      player.reality.reqLock.imaginary |= 1 << this.bitIndex;
+    } else {
+      player.reality.reqLock.imaginary &= ~(1 << this.bitIndex);
+    }
   }
 
   get isLockingMechanics() {
@@ -81,7 +84,9 @@ class ImaginaryUpgradeState extends BitPurchasableMechanicState {
   }
 
   tryUnlock() {
-    if (!MachineHandler.isIMUnlocked || this.isAvailableForPurchase || !this.config.checkRequirement()) return;
+    if (!MachineHandler.isIMUnlocked || this.isAvailableForPurchase || !this.config.checkRequirement()) {
+      return;
+    }
     player.reality.imaginaryUpgReqs |= (1 << this.id);
     GameUI.notify.reality(`You've unlocked an Imaginary Upgrade: ${this.config.name}`);
     this.hasPlayerLock = false;
@@ -91,7 +96,9 @@ class ImaginaryUpgradeState extends BitPurchasableMechanicState {
     EventHub.dispatch(GAME_EVENT.REALITY_UPGRADE_BOUGHT);
     if (this.id >= 15 && this.id <= 18) {
       DarkMatterDimension(this.id - 14).amount = DC.D1;
-      if (this.id === 17) Laitela.quotes.thirdDMD.show();
+      if (this.id === 17) {
+        Laitela.quotes.thirdDMD.show();
+      }
     }
     if (this.id >= 15 && this.id <= 19) {
       // Need to clear before retriggering, or else it won't actually show up on subsequent upgrades
@@ -144,7 +151,7 @@ ImaginaryUpgradeState.index = mapGameData(
   GameDatabase.reality.imaginaryUpgrades,
   config => (config.id <= 10
     ? new RebuyableImaginaryUpgradeState(config)
-    : new ImaginaryUpgradeState(config))
+    : new ImaginaryUpgradeState(config)),
 );
 
 export const ImaginaryUpgrade = id => ImaginaryUpgradeState.index[id];
@@ -154,7 +161,9 @@ export const ImaginaryUpgrades = {
   get totalRebuyables() {
     const rebuyables = player.reality.imaginaryRebuyables;
     let total = DC.D0;
-    for (const i in rebuyables) total = total.add(rebuyables[i]);
+    for (const i in rebuyables) {
+      total = total.add(rebuyables[i]);
+    }
     return total;
   },
   get totalSinglePurchase() {
@@ -162,5 +171,5 @@ export const ImaginaryUpgrades = {
   },
   get allBought() {
     return (player.reality.imaginaryUpgradeBits >> 6) + 1 === 1 << (GameDatabase.reality.imaginaryUpgrades.length - 5);
-  }
+  },
 };

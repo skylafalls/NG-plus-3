@@ -20,7 +20,9 @@ window.Async = {
         fun(remaining);
         --remaining;
       }
-      if (Date.now() - t0 >= maxTime) return remaining;
+      if (Date.now() - t0 >= maxTime) {
+        return remaining;
+      }
     }
     return 0;
   },
@@ -52,34 +54,48 @@ window.Async = {
       // Disable async if we're already doing async
       this.enabled = false;
       const runResult = this._run(fun, maxIter, config);
-      return config.then ? runResult.then(() => {
-        config.then();
-        this.enabled = true;
-      }) : runResult;
+      return config.then
+        ? runResult.then(() => {
+            config.then();
+            this.enabled = true;
+          })
+        : runResult;
     }
     for (let i = 0; i < maxIter; ++i) {
       fun(i);
     }
-    if (config.then) config.then();
+    if (config.then) {
+      config.then();
+    }
     return false;
   },
   /**
    * @private
    */
   async _run(fun, maxIter, config) {
-    if (!config.progress) config.progress = {};
+    if (!config.progress) {
+      config.progress = {};
+    }
     // We need to use config.progress variables because something else could change them
     // (e.g. someone speeding up offline progress)
     config.progress.maxIter = maxIter;
     config.progress.remaining = this.runForTime(fun, config.progress.maxIter, config);
     const sleepTime = config.sleepTime || 1;
-    if (!config.progress.remaining) return;
-    if (config.asyncEntry) config.asyncEntry(config.progress.maxIter - config.progress.remaining);
+    if (!config.progress.remaining) {
+      return;
+    }
+    if (config.asyncEntry) {
+      config.asyncEntry(config.progress.maxIter - config.progress.remaining);
+    }
     do {
       await this.sleepPromise(sleepTime);
       config.progress.remaining = this.runForTime(fun, config.progress.remaining, config);
-      if (config.asyncProgress) config.asyncProgress(config.progress.maxIter - config.progress.remaining);
+      if (config.asyncProgress) {
+        config.asyncProgress(config.progress.maxIter - config.progress.remaining);
+      }
     } while (config.progress.remaining > 0);
-    if (config.asyncExit) config.asyncExit();
-  }
+    if (config.asyncExit) {
+      config.asyncExit();
+    }
+  },
 };

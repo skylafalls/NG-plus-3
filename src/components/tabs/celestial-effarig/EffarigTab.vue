@@ -24,20 +24,20 @@ export default {
       quote: "",
       isRunning: false,
       vIsFlipped: false,
-      relicShardRarityAlwaysMax: false
+      relicShardRarityAlwaysMax: false,
     };
   },
   computed: {
     shopUnlocks: () => [
       EffarigUnlock.adjuster,
       EffarigUnlock.glyphFilter,
-      EffarigUnlock.setSaves
+      EffarigUnlock.setSaves,
     ],
     runUnlock: () => EffarigUnlock.run,
     runUnlocks: () => [
       EffarigUnlock.infinity,
       EffarigUnlock.eternity,
-      EffarigUnlock.reality
+      EffarigUnlock.reality,
     ],
     symbol: () => GlyphInfo.effarig.regularGlyphSymbol,
     runButtonOuterClass() {
@@ -47,7 +47,7 @@ export default {
         "c-effarig-run-button--running": this.isRunning,
         "c-effarig-run-button--not-running": !this.isRunning,
         "c-celestial-run-button--clickable": !this.isDoomed,
-        "o-pelle-disabled-pointer": this.isDoomed
+        "o-pelle-disabled-pointer": this.isDoomed,
       };
     },
     runButtonInnerClass() {
@@ -65,7 +65,7 @@ export default {
   watch: {
     isRunning() {
       this.$recompute("runDescription");
-    }
+    },
   },
   methods: {
     update() {
@@ -84,13 +84,15 @@ export default {
       this.relicShardRarityAlwaysMax = Ra.unlocks.extraGlyphChoicesAndRelicShardRarityAlwaysMax.canBeApplied;
     },
     startRun() {
-      if (this.isDoomed) return;
+      if (this.isDoomed) {
+        return;
+      }
       Modal.celestials.show({ name: "Effarig's", number: 1 });
     },
     createCursedGlyph() {
       Glyphs.giveCursedGlyph();
-    }
-  }
+    },
+  },
 };
 </script>
 

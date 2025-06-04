@@ -24,7 +24,9 @@ export class AntimatterDimensionAutobuyerState extends UpgradeableAutobuyerState
   }
 
   get isUnlocked() {
-    if (Pelle.isDisabled(`antimatterDimAutobuyer${this.tier}`)) return false;
+    if (Pelle.isDisabled(`antimatterDimAutobuyer${this.tier}`)) {
+      return false;
+    }
     return this.data.isBought || this.canBeUpgraded;
   }
 
@@ -80,7 +82,7 @@ export class AntimatterDimensionAutobuyerState extends UpgradeableAutobuyerState
   toggleMode() {
     this.mode = [
       AUTOBUYER_MODE.BUY_SINGLE,
-      AUTOBUYER_MODE.BUY_10
+      AUTOBUYER_MODE.BUY_10,
     ]
       .nextSibling(this.mode);
   }
@@ -125,8 +127,12 @@ export class AntimatterDimensionAutobuyerState extends UpgradeableAutobuyerState
   }
 
   upgradeBulk() {
-    if (this.hasMaxedBulk) return;
-    if (!Currency.infinityPoints.purchase(this.cost)) return;
+    if (this.hasMaxedBulk) {
+      return;
+    }
+    if (!Currency.infinityPoints.purchase(this.cost)) {
+      return;
+    }
     this.data.bulk = Math.clampMax(this.bulk * 2, this.bulkCap);
     this.data.cost = Math.ceil(2.4 * this.cost);
     Achievement(61).tryUnlock();
@@ -134,7 +140,9 @@ export class AntimatterDimensionAutobuyerState extends UpgradeableAutobuyerState
   }
 
   purchase() {
-    if (!this.canUnlockSlowVersion) return;
+    if (!this.canUnlockSlowVersion) {
+      return;
+    }
     this.data.isBought = true;
   }
 
@@ -144,19 +152,31 @@ export class AntimatterDimensionAutobuyerState extends UpgradeableAutobuyerState
 
   reset() {
     super.reset();
-    if (EternityMilestone.keepAutobuyers.isReached || PelleUpgrade.keepAutobuyers.canBeApplied) return;
+    if (EternityMilestone.keepAutobuyers.isReached || PelleUpgrade.keepAutobuyers.canBeApplied) {
+      return;
+    }
     this.data.isUnlocked = false;
     this.data.isBought = false;
     this.data.bulk = 1;
     TabNotification.newAutobuyer.clearTrigger();
   }
 
-  static get entryCount() { return 8; }
-  static get autobuyerGroupName() { return "Antimatter Dimension"; }
+  static get entryCount() {
+    return 8;
+  }
+
+  static get autobuyerGroupName() {
+    return "Antimatter Dimension";
+  }
 
   // These are toggled on and off from the group autobuyer checkbox
-  static get isActive() { return player.auto.antimatterDims.isActive; }
-  static set isActive(value) { player.auto.antimatterDims.isActive = value; }
+  static get isActive() {
+    return player.auto.antimatterDims.isActive;
+  }
+
+  static set isActive(value) {
+    player.auto.antimatterDims.isActive = value;
+  }
 
   static createAccessor() {
     const accessor = super.createAccessor();
@@ -165,7 +185,7 @@ export class AntimatterDimensionAutobuyerState extends UpgradeableAutobuyerState
       // We can get away with this since allUnlimitedBulk is the same for all AD autos
       allUnlimitedBulk: { get: () => accessor.zeroIndexed[0].hasUnlimitedBulk },
       bulkCap: { get: () => accessor.zeroIndexed[0].bulkCap },
-      collapseDisplay: { get: () => accessor.allMaxedInterval && accessor.allUnlocked && accessor.allUnlimitedBulk }
+      collapseDisplay: { get: () => accessor.allMaxedInterval && accessor.allUnlocked && accessor.allUnlimitedBulk },
     });
     return accessor;
   }

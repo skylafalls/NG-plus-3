@@ -6,7 +6,7 @@ export default {
   name: "DesktopIcons",
   data() {
     return {
-      DesktopIcons
+      DesktopIcons,
     };
   },
   mounted() {
@@ -18,12 +18,14 @@ export default {
   },
   methods: {
     clearSelected() {
-      if (isSelectingIcon) return;
+      if (isSelectingIcon) {
+        return;
+      }
       DesktopIcons.selected = -1;
     },
     handleClick(idx) {
       // This makes what everything is doing clearer
-      // eslint-disable-next-line no-negated-condition
+
       if (DesktopIcons.selected !== idx) {
         DesktopIcons.selected = idx;
         isSelectingIcon = true;
@@ -31,8 +33,8 @@ export default {
       } else {
         DesktopIcons.entries[idx].action();
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -77,7 +77,9 @@ class AlchemyResourceState extends GameMechanicState {
 
   get effectValue() {
     // Disable Exponential alchemy effect in V reality.
-    if (V.isRunning && this.config.id === 14) return DC.D0;
+    if (V.isRunning && this.config.id === 14) {
+      return DC.D0;
+    }
     return this.config.effect(Pelle.isDisabled("alchemy") ? DC.D0 : this.amount);
   }
 
@@ -88,7 +90,9 @@ class AlchemyResourceState extends GameMechanicState {
   /**
    * @abstract
    */
-  get cap() { throw new NotImplementedError(); }
+  get cap() {
+    throw new NotImplementedError();
+  }
 
   get capped() {
     return this.amount.gte(this.cap);
@@ -141,12 +145,17 @@ class AlchemyReaction {
   // 100%, but the reaction will be forced to occur at higher than 100% if there is significantly more reagent than
   // product. This allows resources to be created quickly when its reaction is initially turned on with saved reagents.
   get reactionYield() {
-    if (!this._product.isUnlocked || this._reagents.some(r => !r.resource.isUnlocked)) return new Decimal();
+    if (!this._product.isUnlocked || this._reagents.some(r => !r.resource.isUnlocked)) {
+      return new Decimal();
+    }
     let forcingFactor = (this._reagents
-      .map(r => r.resource.amount))
+      .map(r => r.resource.amount));
     while (forcingFactor.length > 1) {
-      if (forcingFactor[0].gt(forcingFactor[1])) forcingFactor.splice(1, 1);
-      else forcingFactor.splice(0, 1);
+      if (forcingFactor[0].gt(forcingFactor[1])) {
+        forcingFactor.splice(1, 1);
+      } else {
+        forcingFactor.splice(0, 1);
+      }
     }
     forcingFactor = forcingFactor[0];
     forcingFactor = forcingFactor.sub(this._product.amount);
@@ -154,8 +163,11 @@ class AlchemyReaction {
     const totalYield = this._reagents
       .map(r => r.resource.amount.div(r.cost));
     while (totalYield.length > 1) {
-      if (totalYield[0].gt(totalYield[1])) totalYield.splice(1, 1);
-      else totalYield.splice(0, 1);
+      if (totalYield[0].gt(totalYield[1])) {
+        totalYield.splice(1, 1);
+      } else {
+        totalYield.splice(0, 1);
+      }
     }
     return Decimal.min(totalYield[0], Decimal.max(forcingFactor, 1));
   }
@@ -218,7 +230,9 @@ class AlchemyReaction {
   // Cap products at the minimum amount of all reagents before the reaction occurs, eg. 200Ξ and 350Ψ will not bring
   // ω above 200.  In fact, since some Ξ will be used during the reaction, the actual cap will be a bit lower.
   combineReagents() {
-    if (!this.isActive || this.reactionYield.eq(0)) return;
+    if (!this.isActive || this.reactionYield.eq(0)) {
+      return;
+    }
     const unpredictabilityEffect = AlchemyResource.unpredictability.effectValue;
     let times = poissonDistribution(unpredictabilityEffect.div(unpredictabilityEffect.sub(1).neg())).add(1);
     const cap = this._product.cap;
@@ -239,25 +253,25 @@ export const AlchemyResource = mapGameDataToObject(
   GameDatabase.celestials.alchemy.resources,
   config => (config.isBaseResource
     ? new BasicAlchemyResourceState(config)
-    : new AdvancedAlchemyResourceState(config))
+    : new AdvancedAlchemyResourceState(config)),
 );
 
 export const AlchemyResources = {
   all: AlchemyResource.all,
-  base: AlchemyResource.all.filter(r => r.isBaseResource)
+  base: AlchemyResource.all.filter(r => r.isBaseResource),
 };
 
-export const AlchemyReactions = (function() {
+export const AlchemyReactions = (function () {
   // For convenience and readability, stuff is named differently in GameDatabase
   function mapReagents(resource) {
     return resource.config.reagents
       .map(r => ({
         resource: AlchemyResources.all.find(x => x.id === r.resource),
-        cost: r.amount
+        cost: r.amount,
       }));
   }
   return {
     all: AlchemyResources.all
-      .map(r => (r.isBaseResource ? null : new AlchemyReaction(r, mapReagents(r))))
+      .map(r => (r.isBaseResource ? null : new AlchemyReaction(r, mapReagents(r)))),
   };
 }());

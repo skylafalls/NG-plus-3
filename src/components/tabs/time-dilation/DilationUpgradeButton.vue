@@ -12,22 +12,22 @@ export default {
     DescriptionDisplay,
     EffectDisplay,
     CostDisplay,
-    CustomizeableTooltip
+    CustomizeableTooltip,
   },
   props: {
     upgrade: {
       type: Object,
-      required: true
+      required: true,
     },
     isRebuyable: {
       type: Boolean,
       required: false,
-      default: false
+      default: false,
     },
     showTooltip: {
       type: Boolean,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {
@@ -67,12 +67,12 @@ export default {
     isUseless() {
       const tpip = this.upgrade.id === 3 || this.upgrade.id === 7;
       return Pelle.isDoomed && tpip;
-    }
+    },
   },
   watch: {
     isAutobuyerOn(newValue) {
       Autobuyer.dilationUpgrade(this.upgrade.id).isActive = newValue;
-    }
+    },
   },
   methods: {
     update() {
@@ -86,7 +86,9 @@ export default {
         this.isCapped = upgrade.isCapped;
         const autobuyer = Autobuyer.dilationUpgrade(upgrade.id);
         this.boughtAmount.copyFrom(upgrade.boughtAmount);
-        if (!autobuyer) return;
+        if (!autobuyer) {
+          return;
+        }
         this.isAutoUnlocked = autobuyer.isUnlocked;
         this.isAutobuyerOn = autobuyer.isActive;
         return;
@@ -95,8 +97,8 @@ export default {
       if (!this.isBought) {
         this.isAffordable = upgrade.isAffordable;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

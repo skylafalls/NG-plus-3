@@ -48,8 +48,11 @@ class RealityUpgradeState extends BitPurchasableMechanicState {
   }
 
   set hasPlayerLock(value) {
-    if (value) player.reality.reqLock.reality |= 1 << this.bitIndex;
-    else player.reality.reqLock.reality &= ~(1 << this.bitIndex);
+    if (value) {
+      player.reality.reqLock.reality |= 1 << this.bitIndex;
+    } else {
+      player.reality.reqLock.reality &= ~(1 << this.bitIndex);
+    }
   }
 
   get isLockingMechanics() {
@@ -83,7 +86,9 @@ class RealityUpgradeState extends BitPurchasableMechanicState {
 
   tryUnlock() {
     const realityReached = isRealityAvailable();
-    if (!realityReached || this.isAvailableForPurchase || !this.config.checkRequirement()) return;
+    if (!realityReached || this.isAvailableForPurchase || !this.config.checkRequirement()) {
+      return;
+    }
     player.reality.upgReqs |= (1 << this.id);
     GameUI.notify.reality(`You've unlocked a Reality Upgrade: ${this.config.name}`);
     this.hasPlayerLock = false;
@@ -125,7 +130,7 @@ RealityUpgradeState.index = mapGameData(
   GameDatabase.reality.upgrades,
   config => (config.id < 6
     ? new RebuyableRealityUpgradeState(config)
-    : new RealityUpgradeState(config))
+    : new RealityUpgradeState(config)),
 );
 
 /**
@@ -141,5 +146,5 @@ export const RealityUpgrades = {
   all: RealityUpgradeState.index.compact(),
   get allBought() {
     return (player.reality.upgradeBits >> 6) + 1 === 1 << (GameDatabase.reality.upgrades.length - 5);
-  }
+  },
 };

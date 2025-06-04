@@ -29,7 +29,9 @@ export default {
       return this.view.theme === "S12";
     },
     uiLayout() {
-      if (this.isThemeS12) return "S12Ui";
+      if (this.isThemeS12) {
+        return "S12Ui";
+      }
       return this.view.newUI ? "ModernUi" : "ClassicUi";
     },
     containerClass() {
@@ -41,8 +43,8 @@ export default {
     },
     themeCss() {
       return `stylesheets/theme-${this.view.theme}.css`;
-    }
-  }
+    },
+  },
 };
 </script>
 

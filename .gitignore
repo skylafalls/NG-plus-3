@@ -4,5 +4,4 @@ dist
 .vscode
 .idea
 node_modules
-.eslintrc.js
 .DS_Store

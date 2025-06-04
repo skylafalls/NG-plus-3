@@ -10,13 +10,13 @@ export default {
   components: {
     EternityChallengeBoxWrapper,
     DescriptionDisplay,
-    EffectDisplay
+    EffectDisplay,
   },
   props: {
     challenge: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {
@@ -64,7 +64,7 @@ export default {
     },
     name() {
       return `EC${this.challenge.id}`;
-    }
+    },
   },
   methods: {
     update() {
@@ -83,12 +83,14 @@ export default {
     start() {
       if (this.canBeUnlocked) {
         TimeStudy.eternityChallenge(this.challenge.id).purchase();
-      } else this.challenge.requestStart();
+      } else {
+        this.challenge.requestStart();
+      }
     },
     goalAtCompletions(completions) {
       return format(this.challenge.goalAtCompletions(completions), 2, 1);
-    }
-  }
+    },
+  },
 };
 </script>
 

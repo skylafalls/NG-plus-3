@@ -28,7 +28,7 @@ export class TimeStudyConnection {
 /**
  * @type {TimeStudyConnection[]}
  */
-TimeStudy.allConnections = (function() {
+TimeStudy.allConnections = (function () {
   const TS = id => TimeStudy(id);
   const MS = id => MasteryStudy(id);
   const EC = id => TimeStudy.eternityChallenge(id);
@@ -165,7 +165,7 @@ TimeStudy.allConnections = (function() {
 /**
  * @type {TimeStudyConnection[]}
  */
-MasteryStudy.allConnections = (function() {
+MasteryStudy.allConnections = (function () {
   const MS = id => MasteryStudy(id);
   const EC = id => TimeStudy.eternityChallenge(id);
   const connections = [

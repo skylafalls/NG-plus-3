@@ -51,7 +51,9 @@ export default {
     },
     showAutobuyers() {
       // Only display the Antimatter Dimension Autobuyers if the bulk is the same and there are any of them unlocked
-      if (this.isADBox) return this.anyUnlocked && this.displayLabelAsGroup;
+      if (this.isADBox) {
+        return this.anyUnlocked && this.displayLabelAsGroup;
+      }
       return this.anyUnlocked;
     },
   },
@@ -65,8 +67,8 @@ export default {
     },
     toggleGroup() {
       this.type.toggle();
-    }
-  }
+    },
+  },
 };
 </script>
 

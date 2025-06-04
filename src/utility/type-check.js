@@ -13,3 +13,7 @@ export function isFunction(value) {
 export function isDecimal(value) {
   return value instanceof Decimal;
 }
+
+export function isPlainObject(value) {
+  return Object.prototype.toString.call(value) === "[object Object]";
+}

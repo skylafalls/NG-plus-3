@@ -8,16 +8,16 @@ export default {
   components: {
     DescriptionDisplay,
     CostDisplay,
-    CustomizeableTooltip
+    CustomizeableTooltip,
   },
   props: {
     upgrade: {
       type: Object,
-      required: true
+      required: true,
     },
     faded: {
       type: Boolean,
-      required: false
+      required: false,
     },
     galaxyGenerator: {
       type: Boolean,
@@ -39,7 +39,7 @@ export default {
       hovering: false,
       hasRemnants: false,
       galaxyCap: 0,
-      notAffordable: false
+      notAffordable: false,
     };
   },
   computed: {
@@ -47,7 +47,9 @@ export default {
       return this.upgrade.config;
     },
     effectText() {
-      if (!this.config.formatEffect) return false;
+      if (!this.config.formatEffect) {
+        return false;
+      }
       const prefix = this.isCapped ? "Capped:" : "Currently:";
       const formattedEffect = x => this.config.formatEffect(this.config.effect(x));
       const value = formattedEffect(this.purchases);
@@ -57,25 +59,35 @@ export default {
       return { prefix, value, next };
     },
     timeEstimate() {
-      if (!this.hasTimeEstimate || !this.hasRemnants) return null;
-      if (this.notAffordable) return "Never affordable due to Generated Galaxy cap";
+      if (!this.hasTimeEstimate || !this.hasRemnants) {
+        return null;
+      }
+      if (this.notAffordable) {
+        return "Never affordable due to Generated Galaxy cap";
+      }
       return this.currentTimeEstimate;
     },
     hasTimeEstimate() {
-      return !(this.canBuy ||
-        this.isBought ||
-        this.isCapped ||
-        (this.galaxyGenerator && this.config.currencyLabel !== "Galaxy")
+      return !(this.canBuy
+        || this.isBought
+        || this.isCapped
+        || (this.galaxyGenerator && this.config.currencyLabel !== "Galaxy")
       );
     },
     shouldEstimateImprovement() {
       return this.showImprovedEstimate && this.hasTimeEstimate;
     },
     estimateImprovement() {
-      if (!this.shouldEstimateImprovement) return "";
-      if (!Pelle.canArmageddon) return `${this.currentTimeEstimate}`;
+      if (!this.shouldEstimateImprovement) {
+        return "";
+      }
+      if (!Pelle.canArmageddon) {
+        return `${this.currentTimeEstimate}`;
+      }
       // If the improved value is still "> 1 year" then we only show it once
-      if (this.projectedTimeEstimate.startsWith(">")) return this.projectedTimeEstimate;
+      if (this.projectedTimeEstimate.startsWith(">")) {
+        return this.projectedTimeEstimate;
+      }
       return `${this.currentTimeEstimate} ➜ ${this.projectedTimeEstimate}`;
     },
   },
@@ -86,7 +98,8 @@ export default {
       this.isCapped = this.upgrade.isCapped;
       this.purchases.copyFrom(player.celestials.pelle.rebuyables[this.upgrade.config.id] ?? new Decimal(0));
       this.currentTimeEstimate = TimeSpan
-        .fromSeconds(this.secondsUntilCost(this.galaxyGenerator ? GalaxyGenerator.gainPerSecond
+        .fromSeconds(this.secondsUntilCost(this.galaxyGenerator
+          ? GalaxyGenerator.gainPerSecond
           : Pelle.realityShardGainPerSecond)).toTimeEstimate();
       this.projectedTimeEstimate = TimeSpan
         .fromSeconds(this.secondsUntilCost(Pelle.nextRealityShardGain))
@@ -94,15 +107,15 @@ export default {
       this.hasRemnants = Pelle.cel.remnants.gt(0);
       this.galaxyCap = GalaxyGenerator.generationCap;
       const genDB = GameDatabase.celestials.pelle.galaxyGeneratorUpgrades;
-      this.notAffordable = (this.config === genDB.additive || this.config === genDB.multiplicative) &&
-        (Decimal.gt(this.upgrade.cost,
+      this.notAffordable = (this.config === genDB.additive || this.config === genDB.multiplicative)
+        && (Decimal.gt(this.upgrade.cost,
           this.galaxyCap.sub(GalaxyGenerator.generatedGalaxies.add(player.galaxies))));
     },
     secondsUntilCost(rate) {
       const value = this.galaxyGenerator ? player.galaxies.add(GalaxyGenerator.galaxies) : Currency.realityShards.value;
       return Decimal.sub(this.upgrade.cost, value).div(rate);
     },
-  }
+  },
 };
 </script>
 

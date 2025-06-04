@@ -9,30 +9,34 @@ export default {
     },
     action: {
       type: Function,
-      required: true
+      required: true,
     },
   },
   data() {
     return {
-      isLocked: false
+      isLocked: false,
     };
   },
   computed: {
     isEnabled() {
-      if (this.isLocked) return false;
+      if (this.isLocked) {
+        return false;
+      }
       return this.budget.gte(this.cost);
     },
     enabledClass() {
-      if (!this.isEnabled || this.isLocked) return "c-tt-buy-button--locked";
+      if (!this.isEnabled || this.isLocked) {
+        return "c-tt-buy-button--locked";
+      }
 
       return "c-tt-buy-button--unlocked";
-    }
+    },
   },
   methods: {
     update() {
       this.isLocked = player.eternities.eq(0);
-    }
-  }
+    },
+  },
 };
 </script>
 

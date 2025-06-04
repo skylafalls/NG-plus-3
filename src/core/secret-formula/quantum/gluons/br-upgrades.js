@@ -1,0 +1,58 @@
+export const brGluonUpgrades = [
+  {
+    id: 1,
+    cost: () => new Decimal(1),
+    description: () => "Dilated Time boosts Tachyon Particle gain.",
+    effect: () => Currency.dilatedTime.value.plus(1).log2(),
+    formatEffect: value => formatX(value, 2, 2),
+  },
+  {
+    id: 2,
+    cost: () => new Decimal(2),
+    description: () => "Dimensional Sacrifice also affects Dilated Time production but at a reduced rate.",
+    effect: () => Sacrifice.totalBoost.plus(1).logPow(0.15),
+    formatEffect: value => formatX(value, 2, 2),
+  },
+  {
+    id: 3,
+    cost: () => new Decimal(5),
+    description: () => "Gain more Dilated Time based on Tachyon Particles.",
+    effect: () => Currency.tachyonParticles.value.plus(1).log10().plus(1).pow(0.25),
+    formatEffect: value => formatPow(value, 2, 3),
+  },
+  {
+    id: 4,
+    cost: () => new Decimal(100),
+    description: () => "Electrons also boost the Time Dimension per-purchase multiplier but at a reduced rate.",
+    effect: () => Currency.electrons.value.plus(1).sqrt(),
+    formatEffect: value => formatX(value, 2, 2),
+  },
+  {
+    id: 5,
+    cost: () => new Decimal(7e15),
+    description: () => "Meta Dimensions are boosted by BR Gluons.",
+    effect: () => player.quantum.gluons.br.plus(1).logPow(0.15),
+    formatEffect: value => formatX(value, 2, 2),
+  },
+  {
+    id: 6,
+    cost: () => new Decimal(4e19),
+    description: () => "Meta-Dimension Boosts affects Time Dimensions at an increased rate.",
+    effect: () => Decimal.tetrate(MetaDimensions.boost.totalBoosts, 2).plus(1).logPow(1.75),
+    formatEffect: value => formatX(value, 2, 2),
+  },
+  {
+    id: 7,
+    cost: () => new Decimal(3e25),
+    description: () => "Eternity Points makes Remote Antimatter Galaxy scaling start later.",
+    effect: () => Currency.eternityPoints.value.plus(1).log10().pow(0.4),
+    formatEffect: value => `${formatPlus(value, 2, 0)}`,
+  },
+  {
+    id: 8,
+    cost: () => new Decimal("1e570"),
+    description: () => "BR Gluons raises the half-life of free preons.",
+    effect: () => player.quantum.gluons.br.plus(1).log10(),
+    formatEffect: value => formatX(value, 2, 2),
+  },
+];

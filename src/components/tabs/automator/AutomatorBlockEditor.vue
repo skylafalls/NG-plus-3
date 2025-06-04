@@ -8,7 +8,7 @@ export default {
   name: "AutomatorBlockEditor",
   components: {
     AutomatorBlockSingleRow,
-    draggable
+    draggable,
   },
   computed: {
     lines: {
@@ -17,7 +17,7 @@ export default {
       },
       set(value) {
         this.$viewModel.tabs.reality.automator.lines = value;
-      }
+      },
     },
     numberOfLines() {
       return this.lines.reduce((a, l) => a + BlockAutomator.numberOfLinesInBlock(l), 0);
@@ -31,7 +31,9 @@ export default {
   },
   methods: {
     update() {
-      if (AutomatorBackend.state.followExecution) AutomatorBackend.jumpToActiveLine();
+      if (AutomatorBackend.state.followExecution) {
+        AutomatorBackend.jumpToActiveLine();
+      }
       const targetLine = AutomatorBackend.isOn
         ? BlockAutomator.lineNumberFromBlockID(BlockAutomator.currentBlockId)
         : -1;
@@ -55,7 +57,7 @@ export default {
       this.lines.splice(idx, 1);
       this.parseRequest();
     },
-  }
+  },
 };
 
 export const BlockAutomator = {
@@ -78,7 +80,9 @@ export const BlockAutomator = {
   },
 
   get currentBlockId() {
-    if (AutomatorBackend.stack.isEmpty) return false;
+    if (AutomatorBackend.stack.isEmpty) {
+      return false;
+    }
     return this._idArray[AutomatorBackend.stack.top.lineNumber - 1];
   },
 
@@ -127,14 +131,20 @@ export const BlockAutomator = {
     if (block.canWait && block.nowait) {
       parsed = parsed.replace(/(\S+)/u, "$1 NOWAIT");
     }
-    if (block.respec) parsed += ` RESPEC`;
+    if (block.respec) {
+      parsed += " RESPEC";
+    }
 
     const propsToCheck = ["genericInput1", "compOperator", "genericInput2", "singleSelectionInput", "singleTextInput"];
     for (const prop of propsToCheck) {
-      if (block[prop]) parsed += ` ${block[prop]}`;
+      if (block[prop]) {
+        parsed += ` ${block[prop]}`;
+      }
     }
 
-    if (block.cmd === "IF" || block.cmd === "WHILE" || block.cmd === "UNTIL") parsed += " {";
+    if (block.cmd === "IF" || block.cmd === "WHILE" || block.cmd === "UNTIL") {
+      parsed += " {";
+    }
 
     return parsed.replace("  ", " ");
   },
@@ -157,7 +167,9 @@ export const BlockAutomator = {
     for (let i = 0; i < blocks.length; i++) {
       const b = blocks[i];
       output.push(b.id);
-      if (b.nested) output.push(...this.blockIdArray(b.nest), undefined);
+      if (b.nested) {
+        output.push(...this.blockIdArray(b.nest), undefined);
+      }
     }
     return output;
   },

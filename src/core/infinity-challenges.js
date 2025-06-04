@@ -3,7 +3,9 @@ import { GameMechanicState } from "./game-mechanics";
 export function tryCompleteInfinityChallenges() {
   if (EternityMilestone.autoIC.isReached) {
     const toComplete = InfinityChallenges.all.filter(x => x.isUnlocked && !x.isCompleted);
-    for (const challenge of toComplete) challenge.complete();
+    for (const challenge of toComplete) {
+      challenge.complete();
+    }
   }
 }
 
@@ -29,8 +31,8 @@ class InfinityChallengeState extends GameMechanicState {
   }
 
   get isUnlocked() {
-    return player.records.thisEternity.maxAM.gte(this.unlockAM) || (Achievement(133).isUnlocked && !Pelle.isDoomed) ||
-      (PelleUpgrade.keepInfinityChallenges.canBeApplied && Pelle.cel.records.totalAntimatter.gte(this.unlockAM));
+    return player.records.thisEternity.maxAM.gte(this.unlockAM) || (Achievement(133).isUnlocked && !Pelle.isDoomed)
+      || (PelleUpgrade.keepInfinityChallenges.canBeApplied && Pelle.cel.records.totalAntimatter.gte(this.unlockAM));
   }
 
   get isRunning() {
@@ -38,8 +40,12 @@ class InfinityChallengeState extends GameMechanicState {
   }
 
   requestStart() {
-    if (!this.isUnlocked) return;
-    if (GameEnd.creditsEverClosed) return;
+    if (!this.isUnlocked) {
+      return;
+    }
+    if (GameEnd.creditsEverClosed) {
+      return;
+    }
     if (!player.options.confirmations.challenges) {
       this.start();
       return;
@@ -48,14 +54,20 @@ class InfinityChallengeState extends GameMechanicState {
   }
 
   start() {
-    if (!this.isUnlocked || this.isRunning) return;
+    if (!this.isUnlocked || this.isRunning) {
+      return;
+    }
     // Forces big crunch reset but ensures IP gain, if any.
     bigCrunchReset(true, true);
     player.challenge.normal.current = 0;
     player.challenge.infinity.current = this.id;
-    if (!Enslaved.isRunning) Tab.dimensions.antimatter.show();
+    if (!Enslaved.isRunning) {
+      Tab.dimensions.antimatter.show();
+    }
     player.break = true;
-    if (EternityChallenge.isRunning) Achievement(115).unlock();
+    if (EternityChallenge.isRunning) {
+      Achievement(115).unlock();
+    }
   }
 
   get isCompleted() {
@@ -98,7 +110,9 @@ class InfinityChallengeState extends GameMechanicState {
   exit() {
     player.challenge.infinity.current = 0;
     bigCrunchReset(true, false);
-    if (!Enslaved.isRunning) Tab.dimensions.antimatter.show();
+    if (!Enslaved.isRunning) {
+      Tab.dimensions.antimatter.show();
+    }
   }
 }
 
@@ -127,7 +141,9 @@ export const InfinityChallenges = {
    */
   all: InfinityChallenge.index.compact(),
   completeAll() {
-    for (const challenge of InfinityChallenges.all) challenge.complete();
+    for (const challenge of InfinityChallenges.all) {
+      challenge.complete();
+    }
   },
   clearCompletions() {
     player.challenge.infinity.completedBits = 0;
@@ -144,11 +160,19 @@ export const InfinityChallenges = {
    */
   notifyICUnlock(value) {
     // Disable the popup if the user will automatically complete the IC.
-    if (EternityMilestone.autoIC.isReached) return;
-    if (InfinityChallenges.nextIC === undefined) return;
+    if (EternityMilestone.autoIC.isReached) {
+      return;
+    }
+    if (InfinityChallenges.nextIC === undefined) {
+      return;
+    }
     for (const ic of InfinityChallenges.all) {
-      if (ic.isUnlocked || ic.isCompleted) continue;
-      if (value.lt(ic.unlockAM)) break;
+      if (ic.isUnlocked || ic.isCompleted) {
+        continue;
+      }
+      if (value.lt(ic.unlockAM)) {
+        break;
+      }
       // This has a reasonably high likelihood of happening when the player isn't looking at the game, so
       // we also give it a tab notification
       TabNotification.ICUnlock.clearTrigger();
@@ -161,5 +185,5 @@ export const InfinityChallenges = {
    */
   get completed() {
     return InfinityChallenges.all.filter(ic => ic.isCompleted);
-  }
+  },
 };

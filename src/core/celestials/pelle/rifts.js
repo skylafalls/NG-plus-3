@@ -1,7 +1,6 @@
 import { GameMechanicState } from "../../utils";
 
 class RiftMilestoneState extends GameMechanicState {
-
   lastChecked = false;
 
   get requirement() {
@@ -20,7 +19,9 @@ class RiftMilestoneState extends GameMechanicState {
   }
 
   get isUnlocked() {
-    if (this.resource === "decay" && PelleRifts.chaos.milestones[0].isEffectActive) return true;
+    if (this.resource === "decay" && PelleRifts.chaos.milestones[0].isEffectActive) {
+      return true;
+    }
     return this.requirement <= PelleRifts[this.resource].percentage;
   }
 
@@ -34,7 +35,9 @@ class RiftMilestoneState extends GameMechanicState {
   }
 
   get formattedEffect() {
-    if (this.canBeApplied) return this.config.formatEffect(this.effectValue);
+    if (this.canBeApplied) {
+      return this.config.formatEffect(this.effectValue);
+    }
     return false;
   }
 }
@@ -94,8 +97,12 @@ class RiftState extends GameMechanicState {
   }
 
   get percentage() {
-    if (this.reducedTo > 1) return this.reducedTo;
-    if (!this.config.spendable) return Math.min(this.realPercentage, this.reducedTo);
+    if (this.reducedTo > 1) {
+      return this.reducedTo;
+    }
+    if (!this.config.spendable) {
+      return Math.min(this.realPercentage, this.reducedTo);
+    }
     return Math.min(this.config.percentage(this.totalFill) - this.spentPercentage, this.reducedTo);
   }
 
@@ -117,7 +124,9 @@ class RiftState extends GameMechanicState {
     return [base, ...additional];
   }
 
-  get isCustomEffect() { return true; }
+  get isCustomEffect() {
+    return true;
+  }
 
   get effectValue() {
     return this.config.effect(this.config.percentageToFill(this.percentage));
@@ -137,8 +146,11 @@ class RiftState extends GameMechanicState {
 
   toggle() {
     const active = PelleRifts.all.filter(r => r.isActive).length;
-    if (!this.isActive && active === 2) GameUI.notify.error(`You can only have 2 rifts active at the same time!`);
-    else this.rift.active = !this.rift.active;
+    if (!this.isActive && active === 2) {
+      GameUI.notify.error("You can only have 2 rifts active at the same time!");
+    } else {
+      this.rift.active = !this.rift.active;
+    }
   }
 
   checkMilestoneStates() {
@@ -151,12 +163,16 @@ class RiftState extends GameMechanicState {
       this.rift.active = false;
       return;
     }
-    if (!this.isActive || this.isMaxed) return;
+    if (!this.isActive || this.isMaxed) {
+      return;
+    }
 
     if (this.fillCurrency.value instanceof Decimal) {
       // Don't drain resources if you only have 1 of it.
       // This is in place due to the fix to replicanti below.
-      if (this.fillCurrency.value.lte(1)) return;
+      if (this.fillCurrency.value.lte(1)) {
+        return;
+      }
       const afterTickAmount = this.fillCurrency.value.times(Decimal.pow(1 - Pelle.riftDrainPercent, diff.div(1e3)));
       const spent = this.fillCurrency.value.minus(afterTickAmount);
       // We limit this to 1 instead of 0 specifically for the case of replicanti; certain interactions with offline
@@ -164,20 +180,21 @@ class RiftState extends GameMechanicState {
       this.fillCurrency.value = this.fillCurrency.value.minus(spent).max(1);
       this.totalFill = this.totalFill.plus(spent).min(this.maxValue);
     } else {
-      // eslint-disable-next-line max-len
       const afterTickAmount = this.fillCurrency.value * (Decimal.pow(1 - Pelle.riftDrainPercent, diff.div(1e3))).toNumber();
       const spent = this.fillCurrency.value - afterTickAmount;
       this.fillCurrency.value = Math.max(this.fillCurrency.value - spent, 0);
       this.totalFill = Math.clampMax(this.totalFill + spent, this.maxValue);
     }
-    if (PelleRifts.vacuum.milestones[0].canBeApplied) Glyphs.refreshActive();
+    if (PelleRifts.vacuum.milestones[0].canBeApplied) {
+      Glyphs.refreshActive();
+    }
     this.checkMilestoneStates();
   }
 }
 
 export const PelleRifts = mapGameDataToObject(
   GameDatabase.celestials.pelle.rifts,
-  config => new RiftState(config)
+  config => new RiftState(config),
 );
 
 PelleRifts.totalMilestones = () => PelleRifts.all.flatMap(x => x.milestones).countWhere(x => x.canBeApplied);

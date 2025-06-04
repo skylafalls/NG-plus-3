@@ -9,7 +9,7 @@ export default defineComponent({
   components: {
     PrimaryToggleButton,
     TimeTheoremBuyButton,
-    TimeStudySaveLoadButton
+    TimeStudySaveLoadButton,
   },
   data() {
     return {
@@ -23,12 +23,12 @@ export default defineComponent({
       budget: {
         am: new Decimal(),
         ip: new Decimal(),
-        ep: new Decimal()
+        ep: new Decimal(),
       },
       costs: {
         am: new Decimal(),
         ip: new Decimal(),
-        ep: new Decimal()
+        ep: new Decimal(),
       },
       showST: false,
       STamount: 0,
@@ -45,8 +45,8 @@ export default defineComponent({
       if (this.theoremAmount.gte(1e6)) {
         return format;
       }
-      if (!(Teresa.isRunning || Enslaved.isRunning) &&
-        getAdjustedGlyphEffect("dilationTTgen").gt(0) && !DilationUpgrade.ttGenerator.isBought) {
+      if (!(Teresa.isRunning || Enslaved.isRunning)
+        && getAdjustedGlyphEffect("dilationTTgen").gt(0) && !DilationUpgrade.ttGenerator.isBought) {
         return formatFloat;
       }
       return formatInt;
@@ -67,7 +67,7 @@ export default defineComponent({
     minimizeArrowStyle() {
       return {
         transform: this.minimized ? "rotate(-180deg)" : "",
-        transition: "all 0.25s ease-out"
+        transition: "all 0.25s ease-out",
       };
     },
     saveLoadText() {
@@ -77,7 +77,7 @@ export default defineComponent({
       return {
         height: this.hasTTAutobuyer ? "6.7rem" : "4.4rem",
       };
-    }
+    },
   },
   watch: {
     isAutobuyerOn(newValue) {
@@ -136,7 +136,7 @@ export default defineComponent({
     },
     toggleTTgen() {
       this.invertTTgenDisplay = !this.invertTTgenDisplay;
-    }
+    },
   },
 });
 </script>

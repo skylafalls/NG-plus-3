@@ -1,4 +1,4 @@
-export const BlackHoleAnimation = (function() {
+export const BlackHoleAnimation = (function () {
   const PLANET_SIZE = 1.5;
   const PARTICLE_SIZE = 0.5;
   const PARTICLE_COUNT = 120;
@@ -33,13 +33,13 @@ export const BlackHoleAnimation = (function() {
     /**
      * @abstract
      */
-    // eslint-disable-next-line no-empty-function, no-unused-vars
+
     performDraw(context) {}
 
     static calculatePosition(distance, angle) {
       return {
         x: distance * Math.sin(2 * Math.PI * angle),
-        y: distance * Math.cos(2 * Math.PI * angle)
+        y: distance * Math.cos(2 * Math.PI * angle),
       };
     }
   }
@@ -58,7 +58,9 @@ export const BlackHoleAnimation = (function() {
       const E0 = eccentricAnomaly(eccentricity, 2 * Math.PI * totalPhase / period);
       const r = SEMIMAJOR_AXIS * (1 - eccentricity * Math.cos(E0));
       let theta = 2 * Math.atan(Math.sqrt((1 + eccentricity) / (1 - eccentricity) * Math.pow(Math.tan(E0 / 2), 2)));
-      if (Math.tan(E0 / 2) < 0) theta *= -1;
+      if (Math.tan(E0 / 2) < 0) {
+        theta *= -1;
+      }
       this.distance = r;
       this.angle = theta / (2 * Math.PI);
     }
@@ -188,7 +190,9 @@ export const BlackHoleAnimation = (function() {
       const { x, y } = Dot.calculatePosition(this.distance, this.angle);
       if (this.respawnTick || !BlackHole(1).isActive) {
         context.arc(x + 200, y + 200, this.size, 0, 2 * Math.PI);
-        if (this.isBlob) this.drawAndRotateBlob(context, x, y);
+        if (this.isBlob) {
+          this.drawAndRotateBlob(context, x, y);
+        }
         return;
       }
       const angle = this.isInside ? this.angle : this.preLastAngle;
@@ -273,8 +277,9 @@ export const BlackHoleAnimation = (function() {
         particle.draw(this.context);
       }
 
-      if (BlackHoles.arePaused && !BlackHoles.areNegative) return;
-
+      if (BlackHoles.arePaused && !BlackHoles.areNegative) {
+        return;
+      }
 
       // Time dilation factor (Realistic formula, but only actually used for particle speed)
       const dilationFactor = 1 / Math.sqrt(1 - holeSize / this.planet.distance);

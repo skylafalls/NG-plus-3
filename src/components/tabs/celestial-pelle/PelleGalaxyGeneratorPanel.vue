@@ -6,7 +6,7 @@ import PelleUpgrade from "./PelleUpgrade";
 export default {
   name: "GalaxyGeneratorPanel",
   components: {
-    PelleUpgrade
+    PelleUpgrade,
   },
   data() {
     return {
@@ -34,7 +34,9 @@ export default {
     },
     galaxyText() {
       let text = format(Decimal.max(this.galaxies, 0), 2);
-      if (this.galaxies.lt(0)) text += ` [${format(this.galaxies, 2)}]`;
+      if (this.galaxies.lt(0)) {
+        text += ` [${format(this.galaxies, 2)}]`;
+      }
       return text;
     },
     sacrificeText() {
@@ -42,14 +44,16 @@ export default {
     },
     emphasisedStart() {
       return Decimal.pow(this.generatedGalaxies.div(this.cap), 0.45).toNumber();
-    }
+    },
   },
   methods: {
     update() {
       this.isUnlocked = Pelle.hasGalaxyGenerator;
       this.isCapped = GalaxyGenerator.isCapped;
       this.isCollapsed = player.celestials.pelle.collapsed.galaxies && !this.isCapped;
-      if (this.isCollapsed || !this.isUnlocked) return;
+      if (this.isCollapsed || !this.isUnlocked) {
+        return;
+      }
       this.galaxies.copyFrom(player.galaxies.add(GalaxyGenerator.galaxies));
       this.generatedGalaxies.copyFrom(GalaxyGenerator.generatedGalaxies);
       this.galaxiesPerSecond = GalaxyGenerator.gainPerSecond;
@@ -57,10 +61,14 @@ export default {
       this.capRift = GalaxyGenerator.capRift;
       this.sacrificeActive = GalaxyGenerator.sacrificeActive;
       this.barWidth = (this.isCapped ? this.capRift.reducedTo : this.emphasisedStart);
-      if (this.capRift) this.capRiftName = wordShift.wordCycle(this.capRift.name);
+      if (this.capRift) {
+        this.capRiftName = wordShift.wordCycle(this.capRift.name);
+      }
     },
     increaseCap() {
-      if (GalaxyGenerator.isCapped) GalaxyGenerator.startSacrifice();
+      if (GalaxyGenerator.isCapped) {
+        GalaxyGenerator.startSacrifice();
+      }
     },
     toggleCollapse() {
       player.celestials.pelle.collapsed.galaxies = !this.isCollapsed;
@@ -68,7 +76,7 @@ export default {
     unlock() {
       player.celestials.pelle.galaxyGenerator.unlocked = true;
       Pelle.quotes.galaxyGeneratorUnlock.show();
-    }
+    },
   },
 };
 </script>

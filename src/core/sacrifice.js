@@ -8,18 +8,30 @@ export class Sacrifice {
   }
 
   static get canSacrifice() {
-    return DimBoost.purchasedBoosts.gt(4) && !EternityChallenge(3).isRunning && this.nextBoost.gt(1) &&
-      AntimatterDimension(8).totalAmount.gt(0) && Currency.antimatter.lt(Player.infinityLimit) &&
-      !Enslaved.isRunning;
+    return DimBoost.purchasedBoosts.gt(4) && !EternityChallenge(3).isRunning && this.nextBoost.gt(1)
+      && AntimatterDimension(8).totalAmount.gt(0) && Currency.antimatter.lt(Player.infinityLimit)
+      && !Enslaved.isRunning;
   }
 
   static get disabledCondition() {
-    if (NormalChallenge(10).isRunning) return "8th Dimensions are disabled";
-    if (EternityChallenge(3).isRunning) return "Eternity Challenge 3";
-    if (DimBoost.purchasedBoosts.lt(5)) return `Requires ${formatInt(5)} Dimension Boosts`;
-    if (AntimatterDimension(8).totalAmount.eq(0)) return "No 8th Antimatter Dimensions";
-    if (this.nextBoost.lte(1)) return `${formatX(1)} multiplier`;
-    if (Player.isInAntimatterChallenge) return "Challenge goal reached";
+    if (NormalChallenge(10).isRunning) {
+      return "8th Dimensions are disabled";
+    }
+    if (EternityChallenge(3).isRunning) {
+      return "Eternity Challenge 3";
+    }
+    if (DimBoost.purchasedBoosts.lt(5)) {
+      return `Requires ${formatInt(5)} Dimension Boosts`;
+    }
+    if (AntimatterDimension(8).totalAmount.eq(0)) {
+      return "No 8th Antimatter Dimensions";
+    }
+    if (this.nextBoost.lte(1)) {
+      return `${formatX(1)} multiplier`;
+    }
+    if (Player.isInAntimatterChallenge) {
+      return "Challenge goal reached";
+    }
     return "Need to Crunch";
   }
 
@@ -37,12 +49,12 @@ export class Sacrifice {
       base = "AD1";
     }
 
-    const exponent = (1 +
-      (f("Achievement32", Achievement(32).isEffectActive) ? Achievement(32).config.effect : 0) +
-      (f("Achievement57", Achievement(57).isEffectActive) ? Achievement(57).config.effect : 0)
-    ) * (1 +
-      (f("Achievement88", Achievement(88).isEffectActive) ? Achievement(88).config.effect : 0) +
-      (f("TimeStudy228", TimeStudy(228).isEffectActive) ? TimeStudy(228).config.effect : 0)
+    const exponent = (1
+      + (f("Achievement32", Achievement(32).isEffectActive) ? Achievement(32).config.effect : 0)
+      + (f("Achievement57", Achievement(57).isEffectActive) ? Achievement(57).config.effect : 0)
+    ) * (1
+      + (f("Achievement88", Achievement(88).isEffectActive) ? Achievement(88).config.effect : 0)
+      + (f("TimeStudy228", TimeStudy(228).isEffectActive) ? TimeStudy(228).config.effect : 0)
     ) * factor;
     return base + (exponent === 1 ? "" : formatPow(exponent, places, places));
   }
@@ -56,10 +68,15 @@ export class Sacrifice {
   static get sacrificeExponent() {
     let base;
     // C8 seems weaker, but it actually follows its own formula which ends up being stronger based on how it stacks
-    if (NormalChallenge(8).isRunning) base = DC.D1;
+    if (NormalChallenge(8).isRunning) {
+      base = DC.D1;
+    }
     // Pre-Reality this was 100; having ach32/57 results in 1.2x, which is brought back in line by changing to 120
-    else if (InfinityChallenge(2).isCompleted) base = DC.D1.div(120);
-    else base = DC.D2;
+    else if (InfinityChallenge(2).isCompleted) {
+      base = DC.D1.div(120);
+    } else {
+      base = DC.D2;
+    }
 
     // All the factors which go into the multiplier have to combine this way in order to replicate legacy behavior
     const preIC2 = Effects.sum(Achievement(32), Achievement(57)).add(1);
@@ -71,7 +88,9 @@ export class Sacrifice {
 
   static get nextBoost() {
     const nd1Amount = AntimatterDimension(1).amount;
-    if (nd1Amount.eq(0)) return DC.D1;
+    if (nd1Amount.eq(0)) {
+      return DC.D1;
+    }
     const sacrificed = player.sacrificed.clampMin(1);
     let prePowerSacrificeMult;
     // Pre-reality update C8 works really weirdly - every sacrifice, the current sacrifice multiplier gets applied to
@@ -91,7 +110,9 @@ export class Sacrifice {
   }
 
   static get totalBoost() {
-    if (player.sacrificed.eq(0)) return DC.D1;
+    if (player.sacrificed.eq(0)) {
+      return DC.D1;
+    }
     // C8 uses a variable that keeps track of a sacrifice boost that persists across sacrifice-resets and isn't
     // used anywhere else, which also naturally takes account of the exponent from achievements and time studies.
     if (NormalChallenge(8).isRunning) {
@@ -111,12 +132,16 @@ export class Sacrifice {
 }
 
 export function sacrificeReset() {
-  if (!Sacrifice.canSacrifice) return false;
-  if ((!player.break || (!InfinityChallenge.isRunning && NormalChallenge.isRunning)) &&
-    Currency.antimatter.gt(DC.NUMMAX)) return false;
+  if (!Sacrifice.canSacrifice) {
+    return false;
+  }
+  if ((!player.break || (!InfinityChallenge.isRunning && NormalChallenge.isRunning))
+    && Currency.antimatter.gt(DC.NUMMAX)) {
+    return false;
+  }
   if (
-    NormalChallenge(8).isRunning &&
-    (Sacrifice.totalBoost.gte(DC.NUMMAX))
+    NormalChallenge(8).isRunning
+    && (Sacrifice.totalBoost.gte(DC.NUMMAX))
   ) {
     return false;
   }
@@ -139,7 +164,9 @@ export function sacrificeReset() {
 }
 
 export function sacrificeBtnClick() {
-  if (!Sacrifice.isVisible || !Sacrifice.canSacrifice) return;
+  if (!Sacrifice.isVisible || !Sacrifice.canSacrifice) {
+    return;
+  }
   if (player.options.confirmations.sacrifice) {
     Modal.sacrifice.show();
   } else {

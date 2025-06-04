@@ -68,7 +68,7 @@ export const GameStorage = {
   saves: {
     0: undefined,
     1: undefined,
-    2: undefined
+    2: undefined,
   },
   saved: 0,
   lastSaveTime: Date.now(),
@@ -120,7 +120,7 @@ export const GameStorage = {
       this.saves = {
         0: root,
         1: undefined,
-        2: undefined
+        2: undefined,
       };
       this.currentSlot = 0;
       this.loadPlayerObject(root);
@@ -166,7 +166,9 @@ export const GameStorage = {
     AutomatorBackend.clearEditor();
     this.loadPlayerObject(newPlayer);
     GlyphAppearanceHandler.clearInvalidCosmetics();
-    if (player.speedrun?.isActive) Speedrun.setSegmented(true);
+    if (player.speedrun?.isActive) {
+      Speedrun.setSegmented(true);
+    }
     this.save(true);
     Cloud.resetTempState();
     this.resetBackupTimer();
@@ -181,7 +183,9 @@ export const GameStorage = {
   },
 
   importAsFile() {
-    if (GameEnd.creditsEverClosed) return;
+    if (GameEnd.creditsEverClosed) {
+      return;
+    }
     const reader = new FileReader();
     const text = reader.readAsText(file);
     this.import(text);
@@ -202,13 +206,17 @@ export const GameStorage = {
   checkPlayerObject(save) {
     // Sometimes save is the output of GameSaveSerializer.deserialize, and if that function fails then it will result
     // in the input parameter here being undefined
-    if (save === undefined || save === null) return "Save decoding failed (invalid format)";
+    if (save === undefined || save === null) {
+      return "Save decoding failed (invalid format)";
+    }
     // Right now all we do is check for the existence of an antimatter prop, but if we wanted to do further save
     // verification then here's where we'd do it
-    if (save.money === undefined && save.antimatter === undefined) return "Save does not have antimatter property";
+    if (save.money === undefined && save.antimatter === undefined) {
+      return "Save does not have antimatter property";
+    }
 
     if (save.version === undefined || save.version < 25) {
-      return "Save is from an earlier version of AD. Import to vanilla first."
+      return "Save is from an earlier version of AD. Import to vanilla first.";
     }
 
     // Recursively check for any NaN props and add any we find to an array
@@ -219,19 +227,23 @@ export const GameStorage = {
         const prop = obj[key];
         let thisNaN;
         switch (typeof prop) {
-          case 'object': {
+          case "object": {
             thisNaN = checkNaN(prop, `${path}.${key}`);
             hasNaN = hasNaN || thisNaN;
             break;
           }
-          case 'number': {
+          case "number": {
             thisNaN = Number.isNaN(prop);
-            hasNaN = hasNaN || thisNaN;if (thisNaN) invalidProps.push(`${path}.${key}`);
+            hasNaN = hasNaN || thisNaN; if (thisNaN) {
+              invalidProps.push(`${path}.${key}`);
+            }
             break;
           }
-          case 'string': {
+          case "string": {
             thisNaN = prop === "NaN";
-            hasNaN = hasNaN || thisNaN;if (thisNaN) invalidProps.push(`${path}.${key}`);
+            hasNaN = hasNaN || thisNaN; if (thisNaN) {
+              invalidProps.push(`${path}.${key}`);
+            }
             break;
           }
         }
@@ -240,7 +252,9 @@ export const GameStorage = {
     }
     checkNaN(save, "player");
 
-    if (invalidProps.length === 0) return "";
+    if (invalidProps.length === 0) {
+      return "";
+    }
     return `${quantify("NaN player property", invalidProps.length)} found:
       ${invalidProps.join(", ")}`;
   },
@@ -249,22 +263,28 @@ export const GameStorage = {
   canSave(ignoreSimulation = false) {
     const isSelectingGlyph = GlyphSelection.active;
     const isSimulating = ui.$viewModel.modal.progressBar !== undefined && !ignoreSimulation;
-    const isEnd = (GameEnd.endState >= END_STATE_MARKERS.SAVE_DISABLED && !GameEnd.removeAdditionalEnd) ||
-      GameEnd.endState >= END_STATE_MARKERS.INTERACTIVITY_DISABLED;
+    const isEnd = (GameEnd.endState >= END_STATE_MARKERS.SAVE_DISABLED && !GameEnd.removeAdditionalEnd)
+      || GameEnd.endState >= END_STATE_MARKERS.INTERACTIVITY_DISABLED;
     return !isEnd && !(isSelectingGlyph || isSimulating);
   },
 
   save(silent = true, manual = false) {
-    if (!this.canSave()) return;
+    if (!this.canSave()) {
+      return;
+    }
     this.lastSaveTime = Date.now();
     GameIntervals.save.restart();
-    if (manual && ++this.saved > 99) SecretAchievement(12).unlock();
+    if (manual && ++this.saved > 99) {
+      SecretAchievement(12).unlock();
+    }
     const root = {
       current: this.currentSlot,
-      saves: this.saves
+      saves: this.saves,
     };
     localStorage.setItem(this.localStorageKey, GameSaveSerializer.serialize(root));
-    if (!silent) GameUI.notify.info("Game saved");
+    if (!silent) {
+      GameUI.notify.info("Game saved");
+    }
   },
 
   // Saves a backup, updates save timers (this is called before nextBackup is updated), and then saves the timers too.
@@ -272,7 +292,9 @@ export const GameStorage = {
   // we want to ignore that (which saves the game state pre-simulation). This is because it's messier and less useful
   // to the player if we instead defer the call until after simulation
   saveToBackup(backupSlot, backupTimer) {
-    if (!this.canSave(true)) return;
+    if (!this.canSave(true)) {
+      return;
+    }
     localStorage.setItem(this.backupDataKey(this.currentSlot, backupSlot), GameSaveSerializer.serialize(player));
     this.lastBackupTimes[backupSlot] = {
       backupTimer,
@@ -305,13 +327,17 @@ export const GameStorage = {
 
   backupOnlineSlots(slotsToBackup) {
     const currentTime = player.backupTimer;
-    for (const slot of slotsToBackup) this.saveToBackup(slot, currentTime);
+    for (const slot of slotsToBackup) {
+      this.saveToBackup(slot, currentTime);
+    }
   },
 
   // Loads in all the data from previous backup times in localStorage
   loadBackupTimes() {
     this.lastBackupTimes = GameSaveSerializer.deserialize(localStorage.getItem(this.backupTimeKey(this.currentSlot)));
-    if (!this.lastBackupTimes) this.lastBackupTimes = {};
+    if (!this.lastBackupTimes) {
+      this.lastBackupTimes = {};
+    }
     for (const backupInfo of AutoBackupSlots) {
       const key = backupInfo.id;
       if (!this.lastBackupTimes[key]) {
@@ -331,7 +357,9 @@ export const GameStorage = {
     for (const backupInfo of AutoBackupSlots.filter(slot => slot.type === BACKUP_SLOT_TYPE.ONLINE)) {
       const id = backupInfo.id;
       const timeSinceLast = player.backupTimer - (this.lastBackupTimes[id]?.backupTimer ?? 0);
-      if (1000 * backupInfo.interval - timeSinceLast <= 800) toBackup.push(id);
+      if (1000 * backupInfo.interval - timeSinceLast <= 800) {
+        toBackup.push(id);
+      }
     }
     this.backupOnlineSlots(toBackup);
   },
@@ -363,7 +391,9 @@ export const GameStorage = {
   },
 
   exportAsFile() {
-    if (!this.canSave()) return;
+    if (!this.canSave()) {
+      return;
+    }
     player.options.exportedFileCount++;
     this.save(true);
     const saveFileName = player.options.saveFileName ? ` - ${player.options.saveFileName},` : "";
@@ -379,7 +409,9 @@ export const GameStorage = {
     const backupData = {};
     for (const id of AutoBackupSlots.map(slot => slot.id)) {
       const backup = this.loadFromBackup(id);
-      if (backup) backupData[id] = backup;
+      if (backup) {
+        backupData[id] = backup;
+      }
     }
     backupData.time = GameSaveSerializer.deserialize(localStorage.getItem(this.backupTimeKey(this.currentSlot)));
     download(
@@ -392,7 +424,9 @@ export const GameStorage = {
     const backupData = GameSaveSerializer.deserialize(importText);
     localStorage.setItem(this.backupTimeKey(this.currentSlot), GameSaveSerializer.serialize(backupData.time));
     for (const backupKey of Object.keys(backupData)) {
-      if (backupKey === "time") continue;
+      if (backupKey === "time") {
+        continue;
+      }
       const id = Number(backupKey);
       const storageKey = this.backupDataKey(this.currentSlot, id);
       localStorage.setItem(storageKey, GameSaveSerializer.serialize(backupData[backupKey]));
@@ -424,14 +458,12 @@ export const GameStorage = {
     Cloud.resetTempState();
   },
 
-  // eslint-disable-next-line complexity
   loadPlayerObject(playerObject) {
     this.saved = 0;
 
     const checkString = this.checkPlayerObject(playerObject);
     if (playerObject === Player.defaultStart || checkString !== "") {
       if (DEV && checkString !== "") {
-        // eslint-disable-next-line no-console
         console.log(`Savefile was invalid and has been reset - ${checkString}`);
       }
       player = deepmergeAll([{}, Player.defaultStart]);
@@ -451,7 +483,9 @@ export const GameStorage = {
       const isPreviousVersionSave = playerObject.version < migrations.firstRealityMigration;
       player = migrations.patchPreReality(playerObject);
       if (isPreviousVersionSave) {
-        if (DEV) devMigrations.setLatestTestVersion(player);
+        if (DEV) {
+          devMigrations.setLatestTestVersion(player);
+        }
         EventHub.dispatch(GAME_EVENT.SAVE_CONVERTED_FROM_PREVIOUS_VERSION);
       }
 
@@ -467,11 +501,11 @@ export const GameStorage = {
       // We do this because the codeis dumb and doesnt redecimalize if we dont for some reason
       // Also, if we do it later i think it fucks up the code down the line somehow
       if (player.version >= 83) {
-        const fixGlyph = glyph => {
+        const fixGlyph = (glyph) => {
           glyph.level = new Decimal(glyph.level);
           glyph.rawLevel = new Decimal(glyph.rawLevel);
           glyph.strength = new Decimal(glyph.strength);
-          // eslint-disable-next-line consistent-return
+
           return glyph;
         };
         player.celestials.teresa.bestAMSet = player.celestials.teresa.bestAMSet.map(n => fixGlyph(n));
@@ -490,7 +524,7 @@ export const GameStorage = {
       }
       for (const item in player.reality.glyphs.filter.types) {
         player.reality.glyphs.filter.types[item].rarity = new Decimal(player.reality.glyphs.filter.types[item].rarity);
-        // eslint-disable-next-line max-len
+
         // Eplayer.reality.glyphs.filter.types[item].score = new Decimal(player.reality.glyphs.filter.types[item].score);
       }
 
@@ -548,7 +582,9 @@ export const GameStorage = {
       // Try to unlock "Don't you dare sleep" (usually this check only happens
       // during a game tick, which makes the achievement impossible to get
       // with offline progress off)
-      if (!Speedrun.isPausedAtStart()) Achievement(35).tryUnlock();
+      if (!Speedrun.isPausedAtStart()) {
+        Achievement(35).tryUnlock();
+      }
       player.lastUpdate = Date.now();
       this.postLoadStuff();
     }
@@ -559,10 +595,14 @@ export const GameStorage = {
     // actively hidden by Modal.hideAll(), so delaying it asynchronously gets past whatever is causing it to not appear.
     // Delay time is relatively long to make it more likely to work on much slower computers.
     if (rawDiff > 1000 * 86400 * 14) {
-      if (["S4", "S9"].includes(Theme.current().name)) Theme.set("Normal");
+      if (["S4", "S9"].includes(Theme.current().name)) {
+        Theme.set("Normal");
+      }
       // Looks like the game takes too long to load so we need to setTimeout else it doesn't check for the notation.
       setTimeout(() => {
-        if (Notations.current.isPainful) Notation.mixedScientific.setAsCurrent();
+        if (Notations.current.isPainful) {
+          Notation.mixedScientific.setAsCurrent();
+        }
       }, 2500);
       setTimeout(() => Modal.catchup.show(rawDiff), 5000);
     }
@@ -576,13 +616,15 @@ export const GameStorage = {
     // The condition for this secret achievement is only checked when the player is actively storing real time, either
     // when online or simulating time. When only storing offline, the condition is never actually entered in the
     // gameLoop due to the option technically being false, so we need to check it on-load too.
-    if (player.celestials.enslaved.storedReal.gte(24 * 60 * 60 * 1000)) SecretAchievement(46).unlock();
+    if (player.celestials.enslaved.storedReal.gte(24 * 60 * 60 * 1000)) {
+      SecretAchievement(46).unlock();
+    }
     GameUI.update();
 
     for (const resource of AlchemyResources.all) {
       resource.before = resource.amount;
     }
-  }
+  },
 };
 
 function download(filename, text) {

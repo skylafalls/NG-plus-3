@@ -1,5 +1,5 @@
 <script>
-import { defineComponent } from 'vue'
+import { defineComponent } from "vue";
 
 /**
  * This slotted component manages a context menu that is accessible both
@@ -11,8 +11,8 @@ export default defineComponent({
   props: {
     saveslot: {
       type: Number,
-      default: 0
-    }
+      default: 0,
+    },
   },
   data: () => ({
     componentID: UIID.next(),
@@ -24,17 +24,17 @@ export default defineComponent({
       return this.$viewModel.currentContextMenu === this.componentID;
     },
     listeners() {
-      return Object.assign({}, this.$listeners, {
-        touchstart: () => this.startShowTimer(),
+      return { ...this.$listeners, touchstart: () => this.startShowTimer(),
         mouseenter: () => this.startShowTimer(),
-        mouseleave: () => this.startHideTimer(),
-      });
-    }
+        mouseleave: () => this.startHideTimer() };
+    },
   },
   methods: {
     startShowTimer() {
       this.stopHideTimer();
-      if (this.contextMenuIsVisible || this.contextMenuShowTimer) return;
+      if (this.contextMenuIsVisible || this.contextMenuShowTimer) {
+        return;
+      }
       this.contextMenuShowTimer = setTimeout(() => {
         this.contextMenuShowTimer = null;
         this.showContextMenu();
@@ -46,7 +46,9 @@ export default defineComponent({
     },
     startHideTimer() {
       this.stopShowTimer();
-      if (!this.contextMenuIsVisible || this.contextMenuHideTimer) return;
+      if (!this.contextMenuIsVisible || this.contextMenuHideTimer) {
+        return;
+      }
       this.contextMenuHideTimer = setTimeout(() => {
         this.contextMenuHideTimer = null;
         this.hideContextMenu();
@@ -59,8 +61,11 @@ export default defineComponent({
       }
     },
     toggleContextMenu() {
-      if (this.contextMenuIsVisible) this.hideContextMenu();
-      else this.showContextMenu();
+      if (this.contextMenuIsVisible) {
+        this.hideContextMenu();
+      } else {
+        this.showContextMenu();
+      }
     },
     stopTimers() {
       this.stopHideTimer();
@@ -98,7 +103,6 @@ export default defineComponent({
     />
   </div>
 </template>
-
 
 <style scoped>
 .hover-menu__wrapper {

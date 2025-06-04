@@ -27,10 +27,11 @@ export default {
     showAllTabs() {
       for (const tab of this.tabs) {
         tab.unhideTab();
-        for (const subtab of tab.subtabs)
+        for (const subtab of tab.subtabs) {
           subtab.unhideTab();
+        }
       }
-    }
+    },
   },
 };
 </script>

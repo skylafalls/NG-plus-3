@@ -4,13 +4,13 @@ import EffectDisplay from "@/components/EffectDisplay";
 export default {
   name: "AlchemyResourceInfo",
   components: {
-    EffectDisplay
+    EffectDisplay,
   },
   props: {
     resource: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {
@@ -21,14 +21,14 @@ export default {
       isReactionActive: false,
       reactionProduction: new Decimal(),
       isUnlocked: false,
-      unlockRequirement: ""
+      unlockRequirement: "",
     };
   },
   computed: {
     classObject() {
       return {
         "c-alchemy-resource-info": true,
-        "c-alchemy-resource-info--locked": !this.isUnlocked
+        "c-alchemy-resource-info--locked": !this.isUnlocked,
       };
     },
     reaction() {
@@ -38,7 +38,9 @@ export default {
       return this.resource.isBaseResource;
     },
     reactionText() {
-      if (this.resource === AlchemyResource.reality) return this.realityReactionText;
+      if (this.resource === AlchemyResource.reality) {
+        return this.realityReactionText;
+      }
       const reagents = this.reaction.reagents
         .map(r => `${format(r.cost)}${r.resource.symbol}`)
         .join(" + ");
@@ -54,7 +56,7 @@ export default {
       const resource = this.resource;
       return {
         effect: () => resource.effectValue,
-        formatEffect: resource.config.formatEffect
+        formatEffect: resource.config.formatEffect,
       };
     },
     resourceAmount() {
@@ -65,7 +67,9 @@ export default {
     },
     formattedFlow() {
       const sign = this.flow.gte(0) ? "+" : "-";
-      if (Decimal.abs(this.flow).lt(0.01)) return "None";
+      if (Decimal.abs(this.flow).lt(0.01)) {
+        return "None";
+      }
       const resourceText = `${sign}${format(Decimal.abs(this.flow), 2, 2)}/sec`;
       const color = this.flow.gt(0) ? "9CCC65" : "CC6666";
       return `<span style="color:#${color}">${resourceText}</span>`;
@@ -85,8 +89,8 @@ export default {
         this.isReactionActive = !this.isDoomed && this.reaction.isActive;
         this.reactionProduction.copyFrom(this.reaction.reactionProduction);
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

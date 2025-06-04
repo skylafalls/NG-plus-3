@@ -10,13 +10,13 @@ To run the game locally, you will need to install [Node.js](https://nodejs.org).
 First, run the following command in your terminal (or command line) while being
 inside the checked out repository:
 
-```
+```sh
 npm ci
 ```
 
 After all the packages are installed, start up the game:
 
-```
+```sh
 npm run dev
 ```
 

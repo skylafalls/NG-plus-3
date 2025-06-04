@@ -741,7 +741,7 @@ export default class Decimal {
     toExponential(places: number): string;
     toFixed(places: number): string;
     toPrecision(places: number): string;
-    valueOf(): string;
+    valueOf(): never;
     toJSON(): string;
     toStringWithDecimalPlaces(places: number): string;
     /**
@@ -1310,4 +1310,7 @@ export default class Decimal {
     lessThan(other: DecimalSource): boolean;
     greaterThanOrEqualTo(other: DecimalSource): boolean;
     greaterThan(other: DecimalSource): boolean;
+    copyFrom(other: Decimal): void;
+    logPow(value: DecimalSource): Decimal;
+    logRoot(value: DecimalSource): Decimal;
 }

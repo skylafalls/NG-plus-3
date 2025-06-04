@@ -65,16 +65,23 @@ export default {
         this.currentScriptID = Number(Object.keys(storedScripts)[0]);
         player.reality.automator.state.editorScript = this.currentScriptID;
       }
-      if (this.isBlock) this.$nextTick(() => BlockAutomator.updateEditor(this.currentScript));
+      if (this.isBlock) {
+        this.$nextTick(() => BlockAutomator.updateEditor(this.currentScript));
+      }
       this.$parent.openRequest = false;
       AutomatorData.clearUndoData();
     },
     dropdownLabel(script) {
       const labels = [];
-      if (script.id === this.currentScriptID) labels.push("viewing");
+      if (script.id === this.currentScriptID) {
+        labels.push("viewing");
+      }
       if (script.id === this.runningScriptID) {
-        if (this.isRunning) labels.push("running");
-        else if (this.isPaused) labels.push("paused");
+        if (this.isRunning) {
+          labels.push("running");
+        } else if (this.isPaused) {
+          labels.push("paused");
+        }
       }
       const status = labels.length > 0 ? `(${labels.join(", ").capitalize()})` : "";
       return `${script.name} ${status}`;
@@ -86,8 +93,8 @@ export default {
         "l-active-script": id === this.runningScriptID && highlightRunning,
         "l-selected-script": id === this.currentScriptID && (id !== this.runningScriptID || !highlightRunning),
       };
-    }
-  }
+    },
+  },
 };
 </script>
 

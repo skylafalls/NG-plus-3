@@ -18,7 +18,7 @@ export default {
       type: Number,
       required: false,
       default: -1,
-    }
+    },
   },
   data() {
     return {
@@ -41,7 +41,9 @@ export default {
       return CosmeticGlyphTypes;
     },
     defaultOption() {
-      if (this.realityColor) return this.realityColor;
+      if (this.realityColor) {
+        return this.realityColor;
+      }
       const config = this.typeObject[this.type];
       const prop = `${this.isSingleGlyph ? "current" : "default"}${this.attrString.capitalize()}`;
       return this.isSymbol
@@ -54,7 +56,7 @@ export default {
     // Maximum number of options visible at one time, used to determine scrolling bounds
     windowSize() {
       return 17;
-    }
+    },
   },
   created() {
     this.updateSelected();
@@ -67,15 +69,21 @@ export default {
       } else {
         this.isActive = player.reality.glyphs.cosmetics.active;
       }
-      if (this.type === "reality" && !this.isSymbol) this.realityColor = GlyphAppearanceHandler.realityColor;
+      if (this.type === "reality" && !this.isSymbol) {
+        this.realityColor = GlyphAppearanceHandler.realityColor;
+      }
       this.darkKeySwap = player.options.glyphBG;
     },
     select(option) {
-      if (!this.isSingleGlyph && !this.isActive) return;
+      if (!this.isSingleGlyph && !this.isActive) {
+        return;
+      }
       if (this.isSingleGlyph) {
         const glyph = Glyphs.findById(this.glyphId);
         glyph[this.attrString] = option;
-        if (!this.active) glyph.cosmetic = undefined;
+        if (!this.active) {
+          glyph.cosmetic = undefined;
+        }
       } else {
         player.reality.glyphs.cosmetics[`${this.attrString}Map`][this.type] = option;
       }
@@ -95,7 +103,7 @@ export default {
     containerClassObject() {
       return {
         "c-all-options": true,
-        "o-option--inactive": !this.isActive
+        "o-option--inactive": !this.isActive,
       };
     },
     defaultOptionClassObject() {
@@ -116,17 +124,19 @@ export default {
       };
     },
     boxStyle(color) {
-      if (this.isSymbol || !color) return {};
+      if (this.isSymbol || !color) {
+        return {};
+      }
       const colorProps = GlyphAppearanceHandler.getColorProps(color);
       return {
-        background: colorProps.bg,
-        color: this.invertBW(colorProps.bg),
+        "background": colorProps.bg,
+        "color": this.invertBW(colorProps.bg),
         "box-shadow": `0 0 0.4rem 0.1rem ${colorProps.border}`,
       };
     },
     windowStyle() {
       return {
-        transform: `translate(${2 - 2.5 * this.leftmostIndex}rem)`,
+        "transform": `translate(${2 - 2.5 * this.leftmostIndex}rem)`,
         "transition-duration": "0.3s",
       };
     },
@@ -143,17 +153,21 @@ export default {
       };
     },
     slideWindow(dir) {
-      if (!this.canScroll) return;
+      if (!this.canScroll) {
+        return;
+      }
       this.leftmostIndex = Math.clamp(this.leftmostIndex + dir, 0, this.options.length - this.windowSize);
     },
     optionChar(option) {
-      if (this.isSymbol) return option;
+      if (this.isSymbol) {
+        return option;
+      }
       return (option === this.selected || (!this.selected && option === this.defaultOption)) ? "✓" : "";
     },
     invertBW(color) {
       return color === "black" ? "white" : "black";
-    }
-  }
+    },
+  },
 };
 </script>
 

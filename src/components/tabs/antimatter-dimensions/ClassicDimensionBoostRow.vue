@@ -4,13 +4,13 @@ import PrimaryButton from "@/components/PrimaryButton";
 export default {
   name: "ClassicDimensionBoostRow",
   components: {
-    PrimaryButton
+    PrimaryButton,
   },
   data() {
     return {
       requirement: {
         tier: 1,
-        amount: new Decimal()
+        amount: new Decimal(),
       },
       isBuyable: false,
       purchasedBoosts: new Decimal(),
@@ -28,7 +28,9 @@ export default {
       return AntimatterDimension(this.requirement.tier).displayName;
     },
     boostCountText() {
-      if (this.requirementText) return this.requirementText;
+      if (this.requirementText) {
+        return this.requirementText;
+      }
       const parts = [this.purchasedBoosts];
       if (this.imaginaryBoosts.neq(0)) {
         parts.push(this.imaginaryBoosts);
@@ -43,9 +45,9 @@ export default {
       return {
         "o-primary-btn--dimboost l-dim-row__prestige-button": true,
         "tutorial--glow": this.isBuyable && this.hasTutorial,
-        "o-pelle-disabled-pointer": this.creditsClosed
+        "o-pelle-disabled-pointer": this.creditsClosed,
       };
-    }
+    },
   },
   methods: {
     update() {
@@ -58,14 +60,18 @@ export default {
       this.lockText = DimBoost.lockText;
       this.unlockedByBoost = DimBoost.unlockedByBoost;
       this.creditsClosed = GameEnd.creditsClosed;
-      if (this.isDoomed) this.requirementText = formatInt(this.purchasedBoosts);
+      if (this.isDoomed) {
+        this.requirementText = formatInt(this.purchasedBoosts);
+      }
       this.hasTutorial = Tutorial.isActive(TUTORIAL_STATE.DIMBOOST);
     },
     dimensionBoost(bulk) {
-      if (!DimBoost.requirement.isSatisfied || !DimBoost.canBeBought) return;
+      if (!DimBoost.requirement.isSatisfied || !DimBoost.canBeBought) {
+        return;
+      }
       manualRequestDimensionBoost(bulk);
-    }
-  }
+    },
+  },
 };
 </script>
 

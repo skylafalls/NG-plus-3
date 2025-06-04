@@ -21,7 +21,9 @@ window.EventHub = class EventHub {
 
   dispatch(event, args) {
     const handlers = this._handlers[event];
-    if (handlers === undefined) return;
+    if (handlers === undefined) {
+      return;
+    }
     for (const handler of handlers) {
       handler.fn(args);
     }
@@ -39,8 +41,8 @@ window.EventHub = class EventHub {
         .map(handlers => handlers.length)
         .sum();
     }
-    return `UI(UPDATE/Total): ${EventHub.ui._handlers[GAME_EVENT.UPDATE].length}/${countHandlers(EventHub.ui)}; ` +
-      `Logic(Total): ${countHandlers(EventHub.logic)}`;
+    return `UI(UPDATE/Total): ${EventHub.ui._handlers[GAME_EVENT.UPDATE].length}/${countHandlers(EventHub.ui)}; `
+      + `Logic(Total): ${countHandlers(EventHub.logic)}`;
   }
 };
 

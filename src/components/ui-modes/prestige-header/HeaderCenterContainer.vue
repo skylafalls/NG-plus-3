@@ -30,13 +30,17 @@ export default {
   methods: {
     update() {
       this.shouldDisplay = player.break || !Player.canCrunch;
-      if (!this.shouldDisplay) return;
+      if (!this.shouldDisplay) {
+        return;
+      }
 
       this.isModern = player.options.newUI;
       this.isDoomed = Pelle.isDoomed;
       this.antimatter.copyFrom(Currency.antimatter);
       this.hasRealityButton = isRealityAvailable();
-      if (!this.hasRealityButton) this.antimatterPerSec.copyFrom(Currency.antimatter.productionPerSecond);
+      if (!this.hasRealityButton) {
+        this.antimatterPerSec.copyFrom(Currency.antimatter.productionPerSecond);
+      }
     },
   },
 };

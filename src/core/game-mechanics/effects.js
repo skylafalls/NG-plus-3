@@ -36,20 +36,23 @@ export const Effects = {
    * @return {Decimal}
    */
   last(defaultValue, ...effectSources) {
-    // eslint-disable-next-line no-param-reassign
-    if (!isDecimal(defaultValue)) defaultValue = new Decimal(defaultValue);
+    if (!isDecimal(defaultValue)) {
+      defaultValue = new Decimal(defaultValue);
+    }
     let result = defaultValue;
     let foundLast = false;
     const reversedSources = effectSources
       .filter(s => s !== null && s !== undefined)
       .reverse();
-    const reducer = v => {
+    const reducer = (v) => {
       result = v;
       foundLast = true;
     };
     for (const effectSource of reversedSources) {
       effectSource.applyEffect(reducer);
-      if (foundLast) break;
+      if (foundLast) {
+        break;
+      }
     }
     return result;
   },
@@ -59,8 +62,9 @@ export const Effects = {
    * @return {Decimal}
    */
   max(defaultValue, ...effectSources) {
-    // eslint-disable-next-line no-param-reassign
-    if (!isDecimal(defaultValue)) defaultValue = new Decimal(defaultValue);
+    if (!isDecimal(defaultValue)) {
+      defaultValue = new Decimal(defaultValue);
+    }
     let result = defaultValue;
     applyEffectsOf(effectSources, v => result = Decimal.max(result, v));
     return result;
@@ -81,8 +85,9 @@ export const Effects = {
    * @return {Decimal}
    */
   min(defaultValue, ...effectSources) {
-    // eslint-disable-next-line no-param-reassign
-    if (!isDecimal(defaultValue)) defaultValue = new Decimal(defaultValue);
+    if (!isDecimal(defaultValue)) {
+      defaultValue = new Decimal(defaultValue);
+    }
     let result = defaultValue;
     applyEffectsOf(effectSources, v => result = Decimal.min(result, v));
     return result;
@@ -96,14 +101,13 @@ export const Effects = {
     let result = defaultValue;
     applyEffectsOf(effectSources, v => result = Math.min(result, v));
     return result;
-  }
+  },
 };
 
 /**
  * @returns {Decimal}
  */
-Decimal.prototype.plusEffectOf = function(effectSource) {
-  // eslint-disable-next-line consistent-this
+Decimal.prototype.plusEffectOf = function (effectSource) {
   let result = this;
   effectSource.applyEffect(v => result = result.plus(v));
   return result;
@@ -112,8 +116,7 @@ Decimal.prototype.plusEffectOf = function(effectSource) {
 /**
  * @returns {Decimal}
  */
-Decimal.prototype.plusEffectsOf = function(...effectSources) {
-  // eslint-disable-next-line consistent-this
+Decimal.prototype.plusEffectsOf = function (...effectSources) {
   let result = this;
   applyEffectsOf(effectSources, v => result = result.plus(v));
   return result;
@@ -122,8 +125,7 @@ Decimal.prototype.plusEffectsOf = function(...effectSources) {
 /**
  * @returns {Decimal}
  */
-Decimal.prototype.minusEffectOf = function(effectSource) {
-  // eslint-disable-next-line consistent-this
+Decimal.prototype.minusEffectOf = function (effectSource) {
   let result = this;
   effectSource.applyEffect(v => result = result.minus(v));
   return result;
@@ -132,8 +134,7 @@ Decimal.prototype.minusEffectOf = function(effectSource) {
 /**
  * @returns {Decimal}
  */
-Decimal.prototype.minusEffectsOf = function(...effectSources) {
-  // eslint-disable-next-line consistent-this
+Decimal.prototype.minusEffectsOf = function (...effectSources) {
   let result = this;
   applyEffectsOf(effectSources, v => result = result.minus(v));
   return result;
@@ -142,8 +143,7 @@ Decimal.prototype.minusEffectsOf = function(...effectSources) {
 /**
  * @returns {Decimal}
  */
-Decimal.prototype.timesEffectOf = function(effectSource) {
-  // eslint-disable-next-line consistent-this
+Decimal.prototype.timesEffectOf = function (effectSource) {
   let result = this;
   effectSource.applyEffect(v => result = result.times(v));
   return result;
@@ -152,10 +152,10 @@ Decimal.prototype.timesEffectOf = function(effectSource) {
 /**
  * @returns {Decimal}
  */
-Decimal.prototype.timesEffectsOf = function(...effectSources) {
+Decimal.prototype.timesEffectsOf = function (...effectSources) {
   // Normalize is expensive; when we multiply many things together, it's faster
   // to get a big mantissa and then fix it at the end.
-  // eslint-disable-next-line consistent-this
+
   let result = this;
   applyEffectsOf(effectSources, v => result = result.times(v));
   return result;
@@ -164,8 +164,7 @@ Decimal.prototype.timesEffectsOf = function(...effectSources) {
 /**
  * @returns {Decimal}
  */
-Decimal.prototype.dividedByEffectOf = function(effectSource) {
-  // eslint-disable-next-line consistent-this
+Decimal.prototype.dividedByEffectOf = function (effectSource) {
   let result = this;
   effectSource.applyEffect(v => result = result.dividedBy(v));
   return result;
@@ -174,8 +173,7 @@ Decimal.prototype.dividedByEffectOf = function(effectSource) {
 /**
  * @returns {Decimal}
  */
-Decimal.prototype.dividedByEffectsOf = function(...effectSources) {
-  // eslint-disable-next-line consistent-this
+Decimal.prototype.dividedByEffectsOf = function (...effectSources) {
   let result = this;
   applyEffectsOf(effectSources, v => result = result.dividedBy(v));
   return result;
@@ -184,8 +182,7 @@ Decimal.prototype.dividedByEffectsOf = function(...effectSources) {
 /**
  * @returns {Decimal}
  */
-Decimal.prototype.powEffectOf = function(effectSource) {
-  // eslint-disable-next-line consistent-this
+Decimal.prototype.powEffectOf = function (effectSource) {
   let result = this;
   effectSource.applyEffect(v => result = result.pow(v));
   return result;
@@ -194,8 +191,7 @@ Decimal.prototype.powEffectOf = function(effectSource) {
 /**
  * @returns {Decimal}
  */
-Decimal.prototype.powEffectsOf = function(...effectSources) {
-  // eslint-disable-next-line consistent-this
+Decimal.prototype.powEffectsOf = function (...effectSources) {
   let result = this;
   applyEffectsOf(effectSources, v => result = result.pow(v));
   return result;
@@ -203,6 +199,8 @@ Decimal.prototype.powEffectsOf = function(...effectSources) {
 
 function applyEffectsOf(effectSources, applyFn) {
   for (const effectSource of effectSources) {
-    if (effectSource !== null && effectSource !== undefined) effectSource.applyEffect(applyFn);
+    if (effectSource !== null && effectSource !== undefined) {
+      effectSource.applyEffect(applyFn);
+    }
   }
 }

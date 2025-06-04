@@ -23,7 +23,7 @@ export default {
     inputs: {
       type: Array,
       required: true,
-    }
+    },
   },
   data() {
     return {
@@ -44,9 +44,11 @@ export default {
         : this.warnings();
     },
     templateScript() {
-      if (this.invalidInputCount !== 0) return null;
+      if (this.invalidInputCount !== 0) {
+        return null;
+      }
       return new ScriptTemplate(this.templateProps, this.name);
-    }
+    },
   },
   // Many props in this component are generated dynamically from a GameDB entry, but Vue can only give reactive
   // behavior to props that exist on declaration. We need all the dynamically generated inputs to be reactive, so we
@@ -98,7 +100,9 @@ export default {
         const typeObj = this.paramTypeObject(input.type);
         const mapFn = x => (typeObj.map ? typeObj.map(x) : x);
         this.templateProps[input.name] = mapFn(this.templateInputs[input.name]);
-        if (!this.isValid(input)) this.invalidInputCount++;
+        if (!this.isValid(input)) {
+          this.invalidInputCount++;
+        }
       }
 
       // We treat treeStudies as a special prop which will set treePreset if it matches the format "NAME [name]"
@@ -125,7 +129,7 @@ export default {
       if (this.isBlock) {
         const newTemplateBlock = {
           name: `Template: ${this.name}`,
-          blocks: blockifyTextAutomator(this.templateScript.script).blocks
+          blocks: blockifyTextAutomator(this.templateScript.script).blocks,
         };
         AutomatorData.blockTemplates.push(newTemplateBlock);
         GameUI.notify.info("Custom template block created");
@@ -134,8 +138,8 @@ export default {
         GameUI.notify.info("Template copied to clipboard");
       }
       this.emitClose();
-    }
-  }
+    },
+  },
 };
 </script>
 

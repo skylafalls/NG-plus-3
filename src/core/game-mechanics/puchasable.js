@@ -7,7 +7,9 @@ export class PurchasableMechanicState extends GameMechanicState {
   /**
    * @abstract
    */
-  get currency() { throw new NotImplementedError(); }
+  get currency() {
+    throw new NotImplementedError();
+  }
 
   get isAffordable() {
     return this.currency.gte(this.cost);
@@ -28,19 +30,25 @@ export class PurchasableMechanicState extends GameMechanicState {
   /**
    * @abstract
    */
-  get isBought() { throw new NotImplementedError(); }
+  get isBought() {
+    throw new NotImplementedError();
+  }
 
   /**
    * @abstract
    */
-  set isBought(value) { throw new NotImplementedError(); }
+  set isBought(value) {
+    throw new NotImplementedError();
+  }
 
   get canBeBought() {
     return !this.isBought && this.isAffordable && this.isAvailableForPurchase;
   }
 
   purchase() {
-    if (!this.canBeBought) return false;
+    if (!this.canBeBought) {
+      return false;
+    }
     this.currency.subtract(this.cost);
     this.isBought = true;
     this.onPurchased();
@@ -48,7 +56,6 @@ export class PurchasableMechanicState extends GameMechanicState {
     return true;
   }
 
-  // eslint-disable-next-line no-empty-function
   onPurchased() {}
 
   get isEffectActive() {

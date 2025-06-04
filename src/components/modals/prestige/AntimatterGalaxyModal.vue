@@ -4,33 +4,43 @@ import ModalWrapperChoice from "@/components/modals/ModalWrapperChoice";
 export default {
   name: "AntimatterGalaxyModal",
   components: {
-    ModalWrapperChoice
+    ModalWrapperChoice,
   },
   props: {
     bulk: {
       type: Boolean,
       required: true,
-    }
+    },
   },
   data() {
     return {
       newGalaxies: 0,
       keepAntimatter: false,
       perkANRBought: false,
-      keepDimBoost: false
+      keepDimBoost: false,
     };
   },
   computed: {
     topLabel() {
-      if (this.bulk) return `You are about to purchase ${quantifyInt("Antimatter Galaxy", this.newGalaxies)}`;
-      return `You are about to purchase an Antimatter Galaxy`;
+      if (this.bulk) {
+        return `You are about to purchase ${quantifyInt("Antimatter Galaxy", this.newGalaxies)}`;
+      }
+      return "You are about to purchase an Antimatter Galaxy";
     },
     message() {
       const resetResouces = [];
-      if (Pelle.isDoomed) resetResouces.push("Antimatter", "Antimatter Dimensions", "Tickspeed");
-      if (!this.perkANRBought) resetResouces.push("Antimatter Dimensions", "Tickspeed");
-      if (!this.keepDimBoost) resetResouces.push("Dimension Boosts");
-      if (!this.keepAntimatter && !this.perkANRBought) resetResouces.push("Antimatter");
+      if (Pelle.isDoomed) {
+        resetResouces.push("Antimatter", "Antimatter Dimensions", "Tickspeed");
+      }
+      if (!this.perkANRBought) {
+        resetResouces.push("Antimatter Dimensions", "Tickspeed");
+      }
+      if (!this.keepDimBoost) {
+        resetResouces.push("Dimension Boosts");
+      }
+      if (!this.keepAntimatter && !this.perkANRBought) {
+        resetResouces.push("Antimatter");
+      }
       const resetList = makeEnumeration(resetResouces);
       let tickspeedFixed = "";
       if (InfinityChallenge(3).isRunning) {
@@ -45,10 +55,12 @@ export default {
         ? `This will reset nothing, and ${tickspeedInfo}`
         : `This will reset your ${resetList}. However, ${tickspeedInfo}`;
 
-      if (this.bulk) return `Are you sure you want to purchase
+      if (this.bulk) {
+        return `Are you sure you want to purchase
       ${quantifyInt("Antimatter Galaxy", this.newGalaxies)}? ${message}`;
+      }
       return `Are you sure you want to purchase an Antimatter Galaxy? ${message}`;
-    }
+    },
   },
   created() {
     this.on$(GAME_EVENT.DIMBOOST_AFTER, () =>
@@ -66,13 +78,13 @@ export default {
       }
       this.keepAntimatter = Achievement(111).isUnlocked;
       this.perkANRBought = Perk.antimatterNoReset.canBeApplied;
-      this.keepDimBoost = (Achievement(143).isUnlocked && !Pelle.isDoomed) ||
-        PelleUpgrade.galaxyNoResetDimboost.canBeApplied;
+      this.keepDimBoost = (Achievement(143).isUnlocked && !Pelle.isDoomed)
+        || PelleUpgrade.galaxyNoResetDimboost.canBeApplied;
     },
     handleYesClick() {
       requestGalaxyReset(this.bulk);
       EventHub.ui.offAll(this);
-    }
+    },
   },
 };
 </script>

@@ -8,12 +8,12 @@ export default {
   name: "PelleRift",
   components: {
     PelleStrike,
-    PelleRiftBar
+    PelleRiftBar,
   },
   props: {
     strike: {
       type: Object,
-      required: true
+      required: true,
     },
   },
   data() {
@@ -24,7 +24,7 @@ export default {
       totalFill: new Decimal(),
       resource: new Decimal(),
       hasEffectiveFill: false,
-      effects: []
+      effects: [],
     };
   },
   computed: {
@@ -39,12 +39,14 @@ export default {
     infoTooltip() {
       return `The Replicanti requirement for the 2nd Rift is based on the total amount you have ever filled, including
         any amount drained to fill this Rift.`;
-    }
+    },
   },
   methods: {
     update() {
       this.hasStrike = this.strike.hasStrike;
-      if (!this.hasStrike) return;
+      if (!this.hasStrike) {
+        return;
+      }
       const rift = this.rift;
       this.effects = this.rift.effects;
       this.isActive = rift.isActive;
@@ -55,8 +57,11 @@ export default {
     },
     // One rift has a number and the others are all Decimals; this reduces boilerplate for setting multiple values
     setValue(key, value) {
-      if (typeof value === "number") this[key] = value;
-      else this[key].copyFrom(value);
+      if (typeof value === "number") {
+        this[key] = value;
+      } else {
+        this[key].copyFrom(value);
+      }
     },
     // One-off formatting function; needs to format large Decimals and a small number assumed to be a percentage
     formatRift(value) {
@@ -69,7 +74,7 @@ export default {
       return this.specialRift
         ? wordShift.wordCycle(this.rift.drainResource)
         : this.rift.drainResource;
-    }
+    },
   },
 };
 </script>

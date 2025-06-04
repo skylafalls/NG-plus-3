@@ -5,13 +5,13 @@ import { defineComponent } from "vue";
 export default defineComponent({
   name: "ModernMetaDimensionRow",
   components: {
-    GenericDimensionRowText
+    GenericDimensionRowText,
   },
   props: {
     tier: {
       type: Number,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {
@@ -52,7 +52,9 @@ export default defineComponent({
       return `Buy ${formatInt(this.howManyCanBuy)}`;
     },
     buttonValue() {
-      if (this.isCapped) return "";
+      if (this.isCapped) {
+        return "";
+      }
       const prefix = this.showCostTitle(this.buyUntil10 ? this.until10Cost : this.singleCost) ? "Cost: " : "";
       const suffix = this.isCostsAD ? this.costUnit : "MA";
       return `${prefix}${this.costDisplay} ${suffix}`;
@@ -64,7 +66,9 @@ export default defineComponent({
   methods: {
     update() {
       const tier = this.tier;
-      if (tier > MetaDimensions.boost.maxDimensionsUnlockable && !this.isDoomed) return;
+      if (tier > MetaDimensions.boost.maxDimensionsUnlockable && !this.isDoomed) {
+        return;
+      }
       const dimension = MetaDimension(tier);
       this.isUnlocked = dimension.isAvailableForPurchase;
       const buyUntil10 = player.meta.buyUntil10;
@@ -76,7 +80,7 @@ export default defineComponent({
       this.howManyCanBuy.copyFrom(buyUntil10 ? dimension.howManyCanBuy : Decimal.min(dimension.howManyCanBuy, 1));
       this.singleCost.copyFrom(dimension.cost);
       this.until10Cost.copyFrom(dimension.cost.times(Decimal.max(dimension.howManyCanBuy, 1)));
-      this.rateOfChange.copyFrom(dimension.rateOfChange)
+      this.rateOfChange.copyFrom(dimension.rateOfChange);
       this.isAffordable = dimension.isAffordable;
       this.buyUntil10 = buyUntil10;
       this.isShown = (MetaDimensions.boost.totalBoosts.gt(0) && MetaDimensions.boost.totalBoosts.add(3).gte(tier));
@@ -102,8 +106,8 @@ export default defineComponent({
       return {
         "button-content l-modern-buy-md-text": true,
       };
-    }
-  }
+    },
+  },
 });
 </script>
 

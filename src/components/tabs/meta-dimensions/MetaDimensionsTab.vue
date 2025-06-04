@@ -6,14 +6,14 @@ export default {
   name: "MetaDimensionsTab",
   components: {
     ClassicMetaDimensionsTab,
-    ModernMetaDimensionsTab
+    ModernMetaDimensionsTab,
   },
   computed: {
     activeComponent() {
       return this.$viewModel.newUI
         ? "ModernMetaDimensionsTab"
         : "ClassicMetaDimensionsTab";
-    }
+    },
   },
 };
 </script>

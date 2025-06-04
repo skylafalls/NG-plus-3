@@ -14,17 +14,22 @@ export const PerformanceStats = {
     this.stats = {};
   },
   toggle() {
-    if (this.isOn) this.turnOff();
-    else this.turnOn();
+    if (this.isOn) {
+      this.turnOff();
+    } else {
+      this.turnOn();
+    }
   },
   start(blockName) {
-    if (!this.isOn) return;
+    if (!this.isOn) {
+      return;
+    }
     const blockRoot = this.currentBlocks.length > 0 ? this.currentBlocks.last().childBlocks : this.stats;
     let block = blockRoot[blockName];
     if (block === undefined) {
       block = {
         records: [],
-        childBlocks: {}
+        childBlocks: {},
       };
       blockRoot[blockName] = block;
     }
@@ -34,14 +39,18 @@ export const PerformanceStats = {
     record.timestamp = performance.now();
   },
   end() {
-    if (!this.isOn) return;
+    if (!this.isOn) {
+      return;
+    }
     const now = performance.now();
     const block = this.currentBlocks.pop();
     const record = block.records.last();
     record.duration = now - record.timestamp;
   },
   render() {
-    if (!this.isOn) return;
+    if (!this.isOn) {
+      return;
+    }
     let indentLevel = -1;
     let text = "";
     const samplePeriod = this.samplePeriod;
@@ -49,7 +58,9 @@ export const PerformanceStats = {
     function render(rootBlock) {
       indentLevel++;
       for (const blockName in rootBlock) {
-        if (!Object.prototype.hasOwnProperty.call(rootBlock, blockName)) continue;
+        if (!Object.prototype.hasOwnProperty.call(rootBlock, blockName)) {
+          continue;
+        }
         const block = rootBlock[blockName];
         const records = block.records;
         while (records.length > 1 && records.last().timestamp - records.first().timestamp > samplePeriod) {
@@ -63,8 +74,12 @@ export const PerformanceStats = {
           for (const record of records) {
             const duration = record.duration;
             sum += duration;
-            if (duration > max) max = duration;
-            if (duration < min) min = duration;
+            if (duration > max) {
+              max = duration;
+            }
+            if (duration < min) {
+              min = duration;
+            }
           }
           const average = sum / records.length;
           if (fps === undefined) {
@@ -81,5 +96,5 @@ export const PerformanceStats = {
     }
     render(this.stats);
     this.container.innerHTML = text;
-  }
+  },
 };

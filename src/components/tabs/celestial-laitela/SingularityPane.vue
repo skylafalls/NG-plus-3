@@ -25,7 +25,8 @@ export default {
   computed: {
     isDoomed: () => Pelle.isDoomed,
     singularityFormText() {
-      const formText = this.singularitiesGained.eq(1) ? "all Dark Energy into a Singularity"
+      const formText = this.singularitiesGained.eq(1)
+        ? "all Dark Energy into a Singularity"
         : `all Dark Energy into ${quantify("Singularity", this.singularitiesGained, 2)}`;
       if (this.canPerformSingularity) {
         return `Condense ${formText}`;
@@ -36,7 +37,9 @@ export default {
       let singularityTime = this.currentTimeToSingularity;
       if (this.canPerformSingularity) {
         singularityTime = singularityTime.add(this.extraTimeAfterSingularity);
-        if (!this.isAutoEnabled) return "";
+        if (!this.isAutoEnabled) {
+          return "";
+        }
         return singularityTime.gt(0)
           ? `(Auto-condensing in ${TimeSpan.fromSeconds(new Decimal(singularityTime)).toStringShort()})`
           : "(Will immediately auto-condense)";
@@ -54,12 +57,16 @@ export default {
       return this.formatRate(this.singularitiesGained.div(totalTime));
     },
     autoSingularityRate() {
-      if (this.hasAutoSingularity && !this.isAutoEnabled) return "Auto-Singularity is OFF";
+      if (this.hasAutoSingularity && !this.isAutoEnabled) {
+        return "Auto-Singularity is OFF";
+      }
       const totalTime = this.baseTimeToSingularity.add(this.extraTimeAfterSingularity);
       return this.formatRate(this.singularitiesGained.div(totalTime));
     },
     decreaseTooltip() {
-      if (this.singularityCapIncreases.eq(0)) return "You cannot decrease the cap any further!";
+      if (this.singularityCapIncreases.eq(0)) {
+        return "You cannot decrease the cap any further!";
+      }
       const singularities = this.singularitiesGained.div(this.perStepFactor);
       return this.willCondenseOnDecrease
         ? `Decreasing the cap will immediately auto-condense for
@@ -70,7 +77,7 @@ export default {
       return this.singularityCapIncreases.gte(50)
         ? "You cannot increase the cap any further!"
         : null;
-    }
+    },
   },
   methods: {
     update() {
@@ -103,8 +110,12 @@ export default {
       Singularity.decreaseCap();
     },
     formatRate(rate) {
-      if (rate.lt(1 / 60)) return `${format(rate.mul(3600), 2, 3)} per hour`;
-      if (rate.lt(1)) return `${format(rate.mul(60), 2, 3)} per minute`;
+      if (rate.lt(1 / 60)) {
+        return `${format(rate.mul(3600), 2, 3)} per hour`;
+      }
+      if (rate.lt(1)) {
+        return `${format(rate.mul(60), 2, 3)} per minute`;
+      }
       return `${format(rate, 2, 3)} per second`;
     },
     condenseClassObject() {
@@ -114,8 +125,8 @@ export default {
         "o-pelle-disabled": this.isDoomed,
         "o-pelle-disabled-pointer": this.isDoomed,
       };
-    }
-  }
+    },
+  },
 };
 </script>
 

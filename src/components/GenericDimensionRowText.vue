@@ -4,23 +4,23 @@ export default {
   props: {
     tier: {
       type: Number,
-      required: true
+      required: true,
     },
     name: {
       type: String,
-      required: true
+      required: true,
     },
     multiplierText: {
       type: String,
-      required: true
+      required: true,
     },
     amount: {
       type: Object,
-      required: true
+      required: true,
     },
     rate: {
       type: Object,
-      required: true
+      required: true,
     },
   },
   data() {
@@ -35,7 +35,7 @@ export default {
         : "";
     },
     amountText() {
-      return format(this.amount, 2)
+      return format(this.amount, 2);
     },
     showPercentage() {
       return player.options.showHintText.showPercentage || ui.view.shiftDown;
@@ -53,8 +53,8 @@ export default {
         "l-narrow-box": this.isSmall,
         "l-wide-box": !this.isSmall,
       };
-    }
-  }
+    },
+  },
 };
 </script>
 

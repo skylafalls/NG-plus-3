@@ -4,29 +4,29 @@ import HintText from "@/components/HintText";
 export default {
   name: "ChallengeBox",
   components: {
-    HintText
+    HintText,
   },
   props: {
     name: {
       type: String,
-      required: true
+      required: true,
     },
     isUnlocked: {
       type: Boolean,
-      required: true
+      required: true,
     },
     isRunning: {
       type: Boolean,
-      required: true
+      required: true,
     },
     isCompleted: {
       type: Boolean,
-      required: true
+      required: true,
     },
     lockedAt: {
       type: Decimal,
       required: false,
-      default: undefined
+      default: undefined,
     },
     overrideLabel: {
       type: String,
@@ -58,22 +58,30 @@ export default {
       };
     },
     buttonText() {
-      if (this.overrideLabel.length > 0) return this.overrideLabel;
-      if (this.isRunning || this.inC1) return "Running";
-      if (this.isCompleted) return "Completed";
-      if (this.isUnlocked) return "Start";
+      if (this.overrideLabel.length > 0) {
+        return this.overrideLabel;
+      }
+      if (this.isRunning || this.inC1) {
+        return "Running";
+      }
+      if (this.isCompleted) {
+        return "Completed";
+      }
+      if (this.isUnlocked) {
+        return "Start";
+      }
       const lockedText = this.lockedAt === undefined
         ? ""
         : ` (${format(this.infinities)}/${formatInt(this.lockedAt)})`;
       return `Locked${lockedText}`;
-    }
+    },
   },
   methods: {
     update() {
       this.inC1 = this.name === "C1" && !this.isCompleted && !Player.isInAntimatterChallenge;
       this.infinities.copyFrom(Currency.infinities);
     },
-  }
+  },
 };
 </script>
 

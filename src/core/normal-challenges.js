@@ -54,8 +54,12 @@ class NormalChallengeState extends GameMechanicState {
   }
 
   get isUnlocked() {
-    if (PlayerProgress.eternityUnlocked()) return true;
-    if (this.id === 0) return true;
+    if (PlayerProgress.eternityUnlocked()) {
+      return true;
+    }
+    if (this.id === 0) {
+      return true;
+    }
     const ip = GameDatabase.challenges.normal[this.id - 1].lockedAt;
     return Currency.infinitiesTotal.gte(ip);
   }
@@ -69,8 +73,12 @@ class NormalChallengeState extends GameMechanicState {
   }
 
   requestStart() {
-    if (!Tab.challenges.isUnlocked) return;
-    if (GameEnd.creditsEverClosed) return;
+    if (!Tab.challenges.isUnlocked) {
+      return;
+    }
+    if (GameEnd.creditsEverClosed) {
+      return;
+    }
     if (!player.options.confirmations.challenges) {
       this.start();
       return;
@@ -79,8 +87,12 @@ class NormalChallengeState extends GameMechanicState {
   }
 
   start() {
-    if (this.id === 1 || this.isOnlyActiveChallenge) return;
-    if (!Tab.challenges.isUnlocked) return;
+    if (this.id === 1 || this.isOnlyActiveChallenge) {
+      return;
+    }
+    if (!Tab.challenges.isUnlocked) {
+      return;
+    }
     // Forces big crunch reset but ensures IP gain, if any.
     bigCrunchReset(true, true);
     player.challenge.normal.current = this.id;
@@ -89,7 +101,9 @@ class NormalChallengeState extends GameMechanicState {
       EnslavedProgress.challengeCombo.giveProgress();
       Enslaved.quotes.ec6C10.show();
     }
-    if (!Enslaved.isRunning) Tab.dimensions.antimatter.show();
+    if (!Enslaved.isRunning) {
+      Tab.dimensions.antimatter.show();
+    }
   }
 
   get isCompleted() {
@@ -131,7 +145,9 @@ class NormalChallengeState extends GameMechanicState {
   exit() {
     player.challenge.normal.current = 0;
     bigCrunchReset(true, false);
-    if (!Enslaved.isRunning) Tab.dimensions.antimatter.show();
+    if (!Enslaved.isRunning) {
+      Tab.dimensions.antimatter.show();
+    }
   }
 }
 
@@ -160,9 +176,11 @@ export const NormalChallenges = {
    */
   all: NormalChallenge.index.compact(),
   completeAll() {
-    for (const challenge of NormalChallenges.all) challenge.complete();
+    for (const challenge of NormalChallenges.all) {
+      challenge.complete();
+    }
   },
   clearCompletions() {
     player.challenge.normal.completedBits = 0;
-  }
+  },
 };

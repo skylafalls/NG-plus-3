@@ -4,22 +4,22 @@ export default {
   props: {
     autobuyer: {
       type: Object,
-      required: true
+      required: true,
     },
     property: {
       type: String,
-      required: true
+      required: true,
     },
     type: {
       type: String,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {
       isValid: true,
       isFocused: false,
-      displayValue: "0"
+      displayValue: "0",
     };
   },
   computed: {
@@ -35,21 +35,27 @@ export default {
     },
     validityClass() {
       return this.isValid ? undefined : "o-autobuyer-input--invalid";
-    }
+    },
   },
   methods: {
     update() {
-      if (this.isFocused) return;
+      if (this.isFocused) {
+        return;
+      }
       this.updateActualValue();
     },
     updateActualValue() {
       const actualValue = this.autobuyer[this.property];
-      if (this.areEqual(this.actualValue, actualValue)) return;
+      if (this.areEqual(this.actualValue, actualValue)) {
+        return;
+      }
       this.actualValue = this.typeFunctions.copyValue(actualValue);
       this.updateDisplayValue();
     },
     areEqual(value, other) {
-      if (other === undefined || value === undefined) return false;
+      if (other === undefined || value === undefined) {
+        return false;
+      }
       return this.typeFunctions.areEqual(value, other);
     },
     updateDisplayValue() {
@@ -83,8 +89,8 @@ export default {
       this.isValid = true;
       this.isFocused = false;
       event.target.blur();
-    }
-  }
+    },
+  },
 };
 
 export const AutobuyerInputFunctions = {
@@ -92,8 +98,10 @@ export const AutobuyerInputFunctions = {
     areEqual: (value, other) => Decimal.eq(value, other),
     formatValue: value => Notation.scientific.format(value, 2, 2),
     copyValue: value => new Decimal(value),
-    tryParse: input => {
-      if (!input) return;
+    tryParse: (input) => {
+      if (!input) {
+        return;
+      }
       try {
         let decimal;
         if (/^e\d*[.]?\d+$/u.test(input.replaceAll(",", ""))) {
@@ -111,30 +119,34 @@ export const AutobuyerInputFunctions = {
       } catch {
         return;
       }
-    }
+    },
   },
   float: {
     areEqual: (value, other) => value === other,
     formatValue: value => value.toString(),
     copyValue: value => value,
-    tryParse: input => {
+    tryParse: (input) => {
       const float = parseFloat(input);
       return isNaN(float) ? undefined : float;
-    }
+    },
   },
   int: {
     areEqual: (value, other) => value === other,
     formatValue: value => value.toString(),
     copyValue: value => value,
-    tryParse: input => {
-      if (!input) return;
+    tryParse: (input) => {
+      if (!input) {
+        return;
+      }
       // We explicitly check formatting here instead of letting parseInt handle the whole thing because otherwise the
       // fact that parseInt removes extraneous letters means junk like "361ebqv3" registers as valid and parses as 361
-      if (!/^\d+$/u.test(input.replaceAll(",", ""))) return;
+      if (!/^\d+$/u.test(input.replaceAll(",", ""))) {
+        return;
+      }
       const int = parseInt(input, 10);
       return isNaN(int) || !Number.isInteger(int) ? undefined : int;
-    }
-  }
+    },
+  },
 };
 </script>
 

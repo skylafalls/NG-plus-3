@@ -45,7 +45,9 @@ export default {
   mounted() {
     this.$nextTick(() => {
       // After all the children have been loaded, check if somethingHappened - if not, give them the achievement!
-      if (this.nothingHappened || !this.somethingHappened) SecretAchievement(36).unlock();
+      if (this.nothingHappened || !this.somethingHappened) {
+        SecretAchievement(36).unlock();
+      }
     });
   },
 };

@@ -47,12 +47,16 @@ class GlyphRNG {
    * Write the seed out to where it can be restored
    * @abstract
    */
-  finalize() { throw new NotImplementedError(); }
+  finalize() {
+    throw new NotImplementedError();
+  }
 
   /**
    * @abstract
    */
-  get isFake() { throw new NotImplementedError(); }
+  get isFake() {
+    throw new NotImplementedError();
+  }
 }
 
 export const GlyphGenerator = {
@@ -67,34 +71,51 @@ export const GlyphGenerator = {
 
   fakeSeed: Date.now() % Math.pow(2, 32),
   fakeSecondGaussian: null,
-  /* eslint-disable lines-between-class-members */
+
   RealGlyphRNG: class extends GlyphRNG {
-    constructor() { super(player.reality.seed, player.reality.secondGaussian); }
+    constructor() {
+      super(player.reality.seed, player.reality.secondGaussian);
+    }
+
     finalize() {
       player.reality.seed = this.seed;
       player.reality.secondGaussian = this.secondGaussian;
     }
-    get isFake() { return false; }
+
+    get isFake() {
+      return false;
+    }
   },
 
   FakeGlyphRNG: class extends GlyphRNG {
-    constructor() { super(GlyphGenerator.fakeSeed, GlyphGenerator.fakeSecondGaussian); }
+    constructor() {
+      super(GlyphGenerator.fakeSeed, GlyphGenerator.fakeSecondGaussian);
+    }
+
     finalize() {
       GlyphGenerator.fakeSeed = this.seed;
       GlyphGenerator.fakeSecondGaussian = this.secondGaussian;
     }
-    get isFake() { return true; }
+
+    get isFake() {
+      return true;
+    }
   },
 
   MusicGlyphRNG: class extends GlyphRNG {
-    constructor() { super(player.reality.musicSeed, player.reality.musicSecondGaussian); }
+    constructor() {
+      super(player.reality.musicSeed, player.reality.musicSecondGaussian);
+    }
+
     finalize() {
       player.reality.musicSeed = this.seed;
       player.reality.musicSecondGaussian = this.secondGaussian;
     }
-    get isFake() { return false; }
+
+    get isFake() {
+      return false;
+    }
   },
-  /* eslint-enable lines-between-class-members */
 
   startingGlyph(level) {
     const initialStrength = 1.5;
@@ -110,16 +131,19 @@ export const GlyphGenerator = {
     };
   },
 
-  // eslint-disable-next-line max-params
   randomGlyph(level, rngIn, typeIn = null, effectsIn = []) {
     const rng = rngIn || new GlyphGenerator.RealGlyphRNG();
     const strength = this.randomStrength(rng);
     const type = typeIn || this.randomType(rng);
     let numEffects = this.randomNumberOfEffects(type, strength, level.actualLevel, rng);
     const maxEffects = GlyphInfo[type].effects().length;
-    if (type !== "effarig" && numEffects > maxEffects) numEffects = maxEffects;
+    if (type !== "effarig" && numEffects > maxEffects) {
+      numEffects = maxEffects;
+    }
     const effects = this.generateEffects(type, numEffects, rng, effectsIn);
-    if (rngIn === undefined) rng.finalize();
+    if (rngIn === undefined) {
+      rng.finalize();
+    }
     return {
       id: undefined,
       idx: null,
@@ -132,7 +156,6 @@ export const GlyphGenerator = {
   },
 
   realityGlyph(level) {
-    // eslint-disable-next-line no-param-reassign
     level = level ?? AlchemyResource.reality.effectValue;
     const str = rarityToStrength(100);
     const effects = this.generateRealityEffects(level);
@@ -195,8 +218,8 @@ export const GlyphGenerator = {
 
   musicGlyph() {
     const rng = new GlyphGenerator.MusicGlyphRNG();
-    const glyph =
-      this.randomGlyph({ actualLevel: player.records.bestReality.glyphLevel.mul(0.8).floor(), rawLevel: DC.D1 }, rng);
+    const glyph
+      = this.randomGlyph({ actualLevel: player.records.bestReality.glyphLevel.mul(0.8).floor(), rawLevel: DC.D1 }, rng);
     rng.finalize();
     glyph.cosmetic = "music";
     glyph.fixedCosmetic = "music";
@@ -221,10 +244,13 @@ export const GlyphGenerator = {
   randomStrength(rng) {
     // Technically getting this upgrade really changes glyph gen but at this point almost all
     // the RNG is gone anyway.
-    if (Ra.unlocks.maxGlyphRarityAndShardSacrificeBoost.canBeApplied) return rarityToStrength(100);
+    if (Ra.unlocks.maxGlyphRarityAndShardSacrificeBoost.canBeApplied) {
+      return rarityToStrength(100);
+    }
     let result = GlyphGenerator.strengthMultiplier.mul(GlyphGenerator.gaussianBellCurve(rng));
     const relicShardFactor = Ra.unlocks.extraGlyphChoicesAndRelicShardRarityAlwaysMax.canBeApplied
-      ? new Decimal(1) : rng.uniform();
+      ? new Decimal(1)
+      : rng.uniform();
     const increasedRarity = Effarig.maxRarityBoost.mul(relicShardFactor)
       .add(Effects.sum(Achievement(146)).add(GlyphInfo.effarig.sacrificeInfo.effect()));
     // Each rarity% is 0.025 strength.
@@ -234,7 +260,6 @@ export const GlyphGenerator = {
     return Decimal.min(result, rarityToStrength(100));
   },
 
-  // eslint-disable-next-line max-params
   randomNumberOfEffects(type, strength, level, rng) {
     // Call the RNG twice before anything else to advance the RNG seed properly, even if the whole method returns early.
     // This prevents the position of effarig glyphs in the choice list from affecting the choices themselves, as well
@@ -244,12 +269,13 @@ export const GlyphGenerator = {
     if (GlyphInfo[type].effects().length <= 4 && Ra.unlocks.glyphEffectCount.canBeApplied) {
       return GlyphInfo[type].effects().length;
     }
-    const maxEffects = !Ra.unlocks.glyphEffectCount.canBeApplied && type === "effarig" ? 4
+    const maxEffects = !Ra.unlocks.glyphEffectCount.canBeApplied && type === "effarig"
+      ? 4
       : GlyphInfo[type].effects().length;
     let num = Decimal.min(
       maxEffects,
-      // eslint-disable-next-line max-len
-      Decimal.floor(Decimal.pow(random1, DC.D1.sub((Decimal.pow(level.times(strength), 0.5)).div(100))).times(1.5).add(1))
+
+      Decimal.floor(Decimal.pow(random1, DC.D1.sub((Decimal.pow(level.times(strength), 0.5)).div(100))).times(1.5).add(1)),
     ).min(250).toNumber();
     // Incase someone somehow forgets to put a limit, this .min(250) is a final protection
     // If we do decide to add anything else that boosts chance of an extra effect, keeping the code like this
@@ -269,7 +295,6 @@ export const GlyphGenerator = {
     return sortedRealityEffects.slice(0, numberOfEffects);
   },
 
-  // eslint-disable-next-line max-params
   generateEffects(type, count, rng, guarenteedEffects = []) {
     const glyphTypeEffects = GlyphInfo[type].effects();
     const effectValues = glyphTypeEffects.mapToObject(x => x.intID, () => rng.uniform());
@@ -288,12 +313,10 @@ export const GlyphGenerator = {
     }
 
     for (let i = 0; i < guarenteedEffects.length; i++) {
-      // eslint-disable-next-line no-loop-func
       effectValues[GlyphInfo[type].effects().filter(e => e.id === guarenteedEffects[i])[0].intID] = 2;
     }
 
     if (GlyphInfo[type].primaryEffect !== undefined) {
-      // eslint-disable-next-line no-param-reassign
       count = Math.max(count, guarenteedEffects.length + 1);
     }
     // Sort from highest to lowest value.
@@ -306,11 +329,12 @@ export const GlyphGenerator = {
   },
 
   randomType(rng, typesSoFar = []) {
-    const generatable = generatedTypes.filter(x => (GlyphInfo[x].isGenerated ?? false) &&
-      (GlyphInfo[x].generationRequirement ? GlyphInfo[x].generationRequirement() : true));
+    const generatable = generatedTypes.filter(x => (GlyphInfo[x].isGenerated ?? false)
+      && (GlyphInfo[x].generationRequirement ? GlyphInfo[x].generationRequirement() : true));
     const maxOfSameTypeSoFar = generatable.map(x => typesSoFar.countWhere(y => y === x)).max();
     const blacklisted = typesSoFar.length === 0
-      ? [] : generatable.filter(x => typesSoFar.countWhere(y => y === x) === maxOfSameTypeSoFar);
+      ? []
+      : generatable.filter(x => typesSoFar.countWhere(y => y === x) === maxOfSameTypeSoFar);
     const types = generatedTypes.filter(
       x => generatable.includes(x) && !blacklisted.includes(x));
     return types[Math.floor(rng.uniform() * types.length)];
@@ -322,7 +346,9 @@ export const GlyphGenerator = {
       .clampMax(basics * this.uniformityGroups + 1).toNumber();
     let groupIndex = realityCount.floor().sub(1).mod(basics).toNumber();
     // Mod here returns negative for negative numbers, so turn into positive mod if lt 0
-    if (groupIndex < 0) groupIndex += basics;
+    if (groupIndex < 0) {
+      groupIndex += basics;
+    }
 
     const initSeed = player.reality.initialSeed;
     const typePerm = permutationIndex(basics, groupNum * (31 + initSeed % 7) + (initSeed % 1123));
@@ -341,11 +367,10 @@ export const GlyphGenerator = {
 
     const effectsAsIds = [];
     for (let i = 0; i <= (GlyphSelection.choiceCount - 1); i++) {
-      // eslint-disable-next-line max-len
       const effectPerm = permutationIndex(GlyphInfo[glyphsChosen[i]].effects().length, (7 + initSeed % 5) * groupNum + initSeed % 11);
       // Why add n - 1?
       // Well, +(n-1) = -1, since in modulo n arithmetic +n = +0. This way also prevents negatives, read above comments
-      // eslint-disable-next-line max-len
+
       groupIndex = effectPerm[realityCount.add(GlyphInfo[glyphsChosen[i]].effects().length - 1).mod(GlyphInfo[glyphsChosen[i]].effects().length).toNumber()];
       effectsAsIds.push(GlyphInfo[glyphsChosen[i]].effects()[groupIndex].id);
     }
@@ -357,7 +382,6 @@ export const GlyphGenerator = {
     }
 
     return glyphs;
-
   },
 
   getRNG(fake) {

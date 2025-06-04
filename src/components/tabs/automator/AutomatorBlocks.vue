@@ -4,12 +4,12 @@ import draggable from "vuedraggable";
 export default {
   name: "AutomatorBlocks",
   components: {
-    draggable
+    draggable,
   },
   data() {
     return {
       allBlocks: automatorBlocks.filter(b => !AUTOMATOR_BLOCKS_BLACKLIST.has(b.cmd)),
-      blocks: []
+      blocks: [],
     };
   },
   methods: {
@@ -19,14 +19,16 @@ export default {
     clone(block) {
       const b = {
         ...block,
-        id: UIID.next()
+        id: UIID.next(),
       };
 
-      if (block.nested && !block.nest) b.nest = [];
+      if (block.nested && !block.nest) {
+        b.nest = [];
+      }
       AutomatorData.recalculateErrors();
       return b;
     },
-  }
+  },
 };
 
 const AUTOMATOR_BLOCKS_COMPARISON_OPERATORS = ["<", ">", ">=", "<="];
@@ -60,7 +62,7 @@ const AUTOMATOR_BLOCKS_RESETS = ["INFINITY", "ETERNITY", "REALITY"];
 export const automatorBlocks = [
   {
     cmd: "STUDIES RESPEC",
-    alias: "RESPEC TIME STUDIES"
+    alias: "RESPEC TIME STUDIES",
   }, {
     cmd: "STUDIES LOAD",
     alias: "LOAD STUDY PRESET",
@@ -68,26 +70,26 @@ export const automatorBlocks = [
     A: ["ID", "NAME"],
     B: ["*"],
     targets: ["singleSelectionInput", "singleTextInput"],
-    canWait: true
+    canWait: true,
   }, {
     cmd: "STUDIES PURCHASE",
     alias: "PURCHASE STUDIES",
     allowedPatterns: ["A"],
     A: ["*"],
     targets: ["singleTextInput"],
-    canWait: true
+    canWait: true,
   }, {
     cmd: "INFINITY",
-    canWait: true
+    canWait: true,
   }, {
     cmd: "ETERNITY",
     canRespec: true,
-    canWait: true
+    canWait: true,
   }, {
     cmd: "REALITY",
     canRespec: true,
     canWait: true,
-    isUnlocked: () => RealityUpgrade(25).isBought
+    isUnlocked: () => RealityUpgrade(25).isBought,
   }, {
     cmd: "UNLOCK",
     allowedPatterns: ["AB", "C"],
@@ -95,7 +97,7 @@ export const automatorBlocks = [
     B: ["*"],
     C: ["DILATION"],
     targets: ["singleSelectionInput", "singleTextInput"],
-    canWait: true
+    canWait: true,
   }, {
     cmd: "START",
     allowedPatterns: ["AB", "C"],
@@ -116,14 +118,14 @@ export const automatorBlocks = [
     allowedPatterns: ["A"],
     A: ["ON", "OFF"],
     targets: ["singleSelectionInput"],
-    isUnlocked: () => BlackHole(1).isUnlocked
+    isUnlocked: () => BlackHole(1).isUnlocked,
   }, {
     cmd: "STORE GAME TIME",
     alias: "SET GAME TIME STORAGE TO",
     allowedPatterns: ["A"],
     A: ["ON", "OFF", "USE"],
     targets: ["singleSelectionInput"],
-    isUnlocked: () => Enslaved.isUnlocked
+    isUnlocked: () => Enslaved.isUnlocked,
   }, {
     cmd: "NOTIFY",
     alias: "GAME NOTIFICATION:",
@@ -145,7 +147,7 @@ export const automatorBlocks = [
     C: AUTOMATOR_BLOCKS_COMPARISON_OPERATORS,
     D: ["BLACK HOLE"],
     E: ["OFF", "BH1", "BH2"],
-    targets: ["genericInput1", "compOperator", "genericInput2"]
+    targets: ["genericInput1", "compOperator", "genericInput2"],
   }, {
     cmd: "PAUSE",
     alias: "PAUSE AUTOMATOR FOR",
@@ -159,7 +161,7 @@ export const automatorBlocks = [
     A: [...AUTOMATOR_BLOCKS_COMPARISON_CURRENCIES, "* SPECIFIED CONSTANT"],
     B: AUTOMATOR_BLOCKS_COMPARISON_OPERATORS,
     targets: ["genericInput1", "compOperator", "genericInput2"],
-    nested: true
+    nested: true,
   }, {
     cmd: "UNTIL",
     alias: "REPEAT BLOCK UNTIL",
@@ -168,7 +170,7 @@ export const automatorBlocks = [
     B: [...AUTOMATOR_BLOCKS_COMPARISON_CURRENCIES, "* SPECIFIED CONSTANT"],
     C: AUTOMATOR_BLOCKS_COMPARISON_OPERATORS,
     targets: ["genericInput1", "compOperator", "genericInput2"],
-    nested: true
+    nested: true,
   }, {
     cmd: "WHILE",
     alias: "REPEAT BLOCK WHILE",
@@ -176,13 +178,13 @@ export const automatorBlocks = [
     A: [...AUTOMATOR_BLOCKS_COMPARISON_CURRENCIES, "* SPECIFIED CONSTANT"],
     B: AUTOMATOR_BLOCKS_COMPARISON_OPERATORS,
     targets: ["genericInput1", "compOperator", "genericInput2"],
-    nested: true
+    nested: true,
   }, {
-    cmd: "BLOB"
+    cmd: "BLOB",
   }, {
     cmd: "STOP",
-    alias: "STOP EXECUTION"
-  }
+    alias: "STOP EXECUTION",
+  },
 ];
 const AUTOMATOR_BLOCKS_BLACKLIST = new Set(["BLOB"]);
 

@@ -46,10 +46,16 @@ class PerkState extends SetPurchasableMechanicState {
   }
 
   onPurchased() {
-    if (this.config.bumpCurrency !== undefined) this.config.bumpCurrency();
-    if (this.label === "EU1" && Currency.eternities.gt(0)) applyEU1();
+    if (this.config.bumpCurrency !== undefined) {
+      this.config.bumpCurrency();
+    }
+    if (this.label === "EU1" && Currency.eternities.gt(0)) {
+      applyEU1();
+    }
     if (this.label === "ACHNR") {
-      if (Achievements.preReality.some(a => !a.isUnlocked)) player.reality.gainedAutoAchievements = true;
+      if (Achievements.preReality.some(a => !a.isUnlocked)) {
+        player.reality.gainedAutoAchievements = true;
+      }
       for (const achievement of Achievements.preReality) {
         achievement.unlock(true);
       }
@@ -62,7 +68,7 @@ class PerkState extends SetPurchasableMechanicState {
 
 export const Perk = mapGameDataToObject(
   GameDatabase.reality.perks,
-  config => new PerkState(config)
+  config => new PerkState(config),
 );
 
 export const Perks = {
@@ -73,7 +79,7 @@ export const Perks = {
    */
   find(id) {
     return Perks.all.find(p => p.id === id);
-  }
+  },
 };
 
 for (const perk of Perks.all) {
@@ -81,7 +87,9 @@ for (const perk of Perks.all) {
 }
 
 export function checkPerkValidity() {
-  if (player.reality.perks.every(id => Perks.some(id) !== undefined)) return;
+  if (player.reality.perks.every(id => Perks.some(id) !== undefined)) {
+    return;
+  }
   dev.respecPerks();
   if (Currency.perkPoints.gte(Perks.all.length)) {
     dev.buyAllPerks();

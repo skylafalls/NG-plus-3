@@ -5,28 +5,28 @@ import { defineComponent } from "vue";
 export default defineComponent({
   name: "TimeStudyButton",
   components: {
-    CostDisplay
+    CostDisplay,
   },
   props: {
     setup: {
       type: Object,
-      required: true
+      required: true,
     },
     showCost: {
       type: Boolean,
       required: false,
-      default: true
+      default: true,
     },
     showStCost: {
       type: Boolean,
       required: false,
-      default: false
+      default: false,
     },
     specialClick: {
       type: Function,
       required: false,
       default: null,
-    }
+    },
   },
   data() {
     return {
@@ -45,7 +45,7 @@ export default defineComponent({
     styleObject() {
       return {
         top: `${this.setup.top}rem`,
-        left: `${this.setup.left}rem`
+        left: `${this.setup.left}rem`,
       };
     },
     classObject() {
@@ -99,7 +99,9 @@ export default defineComponent({
           return "o-time-study-eternity-challenge";
         }
         case TIME_STUDY_TYPE.DILATION: {
-          if (this.study.id === 7) return "o-time-study-reality";
+          if (this.study.id === 7) {
+            return "o-time-study-reality";
+          }
           return "o-time-study-dilation";
         }
         case TIME_STUDY_TYPE.QUANTUM: {
@@ -112,7 +114,9 @@ export default defineComponent({
       return "";
     },
     studyClass() {
-      if (this.isUseless) return "";
+      if (this.isUseless) {
+        return "";
+      }
       let pathClasses = "";
       if (!this.isAvailableForPurchase && !this.isBought) {
         pathClasses += `${this.pathClass}--unavailable`;
@@ -157,36 +161,45 @@ export default defineComponent({
         : quantifyInt("Space Theorem", this.STCost);
 
       const costs = [];
-      if (this.config.cost) costs.push(ttStr);
-      if (this.STCost && this.showStCost) costs.push(stStr);
+      if (this.config.cost) {
+        costs.push(ttStr);
+      }
+      if (this.STCost && this.showStCost) {
+        costs.push(stStr);
+      }
       return costs.join(" + ");
     },
     doomedRealityStudy() {
       return this.study.type === TIME_STUDY_TYPE.DILATION && this.study.id === 6 && Pelle.isDoomed;
-    }
+    },
   },
   methods: {
     update() {
       const study = this.study;
       this.isUseless = Pelle.uselessTimeStudies.includes(this.study.id) && Pelle.isDoomed;
       this.isBought = study.isBought;
-      this.eternityChallengeRunning = study.type === TIME_STUDY_TYPE.ETERNITY_CHALLENGE &&
-        EternityChallenge.current?.id === study.id;
+      this.eternityChallengeRunning = study.type === TIME_STUDY_TYPE.ETERNITY_CHALLENGE
+        && EternityChallenge.current?.id === study.id;
       if (!this.isBought) {
         this.isAvailableForPurchase = study.canBeBought && study.isAffordable;
       }
       this.STCost = this.study.STCost;
-      this.isCompleteEC = this.study.type === TIME_STUDY_TYPE.ETERNITY_CHALLENGE &&
-        EternityChallenge(this.study.id).remainingCompletions === 0;
+      this.isCompleteEC = this.study.type === TIME_STUDY_TYPE.ETERNITY_CHALLENGE
+        && EternityChallenge(this.study.id).remainingCompletions === 0;
     },
     handleClick() {
-      if (this.specialClick === null || !this.study.isBought) this.study.purchase();
-      else this.specialClick();
+      if (this.specialClick === null || !this.study.isBought) {
+        this.study.purchase();
+      } else {
+        this.specialClick();
+      }
     },
     shiftClick() {
-      if (this.study.purchaseUntil) this.study.purchaseUntil();
-    }
-  }
+      if (this.study.purchaseUntil) {
+        this.study.purchaseUntil();
+      }
+    },
+  },
 });
 
 export class TimeStudySetup {

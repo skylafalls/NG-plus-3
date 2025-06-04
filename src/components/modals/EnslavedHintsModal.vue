@@ -6,7 +6,7 @@ export default {
   name: "EnslavedHintsModal",
   components: {
     ModalWrapper,
-    PrimaryButton
+    PrimaryButton,
   },
   data() {
     return {
@@ -33,7 +33,9 @@ export default {
     // of cost bumps and I'm not entirely sure why. There's probably a numerical issue I can't quite figure out, but
     // considering that much cost raising can't happen in practice I think I'm just going to leave it be.
     timeEstimate() {
-      if (this.currentStore.gte(this.nextHintCost)) return "";
+      if (this.currentStore.gte(this.nextHintCost)) {
+        return "";
+      }
 
       // Relevant values are stored as milliseconds, so multiply the rate by 1000 to get to seconds
       const storeRate = (Enslaved.isStoringGameTime
@@ -54,7 +56,7 @@ export default {
       const x = Decimal.ln(K).mul(Decimal.pow(K, alreadyWaited)).mul(decaylessTime);
       const timeToGoal = decimalProductLog(x).div(Decimal.ln(K).sub(alreadyWaited));
       return `${TimeSpan.fromSeconds(timeToGoal).toStringShort(true)}`;
-    }
+    },
   },
   methods: {
     update() {
@@ -80,13 +82,17 @@ export default {
       this.hints = Enslaved.hintCostIncreases;
     },
     giveRealityHint(available) {
-      if (available <= 0 || !Enslaved.spendTimeForHint()) return;
+      if (available <= 0 || !Enslaved.spendTimeForHint()) {
+        return;
+      }
       EnslavedProgress.all.filter(prog => !prog.hasHint).randomElement().unlock();
     },
     giveGlyphHint(available) {
-      if (available <= 0 || !Enslaved.spendTimeForHint()) return;
+      if (available <= 0 || !Enslaved.spendTimeForHint()) {
+        return;
+      }
       player.celestials.enslaved.glyphHintsGiven++;
-    }
+    },
   },
 
 };

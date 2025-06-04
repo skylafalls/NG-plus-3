@@ -28,7 +28,9 @@ export const GalaxyGenerator = {
   },
 
   get gainPerSecond() {
-    if (!Pelle.hasGalaxyGenerator) return DC.D0;
+    if (!Pelle.hasGalaxyGenerator) {
+      return DC.D0;
+    }
     return new Decimal(GalaxyGeneratorUpgrades.additive.effectValue).timesEffectsOf(
       GalaxyGeneratorUpgrades.multiplicative,
       GalaxyGeneratorUpgrades.antimatterMult,
@@ -92,13 +94,12 @@ export const GalaxyGenerator = {
         Glyphs.unequipAll(player.options.respecIntoProtected && Glyphs.findFreeIndex(true) === -1);
         Glyphs.refreshActive();
       }
-
     }
-    player.celestials.pelle.galaxyGenerator.generatedGalaxies =
-      player.celestials.pelle.galaxyGenerator.generatedGalaxies.add(this.gainPerSecond.times(diff.div(1000)));
+    player.celestials.pelle.galaxyGenerator.generatedGalaxies
+      = player.celestials.pelle.galaxyGenerator.generatedGalaxies.add(this.gainPerSecond.times(diff.div(1000)));
     player.celestials.pelle.galaxyGenerator.generatedGalaxies = Decimal.min(
       player.celestials.pelle.galaxyGenerator.generatedGalaxies,
-      this.generationCap
+      this.generationCap,
     );
 
     if (!this.capRift) {
@@ -109,7 +110,7 @@ export const GalaxyGenerator = {
         this.hasReturnedGlyphSlot = true;
       }
     }
-  }
+  },
 };
 
 export class GalaxyGeneratorUpgrade extends RebuyableMechanicState {
@@ -125,7 +126,9 @@ export class GalaxyGeneratorUpgrade extends RebuyableMechanicState {
     player.celestials.pelle.rebuyables[this.id] = value;
   }
 
-  get isCustomEffect() { return true; }
+  get isCustomEffect() {
+    return true;
+  }
 
   get effectValue() {
     return this.config.effect(this.boughtAmount);
@@ -134,5 +137,5 @@ export class GalaxyGeneratorUpgrade extends RebuyableMechanicState {
 
 export const GalaxyGeneratorUpgrades = mapGameDataToObject(
   GameDatabase.celestials.pelle.galaxyGeneratorUpgrades,
-  config => new GalaxyGeneratorUpgrade(config)
+  config => new GalaxyGeneratorUpgrade(config),
 );

@@ -58,19 +58,31 @@ export default {
       return mismatchedPresets;
     },
     willOverwriteConstant() {
-      if (!this.hasExtraData) return false;
+      if (!this.hasExtraData) {
+        return false;
+      }
       const all = new Set();
-      for (const constant of this.currentConstants) all.add(constant);
+      for (const constant of this.currentConstants) {
+        all.add(constant);
+      }
       for (const constant of this.importedConstants) {
-        if (all.has(constant.key) && player.reality.automator.constants[constant.key] !== constant.value) return true;
+        if (all.has(constant.key) && player.reality.automator.constants[constant.key] !== constant.value) {
+          return true;
+        }
       }
       return false;
     },
     constantCountAfterImport() {
-      if (!this.hasExtraData) return this.currentConstants.length;
+      if (!this.hasExtraData) {
+        return this.currentConstants.length;
+      }
       const all = new Set();
-      for (const constant of this.currentConstants) all.add(constant);
-      for (const constant of this.importedConstants) all.add(constant.key);
+      for (const constant of this.currentConstants) {
+        all.add(constant);
+      }
+      for (const constant of this.importedConstants) {
+        all.add(constant.key);
+      }
       return all.size;
     },
     extraConstants() {
@@ -81,7 +93,7 @@ export default {
     },
     constantButtonText() {
       return this.ignoreConstants ? "Will Ignore Constants" : "Will Import Constants";
-    }
+    },
   },
   mounted() {
     this.$refs.input.select();
@@ -91,8 +103,9 @@ export default {
       // We need to sequentially parse full data and then single script data in order to handle both in the same modal.
       // Parsing order doesn't matter due to the fact that export formatting means it's only ever one or the other.
       let parsed = AutomatorBackend.parseFullScriptData(this.input);
-      if (parsed) this.hasExtraData = true;
-      else {
+      if (parsed) {
+        this.hasExtraData = true;
+      } else {
         parsed = AutomatorBackend.parseScriptContents(this.input);
         this.hasExtraData = false;
       }
@@ -112,11 +125,13 @@ export default {
       this.isValid = true;
     },
     importSave() {
-      if (!this.isValid) return;
+      if (!this.isValid) {
+        return;
+      }
       if (this.hasExtraData) {
         AutomatorBackend.importFullScriptData(this.input, {
           presets: this.ignorePresets,
-          constants: this.ignoreConstants
+          constants: this.ignoreConstants,
         });
       } else {
         AutomatorBackend.importScriptContents(this.input);

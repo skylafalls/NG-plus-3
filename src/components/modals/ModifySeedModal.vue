@@ -42,11 +42,16 @@ export default {
       }
       this.convertedInput = this.seedValue !== Number(this.inputSeed);
 
-      if (this.seedValue === 0) this.setMode(this.choiceEnum.FIXED);
-      else this.setMode(this.choiceEnum.PLAYER, this.seedValue);
+      if (this.seedValue === 0) {
+        this.setMode(this.choiceEnum.FIXED);
+      } else {
+        this.setMode(this.choiceEnum.PLAYER, this.seedValue);
+      }
     },
     setMode(mode, seed) {
-      if (mode === this.choiceEnum.PLAYER && this.seedValue === 0) return;
+      if (mode === this.choiceEnum.PLAYER && this.seedValue === 0) {
+        return;
+      }
       Speedrun.modifySeed(mode, parseInt(seed, 10));
     },
     buttonClass(mode) {
@@ -68,7 +73,7 @@ export default {
       h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909);
       h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
       return 4294967296 * (2097151 & h2) + (h1 >>> 0);
-    }
+    },
   },
 };
 </script>

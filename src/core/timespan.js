@@ -224,7 +224,9 @@ window.TimeSpan = class TimeSpan {
     addCheckedComponent(this.minutes, "minute");
     addCheckedComponent(this.seconds, "second");
     // Join with commas and 'and' in the end.
-    if (parts.length === 0) return `${formatInt(0)} seconds`;
+    if (parts.length === 0) {
+      return `${formatInt(0)} seconds`;
+    }
     return [parts.slice(0, -1).join(", "), parts.slice(-1)[0]].join(parts.length < 2 ? "" : " and ");
   }
 
@@ -237,7 +239,9 @@ window.TimeSpan = class TimeSpan {
   toStringShort(useHMS = true, isSpeedrun = false) {
     // Probably not worth the trouble of importing the isEND function from formatting since this accomplishes the same
     // thing; we do however need this to prevent strings like "02:32" from showing up though
-    if (format(0) === "END" && !isSpeedrun) return "END";
+    if (format(0) === "END" && !isSpeedrun) {
+      return "END";
+    }
 
     const totalSeconds = this.totalSeconds;
     if (totalSeconds.gt(5e-7) && totalSeconds.lt(1e-3)) {
@@ -264,7 +268,9 @@ window.TimeSpan = class TimeSpan {
     if (this.totalHours.lt(100) || (isSpeedrun && this.totalHours.lt(1000))) {
       if (useHMS && !Notations.current.isPainful) {
         const sec = seconds(this.seconds, this.milliseconds);
-        if (Decimal.floor(this.totalHours).eq(0)) return `${formatHMS(this.minutes)}:${sec}`;
+        if (Decimal.floor(this.totalHours).eq(0)) {
+          return `${formatHMS(this.minutes)}:${sec}`;
+        }
         return `${formatHMS(Decimal.floor(this.totalHours))}:${formatHMS(this.minutes)}:${sec}`;
       }
       if (this.totalMinutes.lt(60)) {
@@ -292,8 +298,12 @@ window.TimeSpan = class TimeSpan {
 
   toTimeEstimate() {
     const seconds = this.totalSeconds;
-    if (seconds.lt(1)) return `< ${formatInt(1)} second`;
-    if (seconds.gt(86400 * 365.25)) return `> ${formatInt(1)} year`;
+    if (seconds.lt(1)) {
+      return `< ${formatInt(1)} second`;
+    }
+    if (seconds.gt(86400 * 365.25)) {
+      return `> ${formatInt(1)} year`;
+    }
     return this.toStringShort();
   }
 
@@ -312,18 +322,30 @@ window.TimeSpan = class TimeSpan {
 
 const Guard = {
   isDefined(value, message) {
-    if (value !== undefined) return;
-    if (message) throw message;
+    if (value !== undefined) {
+      return;
+    }
+    if (message) {
+      throw message;
+    }
     throw "Value is defined";
   },
   isDecimal(value, message) {
-    if (value instanceof Decimal) return;
-    if (message) throw message;
+    if (value instanceof Decimal) {
+      return;
+    }
+    if (message) {
+      throw message;
+    }
     throw "Value is not a decimal";
   },
   isTimeSpan(value, message) {
-    if (value instanceof TimeSpan) return;
-    if (message) throw message;
+    if (value instanceof TimeSpan) {
+      return;
+    }
+    if (message) {
+      throw message;
+    }
     throw "Value is not a TimeSpan";
-  }
+  },
 };

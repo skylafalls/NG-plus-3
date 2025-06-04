@@ -10,9 +10,8 @@ export const GlyphInfoVue = {
     MAX_REFINE: 6,
   },
   labels: ["None", "Level", "Rarity", "Sacrifice Value", "Glyph Filter Score",
-    "Current Refinement Value", "Maximum Refinement Value"]
+    "Current Refinement Value", "Maximum Refinement Value"],
 };
-
 
 export default {
   name: "SelectGlyphInfoDropdown",
@@ -20,14 +19,18 @@ export default {
     availableTypes() {
       const typeEnum = GlyphInfoVue.types;
       const options = [typeEnum.NONE, typeEnum.LEVEL, typeEnum.RARITY];
-      if (GlyphSacrificeHandler.canSacrifice) options.push(typeEnum.SAC_VALUE);
-      if (EffarigUnlock.glyphFilter.isUnlocked) options.push(typeEnum.FILTER_SCORE);
+      if (GlyphSacrificeHandler.canSacrifice) {
+        options.push(typeEnum.SAC_VALUE);
+      }
+      if (EffarigUnlock.glyphFilter.isUnlocked) {
+        options.push(typeEnum.FILTER_SCORE);
+      }
       if (Ra.unlocks.unlockGlyphAlchemy.canBeApplied) {
         options.push(typeEnum.CURRENT_REFINE);
         options.push(typeEnum.MAX_REFINE);
       }
       return options;
-    }
+    },
   },
   methods: {
     setType(type) {
@@ -36,8 +39,8 @@ export default {
     },
     getType(type) {
       return GlyphInfoVue.labels[type];
-    }
-  }
+    },
+  },
 };
 </script>
 

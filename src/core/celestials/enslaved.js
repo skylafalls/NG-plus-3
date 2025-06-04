@@ -25,8 +25,8 @@ export const ENSLAVED_UNLOCKS = {
       const hasRarityRequirement = strengthToRarity(player.records.bestReality.glyphStrength).gte(100);
       return `Unlock The Nameless Ones' Reality (requires ${hasLevelRequirement ? "[✓]" : "[✗]"} a level
       ${formatInt(5000)} Glyph and ${hasRarityRequirement ? "[✓]" : "[✗]"} a ${formatRarity(new Decimal(100))} rarity Glyph)`;
-    }
-  }
+    },
+  },
 };
 
 export const Enslaved = {
@@ -43,22 +43,28 @@ export const Enslaved = {
   currentBlackHoleStoreAmountPerMs: DC.D0,
   tachyonNerf: 0.3,
   toggleStoreBlackHole() {
-    if (!this.canModifyGameTimeStorage) return;
+    if (!this.canModifyGameTimeStorage) {
+      return;
+    }
     player.celestials.enslaved.isStoring = !player.celestials.enslaved.isStoring;
     player.celestials.enslaved.isStoringReal = false;
   },
   toggleStoreReal() {
-    if (!this.canModifyRealTimeStorage && !this.isStoredRealTimeCapped) return;
+    if (!this.canModifyRealTimeStorage && !this.isStoredRealTimeCapped) {
+      return;
+    }
     player.celestials.enslaved.isStoringReal = !player.celestials.enslaved.isStoringReal;
     player.celestials.enslaved.isStoring = false;
   },
   toggleAutoStoreReal() {
-    if (!this.canModifyRealTimeStorage) return;
+    if (!this.canModifyRealTimeStorage) {
+      return;
+    }
     player.celestials.enslaved.autoStoreReal = !player.celestials.enslaved.autoStoreReal;
   },
   get canModifyGameTimeStorage() {
-    return Enslaved.isUnlocked && !Pelle.isDoomed && !BlackHoles.arePaused && !EternityChallenge(12).isRunning &&
-      !Enslaved.isRunning && !Laitela.isRunning;
+    return Enslaved.isUnlocked && !Pelle.isDoomed && !BlackHoles.arePaused && !EternityChallenge(12).isRunning
+      && !Enslaved.isRunning && !Laitela.isRunning;
   },
   get canModifyRealTimeStorage() {
     return Enslaved.isUnlocked && !Pelle.isDoomed;
@@ -86,7 +92,9 @@ export const Enslaved = {
     return player.celestials.enslaved.isAutoReleasing && !BlackHoles.areNegative && !Pelle.isDisabled("blackhole");
   },
   storeRealTime(diffVal) {
-    if (Pelle.isDoomed) return;
+    if (Pelle.isDoomed) {
+      return;
+    }
     const thisUpdate = Date.now();
     const diff = diffVal === undefined ? Decimal.max(thisUpdate - player.lastUpdate, 0) : diffVal;
     const efficiency = this.storedRealTimeEfficiency;
@@ -97,7 +105,9 @@ export const Enslaved = {
       player.celestials.enslaved.storedReal = maxTime;
     }
     // More than 24 hours in milliseconds
-    if (player.celestials.enslaved.storedReal.gte(24 * 60 * 60 * 1000)) SecretAchievement(46).unlock();
+    if (player.celestials.enslaved.storedReal.gte(24 * 60 * 60 * 1000)) {
+      SecretAchievement(46).unlock();
+    }
     player.lastUpdate = thisUpdate;
   },
   autoStoreRealTime(diffMs) {
@@ -108,15 +118,19 @@ export const Enslaved = {
     return diffMs - used;
   },
   canRelease(auto) {
-    return !Enslaved.isStoringRealTime && !EternityChallenge(12).isRunning && !Laitela.isRunning &&
-      !(Enslaved.isRunning && auto) && !Pelle.isDoomed;
+    return !Enslaved.isStoringRealTime && !EternityChallenge(12).isRunning && !Laitela.isRunning
+      && !(Enslaved.isRunning && auto) && !Pelle.isDoomed;
   },
   // "autoRelease" should only be true when called with the Ra upgrade
   useStoredTime(autoRelease) {
-    if (!this.canRelease(autoRelease)) return;
+    if (!this.canRelease(autoRelease)) {
+      return;
+    }
     const maxInversion = player.requirementChecks.reality.slowestBH.lte(1e-300);
     if (ImaginaryUpgrade(24).isLockingMechanics && Ra.isRunning && maxInversion) {
-      if (!autoRelease) ImaginaryUpgrade(24).tryShowWarningModal("discharge your Black Hole");
+      if (!autoRelease) {
+        ImaginaryUpgrade(24).tryShowWarningModal("discharge your Black Hole");
+      }
       return;
     }
     player.requirementChecks.reality.slowestBH = DC.D1;
@@ -127,7 +141,9 @@ export const Enslaved = {
         EnslavedProgress.storedTime.giveProgress();
       }
     }
-    if (autoRelease) release = release.mul(0.01);
+    if (autoRelease) {
+      release = release.mul(0.01);
+    }
     this.nextTickDiff = Decimal.clampMax(release, this.timeCap);
     this.isReleaseTick = true;
     // Effective gamespeed from stored time assumes a "default" 50 ms update rate for consistency
@@ -143,8 +159,12 @@ export const Enslaved = {
     return player.celestials.enslaved.stored.gte(info.price) && info.secondaryRequirement() && !this.has(info);
   },
   buyUnlock(info) {
-    if (!this.canBuy(info)) return false;
-    if (info.id === ENSLAVED_UNLOCKS.RUN.id) this.quotes.unlockRun.show();
+    if (!this.canBuy(info)) {
+      return false;
+    }
+    if (info.id === ENSLAVED_UNLOCKS.RUN.id) {
+      this.quotes.unlockRun.show();
+    }
     player.celestials.enslaved.stored = player.celestials.enslaved.stored.sub(info.price);
     player.celestials.enslaved.unlocks.push(info.id);
     return true;
@@ -190,7 +210,9 @@ export const Enslaved = {
     return this.realityBoostRatio.gt(1) && !Pelle.isDoomed && !isInCelestialReality();
   },
   storedTimeInsideEnslaved(stored) {
-    if (stored.lte(1e3)) return stored;
+    if (stored.lte(1e3)) {
+      return stored;
+    }
     return Decimal.pow(10, Decimal.pow(Decimal.log10(stored.div(1e3)), 0.55)).times(1e3);
   },
   feelEternity() {
@@ -219,7 +241,9 @@ export const Enslaved = {
     return Math.clampMin(hintTime / TimeSpan.fromDays(new Decimal(1)).totalMilliseconds.toNumber(), 0);
   },
   spendTimeForHint() {
-    if (player.celestials.enslaved.stored < this.nextHintCost) return false;
+    if (player.celestials.enslaved.stored < this.nextHintCost) {
+      return false;
+    }
     player.celestials.enslaved.stored -= this.nextHintCost;
     if (Enslaved.hintCostIncreases === 0) {
       player.celestials.enslaved.zeroHintTime = Date.now() + TimeSpan.fromDays(1).totalMilliseconds.toNumber();
@@ -250,8 +274,13 @@ export const Enslaved = {
 };
 
 class EnslavedProgressState extends BitUpgradeState {
-  get bits() { return player.celestials.enslaved.hintBits; }
-  set bits(value) { player.celestials.enslaved.hintBits = value; }
+  get bits() {
+    return player.celestials.enslaved.hintBits;
+  }
+
+  set bits(value) {
+    player.celestials.enslaved.hintBits = value;
+  }
 
   get hasProgress() {
     return Boolean(player.celestials.enslaved.progressBits & (1 << this.id));
@@ -272,8 +301,8 @@ class EnslavedProgressState extends BitUpgradeState {
   giveProgress() {
     // Bump the last hint time appropriately if the player found the hint
     if (this.hasHint && !this.hasProgress) {
-      player.celestials.enslaved.zeroHintTime -= Math.log(2) /
-        Math.log(3) * TimeSpan.fromDays(1).totalMilliseconds.toNumber();
+      player.celestials.enslaved.zeroHintTime -= Math.log(2)
+        / Math.log(3) * TimeSpan.fromDays(1).totalMilliseconds.toNumber();
       GameUI.notify.success("You found a crack in The Nameless Ones' Reality!", 10000);
     }
     player.celestials.enslaved.progressBits |= (1 << this.id);
@@ -282,7 +311,7 @@ class EnslavedProgressState extends BitUpgradeState {
 
 export const EnslavedProgress = mapGameDataToObject(
   GameDatabase.celestials.enslaved.progress,
-  config => new EnslavedProgressState(config)
+  config => new EnslavedProgressState(config),
 );
 
 export const Tesseracts = {
@@ -300,17 +329,22 @@ export const Tesseracts = {
   },
 
   buyTesseract() {
-    if (!this.canBuyTesseract) return;
-    if (GameEnd.creditsEverClosed) return;
+    if (!this.canBuyTesseract) {
+      return;
+    }
+    if (GameEnd.creditsEverClosed) {
+      return;
+    }
     player.celestials.enslaved.tesseracts = player.celestials.enslaved.tesseracts.add(1);
   },
 
   // This used to be an array, but tess costs are just a super easy thing to calculate in BE so i dont care
 
   costs(index) {
-    // eslint-disable-next-line no-param-reassign
     index = index.add(1);
-    if (index.lte(3)) return Decimal.pow10(index.times(2e7));
+    if (index.lte(3)) {
+      return Decimal.pow10(index.times(2e7));
+    }
     return Decimal.pow10((index.sub(3)).factorial().times(Decimal.pow(2, index.sub(3))).times(6e7));
   },
 
@@ -334,5 +368,7 @@ export const Tesseracts = {
 };
 
 EventHub.logic.on(GAME_EVENT.TAB_CHANGED, () => {
-  if (Tab.celestials.enslaved.isOpen) Enslaved.quotes.initial.show();
+  if (Tab.celestials.enslaved.isOpen) {
+    Enslaved.quotes.initial.show();
+  }
 });

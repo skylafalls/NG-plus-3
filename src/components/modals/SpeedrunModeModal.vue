@@ -25,7 +25,9 @@ export default {
       this.onInfoPage = false;
     },
     startRun() {
-      if (!this.willStartRun) return;
+      if (!this.willStartRun) {
+        return;
+      }
       this.emitClose();
       Speedrun.prepareSave(Speedrun.generateName(this.name));
     },

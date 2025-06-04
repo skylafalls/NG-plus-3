@@ -6,13 +6,13 @@ import { BACKUP_SLOT_TYPE } from "@/core/storage";
 export default {
   name: "BackupEntry",
   components: {
-    PrimaryButton
+    PrimaryButton,
   },
   props: {
     slotData: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {
@@ -24,7 +24,9 @@ export default {
       return GameStorage.loadFromBackup(this.slotData.id);
     },
     progressStr() {
-      if (!this.save) return "(Empty)";
+      if (!this.save) {
+        return "(Empty)";
+      }
 
       // These will be checked in order; the first nonzero resource will be returned
       const resources = [this.save.celestials.pelle.realityShards,
@@ -32,7 +34,7 @@ export default {
         this.save.reality.realityMachines,
         this.save.eternityPoints,
         this.save.infinityPoints,
-        this.save.antimatter
+        this.save.antimatter,
       ];
       const names = ["Reality Shards",
         "Imaginary Machine Cap",
@@ -43,7 +45,9 @@ export default {
 
       for (let index = 0; index < resources.length; index++) {
         const val = new Decimal(resources[index]);
-        if (val.gt(0)) return `${names[index]}: ${formatPostBreak(val, 2)}`;
+        if (val.gt(0)) {
+          return `${names[index]}: ${formatPostBreak(val, 2)}`;
+        }
       }
 
       // In practice this should never happen, unless a save triggers on the same tick the very first AD1 is bought
@@ -52,13 +56,17 @@ export default {
     slotType() {
       const formattedTime = this.slotData.intervalStr?.();
       switch (this.slotData.type) {
-        case BACKUP_SLOT_TYPE.ONLINE: {return `Saves every ${formattedTime} online`;
+        case BACKUP_SLOT_TYPE.ONLINE: {
+          return `Saves every ${formattedTime} online`;
         }
-        case BACKUP_SLOT_TYPE.OFFLINE: {return `Saves after ${formattedTime} offline`;
+        case BACKUP_SLOT_TYPE.OFFLINE: {
+          return `Saves after ${formattedTime} offline`;
         }
-        case BACKUP_SLOT_TYPE.RESERVE: {return "Pre-loading save";
+        case BACKUP_SLOT_TYPE.RESERVE: {
+          return "Pre-loading save";
         }
-        default: {throw new Error("Unrecognized backup save type");
+        default: {
+          throw new Error("Unrecognized backup save type");
         }
       }
     },
@@ -74,7 +82,9 @@ export default {
       this.currTime = Date.now();
     },
     load() {
-      if (!this.save) return;
+      if (!this.save) {
+        return;
+      }
       // This seems to be the only way to properly hide the modal after the save is properly loaded,
       // since the offline progress modal appears nearly immediately after clicking the button
       Modal.hide();

@@ -41,7 +41,9 @@ export class TimeDimensionAutobuyerState extends IntervaledAutobuyerState {
     Autobuyer.epMult.tick();
 
     const tier = this.tier;
-    if (!TimeDimension(tier).isAvailableForPurchase) return;
+    if (!TimeDimension(tier).isAvailableForPurchase) {
+      return;
+    }
     super.tick();
     if (Currency.eternityPoints.value.add(1).log10().gte(10)) {
       buyMaxTimeDimension(tier, 1, true);
@@ -50,8 +52,19 @@ export class TimeDimensionAutobuyerState extends IntervaledAutobuyerState {
     }
   }
 
-  static get entryCount() { return 8; }
-  static get autobuyerGroupName() { return "Time Dimension"; }
-  static get isActive() { return player.auto.timeDims.isActive; }
-  static set isActive(value) { player.auto.timeDims.isActive = value; }
+  static get entryCount() {
+    return 8;
+  }
+
+  static get autobuyerGroupName() {
+    return "Time Dimension";
+  }
+
+  static get isActive() {
+    return player.auto.timeDims.isActive;
+  }
+
+  static set isActive(value) {
+    player.auto.timeDims.isActive = value;
+  }
 }

@@ -45,10 +45,10 @@ export const Autobuyer = {
   singularity: new SingularityAutobuyerState(),
   tickspeed: new TickspeedAutobuyerState(),
   timeDimension: TimeDimensionAutobuyerState.createAccessor(),
-  timeTheorem: new TimeTheoremAutobuyerState()
+  timeTheorem: new TimeTheoremAutobuyerState(),
 };
 
-export const Autobuyers = (function() {
+export const Autobuyers = (function () {
   const antimatterDimensions = Autobuyer.antimatterDimension.zeroIndexed;
   const infinityDimensions = Autobuyer.infinityDimension.zeroIndexed;
   const timeDimensions = Autobuyer.timeDimension.zeroIndexed;
@@ -125,13 +125,17 @@ export const Autobuyers = (function() {
     },
 
     tick() {
-      if (!player.auto.autobuyersOn) return;
+      if (!player.auto.autobuyersOn) {
+        return;
+      }
       PerformanceStats.start("Autobuyers");
 
       // The canTick condition must be checked after the previous autobuyer has triggered
       // in order to avoid slow dimension autobuyers.
       for (const autobuyer of Autobuyers.all) {
-        if (autobuyer.canTick) autobuyer.tick();
+        if (autobuyer.canTick) {
+          autobuyer.tick();
+        }
       }
 
       PerformanceStats.end();
@@ -148,7 +152,7 @@ export const Autobuyers = (function() {
       for (const autobuyer of Autobuyers.all) {
         autobuyer.reset();
       }
-    }
+    },
   };
 }());
 

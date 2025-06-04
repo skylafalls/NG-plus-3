@@ -8,17 +8,17 @@ export default {
   name: "NormalAchievement",
   components: {
     EffectDisplay,
-    HintText
+    HintText,
   },
   props: {
     achievement: {
       type: Object,
-      required: true
+      required: true,
     },
     isObscured: {
       type: Boolean,
-      required: false
-    }
+      required: false,
+    },
   },
   data() {
     return {
@@ -45,7 +45,7 @@ export default {
     },
     styleObject() {
       return {
-        "background-position": `-${(this.achievement.column - 1) * 104}px -${(this.achievement.row - 1) * 104}px`
+        "background-position": `-${(this.achievement.column - 1) * 104}px -${(this.achievement.row - 1) * 104}px`,
       };
     },
     classObject() {
@@ -62,8 +62,12 @@ export default {
       };
     },
     indicatorIconClass() {
-      if (this.isUnlocked) return "fas fa-check";
-      if (this.isPreRealityAchievement && !this.isDisabled) return "far fa-clock";
+      if (this.isUnlocked) {
+        return "fas fa-check";
+      }
+      if (this.isPreRealityAchievement && !this.isDisabled) {
+        return "far fa-clock";
+      }
       return "fas fa-times";
     },
     indicatorClassObject() {
@@ -99,12 +103,16 @@ export default {
       return this.makeGarbledTemplate(this.config.description);
     },
     achievedTime() {
-      if (!player.speedrun.isActive) return null;
-      if (this.achievementTime === undefined) return "Not Achieved yet";
+      if (!player.speedrun.isActive) {
+        return null;
+      }
+      if (this.achievementTime === undefined) {
+        return "Not Achieved yet";
+      }
       return this.achievementTime === 0
         ? "Given at Speedrun start"
         : `Achieved after ${TimeSpan.fromMilliseconds(new Decimal(this.achievementTime)).toStringShort()}`;
-    }
+    },
   },
   beforeDestroy() {
     clearTimeout(this.mouseOverInterval);
@@ -129,7 +137,9 @@ export default {
       } else {
         this.garbleKey = this.id;
       }
-      if (player.speedrun.isActive) this.achievementTime = player.speedrun.achievementTimes[this.id];
+      if (player.speedrun.isActive) {
+        this.achievementTime = player.speedrun.achievementTimes[this.id];
+      }
     },
     onMouseEnter() {
       clearTimeout(this.mouseOverInterval);
@@ -145,8 +155,9 @@ export default {
       const text = `${input}`;
       let garbled = "";
       for (let i = 0; i < text.length; i++) {
-        if (text[i] === " ") garbled += " ";
-        else {
+        if (text[i] === " ") {
+          garbled += " ";
+        } else {
           const n = text[i].codePointAt();
           // Essentially seeded randomness so that the static parts of the randomized text are deterministic
           garbled += String.fromCodePoint(33 + ((n * n + i * i) % 93));
@@ -156,7 +167,9 @@ export default {
     },
     // When appropriate, garbles input text for achievements on the last row. Otherwise leaves it unchanged
     processText(unmodified, garbledTemplate) {
-      if (!this.isObscured) return unmodified;
+      if (!this.isObscured) {
+        return unmodified;
+      }
 
       // The garbling effect often replaces spaces with non-spaces, which affects line length and can cause individual
       // lines to become long enough that they can't word-wrap. To address that, we take the template as a reference
@@ -164,12 +177,15 @@ export default {
       const raw = wordShift.randomCrossWords(garbledTemplate);
       let modified = "";
       for (let i = 0; i < raw.length; i++) {
-        if (garbledTemplate[i] === " ") modified += " ";
-        else modified += raw[i];
+        if (garbledTemplate[i] === " ") {
+          modified += " ";
+        } else {
+          modified += raw[i];
+        }
       }
       return modified;
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -1,7 +1,9 @@
 import { DC } from "./constants";
 
 export const MachineHandler = {
-  get baseRMCap() { return DC.E1000; },
+  get baseRMCap() {
+    return DC.E1000;
+  },
 
   get hardcapRM() {
     return this.baseRMCap.times(ImaginaryUpgrade(6).effectOrDefault(1));
@@ -19,12 +21,18 @@ export const MachineHandler = {
   get uncappedRM() {
     let log10FinalEP = player.records.thisReality.maxEP.plus(gainedEternityPoints()).max(1).log10();
     if (!PlayerProgress.realityUnlocked()) {
-      if (log10FinalEP.gt(8000)) log10FinalEP = new Decimal(8000);
-      if (log10FinalEP.gt(6000)) log10FinalEP = log10FinalEP.sub((log10FinalEP.sub(6000)).times(0.75));
+      if (log10FinalEP.gt(8000)) {
+        log10FinalEP = new Decimal(8000);
+      }
+      if (log10FinalEP.gt(6000)) {
+        log10FinalEP = log10FinalEP.sub((log10FinalEP.sub(6000)).times(0.75));
+      }
     }
     let rmGain = DC.E3.pow(log10FinalEP.div(4000).sub(1));
     // Increase base RM gain if <10 RM
-    if (rmGain.gte(1) && rmGain.lt(10)) rmGain = (log10FinalEP).minus(26).mul(27).div(4000);
+    if (rmGain.gte(1) && rmGain.lt(10)) {
+      rmGain = (log10FinalEP).minus(26).mul(27).div(4000);
+    }
     rmGain = rmGain.times(this.realityMachineMultiplier);
     return rmGain.floor();
   },
@@ -73,12 +81,14 @@ export const MachineHandler = {
 
   estimateIMTimer(cost) {
     const imCap = this.currentIMCap;
-    if (imCap.lte(cost)) return DC.BEMAX;
+    if (imCap.lte(cost)) {
+      return DC.BEMAX;
+    }
     const currentIM = Currency.imaginaryMachines.value;
     // This is doing log(a, 1/2) - log(b, 1/2) where a is % left to imCap of cost and b is % left to imCap of current
     // iM. log(1 - x, 1/2) should be able to estimate the time taken for iM to increase from 0 to imCap * x since every
     // fixed interval the difference between current iM to max iM should decrease by a factor of 1/2.
     return Decimal.max(0, Decimal.log(imCap.div(imCap.sub(cost)), 2).sub(Decimal.log(
       imCap.div(imCap.sub(currentIM)), 2))).times(this.scaleTimeForIM);
-  }
+  },
 };

@@ -27,19 +27,27 @@ export class DilationTimeStudyState extends TimeStudyState {
   }
 
   purchase(quiet = false) {
-    if (this.isBought || !this.canBeBought) return false;
+    if (this.isBought || !this.canBeBought) {
+      return false;
+    }
     if (this.id === 1) {
       // ID 1 is the dilation unlock study
       if (!quiet) {
         Tab.eternity.dilation.show();
       }
       if (Perk.autounlockDilation1.canBeApplied) {
-        for (const id of [4, 5, 6]) player.dilation.upgrades.add(id);
+        for (const id of [4, 5, 6]) {
+          player.dilation.upgrades.add(id);
+        }
       }
       if (Perk.autounlockDilation2.canBeApplied) {
-        for (const id of [7, 8, 9]) player.dilation.upgrades.add(id);
+        for (const id of [7, 8, 9]) {
+          player.dilation.upgrades.add(id);
+        }
       }
-      if (!Pelle.isDoomed) Currency.tachyonParticles.bumpTo(Perk.startTP.effectOrDefault(0));
+      if (!Pelle.isDoomed) {
+        Currency.tachyonParticles.bumpTo(Perk.startTP.effectOrDefault(0));
+      }
       if (Ra.unlocks.unlockDilationStartingTP.canBeApplied && !isInCelestialReality() && !Pelle.isDoomed) {
         Currency.tachyonParticles.bumpTo(getTP(Ra.unlocks.unlockDilationStartingTP.effectOrDefault(0), false));
       }
@@ -48,6 +56,7 @@ export class DilationTimeStudyState extends TimeStudyState {
     if (this.id === 6) {
       if (!quiet) {
         Tab.dimensions.meta.show();
+        Currency.metaAntimatter.bumpTo(10);
       }
     }
 
@@ -59,7 +68,7 @@ export class DilationTimeStudyState extends TimeStudyState {
 
 DilationTimeStudyState.studies = mapGameData(
   GameDatabase.eternity.timeStudies.dilation,
-  config => new DilationTimeStudyState(config)
+  config => new DilationTimeStudyState(config),
 );
 
 /**
@@ -71,7 +80,7 @@ TimeStudy.dilation = DilationTimeStudyState.studies[1];
  * @param {number} tier
  * @returns {DilationTimeStudyState}
  */
-TimeStudy.timeDimension = function(tier) {
+TimeStudy.timeDimension = function (tier) {
   return DilationTimeStudyState.studies[tier - 3];
 };
 
@@ -85,6 +94,6 @@ TimeStudy.metaDimensions = DilationTimeStudyState.studies[6];
  */
 TimeStudy.masteryStudies = DilationTimeStudyState.studies[7];
 
-TimeStudy.boughtDilationTS = function() {
+TimeStudy.boughtDilationTS = function () {
   return player.dilation.studies.map(id => DilationTimeStudyState.studies[id]);
 };

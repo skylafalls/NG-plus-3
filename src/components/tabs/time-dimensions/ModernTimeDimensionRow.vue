@@ -8,17 +8,17 @@ export default {
   components: {
     GenericDimensionRowText,
     PrimaryButton,
-    PrimaryToggleButton
+    PrimaryToggleButton,
   },
   props: {
     tier: {
       type: Number,
-      required: true
+      required: true,
     },
     areAutobuyersUnlocked: {
       type: Boolean,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {
@@ -53,8 +53,12 @@ export default {
       return this.formattedEPCost;
     },
     tooltipContents() {
-      if (this.showTTCost) return `${this.formattedEPCost}<br>${this.timeEstimate}`;
-      if (this.isCapped) return `Nameless prevents the purchase of more than ${format(1)} Time Dimension`;
+      if (this.showTTCost) {
+        return `${this.formattedEPCost}<br>${this.timeEstimate}`;
+      }
+      if (this.isCapped) {
+        return `Nameless prevents the purchase of more than ${format(1)} Time Dimension`;
+      }
       return `Purchased ${quantifyInt("time", this.bought)}`;
     },
     showRow() {
@@ -73,15 +77,17 @@ export default {
       return this.cost.max(1).log10().lte(1e6);
     },
     timeEstimate() {
-      if (!this.showTTCost || this.ttGen.eq(0)) return "";
+      if (!this.showTTCost || this.ttGen.eq(0)) {
+        return "";
+      }
       const time = Decimal.sub(this.ttCost, this.currTT).dividedBy(this.ttGen);
       return time.gt(0) ? `Enough TT in ${TimeSpan.fromSeconds(time).toStringShort()}` : "";
-    }
+    },
   },
   watch: {
     isAutobuyerOn(newValue) {
       Autobuyer.timeDimension(this.tier).isActive = newValue;
-    }
+    },
   },
   methods: {
     update() {
@@ -104,7 +110,9 @@ export default {
       this.isAutobuyerOn = Autobuyer.timeDimension(this.tier).isActive;
       this.realityUnlocked = PlayerProgress.realityUnlocked();
       this.showTTCost = !this.isUnlocked && !this.shiftDown;
-      if (this.tier > 4) this.ttCost = TimeStudy.timeDimension(this.tier).cost;
+      if (this.tier > 4) {
+        this.ttCost = TimeStudy.timeDimension(this.tier).cost;
+      }
       this.currTT.copyFrom(Currency.timeTheorems.value);
       this.ttGen.copyFrom(getTTPerSecond().times(getGameSpeedupFactor()));
     },
@@ -117,8 +125,8 @@ export default {
     },
     buyMaxTimeDimension() {
       buyMaxTimeDimension(this.tier);
-    }
-  }
+    },
+  },
 };
 </script>
 

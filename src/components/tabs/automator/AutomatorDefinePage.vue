@@ -27,7 +27,7 @@ export default {
     },
     hasConstants() {
       return this.constants.length > 1 || this.constants[0] !== "";
-    }
+    },
   },
   created() {
     // This key-swaps the container for all the constants in order to force a re-render when externally changed
@@ -43,12 +43,14 @@ export default {
       this.constants = this.count < this.maxConstantCount ? [...existingValues, ""] : [...existingValues];
     },
     deleteAllConstants() {
-      if (this.hasConstants) Modal.clearAutomatorConstants.show();
+      if (this.hasConstants) {
+        Modal.clearAutomatorConstants.show();
+      }
     },
     importPresets() {
       Modal.importTSConstants.show();
     },
-  }
+  },
 };
 </script>
 

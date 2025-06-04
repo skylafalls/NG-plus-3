@@ -8,12 +8,12 @@ export default {
   components: {
     ChallengeGrid,
     ChallengeTabHeader,
-    InfinityChallengeBox
+    InfinityChallengeBox,
   },
   data() {
     return {
       nextIC: 0,
-      showAllChallenges: false
+      showAllChallenges: false,
     };
   },
   computed: {
@@ -24,11 +24,13 @@ export default {
       const first = this.nextIC?.id === 1;
       const next = InfinityChallenges.nextICUnlockAM;
 
-      if (first) return `The first Infinity Challenge unlocks at ${format(next)} antimatter.`;
+      if (first) {
+        return `The first Infinity Challenge unlocks at ${format(next)} antimatter.`;
+      }
       return next === undefined
         ? "All Infinity Challenges unlocked"
         : `Next Infinity Challenge unlocks at ${format(next)} antimatter.`;
-    }
+    },
   },
   methods: {
     update() {
@@ -37,8 +39,8 @@ export default {
     },
     isChallengeVisible(challenge) {
       return challenge.isUnlocked || (this.showAllChallenges && PlayerProgress.eternityUnlocked());
-    }
-  }
+    },
+  },
 };
 </script>
 

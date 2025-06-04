@@ -1,5 +1,3 @@
-/* eslint-disable no-param-reassign */
-
 // Copyright (c) 2011, Daniel Guerrero
 // All rights reserved.
 //
@@ -48,7 +46,7 @@ export function decodeArrayBuffer(input) {
 function removePaddingChars(input) {
   const lkey = keyStr.indexOf(input.charAt(input.length - 1));
   if (lkey === 64) {
-    return input.slice(0, - 1);
+    return input.slice(0, -1);
   }
   return input;
 }
@@ -66,10 +64,11 @@ export function decodeBase64Binary(input, arrayBuffer) {
   let i = 0;
   let j = 0;
 
-  if (arrayBuffer)
+  if (arrayBuffer) {
     array = new Uint8Array(arrayBuffer);
-  else
+  } else {
     array = new Uint8Array(bytes);
+  }
 
   input = input.replaceAll(/[^A-Za-z0-9+/=]/gu, "");
 
@@ -85,8 +84,12 @@ export function decodeBase64Binary(input, arrayBuffer) {
     chr3 = ((enc3 & 3) << 6) | enc4;
 
     array[i] = chr1;
-    if (enc3 !== 64) array[i + 1] = chr2;
-    if (enc4 !== 64) array[i + 2] = chr3;
+    if (enc3 !== 64) {
+      array[i + 1] = chr2;
+    }
+    if (enc4 !== 64) {
+      array[i + 2] = chr3;
+    }
   }
 
   return array;

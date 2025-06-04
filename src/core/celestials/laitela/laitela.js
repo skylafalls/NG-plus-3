@@ -35,9 +35,9 @@ export const Laitela = {
     return ImaginaryUpgrade(15).isBought && !Pelle.isDisabled("continuum");
   },
   get continuumActive() {
-    //return this.continuumUnlocked && !player.auto.disableContinuum && !Pelle.isDisabled("continuum");
-    // This is temporarily enabled until I figure out and fix the weird AD autobuyer staggering pattern.
-    return true;
+    // return this.continuumUnlocked && !player.auto.disableContinuum && !Pelle.isDisabled("continuum");
+    // This is temporarily enabled after break infinity until I figure out and fix the weird AD autobuyer staggering pattern.
+    return player.break;
   },
   setContinuum(x) {
     player.auto.disableContinuum = !x;
@@ -78,7 +78,9 @@ export const Laitela = {
     return Laitela.annihilationUnlocked && Currency.darkMatter.gte(this.annihilationDMRequirement);
   },
   annihilate(force) {
-    if (!force && !this.canAnnihilate) return false;
+    if (!force && !this.canAnnihilate) {
+      return false;
+    }
     this.celestial.darkMatterMult = this.celestial.darkMatterMult.add(this.darkMatterMultGain);
     DarkMatterDimensions.reset();
     Laitela.quotes.annihilation.show();
@@ -111,9 +113,11 @@ export const Laitela = {
     this.celestial.singularityCapIncreases = DC.D0;
   },
   quotes: Quotes.laitela,
-  symbol: "ᛝ"
+  symbol: "ᛝ",
 };
 
 EventHub.logic.on(GAME_EVENT.TAB_CHANGED, () => {
-  if (Tab.celestials.laitela.isOpen) Laitela.quotes.unlock.show();
+  if (Tab.celestials.laitela.isOpen) {
+    Laitela.quotes.unlock.show();
+  }
 });

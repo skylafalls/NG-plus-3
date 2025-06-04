@@ -6,8 +6,12 @@ export const gamespeed = {
   total: {
     name: "Game speed",
     displayOverride: () => {
-      if (Enslaved.isStoringRealTime) return `Set to ${format(0)} (storing real time)`;
-      if (EternityChallenge(12).isRunning) return `${formatX(1)}/${formatInt(1000)} (fixed)`;
+      if (Enslaved.isStoringRealTime) {
+        return `Set to ${format(0)} (storing real time)`;
+      }
+      if (EternityChallenge(12).isRunning) {
+        return `${formatX(1)}/${formatInt(1000)} (fixed)`;
+      }
       const curr = getGameSpeedupFactor();
 
       const bh = MultiplierTabHelper.blackHoleSpeeds();
@@ -24,7 +28,7 @@ export const gamespeed = {
     isActive: () => PlayerProgress.seenAlteredSpeed(),
     dilationEffect: () => (Effarig.isRunning ? Effarig.multDilation : 1),
     isDilated: true,
-    overlay: ["Δ", `<i class="fas fa-clock" />`, `<i class="fas fa-circle" />`],
+    overlay: ["Δ", "<i class=\"fas fa-clock\" />", "<i class=\"fas fa-circle\" />"],
   },
   glyph: {
     name: "Equipped Glyphs",
@@ -97,5 +101,5 @@ export const gamespeed = {
     powValue: () => Math.clampMax(Time.thisRealityRealTime.totalMinutes / 10, 1),
     isActive: () => Laitela.isRunning,
     icon: MultiplierTabIcons.GENERIC_LAITELA,
-  }
+  },
 };

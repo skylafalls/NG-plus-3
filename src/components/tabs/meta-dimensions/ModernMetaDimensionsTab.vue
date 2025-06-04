@@ -46,8 +46,8 @@ export default {
       this.dimBoostMultiplierPower.copyFrom(MetaDimensions.metaAMtoDimBoostExponent);
 
       this.multiplierText = `Buy 10 Dimension purchase multiplier: ${formatX(this.buy10Mult, 2, 2)}`;
-    }
-  }
+    },
+  },
 };
 </script>
 

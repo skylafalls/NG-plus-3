@@ -10,7 +10,7 @@ export default {
     GlyphCustomizationSingleType,
     PrimaryButton,
     PrimaryToggleButton,
-    GlyphComponent
+    GlyphComponent,
   },
   data() {
     return {
@@ -30,10 +30,10 @@ export default {
     },
     glyphIconProps() {
       return {
-        size: "2.5rem",
+        "size": "2.5rem",
         "glow-blur": "0.3rem",
         "glow-spread": "0.1rem",
-        "text-proportion": 0.7
+        "text-proportion": 0.7,
       };
     },
     hasCustomSets() {
@@ -41,7 +41,7 @@ export default {
     },
     hasSpecialTypes() {
       return GlyphAppearanceHandler.availableTypes.length > 0;
-    }
+    },
   },
   watch: {
     enabled(newValue) {
@@ -71,8 +71,12 @@ export default {
     },
     fakeGlyph(type) {
       let typeName = "power";
-      if (type === "reality") typeName = "reality";
-      if (type === "cursed") typeName = "cursed";
+      if (type === "reality") {
+        typeName = "reality";
+      }
+      if (type === "cursed") {
+        typeName = "cursed";
+      }
       return {
         // This are just dummy values to make sure that GlyphComponent doesn't throw errors; only the cosmetic aspects
         // will end up being visible in this case anyway (as they override anything type would otherwise show). Type
@@ -94,12 +98,14 @@ export default {
     },
     resetIndividual() {
       for (const glyph of Glyphs.allGlyphs) {
-        if (!glyph.fixedCosmetic) glyph.cosmetic = undefined;
+        if (!glyph.fixedCosmetic) {
+          glyph.cosmetic = undefined;
+        }
       }
       this.defaultKeySwap = false;
       EventHub.dispatch(GAME_EVENT.GLYPH_VISUAL_CHANGE);
     },
-  }
+  },
 };
 </script>
 

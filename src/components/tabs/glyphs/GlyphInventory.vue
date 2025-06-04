@@ -4,7 +4,7 @@ import GlyphComponent from "@/components/GlyphComponent";
 export default {
   name: "GlyphInventory",
   components: {
-    GlyphComponent
+    GlyphComponent,
   },
   data() {
     return {
@@ -37,13 +37,19 @@ export default {
       return (row - 1) * this.colCount + (col - 1);
     },
     allowDrag(event) {
-      if (event.dataTransfer.types.includes(GLYPH_MIME_TYPE)) event.preventDefault();
+      if (event.dataTransfer.types.includes(GLYPH_MIME_TYPE)) {
+        event.preventDefault();
+      }
     },
     drop(idx, event) {
       const id = parseInt(event.dataTransfer.getData(GLYPH_MIME_TYPE), 10);
-      if (isNaN(id)) return;
+      if (isNaN(id)) {
+        return;
+      }
       const glyph = Glyphs.findById(id);
-      if (!glyph) return;
+      if (!glyph) {
+        return;
+      }
       Glyphs.moveToSlot(glyph, idx);
     },
     removeGlyph(id, force) {
@@ -58,7 +64,9 @@ export default {
           this.doubleClickTimeOut = null;
         }, 200);
         this.clickedGlyphId = id;
-        if (!glyph) return;
+        if (!glyph) {
+          return;
+        }
         if (Glyphs.isMusicGlyph(glyph)) {
           new Audio(`audio/note${col}.mp3`).play();
         }
@@ -67,7 +75,9 @@ export default {
         clearTimeout(this.doubleClickTimeOut);
         this.doubleClickTimeOut = null;
         const idx = Glyphs.active.indexOf(null);
-        if (idx !== -1) Glyphs.equip(glyph, idx);
+        if (idx !== -1) {
+          Glyphs.equip(glyph, idx);
+        }
       }
     },
     glyphsChanged() {
@@ -81,8 +91,8 @@ export default {
     },
     isUnequipped(index) {
       return player.options.showUnequippedGlyphIcon && this.unequippedGlyphs.includes(this.inventory[index].id);
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -320,7 +320,9 @@ export class CostHandler {
   }
 
   buyOnce() {
-    if (this.cost.gt(this.config.currency)) return false;
+    if (this.cost.gt(this.config.currency)) {
+      return false;
+    }
     this.config.currency = this.config.currency.sub(this.cost);
     this.config.baseResource = this.config.baseResource.plus(1);
     return true;
@@ -331,7 +333,9 @@ export class CostHandler {
   }
 
   buyMax() {
-    if (this.cost.gt(this.config.currency)) return false;
+    if (this.cost.gt(this.config.currency)) {
+      return false;
+    }
     const currency = this.config.currency;
     const resource = this.config.baseResource;
 
@@ -344,7 +348,9 @@ export class CostHandler {
     // Second case: Player has enough for >= 2 baseResource.
     // Use the getBulkFor() function defined above, then subtract the required cost.
     // Sanity check: Is the baseResource/currency NaN?
-    if (!Decimal.isFinite(currency) || !Decimal.isFinite(resource)) return false;
+    if (!Decimal.isFinite(currency) || !Decimal.isFinite(resource)) {
+      return false;
+    }
 
     // Now here's the actual calulation.
     this.config.currency = currency.sub(this.getCostOf(resource));

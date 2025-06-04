@@ -11,7 +11,7 @@ export class Effect {
       throw new Error("Unknown effect value type.");
     }
     const createProperty = () => ({
-      configurable: false
+      configurable: false,
     });
     const addGetter = (property, v) => {
       if (isConstant(v)) {
@@ -143,7 +143,9 @@ export class Effect {
   }
 
   applyEffect(applyFn) {
-    if (this.canBeApplied) applyFn(this.effectValue);
+    if (this.canBeApplied) {
+      applyFn(this.effectValue);
+    }
   }
 
   get isCustomEffect() {

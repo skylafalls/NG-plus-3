@@ -20,13 +20,17 @@ export default {
       };
     },
     tooltip() {
-      if (this.isEnslaved) return "...eons stacked on eons stacked on eons stacked on eons stacked on ...";
+      if (this.isEnslaved) {
+        return "...eons stacked on eons stacked on eons stacked on eons stacked on ...";
+      }
       return;
     },
     text() {
-      if (this.isEnslaved) return "FEEL ETERNITY";
+      if (this.isEnslaved) {
+        return "FEEL ETERNITY";
+      }
       return this.isBroken ? "INFINITY IS BROKEN" : "BREAK INFINITY";
-    }
+    },
   },
   methods: {
     update() {
@@ -35,10 +39,13 @@ export default {
       this.isEnslaved = Enslaved.isRunning;
     },
     clicked() {
-      if (this.isEnslaved) Enslaved.feelEternity();
-      else if (!this.isBroken && this.isUnlocked) Modal.breakInfinity.show();
-    }
-  }
+      if (this.isEnslaved) {
+        Enslaved.feelEternity();
+      } else if (!this.isBroken && this.isUnlocked) {
+        Modal.breakInfinity.show();
+      }
+    },
+  },
 };
 </script>
 

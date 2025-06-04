@@ -10,7 +10,7 @@ export default {
     GlyphSetPreview,
     PerkShopUpgradeButton,
     CelestialQuoteHistory,
-    CustomizeableTooltip
+    CustomizeableTooltip,
   },
   data() {
     return {
@@ -50,7 +50,9 @@ export default {
         PerkShopUpgrade.autoSpeed,
         PerkShopUpgrade.musicGlyph,
       ];
-      if (this.raisedPerkShop) upgrades.push(PerkShopUpgrade.fillMusicGlyph);
+      if (this.raisedPerkShop) {
+        upgrades.push(PerkShopUpgrade.fillMusicGlyph);
+      }
       return upgrades;
     },
     runButtonClassObject() {
@@ -58,7 +60,7 @@ export default {
         "c-teresa-run-button__icon": true,
         "c-teresa-run-button__icon--running": this.isRunning,
         "c-celestial-run-button--clickable": !this.isDoomed,
-        "o-pelle-disabled-pointer": this.isDoomed
+        "o-pelle-disabled-pointer": this.isDoomed,
       };
     },
     pourButtonClassObject() {
@@ -68,7 +70,7 @@ export default {
         "o-teresa-shop-button--available": !this.isPouredAmountCapped,
         "o-teresa-shop-button--capped": this.isPouredAmountCapped,
         "c-teresa-pour--unlock-available": this.canUnlockNextPour,
-        "c-disabled-pour": this.isPouredAmountCapped
+        "c-disabled-pour": this.isPouredAmountCapped,
       };
     },
     pourText() {
@@ -84,7 +86,7 @@ export default {
     },
     unlockInfoTooltipArrowStyle() {
       return {
-        borderRight: "0.5rem solid var(--color-teresa--base)"
+        borderRight: "0.5rem solid var(--color-teresa--base)",
       };
     },
     isDoomed: () => Pelle.isDoomed,
@@ -120,7 +122,9 @@ export default {
         .some(unlock => this.rm.plus(this.pouredAmount).gte(unlock.price) && !unlock.isUnlocked).length > 0;
     },
     startRun() {
-      if (this.isDoomed) return;
+      if (this.isDoomed) {
+        return;
+      }
       Modal.celestials.show({ name: "Teresa's", number: 0 });
     },
     unlockDescriptionHeight(unlockInfo) {
@@ -134,10 +138,10 @@ export default {
     unlockInfoTooltipClass(unlockInfo) {
       return {
         "c-teresa-unlock-description": true,
-        "c-teresa-unlock-description--unlocked": this.hasUnlock(unlockInfo)
+        "c-teresa-unlock-description--unlocked": this.hasUnlock(unlockInfo),
       };
-    }
-  }
+    },
+  },
 };
 </script>
 

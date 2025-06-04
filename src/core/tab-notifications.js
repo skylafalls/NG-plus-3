@@ -13,11 +13,15 @@ class TabNotificationState {
   }
 
   tryTrigger() {
-    if (!this.config.condition() || this.triggered) return;
+    if (!this.config.condition() || this.triggered) {
+      return;
+    }
     const currentTabKey = `${Tabs.current.key}${Tabs.current._currentSubtab.key}`;
     this.config.tabsToHighLight.map(t => t.parent + t.tab)
-      .forEach(tab => {
-        if (tab !== currentTabKey) player.tabNotifications.add(tab);
+      .forEach((tab) => {
+        if (tab !== currentTabKey) {
+          player.tabNotifications.add(tab);
+        }
       });
     player.triggeredTabNotificationBits |= 1 << this.config.id;
 
@@ -40,5 +44,5 @@ class TabNotificationState {
 
 export const TabNotification = mapGameDataToObject(
   GameDatabase.tabNotifications,
-  config => new TabNotificationState(config)
+  config => new TabNotificationState(config),
 );

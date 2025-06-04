@@ -6,7 +6,7 @@ export default {
   name: "AutomatorControls",
   components: {
     AutomatorButton,
-    AutomatorModeSwitch
+    AutomatorModeSwitch,
   },
   data() {
     return {
@@ -34,8 +34,12 @@ export default {
       return this.$viewModel.tabs.reality.automator.editorScriptID;
     },
     playTooltip() {
-      if (this.isPaused) return "Resume Automator execution";
-      if (!this.isRunning) return "Start Automator";
+      if (this.isPaused) {
+        return "Resume Automator execution";
+      }
+      if (!this.isRunning) {
+        return "Start Automator";
+      }
       return "Pause Automator execution";
     },
     playButtonClass() {
@@ -43,7 +47,7 @@ export default {
         "c-automator__button--active": this.isRunning,
         "fa-play": !this.isRunning && !this.isPaused,
         "fa-pause": this.isRunning,
-        "fa-eject": this.isPaused
+        "fa-eject": this.isPaused,
       };
     },
     statusText() {
@@ -53,9 +57,15 @@ export default {
       let lineNum = `0000${this.currentLine}`;
       lineNum = lineNum.slice(lineNum.length - digits);
 
-      if (this.isPaused) return `Paused: "${this.statusName}" (Resumes on Line ${lineNum})`;
-      if (this.isRunning) return `Running: "${this.statusName}" (Line ${lineNum})`;
-      if (this.hasErrors) return `Stopped: "${this.statusName}" has errors (Cannot run)`;
+      if (this.isPaused) {
+        return `Paused: "${this.statusName}" (Resumes on Line ${lineNum})`;
+      }
+      if (this.isRunning) {
+        return `Running: "${this.statusName}" (Line ${lineNum})`;
+      }
+      if (this.hasErrors) {
+        return `Stopped: "${this.statusName}" has errors (Cannot run)`;
+      }
       return `Stopped: Will start running "${this.statusName}"`;
     },
     maxScriptChars() {
@@ -79,8 +89,8 @@ export default {
         ? AutomatorBackend.scriptName
         : AutomatorBackend.currentEditingScript.name;
       this.duplicateStatus = AutomatorBackend.hasDuplicateName(this.statusName);
-      this.editingDifferentScript = (this.isRunning || this.isPaused) &&
-        AutomatorBackend.currentEditingScript.id !== AutomatorBackend.currentRunningScript.id;
+      this.editingDifferentScript = (this.isRunning || this.isPaused)
+        && AutomatorBackend.currentEditingScript.id !== AutomatorBackend.currentRunningScript.id;
 
       this.currentChars = AutomatorData.singleScriptCharacters();
       this.hasUndo = AutomatorData.undoBuffer.length > 0;
@@ -98,21 +108,29 @@ export default {
         AutomatorBackend.pause();
         return;
       }
-      if (player.reality.automator.type === AUTOMATOR_TYPE.BLOCK) this.$emit("automatorplay");
-      if (AutomatorBackend.isOn) AutomatorBackend.mode = AUTOMATOR_MODE.RUN;
-      else AutomatorBackend.start(this.currentScriptID);
+      if (player.reality.automator.type === AUTOMATOR_TYPE.BLOCK) {
+        this.$emit("automatorplay");
+      }
+      if (AutomatorBackend.isOn) {
+        AutomatorBackend.mode = AUTOMATOR_MODE.RUN;
+      } else {
+        AutomatorBackend.start(this.currentScriptID);
+      }
     },
     stop: () => AutomatorBackend.stop(),
     step() {
-      if (AutomatorBackend.isOn) AutomatorBackend.mode = AUTOMATOR_MODE.SINGLE_STEP;
-      else AutomatorBackend.start(this.currentScriptID, AUTOMATOR_MODE.SINGLE_STEP);
+      if (AutomatorBackend.isOn) {
+        AutomatorBackend.mode = AUTOMATOR_MODE.SINGLE_STEP;
+      } else {
+        AutomatorBackend.start(this.currentScriptID, AUTOMATOR_MODE.SINGLE_STEP);
+      }
     },
     repeat: () => AutomatorBackend.toggleRepeat(),
     restart: () => AutomatorBackend.toggleForceRestart(),
     follow: () => AutomatorBackend.toggleFollowExecution(),
     undo: () => AutomatorData.undoScriptEdit(),
     redo: () => AutomatorData.redoScriptEdit(),
-  }
+  },
 };
 </script>
 

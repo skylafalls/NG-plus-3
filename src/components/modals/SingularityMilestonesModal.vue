@@ -91,19 +91,20 @@ export default {
           settings.sortOrder = (settings.sortOrder + 1) % stateCount;
           break;
         }
-        default: {throw new Error("Unrecognized Singularity milestone sorting button");
+        default: {
+          throw new Error("Unrecognized Singularity milestone sorting button");
         }
       }
     },
     glowOptionClass() {
       return {
         "c-modal__confirmation-toggle__checkbox": true,
-        "c-modal__confirmation-toggle__checkbox--active": this.milestoneGlow
+        "c-modal__confirmation-toggle__checkbox--active": this.milestoneGlow,
       };
     },
     toggleGlow() {
       this.milestoneGlow = !this.milestoneGlow;
-    }
+    },
   },
 };
 </script>

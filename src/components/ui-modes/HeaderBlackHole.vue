@@ -8,7 +8,7 @@ export default {
   components: {
     PrimaryButton,
     PrimaryToggleButton,
-    HeaderBlackHoleStatusText
+    HeaderBlackHoleStatusText,
   },
   data() {
     return {
@@ -38,7 +38,7 @@ export default {
   watch: {
     isAutoReleasing(newValue) {
       player.celestials.enslaved.isAutoReleasing = newValue;
-    }
+    },
   },
   methods: {
     update() {
@@ -46,7 +46,9 @@ export default {
       // because Laitela disables everything else and it technically still displays as pulsing even if it isn't
       this.canModifyBlackHoles = BlackHoles.areUnlocked && !Laitela.isRunning;
       this.displaySingle = BlackHoles.arePermanent;
-      if (this.displaySingle) this.singleState = BlackHole(1).displayState;
+      if (this.displaySingle) {
+        this.singleState = BlackHole(1).displayState;
+      }
       this.pauseText = this.pauseButtonText();
       this.canCharge = Enslaved.isUnlocked;
       this.isCharging = Enslaved.isStoringGameTime;
@@ -55,11 +57,19 @@ export default {
       this.isAutoReleasing = player.celestials.enslaved.isAutoReleasing;
     },
     pauseButtonText() {
-      if (BlackHoles.arePaused && player.blackHoleNegative.lt(1)) return "Uninvert BH";
-      if (BlackHoles.arePaused) return "Unpause BH";
+      if (BlackHoles.arePaused && player.blackHoleNegative.lt(1)) {
+        return "Uninvert BH";
+      }
+      if (BlackHoles.arePaused) {
+        return "Unpause BH";
+      }
       const accel = BlackHoles.unpauseAccelerationFactor;
-      if (accel.lt(1)) return `${formatPercents(new Decimal(accel), 1)} speed`;
-      if (player.blackHoleNegative.lt(1)) return "Invert BH";
+      if (accel.lt(1)) {
+        return `${formatPercents(new Decimal(accel), 1)} speed`;
+      }
+      if (player.blackHoleNegative.lt(1)) {
+        return "Invert BH";
+      }
       return "Pause BH";
     },
     timeDisplayShort(ms) {
@@ -68,10 +78,10 @@ export default {
     chargingClassObject() {
       return {
         "o-primary-btn--buy-max c-primary-btn--black-hole-header": true,
-        "o-bh-charge-disabled": this.isAutoReleasing
+        "o-bh-charge-disabled": this.isAutoReleasing,
       };
-    }
-  }
+    },
+  },
 };
 </script>
 

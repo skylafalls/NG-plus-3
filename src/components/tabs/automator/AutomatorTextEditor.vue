@@ -4,7 +4,7 @@ export default {
   props: {
     currentScriptId: {
       type: [Number, String],
-      required: true
+      required: true,
     },
   },
   data() {
@@ -31,7 +31,9 @@ export default {
         if (!this.UI.documents[id] || this.UI.documents[id].getValue() !== storedScripts[id].content) {
           this.UI.documents[id] = CodeMirror.Doc(storedScripts[id].content, "automato");
         }
-        if (this.UI.editor.getDoc() !== this.UI.documents[id]) this.UI.editor.swapDoc(this.UI.documents[id]);
+        if (this.UI.editor.getDoc() !== this.UI.documents[id]) {
+          this.UI.editor.swapDoc(this.UI.documents[id]);
+        }
         // When a script gets deleted, get rid of the old document object
         if (this.UI.documents[oldId] !== undefined && storedScripts[oldId] === undefined) {
           delete this.UI.documents[oldId];
@@ -41,7 +43,7 @@ export default {
     },
     fullScreen() {
       this.$nextTick(() => this.UI.editor.refresh());
-    }
+    },
   },
   created() {
     AutomatorTextUI.initialize();
@@ -65,7 +67,9 @@ export default {
   methods: {
     update() {
       AutomatorBackend.jumpToActiveLine();
-      if (this.unclearedLines && !AutomatorBackend.isOn) this.clearAllActiveLines();
+      if (this.unclearedLines && !AutomatorBackend.isOn) {
+        this.clearAllActiveLines();
+      }
       if (AutomatorBackend.isOn) {
         this.setActiveState(`${AutomatorBackend.state.topLevelScript}`, AutomatorBackend.stack.top.lineNumber);
       } else {
@@ -88,10 +92,13 @@ export default {
       this.unclearedLines = false;
     },
     setActiveState(scriptID, lineNumber) {
-      if (`${this.currentScriptId}` === scriptID) this.markActiveLine(lineNumber);
-      else this.unmarkActiveLine();
+      if (`${this.currentScriptId}` === scriptID) {
+        this.markActiveLine(lineNumber);
+      } else {
+        this.unmarkActiveLine();
+      }
     },
-  }
+  },
 };
 
 export const AutomatorTextUI = {
@@ -107,14 +114,16 @@ export const AutomatorTextUI = {
     theme: "liquibyte",
     tabSize: 2,
     extraKeys: {
-      Tab: cm => cm.execCommand("indentMore"),
+      "Tab": cm => cm.execCommand("indentMore"),
       "Shift-Tab": cm => cm.execCommand("indentLess"),
     },
     autoCloseBrackets: true,
-    lineWrapping: true
+    lineWrapping: true,
   },
   initialize() {
-    if (this.container) return;
+    if (this.container) {
+      return;
+    }
     this.setUpContainer();
     this.setUpEditor();
     EventHub.ui.on(GAME_EVENT.GAME_LOAD, () => this.documents = {});
@@ -130,19 +139,29 @@ export const AutomatorTextUI = {
     // CodeMirror has a built-in undo/redo functionality bound to ctrl-z/ctrl-y which doesn't have an
     // easily-configured history buffer; we need to specifically cancel this event since we have our own undo
     this.editor.on("beforeChange", (_, event) => {
-      if (event.origin === "undo") event.cancel();
+      if (event.origin === "undo") {
+        event.cancel();
+      }
     });
     this.editor.on("keydown", (editor, event) => {
       const key = event.key;
       if (event.ctrlKey && ["z", "y"].includes(key)) {
-        if (key === "z") AutomatorData.undoScriptEdit();
-        if (key === "y") AutomatorData.redoScriptEdit();
+        if (key === "z") {
+          AutomatorData.undoScriptEdit();
+        }
+        if (key === "y") {
+          AutomatorData.redoScriptEdit();
+        }
         return;
       }
       // This check is related to the drop-down command suggestion menu, but must come after the undo/redo check
       // as it often evaluates to innocuous false positives which eat the keybinds
-      if (editor.state.completionActive) return;
-      if (event.ctrlKey || event.altKey || event.metaKey || !/^[a-zA-Z0-9 \t]$/u.test(key)) return;
+      if (editor.state.completionActive) {
+        return;
+      }
+      if (event.ctrlKey || event.altKey || event.metaKey || !/^[a-zA-Z0-9 \t]$/u.test(key)) {
+        return;
+      }
       CodeMirror.commands.autocomplete(editor, null, { completeSingle: false });
     });
     this.editor.on("change", (editor, event) => {
@@ -157,7 +176,9 @@ export const AutomatorTextUI = {
 
       AutomatorData.recalculateErrors();
       const errors = AutomatorData.currentErrors().length;
-      if (errors > editor.doc.size) SecretAchievement(48).unlock();
+      if (errors > editor.doc.size) {
+        SecretAchievement(48).unlock();
+      }
 
       // Clear all line highlighting as soon as any text is changed because that might have shifted lines around
       AutomatorHighlighter.clearAllHighlightedLines();

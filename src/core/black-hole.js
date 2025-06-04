@@ -33,7 +33,9 @@ class BlackHoleUpgradeState {
   }
 
   purchase() {
-    if (!this.isAffordable || this.value === 0) return;
+    if (!this.isAffordable || this.value === 0) {
+      return;
+    }
 
     // Keep the cycle phase consistent before and after purchase so that upgrading doesn't cause weird behavior
     // such as immediately activating it when inactive (or worse, skipping past the active segment entirely).
@@ -56,7 +58,9 @@ class BlackHoleUpgradeState {
 
     // Prevents a rare edge case where the player makes an inactive black hole permanent, locking themselves into
     // a permanently inactive black hole
-    if (bh.isPermanent) player.blackHole[this.id - 1].active = true;
+    if (bh.isPermanent) {
+      player.blackHole[this.id - 1].active = true;
+    }
 
     EventHub.dispatch(GAME_EVENT.BLACK_HOLE_UPGRADE_BOUGHT);
   }
@@ -79,7 +83,7 @@ class BlackHoleState {
         if (!this.isCharged) {
           this._data.phase = this.interval.clampMax(this._data.phase);
         }
-      }
+      },
     });
     // Power: starts at 5, x1.35 per upgrade, cost goes x2, starts at 20
     this.powerUpgrade = new BlackHoleUpgradeState({
@@ -89,7 +93,7 @@ class BlackHoleState {
       calculateValue: amount => Decimal.pow(1.35, amount).mul(Decimal.div(180, Decimal.pow(2, id))),
       initialCost: blackHoleCostMultipliers[id].mul(20),
       costMult: DC.D2,
-      hasAutobuyer: true
+      hasAutobuyer: true,
     });
     // Duration: starts at 10, x1.5 per upgrade, cost goes x4, starts at 10
     this.durationUpgrade = new BlackHoleUpgradeState({
@@ -99,7 +103,7 @@ class BlackHoleState {
       calculateValue: amount => Decimal.pow(1.3, amount).mul(DC.E1.sub(id * 3)),
       initialCost: blackHoleCostMultipliers[id].mul(10),
       costMult: DC.D4,
-      hasAutobuyer: false
+      hasAutobuyer: false,
     });
   }
 
@@ -154,11 +158,15 @@ class BlackHoleState {
   get timeToNextStateChange() {
     const remainingTime = this.timeWithPreviousActiveToNextStateChange;
 
-    if (this.id === 1) return remainingTime;
+    if (this.id === 1) {
+      return remainingTime;
+    }
 
     // 2nd hole activation logic (not bothering generalizing since we're not adding that 3rd hole again)
     if (this.isCharged) {
-      if (BlackHole(1).isCharged) return Decimal.min(remainingTime, BlackHole(1).timeToNextStateChange);
+      if (BlackHole(1).isCharged) {
+        return Decimal.min(remainingTime, BlackHole(1).timeToNextStateChange);
+      }
       return BlackHole(1).timeToNextStateChange;
     }
     return BlackHole(1).timeUntilTimeActive(remainingTime);
@@ -172,7 +180,9 @@ class BlackHoleState {
       // We start at the next full activation, so if we have a partial activation
       // then that reduces the time required.
       // Make sure to handle the case when the current partial activation is enough.
-      if (timeActive.lt(this.timeToNextStateChange)) return timeActive;
+      if (timeActive.lt(this.timeToNextStateChange)) {
+        return timeActive;
+      }
       // If it's not enough, we can subtract it from our time.
       timeActive = timeActive.sub(this.timeToNextStateChange);
     }
@@ -197,18 +207,32 @@ class BlackHoleState {
 
   // The logic to determine what state the black hole is in for displaying is nontrivial and used in multiple places
   get displayState() {
-    if (Pelle.isDisabled("blackhole")) return `<i class="fas fa-ban"></i> Disabled`;
-    if (Enslaved.isAutoReleasing) {
-      if (Enslaved.autoReleaseTick < 3) return `<i class="fas fa-compress-arrows-alt u-fa-padding"></i> Pulsing`;
-      return `<i class="fas fa-expand-arrows-alt u-fa-padding"></i> Pulsing`;
+    if (Pelle.isDisabled("blackhole")) {
+      return "<i class=\"fas fa-ban\"></i> Disabled";
     }
-    if (Enslaved.isStoringGameTime) return `<i class="fas fa-compress-arrows-alt"></i> Charging`;
-    if (BlackHoles.areNegative) return `<i class="fas fa-caret-left"></i> Inverted`;
-    if (BlackHoles.arePaused) return `<i class="fas fa-pause"></i> Paused`;
-    if (this.isPermanent) return `<i class="fas fa-infinity"></i> Permanent`;
+    if (Enslaved.isAutoReleasing) {
+      if (Enslaved.autoReleaseTick < 3) {
+        return "<i class=\"fas fa-compress-arrows-alt u-fa-padding\"></i> Pulsing";
+      }
+      return "<i class=\"fas fa-expand-arrows-alt u-fa-padding\"></i> Pulsing";
+    }
+    if (Enslaved.isStoringGameTime) {
+      return "<i class=\"fas fa-compress-arrows-alt\"></i> Charging";
+    }
+    if (BlackHoles.areNegative) {
+      return "<i class=\"fas fa-caret-left\"></i> Inverted";
+    }
+    if (BlackHoles.arePaused) {
+      return "<i class=\"fas fa-pause\"></i> Paused";
+    }
+    if (this.isPermanent) {
+      return "<i class=\"fas fa-infinity\"></i> Permanent";
+    }
 
     const timeString = TimeSpan.fromSeconds(new Decimal(this.timeToNextStateChange)).toStringShort(true);
-    if (this.isActive) return `<i class="fas fa-play"></i> Active (${timeString})`;
+    if (this.isActive) {
+      return `<i class="fas fa-play"></i> Active (${timeString})`;
+    }
     return `<i class="fas fa-redo"></i> Inactive (${timeString})`;
   }
 
@@ -239,7 +263,9 @@ class BlackHoleState {
   }
 
   updatePhase(activePeriod) {
-    if (this.isPermanent) return;
+    if (this.isPermanent) {
+      return;
+    }
     // Prevents a flickering black hole if phase gets set too high
     // (shouldn't ever happen in practice). Also, more importantly,
     // should work even if activePeriods[i] is very large. To check:
@@ -278,7 +304,6 @@ class BlackHoleState {
    * BlackHole(2) is active during that time.
    */
   realTimeWhileActive(time) {
-    // eslint-disable-next-line no-param-reassign
     time = new Decimal(time);
     const nextDeactivation = this.timeUntilNextDeactivation;
     const cooldown = this.interval;
@@ -347,7 +372,9 @@ export const BlackHoles = {
   },
 
   unlock() {
-    if (!this.canBeUnlocked) return;
+    if (!this.canBeUnlocked) {
+      return;
+    }
     player.blackHole[0].unlocked = true;
     Currency.realityMachines.purchase(100);
     player.records.timePlayedAtBHUnlock = player.records.totalTimePlayed;
@@ -355,27 +382,35 @@ export const BlackHoles = {
   },
 
   togglePause: (automatic = false) => {
-    if (!BlackHoles.areUnlocked) return;
-    const maxInversion = player.requirementChecks.reality.slowestBH.lte(1e-300);
-    if (ImaginaryUpgrade(24).isLockingMechanics && Ra.isRunning && maxInversion) {
-      if (!automatic) ImaginaryUpgrade(24).tryShowWarningModal("uninvert your Black Hole");
+    if (!BlackHoles.areUnlocked) {
       return;
     }
-    if (player.blackHolePause) player.requirementChecks.reality.slowestBH = DC.D1;
+    const maxInversion = player.requirementChecks.reality.slowestBH.lte(1e-300);
+    if (ImaginaryUpgrade(24).isLockingMechanics && Ra.isRunning && maxInversion) {
+      if (!automatic) {
+        ImaginaryUpgrade(24).tryShowWarningModal("uninvert your Black Hole");
+      }
+      return;
+    }
+    if (player.blackHolePause) {
+      player.requirementChecks.reality.slowestBH = DC.D1;
+    }
     player.blackHolePause = !player.blackHolePause;
     player.blackHolePauseTime = player.records.realTimePlayed;
     const blackHoleString = RealityUpgrade(20).isBought ? "Black Holes" : "Black Hole";
     // If black holes are going unpaused -> paused, use "inverted" or "paused" depending o
     // whether the player's using negative BH (i.e. BH inversion); if going paused -> unpaused,
     // use "unpaused".
-    // eslint-disable-next-line no-nested-ternary
+
     const pauseType = player.blackHolePause ? (BlackHoles.areNegative ? "inverted" : "paused") : "unpaused";
     const automaticString = automatic ? "automatically " : "";
     GameUI.notify.blackHole(`${blackHoleString} ${automaticString}${pauseType}`);
   },
 
   get unpauseAccelerationFactor() {
-    if (this.arePermanent) return DC.D1;
+    if (this.arePermanent) {
+      return DC.D1;
+    }
     return player.records.realTimePlayed.sub(player.blackHolePauseTime)
       .div(1000 * this.ACCELERATION_TIME).clamp(0, 1);
   },
@@ -393,7 +428,9 @@ export const BlackHoles = {
   },
 
   updatePhases(blackHoleDiff) {
-    if (!this.areUnlocked || this.arePaused) return;
+    if (!this.areUnlocked || this.arePaused) {
+      return;
+    }
     // This code is intended to successfully update the black hole phases
     // even for very large values of blackHoleDiff.
     // With auto-pause settings, this code also has to take account of that.
@@ -401,7 +438,9 @@ export const BlackHoles = {
     const [autoPause, seconds] = this.autoPauseData(rawSeconds);
     const activePeriods = this.realTimePeriodsWithBlackHoleActive(seconds, true);
     for (const blackHole of this.list) {
-      if (!blackHole.isUnlocked) break;
+      if (!blackHole.isUnlocked) {
+        break;
+      }
       blackHole.updatePhase(activePeriods[blackHole.id - 1]);
     }
     if (autoPause) {
@@ -455,7 +494,7 @@ export const BlackHoles = {
       totalRealTime,
       x => this.calculateGameTimeFromRealTime(x, speedups).mul(numberOfTicks).div(totalGameTime),
       1,
-      tolerance
+      tolerance,
     );
     const blackHoleSpeedup = this.calculateGameTimeFromRealTime(realTickTime, speedups).div(realTickTime);
     return [realTickTime, blackHoleSpeedup];
@@ -466,18 +505,18 @@ export const BlackHoles = {
    * The only unusual thing is tolerance, which is a bound on
    * Math.abs(evaluationFunction(result) - target).
    */
-  // eslint-disable-next-line max-params
+
   binarySearch(start, end, evaluationFunction, target, tolerance) {
     let middle;
     for (let iter = 0; iter < 100; ++iter) {
       middle = (start + end) / 2;
       const error = evaluationFunction(middle).sub(target);
-      if (error.abs().lt(tolerance)) break;
+      if (error.abs().lt(tolerance)) {
+        break;
+      }
       if (error.lt(0)) {
-        // eslint-disable-next-line no-param-reassign
         start = middle;
       } else {
-        // eslint-disable-next-line no-param-reassign
         end = middle;
       }
     }
@@ -498,18 +537,21 @@ export const BlackHoles = {
     effectsToConsider.push(GAME_SPEED_EFFECT.BLACK_HOLE);
     // Crucial thing: this works even if the black holes are paused, it's just that the speedups will be 1.
     for (const blackHole of this.list) {
-      if (!blackHole.isUnlocked) break;
+      if (!blackHole.isUnlocked) {
+        break;
+      }
       speedups.push(getGameSpeedupFactor(effectsToConsider, blackHole.id).div(speedupWithoutBlackHole));
     }
     return speedups;
   },
 
   calculateGameTimeFromRealTime(realTime, speedups) {
-    // eslint-disable-next-line no-param-reassign
-    if (!isDecimal(realTime)) realTime = new Decimal(realTime);
+    if (!isDecimal(realTime)) {
+      realTime = new Decimal(realTime);
+    }
     // We could do this.autoPauseData(realTime)[1] here but that seems less clear.
     // Using _ as an unused variable should be reasonable.
-    // eslint-disable-next-line no-unused-vars
+
     const [_, realerTime] = this.autoPauseData(realTime);
     const effectivePeriods = this.realTimePeriodsWithBlackHoleEffective(realerTime, speedups);
     // This adds in time with black holes paused at the end of the list.
@@ -552,7 +594,9 @@ export const BlackHoles = {
   realTimePeriodsWithBlackHoleActive(realTime) {
     const activePeriods = [realTime];
     for (const blackHole of this.list) {
-      if (!blackHole.isUnlocked) break;
+      if (!blackHole.isUnlocked) {
+        break;
+      }
       const activeTime = blackHole.realTimeWhileActive(activePeriods.last());
       activePeriods.push(activeTime);
     }
@@ -578,7 +622,8 @@ export const BlackHoles = {
       // we have to wait until the activation after that;
       // otherwise, we can just use the next activation.
       return t.lt(BlackHoles.ACCELERATION_TIME)
-        ? t.add(bh.duration).add(bh.interval).sub(BlackHoles.ACCELERATION_TIME) : t.sub(BlackHoles.ACCELERATION_TIME);
+        ? t.add(bh.duration).add(bh.interval).sub(BlackHoles.ACCELERATION_TIME)
+        : t.sub(BlackHoles.ACCELERATION_TIME);
     }
     // Look at the next 100 black hole transitions.
     // This is called every tick if BH pause setting is set to BH2, so we try to optimize it.
@@ -610,12 +655,13 @@ export const BlackHoles = {
     for (let i = 0; i < steps; i++) {
       // Currently active BH (if BH1 and BH2 are both charged, 2,
       // if only BH1 is, 1, if BH1 isn't, 0 regardless of BH2).
-      // eslint-disable-next-line no-nested-ternary
+
       const current = charged[0] ? (charged[1] ? 2 : 1) : 0;
       // Get the list of phase bounds.
       const phaseBounds = phaseBoundList[current];
       // Compute time until some phase reaches its bound.
-      const minTime = current > 0 ? phaseBounds[0].sub(phases[0]).clampMax(phaseBounds[1].sub(phases[1]))
+      const minTime = current > 0
+        ? phaseBounds[0].sub(phases[0]).clampMax(phaseBounds[1].sub(phases[1]))
         : phaseBounds[0].sub(phases[0]);
       if (current === 2) {
         // Check if there was enough time before this activation to pause.
@@ -658,7 +704,9 @@ export const BlackHoles = {
     // This can be called when determining offline time if the black holes are already paused.
     // In that case we don't need to pause them (need to pause = false), but they're already paused (0 time).
     // This saves us some computation.
-    if (this.arePaused) return [false, 0];
+    if (this.arePaused) {
+      return [false, 0];
+    }
     if (player.blackHoleAutoPauseMode === BLACK_HOLE_PAUSE_MODE.NO_PAUSE) {
       return [false, realTime];
     }
@@ -671,5 +719,5 @@ export const BlackHoles = {
       return [false, realTime];
     }
     return [true, timeLeft];
-  }
+  },
 };

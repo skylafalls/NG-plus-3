@@ -9,7 +9,6 @@ import wordShift from "../../word-shift";
 
 import zalgo from "./zalgo";
 
-
 const disabledMechanicUnlocks = {
   achievements: () => ({}),
   IPMults: () => ({}),
@@ -50,7 +49,7 @@ const disabledMechanicUnlocks = {
   dtMults: () => ({}),
   chargedInfinityUpgrades: () => ({}),
   alteration: () => ({}),
-  timeTheorems: () => ({})
+  timeTheorems: () => ({}),
 };
 
 export const Pelle = {
@@ -79,12 +78,16 @@ export const Pelle = {
         ${formatInt(5)} additional Glyphs in order to Doom your Reality.`, 1);
       return;
     }
-    for (const type of GlyphInfo.basicGlyphTypes) Glyphs.addToInventory(GlyphGenerator.doomedGlyph(type));
+    for (const type of GlyphInfo.basicGlyphTypes) {
+      Glyphs.addToInventory(GlyphGenerator.doomedGlyph(type));
+    }
     Glyphs.refreshActive();
     player.options.confirmations.glyphReplace = true;
     player.reality.automator.state.repeat = false;
     player.reality.automator.state.forceRestart = false;
-    if (BlackHoles.arePaused) BlackHoles.togglePause();
+    if (BlackHoles.arePaused) {
+      BlackHoles.togglePause();
+    }
     player.celestials.pelle.doomed = true;
     Pelle.armageddon(false);
     respecTimeStudies(true);
@@ -102,7 +105,9 @@ export const Pelle = {
 
     player.buyUntil10 = true;
     player.records.realTimeDoomed = 0;
-    for (const res of AlchemyResources.all) res.amount = 0;
+    for (const res of AlchemyResources.all) {
+      res.amount = 0;
+    }
     AutomatorBackend.stop();
 
     // Force-unhide all tabs except for the shop tab, for which we retain the hide state instead
@@ -130,11 +135,14 @@ export const Pelle = {
   // This will check if a specific mechanic is disabled, like old PelleFlag(x).isActive,
   // Initially it will only have isDoomed check but we will have upgrades that let you get stuff back
   isDisabled(mechanic) {
-    if (!this.isDoomed) return false;
+    if (!this.isDoomed) {
+      return false;
+    }
 
-    if (!mechanic) return true;
+    if (!mechanic) {
+      return true;
+    }
     if (!disabledMechanicUnlocks[mechanic]) {
-      // eslint-disable-next-line
       console.error(`Mechanic ${mechanic} isn't present in the disabledMechanicUnlocks!`);
       return true;
     }
@@ -153,7 +161,9 @@ export const Pelle = {
   },
 
   armageddon(gainStuff) {
-    if (!this.canArmageddon && gainStuff) return;
+    if (!this.canArmageddon && gainStuff) {
+      return;
+    }
     EventHub.dispatch(GAME_EVENT.ARMAGEDDON_BEFORE, gainStuff);
     if (gainStuff) {
       this.cel.remnants = this.cel.remnants.add(this.remnantsGain);
@@ -162,7 +172,9 @@ export const Pelle = {
     disChargeAll();
     player.celestials.enslaved.isStoringReal = false;
     player.celestials.enslaved.autoStoreReal = false;
-    if (PelleStrikes.dilation.hasStrike) player.dilation.active = true;
+    if (PelleStrikes.dilation.hasStrike) {
+      player.dilation.active = true;
+    }
     EventHub.dispatch(GAME_EVENT.ARMAGEDDON_AFTER, gainStuff);
   },
 
@@ -233,28 +245,36 @@ export const Pelle = {
   },
   getSpecialGlyphEffectDescription(type) {
     switch (type) {
-      case 'infinity': {return `Infinity Point gain ${player.challenge.eternity.current <= 8
+      case "infinity": {
+        return `Infinity Point gain ${player.challenge.eternity.current <= 8
           ? formatX(Currency.infinityPoints.value.plus(1).pow(0.2), 2)
           : formatX(DC.D1, 2)} (based on current IP)`;
       }
-      case 'time': {return `Eternity Point gain ${formatX(Currency.eternityPoints.value.plus(1).pow(0.3), 2)}
+      case "time": {
+        return `Eternity Point gain ${formatX(Currency.eternityPoints.value.plus(1).pow(0.3), 2)}
           (based on current EP)`;
       }
-      case 'replication': {return `Replication speed ${formatX(10 ** 53 ** (PelleRifts.vacuum.percentage), 2)} \
+      case "replication": {
+        return `Replication speed ${formatX(10 ** 53 ** (PelleRifts.vacuum.percentage), 2)} \
         (based on ${wordShift.wordCycle(PelleRifts.vacuum.name)})`;
       }
-      case 'dilation': {return `Dilated Time gain ${formatX(Decimal.pow(player.dilation.totalTachyonGalaxies, 1.5).max(1), 2)}
+      case "dilation": {
+        return `Dilated Time gain ${formatX(Decimal.pow(player.dilation.totalTachyonGalaxies, 1.5).max(1), 2)}
           (based on Tachyon Galaxies)`;
       }
-      case 'power': {return `Galaxies are ${formatPercents(0.02)} stronger`;
+      case "power": {
+        return `Galaxies are ${formatPercents(0.02)} stronger`;
       }
-      case 'companion': {return `You feel ${formatPercents(0.34)} better`;
+      case "companion": {
+        return `You feel ${formatPercents(0.34)} better`;
       }
       // Undefined means that there is no glyph equipped, needs to be here since this function is used in
       // both Current Glyph Effects and Glyph Tooltip
-      case undefined: {return "No Glyph equipped!";
+      case undefined: {
+        return "No Glyph equipped!";
       }
-      default: {return "You cannot equip this Glyph while Doomed!";
+      default: {
+        return "You cannot equip this Glyph while Doomed!";
       }
     }
   },
@@ -383,29 +403,29 @@ export const Pelle = {
         vacuum: {
           fill: DC.D0,
           active: false,
-          reducedTo: 1
+          reducedTo: 1,
         },
         decay: {
           fill: DC.D0,
           active: false,
           percentageSpent: 0,
-          reducedTo: 1
+          reducedTo: 1,
         },
         chaos: {
           fill: 0,
           active: false,
-          reducedTo: 1
+          reducedTo: 1,
         },
         recursion: {
           fill: DC.D0,
           active: false,
-          reducedTo: 1
+          reducedTo: 1,
         },
         paradox: {
           fill: DC.D0,
           active: false,
-          reducedTo: 1
-        }
+          reducedTo: 1,
+        },
       },
       progressBits: 0,
       galaxyGenerator: {
@@ -413,13 +433,13 @@ export const Pelle = {
         spentGalaxies: DC.D0,
         generatedGalaxies: DC.D0,
         phase: 0,
-        sacrificeActive: false
+        sacrificeActive: false,
       },
       quoteBits: 0,
       collapsed: {
         upgrades: false,
         rifts: false,
-        galaxies: false
+        galaxies: false,
       },
       showBought: false,
     };
@@ -466,19 +486,22 @@ export class RebuyablePelleUpgradeState extends RebuyableMechanicState {
     return this.boughtAmount.gte(this.config.cap);
   }
 
-  get isCustomEffect() { return true; }
+  get isCustomEffect() {
+    return true;
+  }
 
   get effectValue() {
     return this.config.effect(this.boughtAmount);
   }
 
   onPurchased() {
-    if (this.id === "glyphLevels") EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
+    if (this.id === "glyphLevels") {
+      EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
+    }
   }
 }
 
 export class PelleUpgradeState extends SetPurchasableMechanicState {
-
   get set() {
     return player.celestials.pelle.upgrades;
   }
@@ -498,7 +521,6 @@ export class PelleUpgradeState extends SetPurchasableMechanicState {
   get isAvailableForPurchase() {
     return Pelle.isDoomed;
   }
-
 }
 
 export const PelleUpgrade = mapGameDataToObject(
@@ -506,7 +528,7 @@ export const PelleUpgrade = mapGameDataToObject(
   config => (config.rebuyable
     ? new RebuyablePelleUpgradeState(config)
     : new PelleUpgradeState(config)
-  )
+  ),
 );
 
 PelleUpgrade.rebuyables = PelleUpgrade.all.filter(u => u.isRebuyable);

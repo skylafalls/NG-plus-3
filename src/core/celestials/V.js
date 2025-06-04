@@ -27,12 +27,14 @@ class VRunUnlockState extends GameMechanicState {
   }
 
   get canBeReduced() {
-    return this.completions < this.config.values.length && this.completions !== 0 &&
-      new Decimal(this.reduction).neq(this.config.maxShardReduction(this.conditionBaseValue));
+    return this.completions < this.config.values.length && this.completions !== 0
+      && new Decimal(this.reduction).neq(this.config.maxShardReduction(this.conditionBaseValue));
   }
 
   get isReduced() {
-    if (player.celestials.v.goalReductionSteps[this.id] === 0) return false;
+    if (player.celestials.v.goalReductionSteps[this.id] === 0) {
+      return false;
+    }
     return (VUnlocks.shardReduction.canBeApplied && this.reduction.gt(0));
   }
 
@@ -57,7 +59,9 @@ class VRunUnlockState extends GameMechanicState {
 
   get conditionValue() {
     let value = this.conditionBaseValue;
-    if (!this.isReduced) return value;
+    if (!this.isReduced) {
+      return value;
+    }
     if (value instanceof Decimal) {
       value = value.sub(this.reduction);
     } else {
@@ -82,9 +86,11 @@ class VRunUnlockState extends GameMechanicState {
       playerData.runGlyphs[this.id] = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
     }
 
-    while (this.completions < this.config.values.length &&
-    Decimal.gte(playerData.runRecords[this.id], this.conditionValue)) {
-      if (!V.isFlipped && this.config.isHard) continue;
+    while (this.completions < this.config.values.length
+      && Decimal.gte(playerData.runRecords[this.id], this.conditionValue)) {
+      if (!V.isFlipped && this.config.isHard) {
+        continue;
+      }
       this.completions++;
       GameUI.notify.success(`You have unlocked V-Achievement
         '${this.config.name}' tier ${formatInt(this.completions)}`);
@@ -102,8 +108,13 @@ class VRunUnlockState extends GameMechanicState {
 }
 
 class VUnlockState extends BitUpgradeState {
-  get bits() { return player.celestials.v.unlockBits; }
-  set bits(value) { player.celestials.v.unlockBits = value; }
+  get bits() {
+    return player.celestials.v.unlockBits;
+  }
+
+  set bits(value) {
+    player.celestials.v.unlockBits = value;
+  }
 
   get pelleDisabled() {
     return Pelle.isDoomed && this !== VUnlocks.vAchievementUnlock;
@@ -114,12 +125,14 @@ class VUnlockState extends BitUpgradeState {
   }
 
   get description() {
-    return typeof this.config.description === "function" ? this.config.description()
+    return typeof this.config.description === "function"
+      ? this.config.description()
       : this.config.description;
   }
 
   get rewardText() {
-    return typeof this.config.reward === "function" ? this.config.reward()
+    return typeof this.config.reward === "function"
+      ? this.config.reward()
       : this.config.reward;
   }
 
@@ -128,7 +141,9 @@ class VUnlockState extends BitUpgradeState {
   }
 
   get formattedEffect() {
-    if (!this.config.effect || !this.config.format) return "";
+    if (!this.config.effect || !this.config.format) {
+      return "";
+    }
 
     return this.config.format(this.effectValue);
   }
@@ -153,7 +168,7 @@ export const VRunUnlocks = {
 
 export const VUnlocks = mapGameDataToObject(
   GameDatabase.celestials.v.unlocks,
-  config => new VUnlockState(config)
+  config => new VUnlockState(config),
 );
 
 export const V = {
@@ -162,7 +177,9 @@ export const V = {
   spaceTheorems: 0,
   checkForUnlocks() {
     for (const unl of VUnlocks.all) {
-      if (unl === VUnlocks.vAchievementUnlock) continue;
+      if (unl === VUnlocks.vAchievementUnlock) {
+        continue;
+      }
       unl.unlock();
     }
 
@@ -170,7 +187,9 @@ export const V = {
       for (const unlock of VRunUnlocks.all) {
         unlock.tryComplete();
       }
-      if (this.spaceTheorems >= 36) SpeedrunMilestones(22).tryComplete();
+      if (this.spaceTheorems >= 36) {
+        SpeedrunMilestones(22).tryComplete();
+      }
     }
 
     if (VUnlocks.raUnlock.canBeApplied && !Ra.unlocks.autoTP.canBeApplied) {
@@ -193,8 +212,11 @@ export const V = {
   updateTotalRunUnlocks() {
     let sum = 0;
     for (let i = 0; i < player.celestials.v.runUnlocks.length; i++) {
-      if (i < 6) sum += player.celestials.v.runUnlocks[i];
-      else sum += player.celestials.v.runUnlocks[i] * 2;
+      if (i < 6) {
+        sum += player.celestials.v.runUnlocks[i];
+      } else {
+        sum += player.celestials.v.runUnlocks[i] * 2;
+      }
     }
     this.spaceTheorems = sum;
   },
@@ -230,9 +252,11 @@ export const V = {
     return 1000 * Math.pow(1.15, currReductionSteps);
   },
   quotes: Quotes.v,
-  symbol: "⌬"
+  symbol: "⌬",
 };
 
 EventHub.logic.on(GAME_EVENT.TAB_CHANGED, () => {
-  if (Tab.celestials.v.isOpen) V.quotes.initial.show();
+  if (Tab.celestials.v.isOpen) {
+    V.quotes.initial.show();
+  }
 });

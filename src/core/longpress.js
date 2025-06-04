@@ -39,7 +39,7 @@ class LongPress {
     obj.addEventListener("touchstart", begin);
     obj.addEventListener("mouseout", LongPress._cancelCurrentPress);
     obj.addEventListener("touchcancel", LongPress._cancelCurrentPress);
-    obj.addEventListener("touchmove", e => {
+    obj.addEventListener("touchmove", (e) => {
       // Suggested in stackoverflow example
       e.preventDefault();
       const t = e.changedTouches[0];
@@ -69,13 +69,14 @@ class LongPress {
     LongPress._currentTarget = null;
   }
 
-  // eslint-disable-next-line max-params
   static _pressBegin(timeout, handler, cancelHandler, repeat, e) {
     // If there's a timer already running, that means that something wasn't cancelled
     // properly (a press shouldn't begin if it hasn't ended). Clear out any existing presses:
     LongPress._cancelCurrentPress(e);
     // Ignore right click
-    if (e.type === "click" && e.button !== 0) return;
+    if (e.type === "click" && e.button !== 0) {
+      return;
+    }
     ++LongPress._pressCount;
     LongPress._currentCancelHandler = cancelHandler;
     LongPress._wasLongPress = false;
@@ -103,7 +104,9 @@ class LongPress {
   static _handleClick(e, handler) {
     const wasLP = LongPress._wasLongPress;
     // If the click was of a right button, just handle it
-    if (e.button !== 0) return handler(e);
+    if (e.button !== 0) {
+      return handler(e);
+    }
     // Cancel any existing presses
     LongPress._cancelCurrentPress(e);
     // If we just had a long press event, ignore the click
@@ -140,7 +143,7 @@ export function useLongPress(vue) {
         cancel: () => emit("longpresscancel"),
         click: () => emit("longpressclick"),
       });
-    }
+    },
   });
 }
 
@@ -157,8 +160,8 @@ export function useRepeatingClick(vue) {
       LongPress.addTo(el, binding.value.delay, {
         longPress: () => emit("repeatclick"),
         click: () => emit("firstclick"),
-        repeat: 250
+        repeat: 250,
       });
-    }
+    },
   });
 }

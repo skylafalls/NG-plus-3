@@ -11,7 +11,7 @@ function showSecondPreferredWarning(currTree) {
 }
 
 // This is only ever called from manual player actions, which means we can immediately commit them to the game state
-// eslint-disable-next-line complexity
+
 export function buyStudiesUntil(id, ec = -1) {
   let studyArray = [];
   const lastInPrevRow = Math.floor(id / 10) * 10 - 1;
@@ -30,7 +30,9 @@ export function buyStudiesUntil(id, ec = -1) {
   studyArray.push(...range(11, Math.min(lastInPrevRow, 70)));
   studyArray.push(id);
 
-  if (id < 71) return studyArray;
+  if (id < 71) {
+    return studyArray;
+  }
 
   // Priority for behavior when buying in the Dimension split; we follow only the first applicable entry below:
   // - If we're buying a study within the split, we first buy just the requested path up to the requested study.
@@ -63,11 +65,15 @@ export function buyStudiesUntil(id, ec = -1) {
   }
 
   // Explicitly purchase 111 here if it's included and stop if applicable, as it isn't covered by logic in either split.
-  if (id >= 111) studyArray.push(111);
+  if (id >= 111) {
+    studyArray.push(111);
+  }
 
   const secondPreferredWarningShown = showSecondPreferredWarning(currTree);
 
-  if (id < 121) return studyArray;
+  if (id < 121) {
+    return studyArray;
+  }
 
   // Priority for behavior when buying in the Pace split; we follow only the first applicable entry below. In contrast
   // to the Dimension split, here we instead err on the side of not buying extra studies since they will cost ST.
@@ -102,7 +108,9 @@ export function buyStudiesUntil(id, ec = -1) {
 
   // First we buy up to 201 so we can buy the second preferred path if needed
   studyArray.push(...range(151, Math.min(id, 201)));
-  if (id < 201) return studyArray;
+  if (id < 201) {
+    return studyArray;
+  }
 
   // If we want to buy EC11 or EC12 we don't want 201 unless we have the EC study requirement perk
   if (!(ecHasRequirement && (ec === 11 || ec === 12))) {
@@ -120,7 +128,9 @@ export function buyStudiesUntil(id, ec = -1) {
       studyArray = [];
     }
 
-    if (!secondPreferredWarningShown) showSecondPreferredWarning(GameCache.currentStudyTree.value);
+    if (!secondPreferredWarningShown) {
+      showSecondPreferredWarning(GameCache.currentStudyTree.value);
+    }
 
     studyArray.push(...range(211, Math.min(lastInPrevRow, 214)));
 
@@ -131,7 +141,9 @@ export function buyStudiesUntil(id, ec = -1) {
 
   // Don't bother buying any more studies at or below row 22 unless the player has fully finished V, in which case just
   // brute-force all of them up to the specified study. This buys all pre-triads, then triads sequentially up to the id
-  if (id < 221 || !V.isFullyCompleted) return studyArray;
+  if (id < 221 || !V.isFullyCompleted) {
+    return studyArray;
+  }
   studyArray.push(...range(221, Math.max(id, 234)));
   return studyArray;
 }

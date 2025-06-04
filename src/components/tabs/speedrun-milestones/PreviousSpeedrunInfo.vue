@@ -6,8 +6,8 @@ export default {
     prevRunInfo: {
       type: Object,
       required: false,
-      // eslint-disable-next-line no-empty-function
-      default: () => {}
+
+      default: () => {},
     },
     index: {
       type: Number,
@@ -30,10 +30,15 @@ export default {
     offlineAttr() {
       const offlineFrac = this.prevRunInfo.offlineTimeUsed / this.prevRunInfo.records.max();
       let symbol;
-      if (offlineFrac === 0) symbol = "fa-eye";
-      else if (offlineFrac < 0.1) symbol = "fa-computer";
-      else if (offlineFrac < 0.6) symbol = "fa-moon";
-      else symbol = "fa-power-off";
+      if (offlineFrac === 0) {
+        symbol = "fa-eye";
+      } else if (offlineFrac < 0.1) {
+        symbol = "fa-computer";
+      } else if (offlineFrac < 0.6) {
+        symbol = "fa-moon";
+      } else {
+        symbol = "fa-power-off";
+      }
       return {
         icon: `fas o-icon ${symbol}`,
         text: `${offlineFrac === 0 ? "No" : formatPercents(offlineFrac, 1)} Offline Time`,
@@ -58,7 +63,8 @@ export default {
           symbol = "fa-user-pen";
           break;
         }
-        default: {throw new Error("Unrecognized speedrun seed option in previous run subtab");
+        default: {
+          throw new Error("Unrecognized speedrun seed option in previous run subtab");
         }
       }
 

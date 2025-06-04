@@ -29,7 +29,9 @@ export const NG = {
       // this will feasibly become an issue from nonstop speedruns is around 2030; I guess we can revisit it at that
       // point if we really need to, but I suspect this limit should be high enough
       const prevRunIndices = Object.keys(speedrun.previousRuns).map(k => Number(k));
-      if (prevRunIndices.length > 100) player.speedrun.previousRuns[prevRunIndices.min()] = undefined;
+      if (prevRunIndices.length > 100) {
+        player.speedrun.previousRuns[prevRunIndices.min()] = undefined;
+      }
     }
 
     // Modify beaten-game quantities before doing a carryover reset
@@ -86,12 +88,12 @@ export const NG = {
     player.speedrun.isUnlocked = hasSpeedrun;
     Themes.find(Theme.currentName()).set();
     player.timestudy.presets = JSON.parse(presets);
-    JSON.parse(companions).forEach(g => {
+    JSON.parse(companions).forEach((g) => {
       Glyphs.addToInventory(g);
     });
     Notations.all.find(n => n.name === player.options.notation).setAsCurrent();
     ADNotations.Settings.exponentCommas.min = 10 ** player.options.notationDigits.comma;
     ADNotations.Settings.exponentCommas.max = 10 ** player.options.notationDigits.notation;
     player.lastUpdate = Date.now();
-  }
+  },
 };

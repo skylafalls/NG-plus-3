@@ -4,8 +4,8 @@ export default {
   props: {
     tier: {
       type: Number,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {
@@ -46,21 +46,21 @@ export default {
       return {
         "o-dark-matter-dimension-button": true,
         "o-dark-matter-dimension-button--available": this.canBuyInterval,
-        "o-dark-matter-dimension-button--ascend": this.isIntervalCapped
+        "o-dark-matter-dimension-button--ascend": this.isIntervalCapped,
       };
     },
     darkMatterClassObject() {
       return {
         "o-dark-matter-dimension-button": true,
         "o-dark-matter-dimension-button--available": this.hoverOverAscension || this.canBuyPowerDM,
-        "o-dark-matter-dimension-button--accent": this.hoverOverAscension
+        "o-dark-matter-dimension-button--accent": this.hoverOverAscension,
       };
     },
     darkEnergyClassObject() {
       return {
         "o-dark-matter-dimension-button": true,
         "o-dark-matter-dimension-button--available": this.hoverOverAscension || this.canBuyPowerDE,
-        "o-dark-matter-dimension-button--accent": this.hoverOverAscension
+        "o-dark-matter-dimension-button--accent": this.hoverOverAscension,
       };
     },
     intervalText() {
@@ -69,8 +69,11 @@ export default {
       const line1 = this.hoverOverAscension ? `<b>${str}</b>` : str;
 
       let line2;
-      if (this.isIntervalCapped) line2 = this.hoverOverAscension ? "On ascend ➜" : "Ascend!";
-      else line2 = `Cost: ${this.formatDMCost(this.intervalCost)} DM`;
+      if (this.isIntervalCapped) {
+        line2 = this.hoverOverAscension ? "On ascend ➜" : "Ascend!";
+      } else {
+        line2 = `Cost: ${this.formatDMCost(this.intervalCost)} DM`;
+      }
       return ` ${line1}<br>${line2}`;
     },
     darkMatterText() {
@@ -98,7 +101,7 @@ export default {
       return `Interval is capped at ${formatInt(DarkMatterDimension(this.tier).intervalPurchaseCap)}ms.
         Ascension multiplies interval by ${formatInt(this.intervalAscensionBump)},
         DM by ${formatInt(this.powerDMPerAscension)}, and DE by ${formatInt(POWER_DE_PER_ASCENSION)}.`;
-    }
+    },
   },
   methods: {
     update() {
@@ -126,11 +129,16 @@ export default {
       this.portionDE.copyFrom(this.darkEnergyPerSecond.div(Currency.darkEnergy.productionPerSecond));
       this.productionPerSecond = this.dimensionProduction(this.tier);
       this.percentPerSecond = Decimal.divide(this.productionPerSecond, this.amount).clampMax(1).toNumber();
-      if (!this.isIntervalCapped) this.hoverOverAscension = false;
+      if (!this.isIntervalCapped) {
+        this.hoverOverAscension = false;
+      }
     },
     handleIntervalClick() {
-      if (this.isIntervalCapped) DarkMatterDimension(this.tier).ascend();
-      else DarkMatterDimension(this.tier).buyInterval();
+      if (this.isIntervalCapped) {
+        DarkMatterDimension(this.tier).ascend();
+      } else {
+        DarkMatterDimension(this.tier).buyInterval();
+      }
     },
     buyPowerDM() {
       DarkMatterDimension(this.tier).buyPowerDM();
@@ -145,15 +153,19 @@ export default {
       return cost.gt(Number.MAX_VALUE) ? Notations.current.infinite : format(cost, 2);
     },
     dimensionProduction(tier) {
-      if (tier === 4) return SingularityMilestone.dim4Generation.effectOrDefault(new Decimal(0));
+      if (tier === 4) {
+        return SingularityMilestone.dim4Generation.effectOrDefault(new Decimal(0));
+      }
       const prodDim = DarkMatterDimension(tier + 1);
       return prodDim.amount.times(prodDim.powerDM).divide(prodDim.interval).times(1000);
     },
     hoverState(state) {
-      if (!this.isIntervalCapped) return;
+      if (!this.isIntervalCapped) {
+        return;
+      }
       this.hoverOverAscension = state;
-    }
-  }
+    },
+  },
 };
 </script>
 

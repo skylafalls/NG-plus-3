@@ -19,11 +19,24 @@ export class ImaginaryUpgradeAutobuyerState extends AutobuyerState {
 
   tick() {
     const upg = ImaginaryUpgrade(this.id);
-    while (Currency.imaginaryMachines.gte(upg.cost)) upg.purchase();
+    while (Currency.imaginaryMachines.gte(upg.cost)) {
+      upg.purchase();
+    }
   }
 
-  static get entryCount() { return 10; }
-  static get autobuyerGroupName() { return "Imaginary Upgrade"; }
-  static get isActive() { return player.auto.imaginaryUpgrades.isActive; }
-  static set isActive(value) { player.auto.imaginaryUpgrades.isActive = value; }
+  static get entryCount() {
+    return 10;
+  }
+
+  static get autobuyerGroupName() {
+    return "Imaginary Upgrade";
+  }
+
+  static get isActive() {
+    return player.auto.imaginaryUpgrades.isActive;
+  }
+
+  static set isActive(value) {
+    player.auto.imaginaryUpgrades.isActive = value;
+  }
 }

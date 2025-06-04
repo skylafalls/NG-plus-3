@@ -8,13 +8,13 @@ export default {
   components: {
     ModalWrapperOptions,
     GlyphCustomizationSingleType,
-    PrimaryButton
+    PrimaryButton,
   },
   props: {
     glyphId: {
       type: Number,
       required: true,
-    }
+    },
   },
   data() {
     return {
@@ -31,13 +31,15 @@ export default {
     },
     glyph() {
       return Glyphs.findById(this.glyphId);
-    }
+    },
   },
   created() {
     // This force-closes the modal only if another glyph is dragged into the panel
     EventHub.logic.on(GAME_EVENT.GLYPH_VISUAL_CHANGE, () => {
       this.$recompute("glyph");
-      if (!this.defaultKeySwap) this.emitClose();
+      if (!this.defaultKeySwap) {
+        this.emitClose();
+      }
     });
   },
   methods: {
@@ -45,21 +47,26 @@ export default {
       this.defaultKeySwap = true;
     },
     setType(type) {
-      if (type && this.glyph.fixedCosmetic) return;
+      if (type && this.glyph.fixedCosmetic) {
+        return;
+      }
       this.glyph.color = undefined;
       this.glyph.symbol = undefined;
-      if (this.glyph.fixedCosmetic) this.glyph.cosmetic = this.glyph.fixedCosmetic;
-      else this.glyph.cosmetic = type;
+      if (this.glyph.fixedCosmetic) {
+        this.glyph.cosmetic = this.glyph.fixedCosmetic;
+      } else {
+        this.glyph.cosmetic = type;
+      }
       this.defaultKeySwap = false;
       EventHub.dispatch(GAME_EVENT.GLYPH_VISUAL_CHANGE);
     },
     cosmeticTypeClass(type) {
       return {
         "o-primary-btn--subtab-option": true,
-        "o-active-type": type === this.glyph.cosmetic
+        "o-active-type": type === this.glyph.cosmetic,
       };
-    }
-  }
+    },
+  },
 };
 </script>
 

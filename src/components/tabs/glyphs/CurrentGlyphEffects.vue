@@ -2,8 +2,8 @@
 import CurrentGlyphEffect from "./CurrentGlyphEffect";
 import GlyphSetName from "@/components/GlyphSetName";
 
-const glyphEffectsOrder =
-  ["powerpow", "powermult", "powerdimboost", "powerbuy10",
+const glyphEffectsOrder
+  = ["powerpow", "powermult", "powerdimboost", "powerbuy10",
     "infinitypow", "infinityinfmult", "infinityIP", "infinityrate",
     "replicationpow", "replicationdtgain", "replicationspeed", "replicationglyphlevel",
     "timepow", "timeshardpow", "timeEP", "timespeed", "timeetermult",
@@ -18,7 +18,7 @@ export default {
   name: "CurrentGlyphEffects",
   components: {
     GlyphSetName,
-    CurrentGlyphEffect
+    CurrentGlyphEffect,
   },
   data() {
     return {
@@ -35,12 +35,18 @@ export default {
       return this.effects.length && !this.effects.every(e => e.value.capped === false);
     },
     uniqueGlyphText() {
-      if (!this.hasEffarig && !this.hasReality) return "";
+      if (!this.hasEffarig && !this.hasReality) {
+        return "";
+      }
       const uniqueGlyphs = [];
-      if (this.hasEffarig) uniqueGlyphs.push(
-        `<span style="color: ${GlyphAppearanceHandler.getBorderColor("effarig")};">Effarig</span>`);
-      if (this.hasReality) uniqueGlyphs.push(
-        `<span style="animation: a-reality-glyph-description-cycle 10s infinite;">Reality</span>`);
+      if (this.hasEffarig) {
+        uniqueGlyphs.push(
+          `<span style="color: ${GlyphAppearanceHandler.getBorderColor("effarig")};">Effarig</span>`);
+      }
+      if (this.hasReality) {
+        uniqueGlyphs.push(
+          "<span style=\"animation: a-reality-glyph-description-cycle 10s infinite;\">Reality</span>");
+      }
       return `You cannot have more than one ${uniqueGlyphs.join(" or ")}
         Glyph equipped${uniqueGlyphs.length > 1 ? " each." : "."}`;
     },
@@ -66,7 +72,7 @@ export default {
   watch: {
     logTotalSacrifice() {
       this.glyphsChanged();
-    }
+    },
   },
   created() {
     this.on$(GAME_EVENT.GLYPHS_EQUIPPED_CHANGED, this.glyphsChanged);
@@ -86,7 +92,7 @@ export default {
       this.effects = getActiveGlyphEffects();
       this.effects.sort((a, b) => glyphEffectsOrder.indexOf(a.id) - glyphEffectsOrder.indexOf(b.id));
     },
-  }
+  },
 };
 </script>
 

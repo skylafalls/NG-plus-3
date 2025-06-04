@@ -10,7 +10,7 @@ export default {
     CelestialQuoteHistory,
     PrimaryButton,
     PrimaryToggleButton,
-    BlackHoleChargingSliders
+    BlackHoleChargingSliders,
   },
   data: () => ({
     isStoringBlackHole: false,
@@ -53,7 +53,9 @@ export default {
       return Enslaved.storedTimeInsideEnslaved(this.storedBlackHole);
     },
     realityTitle() {
-      if (this.isRunning) return "You are inside The Nameless Ones' Reality";
+      if (this.isRunning) {
+        return "You are inside The Nameless Ones' Reality";
+      }
       return "Start The Nameless Ones' Reality";
     },
     runButtonClassObject() {
@@ -61,15 +63,19 @@ export default {
         "c-enslaved-run-button__icon": true,
         "c-enslaved-run-button__icon--running": this.isRunning,
         "c-celestial-run-button--clickable": !this.isDoomed,
-        "o-pelle-disabled-pointer": this.isDoomed
+        "o-pelle-disabled-pointer": this.isDoomed,
       };
     },
     runDescription() {
       return GameDatabase.celestials.descriptions[2].effects().split("\n");
     },
     realTimeButtonText() {
-      if (!this.offlineEnabled) return "Offline Progress is disabled";
-      if (this.autoStoreReal) return "Offline time stored";
+      if (!this.offlineEnabled) {
+        return "Offline Progress is disabled";
+      }
+      if (this.autoStoreReal) {
+        return "Offline time stored";
+      }
       return "Offline time used for production";
     },
     // Use this here since Nameless has a fairly non-standard character, and SFCs don't support using \uf0c1
@@ -81,7 +87,7 @@ export default {
         "o-enslaved-mechanic-button--clickable": this.canModifyGameTimeStorage,
         "o-enslaved-mechanic-button--storing-time": this.isStoringBlackHole,
         "l-fixed-setting": !this.canModifyGameTimeStorage,
-        "o-pelle-disabled": this.isDoomed
+        "o-pelle-disabled": this.isDoomed,
       };
     },
     storeRealTimeClass() {
@@ -90,7 +96,7 @@ export default {
         "o-enslaved-mechanic-button--clickable": !this.isDoomed,
         "o-enslaved-mechanic-button--storing-time": this.isStoringReal,
         "l-fixed-setting": !this.canChangeStoreRealTime,
-        "o-pelle-disabled": this.isDoomed
+        "o-pelle-disabled": this.isDoomed,
       };
     },
     dischargeClass() {
@@ -98,7 +104,7 @@ export default {
         "o-enslaved-mechanic-button": true,
         "o-enslaved-mechanic-button--clickable": !this.isDoomed,
         "l-fixed-setting": !this.canDischarge || this.hasNoCharge,
-        "o-pelle-disabled": this.isDoomed
+        "o-pelle-disabled": this.isDoomed,
       };
     },
     doomedDisabledClass() {
@@ -107,14 +113,14 @@ export default {
     mechanicButtonClass() {
       return {
         "o-enslaved-mechanic-button": true,
-        "o-enslaved-mechanic-button--clickable": !this.isDoomed
+        "o-enslaved-mechanic-button--clickable": !this.isDoomed,
       };
-    }
+    },
   },
   watch: {
     autoRelease(newValue) {
       player.celestials.enslaved.isAutoReleasing = newValue;
-    }
+    },
   },
   methods: {
     update() {
@@ -151,7 +157,9 @@ export default {
       Enslaved.toggleStoreReal();
     },
     toggleAutoStoreReal() {
-      if (!this.offlineEnabled) return;
+      if (!this.offlineEnabled) {
+        return;
+      }
       Enslaved.toggleAutoStoreReal();
     },
     useStored() {
@@ -167,7 +175,9 @@ export default {
       Enslaved.buyUnlock(info);
     },
     startRun() {
-      if (this.isDoomed) return;
+      if (this.isDoomed) {
+        return;
+      }
       Modal.celestials.show({ name: "The Nameless Ones'", number: 2 });
     },
     hasUnlock(info) {
@@ -182,7 +192,7 @@ export default {
     unlockClassObject(info) {
       return {
         "o-enslaved-shop-button--bought": this.hasUnlock(info),
-        "o-enslaved-shop-button--available": this.canBuyUnlock(info)
+        "o-enslaved-shop-button--available": this.canBuyUnlock(info),
       };
     },
     glitchStyle(x) {
@@ -195,7 +205,7 @@ export default {
         transform: `translate(${dx}rem, ${dy}rem)`,
         height: `${height}rem`,
       };
-    }
+    },
   },
 };
 </script>

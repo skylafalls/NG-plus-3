@@ -11,7 +11,7 @@ export default {
     SplitPane,
     AutomatorEditor,
     AutomatorPointsList,
-    AutomatorDocs
+    AutomatorDocs,
   },
   data() {
     return {
@@ -27,7 +27,9 @@ export default {
       return this.$viewModel.tabs.reality.automator.fullScreen;
     },
     tabClass() {
-      if (!this.fullScreen) return;
+      if (!this.fullScreen) {
+        return;
+      }
       return "c-automator-tab--full-screen";
     },
     fullScreenIconClass() {
@@ -58,8 +60,8 @@ export default {
       this.currentChars = AutomatorData.singleScriptCharacters();
       this.totalChars = AutomatorData.totalScriptCharacters();
       this.withinLimit = AutomatorData.isWithinLimit();
-    }
-  }
+    },
+  },
 };
 </script>
 

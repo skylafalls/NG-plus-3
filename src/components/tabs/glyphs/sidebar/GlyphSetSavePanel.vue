@@ -6,7 +6,7 @@ export default {
   name: "GlyphSetSavePanel",
   components: {
     ToggleButton,
-    GlyphSetPreview
+    GlyphSetPreview,
   },
   data() {
     return {
@@ -24,7 +24,7 @@ export default {
         full set of previously-saved Glyphs`;
     },
     noSet() {
-      return `No Glyph Preset saved in this slot`;
+      return "No Glyph Preset saved in this slot";
     },
   },
   watch: {
@@ -61,7 +61,9 @@ export default {
       return `Glyph Preset #${id + 1}${name}`;
     },
     saveGlyphSet(id) {
-      if (!this.hasEquipped || player.reality.glyphs.sets[id].glyphs.length > 0) return;
+      if (!this.hasEquipped || player.reality.glyphs.sets[id].glyphs.length > 0) {
+        return;
+      }
       player.reality.glyphs.sets[id].glyphs = Glyphs.active.compact();
       this.refreshGlyphSets();
       EventHub.dispatch(GAME_EVENT.GLYPH_SET_SAVE_CHANGE);
@@ -70,7 +72,9 @@ export default {
     // something which should work in most cases - we match greedily when it won't obviously lead to an incomplete
     // preset match, and leniently when matching greedily may lead to an incomplete set being loaded
     loadGlyphSet(set, id) {
-      if (!this.setLengthValid(set)) return;
+      if (!this.setLengthValid(set)) {
+        return;
+      }
       let glyphsToLoad = [...set].sort((a, b) => Decimal.compare(a.level.mul(a.strength), b.level.mul(b.strength)));
       const activeGlyphs = Glyphs.active.filter(g => g);
 
@@ -81,7 +85,7 @@ export default {
         const options = Glyphs.findByValues(glyph, glyphsToLoad, {
           level: this.level ? -1 : 0,
           strength: this.rarity ? -1 : 0,
-          effects: this.effects ? -1 : 0
+          effects: this.effects ? -1 : 0,
         });
         activeOptions.push({ glyph, options });
       }
@@ -89,7 +93,9 @@ export default {
       // Using the active glyphs one by one, select matching to-be-loaded preset glyphs to be removed from the list.
       // This makes sure the inventory doesn't attempt to match a glyph which is already satisfied by an equipped one
       const selectedFromActive = this.findSelectedGlyphs(activeOptions, 5);
-      for (const glyph of selectedFromActive) glyphsToLoad = glyphsToLoad.filter(g => g !== glyph);
+      for (const glyph of selectedFromActive) {
+        glyphsToLoad = glyphsToLoad.filter(g => g !== glyph);
+      }
 
       // For the remaining glyphs to load from the preset, find all their appropriate matches within the inventory.
       // This is largely the same as earlier with the equipped glyphs
@@ -99,7 +105,7 @@ export default {
         const options = Glyphs.findByValues(glyph, Glyphs.sortedInventoryList, {
           level: this.level ? 1 : 0,
           strength: this.rarity ? 1 : 0,
-          effects: this.effects ? 1 : 0
+          effects: this.effects ? 1 : 0,
         });
         remainingOptions[index] = { glyph, options };
       }
@@ -108,7 +114,9 @@ export default {
       // match more glyphs than we have room for
       const selectedFromInventory = this.findSelectedGlyphs(remainingOptions,
         Glyphs.active.countWhere(g => g === null));
-      for (const glyph of selectedFromInventory) glyphsToLoad = glyphsToLoad.filter(g => g !== glyph);
+      for (const glyph of selectedFromInventory) {
+        glyphsToLoad = glyphsToLoad.filter(g => g !== glyph);
+      }
 
       // Actually equip the glyphs and then notify how successful (or not) the loading was
       let missingGlyphs = glyphsToLoad.length;
@@ -142,11 +150,15 @@ export default {
       const toLoad = [];
       let slotsLeft = maxGlyphs;
       for (let index = 0; index < optionList.length; index++) {
-        if (slotsLeft === 0) break;
+        if (slotsLeft === 0) {
+          break;
+        }
         const entry = optionList[index];
 
         const filteredOptions = entry.options.filter(g => !toLoad.includes(g));
-        if (filteredOptions.length === 0) continue;
+        if (filteredOptions.length === 0) {
+          continue;
+        }
         const selectedGlyph = filteredOptions[filteredOptions.length - 1];
         toLoad.push(selectedGlyph);
         slotsLeft--;
@@ -154,9 +166,12 @@ export default {
       return toLoad;
     },
     deleteGlyphSet(id) {
-      if (player.reality.glyphs.sets[id].glyphs.length === 0) return;
-      if (player.options.confirmations.deleteGlyphSetSave) Modal.glyphSetSaveDelete.show({ glyphSetId: id });
-      else {
+      if (player.reality.glyphs.sets[id].glyphs.length === 0) {
+        return;
+      }
+      if (player.options.confirmations.deleteGlyphSetSave) {
+        Modal.glyphSetSaveDelete.show({ glyphSetId: id });
+      } else {
         player.reality.glyphs.sets[id].glyphs = [];
         this.refreshGlyphSets();
         EventHub.dispatch(GAME_EVENT.GLYPH_SET_SAVE_CHANGE);
@@ -177,8 +192,8 @@ export default {
     },
     glyphSetKey(set, index) {
       return `${index} ${Glyphs.hash(set)}`;
-    }
-  }
+    },
+  },
 };
 </script>
 

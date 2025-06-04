@@ -6,12 +6,12 @@ export default {
   props: {
     effect: {
       type: Object,
-      required: true
+      required: true,
     },
     glyphType: {
       type: String,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {
@@ -19,8 +19,8 @@ export default {
       noExclude: false,
       effarigSettings: {
         effarigrm: false,
-        effarigglyph: false
-      }
+        effarigglyph: false,
+      },
     };
   },
   computed: {
@@ -36,11 +36,13 @@ export default {
     // This is hardcoded here since there is only one case ever, and that adding generic dynamic support to multiple
     // pairs/groups of effects is both out of design scope and an unacceptable performance hit to amplified realities
     exclusionTooltip() {
-      if (this.noExclude) return "";
+      if (this.noExclude) {
+        return "";
+      }
 
       const effarigSettings = this.effarigSettings;
-      if (effarigSettings.RM && effarigSettings.glyph &&
-        (this.effect.id === "effarigrm" || this.effect.id === "effarigglyph")) {
+      if (effarigSettings.RM && effarigSettings.glyph
+        && (this.effect.id === "effarigrm" || this.effect.id === "effarigglyph")) {
         return "RM multiplier and Glyph instability cannot occur together on the same Glyph!";
       }
       if (this.effect.id === "effarigrm" && effarigSettings.glyph) {
@@ -60,22 +62,22 @@ export default {
         RM: effectDB.effarigrm.intID,
         glyph: effectDB.effarigglyph.intID,
       };
-    }
+    },
   },
   methods: {
     update() {
       this.isActive = AutoGlyphProcessor.types[this.glyphType].specifiedMask.includes(this.effect.id);
       this.effarigSettings = {
         RM: AutoGlyphProcessor.types.effarig.specifiedMask.includes("effarigrm"),
-        glyph: AutoGlyphProcessor.types.effarig.specifiedMask.includes("effarigglyph")
+        glyph: AutoGlyphProcessor.types.effarig.specifiedMask.includes("effarigglyph"),
       };
       this.noExclude = Ra.unlocks.glyphEffectCount.canBeApplied;
     },
     toggleSelection() {
       if (AutoGlyphProcessor.types[this.glyphType].specifiedMask.includes(this.effect.id)) {
-        AutoGlyphProcessor.types[this.glyphType].specifiedMask =
+        AutoGlyphProcessor.types[this.glyphType].specifiedMask
         // Lazy workaround to remove only the glyph effect id and nothing else
-        AutoGlyphProcessor.types[this.glyphType].specifiedMask.filter(e => e !== this.effect.id);
+        = AutoGlyphProcessor.types[this.glyphType].specifiedMask.filter(e => e !== this.effect.id);
       } else {
         AutoGlyphProcessor.types[this.glyphType].specifiedMask.push(this.effect.id);
       }
@@ -86,7 +88,7 @@ export default {
         this.autoSacrificeSettings.effectCount = Math.clamp(inputValue, 0, 8);
       }
     },
-  }
+  },
 };
 </script>
 

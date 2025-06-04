@@ -11,11 +11,17 @@ class Validator extends BaseVisitor {
     this.reset(rawText);
     // Commands can provide validation hooks; we might also have some here
     for (const cmd of AutomatorCommands) {
-      if (!cmd.validate) continue;
+      if (!cmd.validate) {
+        continue;
+      }
       const ownMethod = this[cmd.id];
-      this[cmd.id] = ctx => {
-        if (!cmd.validate(ctx, this)) return;
-        if (ownMethod) ownMethod.call(this, ctx);
+      this[cmd.id] = (ctx) => {
+        if (!cmd.validate(ctx, this)) {
+          return;
+        }
+        if (ownMethod) {
+          ownMethod.call(this, ctx);
+        }
       };
     }
 
@@ -37,7 +43,7 @@ class Validator extends BaseVisitor {
         startOffset: err.offset,
         endOffset: err.offset + err.length,
         info: `Unexpected characters: ${this.rawText.slice(err.offset, err.length)}`,
-        tip: `${this.rawText.slice(err.offset, err.length)} cannot be part of a command, remove them`
+        tip: `${this.rawText.slice(err.offset, err.length)} cannot be part of a command, remove them`,
       });
     }
   }
@@ -81,7 +87,9 @@ class Validator extends BaseVisitor {
       startOffset: Number.MAX_VALUE,
       endOffset: 0,
     };
-    if (ctx === undefined || ctx === null) return pos;
+    if (ctx === undefined || ctx === null) {
+      return pos;
+    }
     if (ctx.startOffset !== undefined) {
       return {
         startLine: ctx.startLine,
@@ -92,12 +100,16 @@ class Validator extends BaseVisitor {
     if (ctx.location !== undefined && ctx.location.startOffset !== undefined) {
       return ctx.location;
     }
-    if (ctx.children && !Array.isArray(ctx.children)) return Validator.getPositionRange(ctx.children);
+    if (ctx.children && !Array.isArray(ctx.children)) {
+      return Validator.getPositionRange(ctx.children);
+    }
     if (Array.isArray(ctx)) {
       return ctx.reduce((prev, el) => Validator.combinePositionRanges(prev, Validator.getPositionRange(el)), pos);
     }
     for (const k in ctx) {
-      if (!Object.prototype.hasOwnProperty.call(ctx, k) || !Array.isArray(ctx[k])) continue;
+      if (!Object.prototype.hasOwnProperty.call(ctx, k) || !Array.isArray(ctx[k])) {
+        continue;
+      }
       pos = Validator.combinePositionRanges(pos, Validator.getPositionRange(ctx[k]));
     }
     return pos;
@@ -119,7 +131,9 @@ class Validator extends BaseVisitor {
     // the game cache is never invalidated. This only seems to happen on re-initialization after full completions,
     // but that means that in many cases a lot of endgame values are never cleared. Therefore we shortcut the whole
     // function if the automator isn't unlocked or it attempts to error-check an empty script
-    if (!Player.automatorUnlocked || AutomatorData.currentScriptText() === undefined) return;
+    if (!Player.automatorUnlocked || AutomatorData.currentScriptText() === undefined) {
+      return;
+    }
 
     const modifiedErrors = [];
     let lastLine = 0;
@@ -182,7 +196,7 @@ class Validator extends BaseVisitor {
     const tsNumber = parseFloat(token.image);
     if (!TimeStudy(tsNumber) || (TimeStudy(tsNumber).isTriad && !Ra.canBuyTriad)) {
       this.addError(token, `Invalid Time Study identifier ${tsNumber}`,
-        `Make sure you copied or typed in your time study IDs correctly`);
+        "Make sure you copied or typed in your time study IDs correctly");
       return 0;
     }
     return tsNumber;
@@ -218,7 +232,8 @@ class Validator extends BaseVisitor {
         varInfo.value = parseInt(1000 * value, 10);
         break;
       }
-      default: {throw new Error("Unrecognized variable format in automator constant lookup");
+      default: {
+        throw new Error("Unrecognized variable format in automator constant lookup");
       }
     }
 
@@ -228,23 +243,31 @@ class Validator extends BaseVisitor {
   isValidVarFormat(identifier, type) {
     const varName = identifier.image;
     const constants = player.reality.automator.constants;
-    if (!Object.keys(constants).includes(varName)) return false;
+    if (!Object.keys(constants).includes(varName)) {
+      return false;
+    }
     const value = constants[varName];
 
     switch (type) {
-      case AUTOMATOR_VAR_TYPES.NUMBER: {return value.match(/^-?(0|[1-9]\d*)(\.\d+)?([eE][+-]?\d+)?$/u);
+      case AUTOMATOR_VAR_TYPES.NUMBER: {
+        return value.match(/^-?(0|[1-9]\d*)(\.\d+)?([eE][+-]?\d+)?$/u);
       }
-      case AUTOMATOR_VAR_TYPES.STUDIES: {return TimeStudyTree.isValidImportString(value);
+      case AUTOMATOR_VAR_TYPES.STUDIES: {
+        return TimeStudyTree.isValidImportString(value);
       }
-      case AUTOMATOR_VAR_TYPES.DURATION: {return !Number.isNaN(parseInt(1000 * value, 10));
+      case AUTOMATOR_VAR_TYPES.DURATION: {
+        return !Number.isNaN(parseInt(1000 * value, 10));
       }
-      default: {throw new Error("Unrecognized variable format in automator constant lookup");
+      default: {
+        throw new Error("Unrecognized variable format in automator constant lookup");
       }
     }
   }
 
   duration(ctx) {
-    if (ctx.$value) return ctx.$value;
+    if (ctx.$value) {
+      return ctx.$value;
+    }
     if (!ctx.TimeUnit || ctx.TimeUnit[0].isInsertedInRecovery) {
       this.addError(ctx, "Missing time unit", "Provide a unit of time (eg. seconds or minutes)");
       return;
@@ -259,7 +282,9 @@ class Validator extends BaseVisitor {
   }
 
   xHighest(ctx) {
-    if (ctx.$value) return ctx.$value;
+    if (ctx.$value) {
+      return ctx.$value;
+    }
     if (!ctx.NumberLiteral || ctx.NumberLiteral[0].isInsertedInRecovery) {
       this.addError(ctx, "Missing multiplier", "Provide a multiplier to set the autobuyer to");
       return;
@@ -269,7 +294,9 @@ class Validator extends BaseVisitor {
   }
 
   currencyAmount(ctx) {
-    if (ctx.$value) return ctx.$value;
+    if (ctx.$value) {
+      return ctx.$value;
+    }
     if (!ctx.NumberLiteral || ctx.NumberLiteral[0].isInsertedInRecovery) {
       this.addError(ctx, "Missing amount", "Provide a threshold to set the autobuyer to");
       return;
@@ -279,17 +306,21 @@ class Validator extends BaseVisitor {
   }
 
   studyRange(ctx, studiesOut) {
-    if (!ctx.firstStudy || ctx.firstStudy[0].isInsertedInRecovery ||
-      !ctx.lastStudy || ctx.lastStudy[0].isInsertedInRecovery) {
+    if (!ctx.firstStudy || ctx.firstStudy[0].isInsertedInRecovery
+      || !ctx.lastStudy || ctx.lastStudy[0].isInsertedInRecovery) {
       this.addError(ctx, "Missing Time Study number in range",
         "Provide starting and ending IDs for Time Study number ranges");
       return;
     }
     const first = this.checkTimeStudyNumber(ctx.firstStudy[0]);
     const last = this.checkTimeStudyNumber(ctx.lastStudy[0]);
-    if (!first || !last || !studiesOut) return;
+    if (!first || !last || !studiesOut) {
+      return;
+    }
     for (let id = first; id <= last; ++id) {
-      if (TimeStudy(id)) studiesOut.push(id);
+      if (TimeStudy(id)) {
+        studiesOut.push(id);
+      }
     }
   }
 
@@ -304,7 +335,9 @@ class Validator extends BaseVisitor {
         return;
       }
       const id = this.checkTimeStudyNumber(ctx.NumberLiteral[0]);
-      if (id) studiesOut.push(id);
+      if (id) {
+        studiesOut.push(id);
+      }
       return;
     }
     if (ctx.StudyPath) {
@@ -315,9 +348,13 @@ class Validator extends BaseVisitor {
   }
 
   studyList(ctx) {
-    if (ctx.$cached !== undefined) return ctx.$cached;
+    if (ctx.$cached !== undefined) {
+      return ctx.$cached;
+    }
     const studiesOut = [];
-    for (const sle of ctx.studyListEntry) this.visit(sle, studiesOut);
+    for (const sle of ctx.studyListEntry) {
+      this.visit(sle, studiesOut);
+    }
     const positionRange = Validator.getPositionRange(ctx);
     ctx.$cached = {
       normal: studiesOut,
@@ -337,7 +374,9 @@ class Validator extends BaseVisitor {
       }
       ctx.$cached.ec = ecNumber;
     }
-    if (ctx.Exclamation) ctx.$cached.startEC = true;
+    if (ctx.Exclamation) {
+      ctx.$cached.startEC = true;
+    }
     return ctx.$cached;
   }
 
@@ -350,14 +389,16 @@ class Validator extends BaseVisitor {
           `Ensure that ${ctx.Identifier[0].image} contains a properly-formatted number and not a Time Study string`);
       }
       const varLookup = this.lookupVar(ctx.Identifier[0], AUTOMATOR_VAR_TYPES.NUMBER);
-      if (varLookup) ctx.$value = ctx.Identifier[0].image;
+      if (varLookup) {
+        ctx.$value = ctx.Identifier[0].image;
+      }
     }
   }
 
   comparison(ctx) {
     super.comparison(ctx);
-    if (!ctx.compareValue || ctx.compareValue[0].recoveredNode ||
-      ctx.compareValue.length !== 2 || ctx.compareValue[1].recoveredNode) {
+    if (!ctx.compareValue || ctx.compareValue[0].recoveredNode
+      || ctx.compareValue.length !== 2 || ctx.compareValue[1].recoveredNode) {
       this.addError(ctx, "Missing value for comparison", "Ensure that the comparison has two values");
     }
     if (!ctx.ComparisonOperator || ctx.ComparisonOperator[0].isInsertedInRecovery) {
@@ -413,7 +454,9 @@ class Validator extends BaseVisitor {
   }
 
   script(ctx) {
-    if (ctx.block) this.visit(ctx.block);
+    if (ctx.block) {
+      this.visit(ctx.block);
+    }
     ctx.variables = this.variables;
   }
 }
@@ -423,14 +466,20 @@ class Compiler extends BaseVisitor {
     super();
     // Commands provide compilation hooks; we might also have some here
     for (const cmd of AutomatorCommands) {
-      if (!cmd.compile) continue;
+      if (!cmd.compile) {
+        continue;
+      }
       const ownMethod = this[cmd.id];
-      // eslint-disable-next-line no-loop-func
+
       this[cmd.id] = (ctx, output) => {
         // For the compiler, we don't bother doing the default recursive visitation behavior
-        if (ownMethod && ownMethod !== super[cmd.id]) ownMethod.call(this, ctx, output);
+        if (ownMethod && ownMethod !== super[cmd.id]) {
+          ownMethod.call(this, ctx, output);
+        }
         let compiled = cmd.compile(ctx, this);
-        if (typeof compiled === "function") compiled = { run: compiled };
+        if (typeof compiled === "function") {
+          compiled = { run: compiled };
+        }
         compiled.lineNumber = ctx.startLine;
         output.push(compiled);
       };
@@ -439,14 +488,18 @@ class Compiler extends BaseVisitor {
   }
 
   comparison(ctx) {
-    const getters = ctx.compareValue.map(cv => {
-      if (cv.children.AutomatorCurrency) return cv.children.AutomatorCurrency[0].tokenType.$getter;
+    const getters = ctx.compareValue.map((cv) => {
+      if (cv.children.AutomatorCurrency) {
+        return cv.children.AutomatorCurrency[0].tokenType.$getter;
+      }
       const val = cv.children.$value;
-      if (typeof val === "string") return () => player.reality.automator.constants[val];
+      if (typeof val === "string") {
+        return () => player.reality.automator.constants[val];
+      }
       return () => val;
     });
     // Some currencies are locked and should always evaluate to false if they're attempted to be used
-    const canUseInComp = ctx.compareValue.map(cv => {
+    const canUseInComp = ctx.compareValue.map((cv) => {
       if (cv.children.AutomatorCurrency) {
         const unlockedFn = cv.children.AutomatorCurrency[0].tokenType.$unlocked;
         return unlockedFn ? unlockedFn() : true;
@@ -455,14 +508,18 @@ class Compiler extends BaseVisitor {
       return true;
     });
 
-    if (!canUseInComp[0] || !canUseInComp[1]) return () => false;
+    if (!canUseInComp[0] || !canUseInComp[1]) {
+      return () => false;
+    }
     const compareFun = ctx.ComparisonOperator[0].tokenType.$compare;
     return () => compareFun(getters[0](), getters[1]());
   }
 
   block(ctx) {
     const output = [];
-    if (ctx.command) for (const cmd of ctx.command) this.visit(cmd, output);
+    if (ctx.command) {
+      for (const cmd of ctx.command) {this.visit(cmd, output);}
+    }
     return output;
   }
 
@@ -479,16 +536,20 @@ class Blockifier extends BaseVisitor {
     super();
     for (const cmd of AutomatorCommands) {
       const blockify = cmd.blockify;
-      if (!blockify) continue;
+      if (!blockify) {
+        continue;
+      }
       const ownMethod = this[cmd.id];
-      // eslint-disable-next-line no-loop-func
+
       this[cmd.id] = (ctx, output) => {
-        if (ownMethod && ownMethod !== super[cmd.id]) ownMethod.call(this, ctx, output);
+        if (ownMethod && ownMethod !== super[cmd.id]) {
+          ownMethod.call(this, ctx, output);
+        }
         try {
           const block = blockify(ctx, this);
           output.push({
             ...block,
-            id: UIID.next()
+            id: UIID.next(),
           });
         } catch {
           // If a command is invalid, it will throw an exception in blockify and fail to assign a value to block
@@ -501,10 +562,12 @@ class Blockifier extends BaseVisitor {
   }
 
   comparison(ctx) {
-    const parseInput = index => {
+    const parseInput = (index) => {
       const comp = ctx.compareValue[index];
       const isCurrency = Boolean(comp.children.AutomatorCurrency);
-      if (isCurrency) return comp.children.AutomatorCurrency[0].image;
+      if (isCurrency) {
+        return comp.children.AutomatorCurrency[0].image;
+      }
       return comp.children.$value;
     };
 
@@ -517,7 +580,9 @@ class Blockifier extends BaseVisitor {
 
   script(ctx) {
     const output = [];
-    if (ctx.block) this.visit(ctx.block, output);
+    if (ctx.block) {
+      this.visit(ctx.block, output);
+    }
     return output;
   }
 
@@ -557,8 +622,10 @@ export function blockifyTextAutomator(input) {
   // associated with unparsable commands. This results in a discrepancy in line count whenever a line can't be
   // parsed as a specific command, and in general this is a problem we can't try to guess a fix for, so we just
   // don't convert it at all. In both cases nested commands are stored recursively, but with different structure.
-  const validatedCount = entry => {
-    if (!entry) return 0;
+  const validatedCount = (entry) => {
+    if (!entry) {
+      return 0;
+    }
     const commandDepth = entry.children;
     let foundChildren = 0;
     // Inner nested commands are found within a prop given the same name as the command itself - this should only
@@ -572,12 +639,16 @@ export function blockifyTextAutomator(input) {
 
       // Trailing newlines get turned into a command with a single EOF argument; we return -1 because one level up
       // on the recursion this looks like an otherwise valid command and would be counted as such
-      if (key === "EOF") return -1;
+      if (key === "EOF") {
+        return -1;
+      }
     }
     return foundChildren;
   };
-  const visitedCount = block => {
-    if (!block.nest) return 1;
+  const visitedCount = (block) => {
+    if (!block.nest) {
+      return 1;
+    }
     return 1 + block.nest.map(b => visitedCount(b)).reduce((sum, val) => sum + val, 0);
   };
   // Note: top-level structure is slightly different than the nesting structure

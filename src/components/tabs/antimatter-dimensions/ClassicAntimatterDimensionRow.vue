@@ -6,13 +6,13 @@ export default {
   name: "ClassicAntimatterDimensionRow",
   components: {
     GenericDimensionRowText,
-    PrimaryButton
+    PrimaryButton,
   },
   props: {
     tier: {
       type: Number,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {
@@ -42,14 +42,20 @@ export default {
       return `${AntimatterDimension(this.tier).shortDisplayName} Antimatter Dimension`;
     },
     singleText() {
-      if (this.isCapped) return "Capped";
+      if (this.isCapped) {
+        return "Capped";
+      }
       const prefix = this.showCostTitle(this.singleCost) ? "Cost: " : "";
       const suffix = this.isCostsAD ? `${this.costUnit}` : "AM";
       return `${prefix} ${format(this.singleCost)} ${suffix}`;
     },
     until10Text() {
-      if (this.isCapped) return "Shattered by Nameless";
-      if (this.isContinuumActive) return `Continuum: ${this.continuumString}`;
+      if (this.isCapped) {
+        return "Shattered by Nameless";
+      }
+      if (this.isContinuumActive) {
+        return `Continuum: ${this.continuumString}`;
+      }
 
       const prefix = `Until ${formatInt(10)},${this.showCostTitle(this.until10Cost) ? " Cost" : ""}`;
       const suffix = this.isCostsAD ? `${this.costUnit}` : "AM";
@@ -62,8 +68,12 @@ export default {
       return this.isShown || this.isUnlocked || this.amount.gt(0);
     },
     boughtTooltip() {
-      if (this.isCapped) return `Nameless prevents the purchase of more than ${format(1)} 8th Antimatter Dimension`;
-      if (this.isContinuumActive) return "Continuum produces all your Antimatter Dimensions";
+      if (this.isCapped) {
+        return `Nameless prevents the purchase of more than ${format(1)} 8th Antimatter Dimension`;
+      }
+      if (this.isContinuumActive) {
+        return "Continuum produces all your Antimatter Dimensions";
+      }
       return `Purchased ${quantifyInt("time", this.bought)}`;
     },
     costUnit() {
@@ -80,15 +90,19 @@ export default {
         "o-primary-btn--buy-ad o-primary-btn--buy-dim c-dim-tooltip-container": true,
         "o-primary-btn--buy-10-ad": !this.isContinuumActive,
         "o-primary-btn--continuum-ad o-continuum": this.isContinuumActive,
-        "l-dim-row-small-text": this.isLongText(this.until10Text) && !this.isContinuumActive
+        "l-dim-row-small-text": this.isLongText(this.until10Text) && !this.isContinuumActive,
       };
-    }
+    },
   },
   methods: {
     update() {
       const tier = this.tier;
-      if (tier === 8 && this.isDoomed) this.formattedAmount = formatInt(this.amount);
-      if (tier > DimBoost.maxDimensionsUnlockable) return;
+      if (tier === 8 && this.isDoomed) {
+        this.formattedAmount = formatInt(this.amount);
+      }
+      if (tier > DimBoost.maxDimensionsUnlockable) {
+        return;
+      }
       const dimension = AntimatterDimension(tier);
       this.isUnlocked = dimension.isAvailableForPurchase;
       this.isCapped = tier === 8 && Enslaved.isRunning && dimension.bought.gte(1);
@@ -98,23 +112,29 @@ export default {
       this.boughtBefore10.copyFrom(dimension.boughtBefore10);
       this.singleCost.copyFrom(dimension.cost);
       this.until10Cost.copyFrom(dimension.costUntil10);
-      this.rateOfChange.copyFrom(dimension.rateOfChange)
+      this.rateOfChange.copyFrom(dimension.rateOfChange);
       this.isAffordable = dimension.isAffordable;
       this.isAffordableUntil10 = dimension.isAffordableUntil10;
       this.isContinuumActive = Laitela.continuumActive;
-      if (this.isContinuumActive) this.continuumValue = dimension.continuumValue;
-      this.isShown =
-        (DimBoost.totalBoosts.gt(0) && DimBoost.totalBoosts.add(3).gte(tier)) || PlayerProgress.infinityUnlocked();
+      if (this.isContinuumActive) {
+        this.continuumValue = dimension.continuumValue;
+      }
+      this.isShown
+        = (DimBoost.totalBoosts.gt(0) && DimBoost.totalBoosts.add(3).gte(tier)) || PlayerProgress.infinityUnlocked();
       this.isCostsAD = NormalChallenge(6).isRunning && tier > 2 && !this.isContinuumActive;
-      this.hasTutorial = (tier === 1 && Tutorial.isActive(TUTORIAL_STATE.DIM1)) ||
-        (tier === 2 && Tutorial.isActive(TUTORIAL_STATE.DIM2));
+      this.hasTutorial = (tier === 1 && Tutorial.isActive(TUTORIAL_STATE.DIM1))
+        || (tier === 2 && Tutorial.isActive(TUTORIAL_STATE.DIM2));
     },
     buySingle() {
-      if (this.isContinuumActive) return;
+      if (this.isContinuumActive) {
+        return;
+      }
       buyOneDimension(this.tier);
     },
     buyUntil10() {
-      if (this.isContinuumActive) return;
+      if (this.isContinuumActive) {
+        return;
+      }
       buyManyDimension(this.tier);
     },
     showCostTitle(value) {
@@ -126,10 +146,10 @@ export default {
     tutorialClass() {
       return {
         "l-glow-container": true,
-        "tutorial--glow": this.isAffordable && this.hasTutorial
+        "tutorial--glow": this.isAffordable && this.hasTutorial,
       };
     },
-  }
+  },
 };
 </script>
 

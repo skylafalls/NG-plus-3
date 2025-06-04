@@ -12,7 +12,7 @@ export default {
   computed: {
     lineClass() {
       return this.enableAnimation ? undefined : "c-disable-ticker-animation";
-    }
+    },
   },
   beforeCreate() {
     this.recentTickers = [];
@@ -48,7 +48,9 @@ export default {
     },
     prepareNextMessage() {
       const line = this.$refs.line;
-      if (line === undefined) return;
+      if (line === undefined) {
+        return;
+      }
 
       // Prevent tickers from repeating if they aren't unlocked or were seen recently
       const canShow = news => (news.unlocked ?? true) && !this.recentTickers.includes(news.id);
@@ -69,7 +71,9 @@ export default {
       }
 
       this.recentTickers.push(this.currentNews.id);
-      while (this.recentTickers.length > player.options.news.repeatBuffer) this.recentTickers.shift();
+      while (this.recentTickers.length > player.options.news.repeatBuffer) {
+        this.recentTickers.shift();
+      }
 
       if (this.currentNews.reset) {
         this.currentNews.reset();
@@ -80,7 +84,7 @@ export default {
         window.openNewsLink = openExternalLink;
         text = text.replaceAll(
           /href=['"]([^"']+)['"]/gu,
-          "href onClick='window.openNewsLink(\"$1\"); return false;'"
+          "href onClick='window.openNewsLink(\"$1\"); return false;'",
         );
       }
       line.innerHTML = text;
@@ -110,7 +114,9 @@ export default {
       }
 
       NewsHandler.addSeenNews(this.currentNews.id);
-      if (NewsHandler.uniqueTickersSeen >= 50) Achievement(22).unlock();
+      if (NewsHandler.uniqueTickersSeen >= 50) {
+        Achievement(22).unlock();
+      }
 
       this.scrollTimeout = setTimeout(this.prepareNextMessage.bind(this), scrollDuration * 1000);
     },
@@ -123,8 +129,8 @@ export default {
       if (updatedText !== undefined) {
         this.$refs.line.innerHTML = updatedText;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -8,7 +8,7 @@ export default {
   components: {
     SwapAchievementImagesButton,
     NormalAchievementRow,
-    PrimaryToggleButton
+    PrimaryToggleButton,
   },
   data() {
     return {
@@ -26,7 +26,7 @@ export default {
       achMultToBH: false,
       achMultToTP: false,
       achMultToTT: false,
-      renderedRowIndices: []
+      renderedRowIndices: [],
     };
   },
   computed: {
@@ -43,13 +43,23 @@ export default {
 
       const dimMultList = [];
       dimMultList.push("Antimatter");
-      if (this.achMultToIDS) dimMultList.push("Infinity");
-      if (this.achMultToTDS) dimMultList.push("Time");
+      if (this.achMultToIDS) {
+        dimMultList.push("Infinity");
+      }
+      if (this.achMultToTDS) {
+        dimMultList.push("Time");
+      }
       boostList.push(`${makeEnumeration(dimMultList)} Dimensions: ${achievementPower}`);
 
-      if (this.achMultToTP) boostList.push(`Tachyon Particles: ${achTPEffect}`);
-      if (this.achMultToBH) boostList.push(`Black Hole Power: ${achievementPower}`);
-      if (this.achMultToTT) boostList.push(`Time Theorem production: ${achievementPower}`);
+      if (this.achMultToTP) {
+        boostList.push(`Tachyon Particles: ${achTPEffect}`);
+      }
+      if (this.achMultToBH) {
+        boostList.push(`Black Hole Power: ${achievementPower}`);
+      }
+      if (this.achMultToTT) {
+        boostList.push(`Time Theorem production: ${achievementPower}`);
+      }
       return `${boostList.join("<br>")}`;
     },
   },
@@ -60,7 +70,7 @@ export default {
     hideCompletedRows(newValue) {
       player.options.hideCompletedAchievementRows = newValue;
       this.startRowRendering();
-    }
+    },
   },
   created() {
     this.startRowRendering();
@@ -125,7 +135,7 @@ export default {
     },
     timeDisplay,
     timeDisplayNoDecimals,
-  }
+  },
 };
 </script>
 

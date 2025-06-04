@@ -14,7 +14,7 @@ export default {
     return {
       hasDimensionBoosts: false,
       buy10Mult: new Decimal(0),
-      multiplierText: ""
+      multiplierText: "",
     };
   },
   methods: {
@@ -23,7 +23,7 @@ export default {
       this.buy10Mult.copyFrom(MetaDimensions.buyTenMultiplier);
       this.multiplierText = `Buy 10 Dimension purchase multiplier: ${formatX(this.buy10Mult, 2, 2)}`;
     },
-  }
+  },
 };
 </script>
 

@@ -4,11 +4,11 @@ import ModalWrapperChoice from "@/components/modals/ModalWrapperChoice";
 export default {
   name: "HardResetModal",
   components: {
-    ModalWrapperChoice
+    ModalWrapperChoice,
   },
   data() {
     return {
-      input: ""
+      input: "",
     };
   },
   computed: {
@@ -20,14 +20,18 @@ export default {
     },
     hasSpeedrun() {
       return player.speedrun.isUnlocked;
-    }
+    },
   },
   destroyed() {
-    if (this.willHardReset) SecretAchievement(38).unlock();
+    if (this.willHardReset) {
+      SecretAchievement(38).unlock();
+    }
   },
   methods: {
     hardReset() {
-      if (this.willHardReset) GameStorage.hardReset();
+      if (this.willHardReset) {
+        GameStorage.hardReset();
+      }
       this.input = "";
     },
   },

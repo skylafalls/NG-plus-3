@@ -9,12 +9,12 @@ export default {
   props: {
     tab: {
       type: Object,
-      required: true
+      required: true,
     },
     changeEnabled: {
       type: Boolean,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {
@@ -43,7 +43,7 @@ export default {
         "l-hide-modal-subtab-container": true,
         "c-hidden-tabs-background__visible": !this.isHidden,
         "c-hidden-tabs-background__hidden": this.isHidden,
-        "c-hidden-tabs-background__always-visible": this.alwaysVisible
+        "c-hidden-tabs-background__always-visible": this.alwaysVisible,
       };
     },
     rowVisibleIndicatorClass() {
@@ -56,8 +56,12 @@ export default {
       };
     },
     rowVisibleIndicatorTooltip() {
-      if (this.isHidden) return "Click to unhide tab";
-      if (!this.alwaysVisible) return "Click to hide tab";
+      if (this.isHidden) {
+        return "Click to unhide tab";
+      }
+      if (!this.alwaysVisible) {
+        return "Click to hide tab";
+      }
       return "This tab cannot be hidden";
     },
   },
@@ -70,7 +74,9 @@ export default {
       this.unlockedSubtabs = this.subtabs.filter(sub => sub.isUnlocked);
     },
     toggleVisibility() {
-      if (!this.changeEnabled) return;
+      if (!this.changeEnabled) {
+        return;
+      }
       // If this tab and all unlocked subtabs are hidden, unhide all subtabs in addition to the tab
       if (this.tab.isHidden && this.unlockedSubtabs.every(t => t.isHidden)) {
         for (const subtab of this.unlockedSubtabs) {
@@ -80,7 +86,7 @@ export default {
       } else {
         this.tab.toggleVisibility();
       }
-    }
+    },
   },
 };
 </script>

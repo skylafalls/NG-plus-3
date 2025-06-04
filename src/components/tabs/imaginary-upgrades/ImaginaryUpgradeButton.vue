@@ -12,13 +12,13 @@ export default {
     DescriptionDisplay,
     EffectDisplay,
     CostDisplay,
-    HintText
+    HintText,
   },
   props: {
     upgrade: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {
@@ -49,7 +49,7 @@ export default {
     },
     requirementConfig() {
       return {
-        description: this.config.requirement
+        description: this.config.requirement,
       };
     },
     canLock() {
@@ -60,7 +60,7 @@ export default {
   watch: {
     isAutobuyerOn(newValue) {
       Autobuyer.imaginaryUpgrade(this.upgrade.id).isActive = newValue;
-    }
+    },
   },
   methods: {
     update() {
@@ -73,20 +73,28 @@ export default {
       this.isAutoUnlocked = ImaginaryUpgrade(20).canBeApplied;
       this.canBeLocked = upgrade.config.canLock && !this.isAvailableForPurchase;
       this.hasRequirementLock = upgrade.hasPlayerLock;
-      if (this.isRebuyable) this.isAutobuyerOn = Autobuyer.imaginaryUpgrade(upgrade.id).isActive;
+      if (this.isRebuyable) {
+        this.isAutobuyerOn = Autobuyer.imaginaryUpgrade(upgrade.id).isActive;
+      }
       this.etaText = this.getETAText();
     },
     getETAText() {
-      if (this.canBeBought || !this.isAvailableForPurchase || this.isBought || Pelle.isDoomed) return "";
+      if (this.canBeBought || !this.isAvailableForPurchase || this.isBought || Pelle.isDoomed) {
+        return "";
+      }
       const time = MachineHandler.estimateIMTimer(this.upgrade.cost);
-      if (time.lt("10^8000000000000")) return TimeSpan.fromSeconds(time).toString();
+      if (time.lt("10^8000000000000")) {
+        return TimeSpan.fromSeconds(time).toString();
+      }
       return "Never affordable";
     },
     toggleLock(upgrade) {
-      if (this.isRebuyable) return;
+      if (this.isRebuyable) {
+        return;
+      }
       upgrade.toggleMechanicLock();
-    }
-  }
+    },
+  },
 };
 </script>
 

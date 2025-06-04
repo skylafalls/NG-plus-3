@@ -13,7 +13,7 @@ export default {
     newSettings: {
       type: Object,
       required: true,
-    }
+    },
   },
   computed: {
     settingsChanged() {
@@ -47,11 +47,13 @@ export default {
         });
       }
       return changes;
-    }
+    },
   },
   methods: {
     changedValue(oldVal, newVal, applyFn) {
-      if (oldVal === newVal) return applyFn(oldVal);
+      if (oldVal === newVal) {
+        return applyFn(oldVal);
+      }
       return `${applyFn(oldVal)}➜${applyFn(newVal)}`;
     },
     effectScoreStr(effectEntry) {
@@ -62,7 +64,9 @@ export default {
       const oldStr = fullStr(effectEntry.oldReq, effectEntry.oldScore);
       const newStr = fullStr(effectEntry.newReq, effectEntry.newScore);
 
-      if (effectEntry.oldScore === effectEntry.newScore) return oldStr;
+      if (effectEntry.oldScore === effectEntry.newScore) {
+        return oldStr;
+      }
       return `${oldStr}➜${newStr}`;
     },
     topLevelClassObject(key) {
@@ -79,7 +83,7 @@ export default {
     },
     getEffectDesc(effectEntry) {
       return GlyphEffects.all.find(e => e.bitmaskIndex === effectEntry.bitmaskIndex && e.isGenerated).genericDesc;
-    }
+    },
   },
 };
 </script>

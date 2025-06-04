@@ -4,15 +4,15 @@ export default {
   props: {
     name: {
       type: String,
-      required: true
+      required: true,
     },
     playerBefore: {
       type: Object,
-      required: true
+      required: true,
     },
     playerAfter: {
       type: Object,
-      required: true
+      required: true,
     },
   },
   data() {
@@ -47,7 +47,9 @@ export default {
     },
     increased() {
       // If they would visually display as the same number, they shouldn't be treated as if they increased
-      if (this.formatAfter === this.formatBefore) return false;
+      if (this.formatAfter === this.formatBefore) {
+        return false;
+      }
       // Both Decimals and numbers may be passed in. This code handles both.
       const before = this.before;
       const after = this.after;
@@ -57,10 +59,14 @@ export default {
         : after > before;
     },
     show() {
-      if (!this.item.appearsInAwayModal) return false;
+      if (!this.item.appearsInAwayModal) {
+        return false;
+      }
       const show = this.increased && this.item.option && this.item.isUnlocked();
       // For the achievement and display, we need to emit if something happened to the parent
-      if (show) this.$emit("something-happened");
+      if (show) {
+        this.$emit("something-happened");
+      }
       return show;
     },
     isBlackHole() {
@@ -75,16 +81,20 @@ export default {
       return this.isBlackHole
         ? false
         : Decimal.gt(this.before, Decimal.pow10(1e9));
-    }
+    },
   },
   methods: {
     // We want different formatting above and below 1e9 to improve readability
     formatPseudo(number) {
       // Sometimes it's undefined and that throws errors, because this method is also used to determine whether or
       // not any text is even shown at all and sometimes this gets checked on variables which don't have values yet
-      if (number === undefined) return "";
+      if (number === undefined) {
+        return "";
+      }
       // Surrounding text is formatted differently to specify that this is log10
-      if (this.isVeryLarge) return format(Decimal.floor(number.max(1).log10()));
+      if (this.isVeryLarge) {
+        return format(Decimal.floor(number.max(1).log10()));
+      }
       if (Decimal.lt(number, 1e9)) {
         // Both numbers and decimals get passed in here so this is needed
         // Not a fan of this solution but whatever
@@ -96,8 +106,8 @@ export default {
     hideEntry() {
       this.removed = !this.removed;
       this.item.option = !this.item.option;
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -11,8 +11,12 @@ export default {
   }),
   computed: {
     tooltip() {
-      if (this.isDoomed) return "You cannot amplify a Doomed Reality";
-      if (this.isDisabled) return "You cannot amplify Celestial Realities";
+      if (this.isDoomed) {
+        return "You cannot amplify a Doomed Reality";
+      }
+      if (this.isDisabled) {
+        return "You cannot amplify Celestial Realities";
+      }
       if (!this.canAmplify) {
         return "Store more real time or complete the Reality faster to amplify";
       }
@@ -24,7 +28,7 @@ export default {
         "l-reality-amplify-button--clickable": !this.isDoomed && this.canAmplify,
         "o-enslaved-mechanic-button--storing-time": this.isActive,
       };
-    }
+    },
   },
   methods: {
     update() {
@@ -36,10 +40,12 @@ export default {
       this.canAmplify = Enslaved.canAmplify;
     },
     toggleActive() {
-      if (!this.canAmplify) return;
+      if (!this.canAmplify) {
+        return;
+      }
       Enslaved.boostReality = !Enslaved.boostReality;
-    }
-  }
+    },
+  },
 };
 </script>
 

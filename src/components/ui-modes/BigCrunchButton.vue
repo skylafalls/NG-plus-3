@@ -5,21 +5,26 @@ export default {
     return {
       isModern: false,
       smallCrunch: false,
-      shouldDisplay: false
+      shouldDisplay: false,
     };
   },
   methods: {
     update() {
       this.shouldDisplay = !player.break && Player.canCrunch;
-      if (!this.shouldDisplay) return;
+      if (!this.shouldDisplay) {
+        return;
+      }
       this.isModern = player.options.newUI;
       this.smallCrunch = Time.bestInfinityRealTime.totalMinutes.lte(1);
     },
     handleClick() {
-      if (PlayerProgress.infinityUnlocked()) bigCrunchResetRequest();
-      else Modal.bigCrunch.show();
-    }
-  }
+      if (PlayerProgress.infinityUnlocked()) {
+        bigCrunchResetRequest();
+      } else {
+        Modal.bigCrunch.show();
+      }
+    },
+  },
 };
 </script>
 

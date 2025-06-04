@@ -10,7 +10,7 @@ export default {
     return {
       requirement: {
         tier: 1,
-        amount: new Decimal()
+        amount: new Decimal(),
       },
       isBuyable: false,
       purchasedBoosts: new Decimal(),
@@ -26,7 +26,9 @@ export default {
       return MetaDimension(this.requirement.tier).displayName;
     },
     boostCountText() {
-      if (this.requirementText) return this.requirementText;
+      if (this.requirementText) {
+        return this.requirementText;
+      }
       const parts = [this.purchasedBoosts];
       const sum = parts.map(formatInt).join(" + ");
       if (parts.length >= 2) {
@@ -37,9 +39,9 @@ export default {
     classObject() {
       return {
         "o-primary-btn--dimboost l-dim-row__prestige-button": true,
-        "o-pelle-disabled-pointer": this.creditsClosed
+        "o-pelle-disabled-pointer": this.creditsClosed,
       };
-    }
+    },
   },
   methods: {
     update() {
@@ -52,13 +54,17 @@ export default {
       this.lockText = DimBoost.lockText;
       this.unlockedByBoost = DimBoost.unlockedByBoost;
       this.creditsClosed = GameEnd.creditsClosed;
-      if (this.isDoomed) this.requirementText = formatInt(this.purchasedBoosts);
+      if (this.isDoomed) {
+        this.requirementText = formatInt(this.purchasedBoosts);
+      }
     },
     dimensionBoost(bulk) {
-      if (!MetaDimensions.boost.requirement.isSatisfied || !MetaDimensions.boost.canBeBought) return;
+      if (!MetaDimensions.boost.requirement.isSatisfied || !MetaDimensions.boost.canBeBought) {
+        return;
+      }
       MetaDimensions.boost.manualRequest(bulk);
-    }
-  }
+    },
+  },
 };
 </script>
 

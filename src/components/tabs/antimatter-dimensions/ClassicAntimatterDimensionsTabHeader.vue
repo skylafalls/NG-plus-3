@@ -4,7 +4,7 @@ import PrimaryButton from "@/components/PrimaryButton";
 export default {
   name: "ClassicAntimatterDimensionsTabHeader",
   components: {
-    PrimaryButton
+    PrimaryButton,
   },
   data() {
     return {
@@ -28,10 +28,12 @@ export default {
     update() {
       const isSacrificeUnlocked = Sacrifice.isVisible;
       this.isSacrificeUnlocked = isSacrificeUnlocked;
-      if (!isSacrificeUnlocked) return;
+      if (!isSacrificeUnlocked) {
+        return;
+      }
       this.isSacrificeAffordable = Sacrifice.canSacrifice;
-      this.isFullyAutomated = Autobuyer.sacrifice.isActive && Achievement(118).isEffectActive &&
-      (this.isSacrificeAffordable || Sacrifice.nextBoost.lte(1));
+      this.isFullyAutomated = Autobuyer.sacrifice.isActive && Achievement(118).isEffectActive
+        && (this.isSacrificeAffordable || Sacrifice.nextBoost.lte(1));
       this.currentSacrifice.copyFrom(Sacrifice.totalBoost);
       this.sacrificeBoost.copyFrom(Sacrifice.nextBoost);
       this.disabledCondition = Sacrifice.disabledCondition;
@@ -41,8 +43,8 @@ export default {
     },
     maxAll() {
       maxAll();
-    }
-  }
+    },
+  },
 };
 </script>
 

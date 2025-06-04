@@ -10,7 +10,7 @@ export default {
     ModalWrapperChoice,
     ExpandingControlBox,
     CosmeticSetDropdown,
-    GlyphComponent
+    GlyphComponent,
   },
   data() {
     return {
@@ -32,8 +32,12 @@ export default {
       const contents = [];
       // We explicitly pass in x => x as the formatting function in order to override END formatting; if we don't,
       // this modal will show END symbols/colors when opened at game completion
-      if (this.symbols) contents.push(quantify("symbol", this.symbols.length, 0, 0, x => x));
-      if (this.colors) contents.push(quantify("color scheme", this.colors.length, 0, 0, x => x));
+      if (this.symbols) {
+        contents.push(quantify("symbol", this.symbols.length, 0, 0, x => x));
+      }
+      if (this.colors) {
+        contents.push(quantify("color scheme", this.colors.length, 0, 0, x => x));
+      }
       return contents.join(" and ");
     },
     symbols() {
@@ -44,7 +48,7 @@ export default {
     },
     glyphIconProps() {
       return {
-        size: "3rem",
+        "size": "3rem",
         "glow-blur": "0.3rem",
         "glow-spread": "0.1rem",
         "text-proportion": 0.66,
@@ -73,7 +77,7 @@ export default {
         color,
       };
     },
-  }
+  },
 };
 </script>
 

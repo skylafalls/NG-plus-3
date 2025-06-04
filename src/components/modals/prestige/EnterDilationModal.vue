@@ -6,7 +6,7 @@ import ModalWrapperChoice from "@/components/modals/ModalWrapperChoice";
 export default {
   name: "EnterDilationModal",
   components: {
-    ModalWrapperChoice
+    ModalWrapperChoice,
   },
   computed: {
     message() {
@@ -16,7 +16,7 @@ export default {
         multipliers you have.`;
     },
     entranceLabel() {
-      return `You are about to enter Dilation`;
+      return "You are about to enter Dilation";
     },
     EPSinceLabel() {
       if (player.dilation.lastEP.eq(-1)) {
@@ -27,17 +27,21 @@ export default {
           Teresa's Level ${formatInt(25)} reward.`;
       }
       return `You last completed Dilation at ${format(player.dilation.lastEP, 2, 2)} Eternity Points.`;
-    }
+    },
   },
   methods: {
     handleYesClick() {
-      if (player.dilation.active) return;
+      if (player.dilation.active) {
+        return;
+      }
       if (player.options.animations.dilation && !FullScreenAnimationHandler.isDisplaying) {
         // Strike trigger happens within the delayed dilation callback in this function
         animateAndDilate();
       } else {
         startDilatedEternity();
-        if (Pelle.isDoomed) PelleStrikes.dilation.trigger();
+        if (Pelle.isDoomed) {
+          PelleStrikes.dilation.trigger();
+        }
       }
     },
   },

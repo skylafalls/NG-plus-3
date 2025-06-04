@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 function D(x) {
   return new Decimal(x);
 }
@@ -6,12 +5,13 @@ function D(x) {
 const BEMAX = new Decimal("10^^9000000000000000");
 
 function updateGlyphs(glyph) {
-  if (Array.isArray(glyph.effects)) return glyph;
+  if (Array.isArray(glyph.effects)) {
+    return glyph;
+  }
   let intIDindex = (["companion", "cursed", "reality"].includes(glyph.type) ? 28 : 0);
   const effectList = [];
   for (let i = 0; i < 32; i++) {
     if ((glyph.effects >> i) % 2 === 1) {
-      // eslint-disable-next-line no-loop-func, eqeqeq
       effectList.push(GlyphEffects.all.filter(e => e.intID == intIDindex)[0].id);
     }
     intIDindex += 1;
@@ -21,7 +21,7 @@ function updateGlyphs(glyph) {
   glyph.level = D(glyph.level);
   glyph.rawLevel = D(glyph.rawLevel);
   glyph.strength = D(glyph.strength);
-  // eslint-disable-next-line consistent-return
+
   return glyph;
 }
 
@@ -35,7 +35,6 @@ function raFix(player) {
   return array;
 }
 
-// eslint-disable-next-line complexity
 export function beMigration(player) {
   player.auto.annihilation.multiplier = D(player.auto.annihilation.multiplier);
   player.auto.dimBoost.galaxies = D(player.auto.dimBoost.galaxies);
@@ -100,7 +99,7 @@ export function beMigration(player) {
   player.celestials.ra.pets.effarig.v = D(player.celestials.ra.pets.v.memoryChunks);
   player.celestials.ra.unlocks = raFix(player);
   delete player.celestials.ra.unlockBits;
-  // eslint-disable-next-line eqeqeq, max-statements-per-line
+
   player.celestials.teresa.bestAMSet = player.celestials.teresa.bestAMSet.map(n => updateGlyphs(n));
   player.celestials.teresa.lastRepeatediM = new Decimal();
   if (player.celestials.teresa.lastRepeatedMachines.gte("1e5000")) {
@@ -124,7 +123,7 @@ export function beMigration(player) {
   player.dilation.baseTachyonGalaxies = D(player.dilation.baseTachyonGalaxies);
   player.dilation.nextThreshold = D(player.dilation.nextThreshold);
   player.dilation.totalTachyonGalaxies = D(player.dilation.totalTachyonGalaxies);
-  // eslint-disable-next-line no-negated-condition
+
   for (let i = 1; i < 14; i !== 3 ? i++ : i = 11) {
     player.dilation.rebuyables[i] = D(player.dilation.rebuyables[i]);
   }
@@ -142,7 +141,9 @@ export function beMigration(player) {
   player.infinityRebuyables[1] = D(player.infinityRebuyables[1]);
   player.infinityRebuyables[2] = D(player.infinityRebuyables[2]);
   player.IPMultPurchases = D(player.IPMultPurchases);
-  if (player.options.lastOpenSubtab[2] === 3) player.options.lastOpenSubtab[2] = 1;
+  if (player.options.lastOpenSubtab[2] === 3) {
+    player.options.lastOpenSubtab[2] = 1;
+  }
   player.options.lnotation = "Stacked Scientific";
   player.partSimulatedReality = D(player.partSimulatedReality);
   player.realities = D(player.realities);
@@ -156,7 +157,6 @@ export function beMigration(player) {
     const effectList = [];
     for (let i = 0; i < 30; i++) {
       if ((player.reality.glyphs.filter.types[item].specifiedMask >> i) % 2 === 1) {
-      // eslint-disable-next-line no-loop-func, eqeqeq
         effectList.push(GlyphEffects.all.filter(e => e.intID == i)[0].id);
       }
       if (i <= 26 && GlyphEffects.all[i].glyphTypes.includes(item)) {
@@ -185,13 +185,21 @@ export function beMigration(player) {
     player.reality.rebuyables[i] = D(player.reality.rebuyables[i]);
   }
   player.records.bestEternity.realTime = D(player.records.bestEternity.realTime);
-  if (player.records.bestEternity.realTime.gt("e308")) player.records.bestEternity.realTime = BEMAX;
+  if (player.records.bestEternity.realTime.gt("e308")) {
+    player.records.bestEternity.realTime = BEMAX;
+  }
   player.records.bestEternity.time = D(player.records.bestEternity.time);
-  if (player.records.bestEternity.time.gt("e308")) player.records.bestEternity.time = BEMAX;
+  if (player.records.bestEternity.time.gt("e308")) {
+    player.records.bestEternity.time = BEMAX;
+  }
   player.records.bestInfinity.realTime = D(player.records.bestInfinity.realTime);
-  if (player.records.bestInfinity.realTime.gt("e308")) player.records.bestInfinity.realTime = BEMAX;
+  if (player.records.bestInfinity.realTime.gt("e308")) {
+    player.records.bestInfinity.realTime = BEMAX;
+  }
   player.records.bestInfinity.time = D(player.records.bestInfinity.time);
-  if (player.records.bestInfinity.time.gt("e308")) player.records.bestInfinity.time = BEMAX;
+  if (player.records.bestInfinity.time.gt("e308")) {
+    player.records.bestInfinity.time = BEMAX;
+  }
   player.records.bestReality.RMSet = player.records.bestReality.RMSet?.map(n => updateGlyphs(n));
   player.records.bestReality.RMminSet = player.records.bestReality.RMminSet?.map(n => updateGlyphs(n));
   player.records.bestReality.glyphLevel = D(player.records.bestReality.glyphLevel);
@@ -200,10 +208,14 @@ export function beMigration(player) {
   player.records.bestReality.imCapSet = player.records.bestReality.imCapSet?.map(n => updateGlyphs(n));
   player.records.bestReality.laitelaSet = player.records.bestReality.laitelaSet?.map(n => updateGlyphs(n));
   player.records.bestReality.realTime = D(player.records.bestReality.realTime);
-  if (player.records.bestReality.realTime.gt("e308")) player.records.bestReality.realTime = BEMAX;
+  if (player.records.bestReality.realTime.gt("e308")) {
+    player.records.bestReality.realTime = BEMAX;
+  }
   player.records.bestReality.speedSet = player.records.bestReality.speedSet?.map(n => updateGlyphs(n));
   player.records.bestReality.time = D(player.records.bestReality.time);
-  if (player.records.bestReality.time.gt("e308")) player.records.bestReality.time = BEMAX;
+  if (player.records.bestReality.time.gt("e308")) {
+    player.records.bestReality.time = BEMAX;
+  }
   player.records.previousRunRealTime = D(player.records.previousRunRealTime);
   player.records.realTimeDoomed = D(player.records.realTimeDoomed);
   player.records.realTimePlayed = D(player.records.realTimePlayed);

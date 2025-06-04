@@ -22,7 +22,7 @@ export class GameMechanicState extends Effect {
         }
         Object.defineProperty(effect, "isEffectActive", {
           configurable: false,
-          get: () => this.isEffectActive
+          get: () => this.isEffectActive,
         });
         this.effects[key] = effect;
       }
@@ -38,7 +38,9 @@ export class GameMechanicState extends Effect {
   }
 
   registerEvents(events, callback) {
-    if (events === undefined) return;
+    if (events === undefined) {
+      return;
+    }
     for (const event of Array.isArray(events) ? events : [events]) {
       EventHub.logic.on(event, callback, this);
     }

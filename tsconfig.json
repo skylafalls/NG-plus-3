@@ -2,10 +2,12 @@
   "compilerOptions": {
     /* Important settings */
     "noEmit": true,
-    "allowJs": true,
+    "allowJs": false,
     "moduleDetection": "force",
     "composite": true,
     "experimentalDecorators": true,
+    "erasableSyntaxOnly": true,
+    "verbatimModuleSyntax": true,
 
     /* Bundler settings */
     "lib": [
@@ -17,6 +19,7 @@
     "esModuleInterop": true,
     "module": "ESNext",
     "moduleResolution": "Bundler",
+    "isolatedModules": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,
 
@@ -25,9 +28,11 @@
     "noImplicitThis": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "noUncheckedIndexedAccess": true,
 
     /* Misc. settings */
     "jsx": "preserve",
@@ -40,7 +45,6 @@
     "paths": {
       "@/*": ["./src/*"]
     },
-    "types": ["./src/typings/break_eternity.d.ts"]
   },
   "include": [
     "**/*.js",

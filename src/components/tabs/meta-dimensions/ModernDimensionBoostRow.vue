@@ -1,5 +1,5 @@
 <script>
-import { defineComponent } from 'vue';
+import { defineComponent } from "vue";
 
 export default defineComponent({
   name: "ModernMetaDimensionBoostRow",
@@ -7,7 +7,7 @@ export default defineComponent({
     return {
       requirement: {
         tier: 1,
-        amount: new Decimal()
+        amount: new Decimal(),
       },
       isBuyable: false,
       purchasedBoosts: new Decimal(),
@@ -24,7 +24,9 @@ export default defineComponent({
       return MetaDimension(this.requirement.tier).shortDisplayName;
     },
     boostCountText() {
-      if (this.requirementText) return this.requirementText;
+      if (this.requirementText) {
+        return this.requirementText;
+      }
       const parts = [this.purchasedBoosts];
       if (this.imaginaryBoosts.neq(0)) {
         parts.push(this.imaginaryBoosts);
@@ -39,9 +41,9 @@ export default defineComponent({
       return {
         "o-primary-btn o-primary-btn--new o-primary-btn--dimension-reset": true,
         "o-primary-btn--disabled": !this.isBuyable,
-        "o-pelle-disabled-pointer": this.creditsClosed
+        "o-pelle-disabled-pointer": this.creditsClosed,
       };
-    }
+    },
   },
   methods: {
     update() {
@@ -53,13 +55,17 @@ export default defineComponent({
       this.lockText = MetaDimensions.boost.lockText;
       this.unlockedByBoost = MetaDimensions.boost.unlockedByBoost;
       this.creditsClosed = GameEnd.creditsEverClosed;
-      if (this.isDoomed) this.requirementText = formatInt(this.purchasedBoosts);
+      if (this.isDoomed) {
+        this.requirementText = formatInt(this.purchasedBoosts);
+      }
     },
     dimensionBoost(bulk) {
-      if (!MetaDimensions.boost.requirement.isSatisfied || !MetaDimensions.boost.canBeBought) return;
+      if (!MetaDimensions.boost.requirement.isSatisfied || !MetaDimensions.boost.canBeBought) {
+        return;
+      }
       MetaDimensions.boost.manualRequest(bulk);
-    }
-  }
+    },
+  },
 });
 </script>
 

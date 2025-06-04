@@ -45,8 +45,12 @@ class AchievementState extends GameMechanicState {
   }
 
   tryUnlock(args) {
-    if (this.isUnlocked) return;
-    if (!this.config.checkRequirement(args)) return;
+    if (this.isUnlocked) {
+      return;
+    }
+    if (!this.config.checkRequirement(args)) {
+      return;
+    }
     this.unlock();
   }
 
@@ -55,7 +59,9 @@ class AchievementState extends GameMechanicState {
   }
 
   unlock(auto) {
-    if (this.isUnlocked) return;
+    if (this.isUnlocked) {
+      return;
+    }
     player.achievementBits[this.row - 1] |= this._bitmask;
     if (this.id === 85 || this.id === 93) {
       Autobuyer.bigCrunch.bumpAmount(4);
@@ -139,28 +145,42 @@ export const Achievements = {
   },
 
   autoAchieveUpdate(diff) {
-    if (!PlayerProgress.realityUnlocked()) return;
+    if (!PlayerProgress.realityUnlocked()) {
+      return;
+    }
     if (!player.reality.autoAchieve || RealityUpgrade(8).isLockingMechanics) {
       player.reality.achTimer = Decimal.clampMax(player.reality.achTimer.add(diff), this.period);
       return;
     }
-    if (Achievements.preReality.every(a => a.isUnlocked)) return;
+    if (Achievements.preReality.every(a => a.isUnlocked)) {
+      return;
+    }
 
     player.reality.achTimer = player.reality.achTimer.add(diff);
-    if (player.reality.achTimer.lt(this.period)) return;
+    if (player.reality.achTimer.lt(this.period)) {
+      return;
+    }
 
     for (const achievement of Achievements.preReality.filter(a => !a.isUnlocked)) {
       achievement.unlock(true);
       player.reality.achTimer = player.reality.achTimer.sub(this.period);
-      if (player.reality.achTimer.lt(this.period)) break;
+      if (player.reality.achTimer.lt(this.period)) {
+        break;
+      }
     }
     player.reality.gainedAutoAchievements = true;
   },
 
   get timeToNextAutoAchieve() {
-    if (!PlayerProgress.realityUnlocked()) return DC.D0;
-    if (GameCache.achievementPeriod.value.eq(0)) return DC.D0;
-    if (Achievements.preReality.countWhere(a => !a.isUnlocked) === 0) return DC.D0;
+    if (!PlayerProgress.realityUnlocked()) {
+      return DC.D0;
+    }
+    if (GameCache.achievementPeriod.value.eq(0)) {
+      return DC.D0;
+    }
+    if (Achievements.preReality.countWhere(a => !a.isUnlocked) === 0) {
+      return DC.D0;
+    }
     return this.period.sub(player.reality.achTimer);
   },
 
@@ -173,7 +193,9 @@ export const Achievements = {
   }),
 
   get power() {
-    if (Pelle.isDisabled("achievementMult")) return DC.D1;
+    if (Pelle.isDisabled("achievementMult")) {
+      return DC.D1;
+    }
     return Achievements._power.value;
   },
 
@@ -181,7 +203,7 @@ export const Achievements = {
     for (const achievement of Achievements.all.filter(x => x.isUnlocked)) {
       SteamRuntime.activateAchievement(achievement.id);
     }
-  }
+  },
 };
 
 EventHub.logic.on(GAME_EVENT.PERK_BOUGHT, () => {

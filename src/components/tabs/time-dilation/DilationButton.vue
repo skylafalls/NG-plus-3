@@ -12,14 +12,14 @@ export default {
       tachyonGain: new Decimal(),
       remnantRequirement: 0,
       showRequirement: false,
-      creditsClosed: false
+      creditsClosed: false,
     };
   },
   computed: {
     disableText() {
       // Doesn't need to be reactive or check strike status; it's always permanent once entered in Doomed
       return Pelle.isDoomed ? "Dilation is permanent." : "Disable Dilation.";
-    }
+    },
   },
   methods: {
     update() {
@@ -27,7 +27,9 @@ export default {
       this.isRunning = player.dilation.active;
       this.remnantRequirement = Pelle.remnantRequirementForDilation;
       this.showRequirement = Pelle.isDoomed && !Pelle.canDilateInPelle;
-      if (!this.isRunning) return;
+      if (!this.isRunning) {
+        return;
+      }
       this.canEternity = Player.canEternity;
       // This lets this.hasGain be true even before eternity.
       this.hasGain = getTachyonGain(false).gt(0);
@@ -41,10 +43,12 @@ export default {
       this.creditsClosed = GameEnd.creditsEverClosed;
     },
     dilate() {
-      if (this.creditsClosed) return;
+      if (this.creditsClosed) {
+        return;
+      }
       startDilatedEternityRequest();
-    }
-  }
+    },
+  },
 };
 </script>
 

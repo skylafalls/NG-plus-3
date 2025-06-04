@@ -1,11 +1,9 @@
-/* eslint-disable line-comment-position */
-/* eslint-disable no-inline-comments */
 import { DC } from "./constants";
 
 export const GALAXY_TYPE = {
   NORMAL: 0,
   DISTANT: 1,
-  REMOTE: 2
+  REMOTE: 2,
 };
 
 class GalaxyRequirement {
@@ -45,8 +43,10 @@ export class Galaxy {
     const dis = Galaxy.costScalingStart;
     const scale = Galaxy.costMult;
     let base = Galaxy.baseCost.sub(Effects.sum(InfinityUpgrade.resetBoost));
-    if (InfinityChallenge(5).isCompleted) base = base.sub(1);
-    // eslint-disable-next-line max-len
+    if (InfinityChallenge(5).isCompleted) {
+      base = base.sub(1);
+    }
+
     // Plz no ask how exponential math work i dont know i just code, see https://discord.com/channels/351476683016241162/439241762603663370/1210707188964659230m
     const minV = Galaxy.costScalingStart.min(Galaxy.remoteStart); // Take the smallest of the two values
     if (currency.lt(Galaxy.requirementAt(minV).amount /* Pre exponential/quadratic? */)) {
@@ -61,7 +61,7 @@ export class Galaxy {
       const quad = decimalQuadraticSolution(a, b, c).floor();
       return Decimal.max(quad, minVal);
     }
-    // eslint-disable-next-line multiline-comment-style
+
     /*
     // Might not be perfect but at this point who gives a shit
       - If we can buy more we will loop a bit at the end to go through till we cant
@@ -136,9 +136,13 @@ export class Galaxy {
     }
 
     amount = amount.sub(Effects.sum(InfinityUpgrade.resetBoost));
-    if (InfinityChallenge(5).isCompleted) amount = amount.sub(1);
+    if (InfinityChallenge(5).isCompleted) {
+      amount = amount.sub(1);
+    }
 
-    if (GlyphAlteration.isAdded("power")) amount = amount.mul(getSecondaryGlyphEffect("powerpow"));
+    if (GlyphAlteration.isAdded("power")) {
+      amount = amount.mul(getSecondaryGlyphEffect("powerpow"));
+    }
 
     amount = Decimal.floor(amount);
     const tier = Galaxy.requiredTier;
@@ -158,29 +162,47 @@ export class Galaxy {
   }
 
   static get canBeBought() {
-    if (EternityChallenge(6).isRunning && !Enslaved.isRunning) return false;
-    if (NormalChallenge(8).isRunning || InfinityChallenge(7).isRunning) return false;
-    if (player.records.thisInfinity.maxAM.gt(Player.infinityGoal) &&
-       (!player.break || Player.isInAntimatterChallenge)) return false;
+    if (EternityChallenge(6).isRunning && !Enslaved.isRunning) {
+      return false;
+    }
+    if (NormalChallenge(8).isRunning || InfinityChallenge(7).isRunning) {
+      return false;
+    }
+    if (player.records.thisInfinity.maxAM.gt(Player.infinityGoal)
+      && (!player.break || Player.isInAntimatterChallenge)) {
+      return false;
+    }
     return true;
   }
 
   static get lockText() {
-    if (this.canBeBought) return null;
-    if (EternityChallenge(6).isRunning) return "Locked (Eternity Challenge 6)";
-    if (InfinityChallenge(7).isRunning) return "Locked (Infinity Challenge 7)";
-    if (InfinityChallenge(1).isRunning) return "Locked (Infinity Challenge 1)";
-    if (NormalChallenge(8).isRunning) return "Locked (8th Antimatter Dimension Autobuyer Challenge)";
+    if (this.canBeBought) {
+      return null;
+    }
+    if (EternityChallenge(6).isRunning) {
+      return "Locked (Eternity Challenge 6)";
+    }
+    if (InfinityChallenge(7).isRunning) {
+      return "Locked (Infinity Challenge 7)";
+    }
+    if (InfinityChallenge(1).isRunning) {
+      return "Locked (Infinity Challenge 1)";
+    }
+    if (NormalChallenge(8).isRunning) {
+      return "Locked (8th Antimatter Dimension Autobuyer Challenge)";
+    }
     return null;
   }
 
   static get costScalingStart() {
-    if (EternityChallenge(5).isRunning) return DC.D0;
+    if (EternityChallenge(5).isRunning) {
+      return DC.D0;
+    }
     return DC.E2.plusEffectsOf(
       TimeStudy(223),
       TimeStudy(224),
       TimeStudy(302),
-      EternityChallenge(5).reward
+      EternityChallenge(5).reward,
     ).add(GlyphInfo.power.sacrificeInfo.effect());
   }
 
@@ -206,16 +228,22 @@ export function galaxyReset() {
     player.dimensionBoosts = DC.D0;
   }
   softReset(0);
-  if (Notations.current === Notation.emoji) player.requirementChecks.permanent.emojiGalaxies =
-  player.requirementChecks.permanent.emojiGalaxies.add(1);
+  if (Notations.current === Notation.emoji) {
+    player.requirementChecks.permanent.emojiGalaxies
+  = player.requirementChecks.permanent.emojiGalaxies.add(1);
+  }
   // This is specifically reset here because the check is actually per-galaxy and not per-infinity
   player.requirementChecks.infinity.noSacrifice = true;
   EventHub.dispatch(GAME_EVENT.GALAXY_RESET_AFTER);
 }
 
 export function manualRequestGalaxyReset(bulk) {
-  if (!Galaxy.canBeBought || !Galaxy.requirement.isSatisfied) return;
-  if (GameEnd.creditsEverClosed) return;
+  if (!Galaxy.canBeBought || !Galaxy.requirement.isSatisfied) {
+    return;
+  }
+  if (GameEnd.creditsEverClosed) {
+    return;
+  }
   if (RealityUpgrade(7).isLockingMechanics && player.galaxies.gt(0)) {
     RealityUpgrade(7).tryShowWarningModal();
     return;
@@ -231,20 +259,30 @@ export function manualRequestGalaxyReset(bulk) {
 // to restrict galaxy count for RUPG7's requirement here and nowhere else
 export function requestGalaxyReset(bulk, limit = Number.MAX_VALUE) {
   const restrictedLimit = RealityUpgrade(7).isLockingMechanics ? DC.D1 : limit;
-  if (EternityMilestone.autobuyMaxGalaxies.isReached && bulk) return maxBuyGalaxies(restrictedLimit);
-  if (player.galaxies.gte(restrictedLimit) || !Galaxy.canBeBought || !Galaxy.requirement.isSatisfied) return false;
+  if (EternityMilestone.autobuyMaxGalaxies.isReached && bulk) {
+    return maxBuyGalaxies(restrictedLimit);
+  }
+  if (player.galaxies.gte(restrictedLimit) || !Galaxy.canBeBought || !Galaxy.requirement.isSatisfied) {
+    return false;
+  }
   Tutorial.turnOffEffect(TUTORIAL_STATE.GALAXY);
   galaxyReset();
   return true;
 }
 
 function maxBuyGalaxies(limit = DC.BEMAX) {
-  if (player.galaxies.gte(limit) || !Galaxy.canBeBought || !Galaxy.requirement.isSatisfied) return false;
+  if (player.galaxies.gte(limit) || !Galaxy.canBeBought || !Galaxy.requirement.isSatisfied) {
+    return false;
+  }
   // Check for ability to buy one galaxy (which is pretty efficient)
   const req = Galaxy.requirement;
-  if (!req.isSatisfied) return false;
+  if (!req.isSatisfied) {
+    return false;
+  }
   const dim = AntimatterDimension(req.tier);
-  if (Galaxy.buyableGalaxies(Decimal.round(dim.totalAmount)).lte(player.galaxies)) return false;
+  if (Galaxy.buyableGalaxies(Decimal.round(dim.totalAmount)).lte(player.galaxies)) {
+    return false;
+  }
   const newGalaxies = Decimal.min(
     Galaxy.buyableGalaxies(Decimal.round(dim.totalAmount)), limit);
   if (Notations.current === Notation.emoji) {
@@ -254,7 +292,9 @@ function maxBuyGalaxies(limit = DC.BEMAX) {
   // Galaxy count is incremented by galaxyReset(), so add one less than we should:
   player.galaxies = newGalaxies.sub(1);
   galaxyReset();
-  if (Enslaved.isRunning && player.galaxies.gt(1)) EnslavedProgress.c10.giveProgress();
+  if (Enslaved.isRunning && player.galaxies.gt(1)) {
+    EnslavedProgress.c10.giveProgress();
+  }
   Tutorial.turnOffEffect(TUTORIAL_STATE.GALAXY);
   return true;
 }

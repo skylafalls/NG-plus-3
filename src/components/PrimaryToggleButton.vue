@@ -1,38 +1,39 @@
 <script>
 import PrimaryButton from "@/components/PrimaryButton";
+import { defineComponent } from "vue";
 
-export default {
+export default defineComponent({
   name: "PrimaryToggleButton",
   components: {
-    PrimaryButton
+    PrimaryButton,
   },
   props: {
     label: {
       type: String,
       required: false,
-      default: ""
+      default: "",
     },
     on: {
       type: String,
       required: false,
-      default: "ON"
+      default: "ON",
     },
     off: {
       type: String,
       required: false,
-      default: "OFF"
+      default: "OFF",
     },
     value: {
       type: Boolean,
-      required: true
+      required: true,
     },
   },
   computed: {
     displayText() {
       return `${this.label} ${this.value ? this.on : this.off}`.trim();
-    }
+    },
   },
-};
+});
 </script>
 
 <template>
@@ -43,4 +44,3 @@ export default {
     {{ displayText }}
   </PrimaryButton>
 </template>
-

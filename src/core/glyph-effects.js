@@ -91,7 +91,9 @@ class GlyphEffectConfig {
    * @returns {boolean}
    */
   get biggerIsBetter() {
-    if (this._biggerIsBetter === undefined) this._biggerIsBetter = this.checkBiggerIsBetter();
+    if (this._biggerIsBetter === undefined) {
+      this._biggerIsBetter = this.checkBiggerIsBetter();
+    }
     return this._biggerIsBetter;
   }
 
@@ -156,8 +158,8 @@ class GlyphEffectConfig {
         throw new Error(`The combine function for Glyph effect "${setup.id}" has invalid return type`);
       }
       if (setup.softcap) {
-        throw new Error(`The combine function for Glyph effect "${setup.id}" gives capped information, ` +
-          `but there's also a softcap method`);
+        throw new Error(`The combine function for Glyph effect "${setup.id}" gives capped information, `
+          + "but there's also a softcap method");
       }
     }
   }
@@ -169,17 +171,21 @@ class GlyphEffectConfig {
     const emptyCombine = combine([]);
     // No supplied capped indicator
     if (typeof (emptyCombine) === "number") {
-      if (softcap === undefined) return effects => ({ value: combine(effects), capped: false });
-      return effects => {
+      if (softcap === undefined) {
+        return effects => ({ value: combine(effects), capped: false });
+      }
+      return (effects) => {
         const rawValue = combine(effects);
         const cappedValue = softcap(rawValue);
         return { value: cappedValue, capped: rawValue !== cappedValue };
       };
     }
     if (emptyCombine instanceof Decimal) {
-      if (softcap === undefined) return effects => ({ value: combine(effects), capped: false });
+      if (softcap === undefined) {
+        return effects => ({ value: combine(effects), capped: false });
+      }
       const neqTest = emptyCombine.value instanceof Decimal ? (a, b) => a.neq(b) : (a, b) => a !== b;
-      return combine = effects => {
+      return combine = (effects) => {
         const rawValue = combine(effects);
         const cappedValue = softcap(rawValue.value);
         return { value: cappedValue, capped: rawValue.capped || neqTest(rawValue.value, cappedValue) };
@@ -194,7 +200,7 @@ export const realityGlyphEffectLevelThresholds = [0, 9000, 15000, 25000];
 
 export const GlyphEffects = mapGameDataToObject(
   GameDatabase.reality.glyphEffects,
-  config => new GlyphEffectConfig(config)
+  config => new GlyphEffectConfig(config),
 );
 
 export function makeGlyphEffectBitmask(effectList) {

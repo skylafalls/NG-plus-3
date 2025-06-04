@@ -7,13 +7,13 @@ export default defineComponent({
   name: "ClassicMetaDimensionRow",
   components: {
     GenericDimensionRowText,
-    PrimaryButton
+    PrimaryButton,
   },
   props: {
     tier: {
       type: Number,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {
@@ -40,7 +40,9 @@ export default defineComponent({
       return `${MetaDimension(this.tier).shortDisplayName} Meta Dimension`;
     },
     singleText() {
-      if (this.isCapped) return "Capped";
+      if (this.isCapped) {
+        return "Capped";
+      }
       const prefix = this.showCostTitle(this.singleCost) ? "Cost: " : "";
       const suffix = this.isCostsAD ? `${this.costUnit}` : "M-AM";
       return `${prefix} ${format(this.singleCost)} ${suffix}`;
@@ -69,15 +71,19 @@ export default defineComponent({
       return {
         "o-primary-btn--buy-ad o-primary-btn--buy-dim c-dim-tooltip-container": true,
         "o-primary-btn--buy-10-ad": true,
-        "l-dim-row-small-text": this.isLongText(this.until10Text)
+        "l-dim-row-small-text": this.isLongText(this.until10Text),
       };
-    }
+    },
   },
   methods: {
     update() {
       const tier = this.tier;
-      if (tier === 8 && this.isDoomed) this.formattedAmount = formatInt(this.amount);
-      if (tier > MetaDimensions.boost.maxDimensionsUnlockable) return;
+      if (tier === 8 && this.isDoomed) {
+        this.formattedAmount = formatInt(this.amount);
+      }
+      if (tier > MetaDimensions.boost.maxDimensionsUnlockable) {
+        return;
+      }
       const dimension = MetaDimension(tier);
       this.isUnlocked = dimension.isAvailableForPurchase;
       this.isCapped = tier === 8 && Enslaved.isRunning && dimension.bought.gte(1);
@@ -87,11 +93,11 @@ export default defineComponent({
       this.boughtBefore10.copyFrom(dimension.boughtBefore10);
       this.singleCost.copyFrom(dimension.cost);
       this.until10Cost.copyFrom(dimension.costUntil10);
-      this.rateOfChange.copyFrom(dimension.rateOfChange)
+      this.rateOfChange.copyFrom(dimension.rateOfChange);
       this.isAffordable = dimension.isAffordable;
       this.isAffordableUntil10 = dimension.isAffordableUntil10;
       this.isShown = (MetaDimensions.boost.totalBoosts.gt(0) && MetaDimensions.boost.totalBoosts.add(3).gte(tier));
-      this.isCostsAD = false; //NormalChallenge(6).isRunning && tier > 2 && !this.isContinuumActive;
+      this.isCostsAD = false; // NormalChallenge(6).isRunning && tier > 2 && !this.isContinuumActive;
     },
     buySingle() {
       MetaDimensions.buyOne(this.tier);
@@ -108,10 +114,10 @@ export default defineComponent({
     tutorialClass() {
       return {
         "l-glow-container": true,
-        "tutorial--glow": this.isAffordable && this.hasTutorial
+        "tutorial--glow": this.isAffordable && this.hasTutorial,
       };
     },
-  }
+  },
 });
 </script>
 

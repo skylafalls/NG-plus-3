@@ -5,13 +5,13 @@ import { defineComponent } from "vue";
 export default defineComponent({
   name: "ModernAntimatterDimensionRow",
   components: {
-    GenericDimensionRowText
+    GenericDimensionRowText,
   },
   props: {
     tier: {
       type: Number,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {
@@ -49,22 +49,36 @@ export default defineComponent({
       return this.isShown || this.isUnlocked || this.amount.gt(0);
     },
     boughtTooltip() {
-      if (this.isCapped) return `Nameless prevents the purchase of more than ${format(1)} 8th Antimatter Dimension`;
-      if (this.isContinuumActive) return "Continuum produces all your Antimatter Dimensions";
+      if (this.isCapped) {
+        return `Nameless prevents the purchase of more than ${format(1)} 8th Antimatter Dimension`;
+      }
+      if (this.isContinuumActive) {
+        return "Continuum produces all your Antimatter Dimensions";
+      }
       return `Purchased ${quantifyInt("time", this.bought)}`;
     },
     costUnit() {
       return `${AntimatterDimension(this.tier - 2).shortDisplayName} AD`;
     },
     buttonPrefix() {
-      if (!this.isUnlocked) return "Locked";
-      if (this.isCapped) return "Shattered by Nameless";
-      if (this.isContinuumActive) return "Continuum: ";
+      if (!this.isUnlocked) {
+        return "Locked";
+      }
+      if (this.isCapped) {
+        return "Shattered by Nameless";
+      }
+      if (this.isContinuumActive) {
+        return "Continuum: ";
+      }
       return `Buy ${formatInt(this.howManyCanBuy)}`;
     },
     buttonValue() {
-      if (this.isCapped) return "";
-      if (this.isContinuumActive) return this.continuumString;
+      if (this.isCapped) {
+        return "";
+      }
+      if (this.isContinuumActive) {
+        return this.continuumString;
+      }
       const prefix = this.showCostTitle(this.buyUntil10 ? this.until10Cost : this.singleCost) ? "Cost: " : "";
       const suffix = this.isCostsAD ? this.costUnit : "AM";
       return `${prefix}${this.costDisplay} ${suffix}`;
@@ -76,7 +90,9 @@ export default defineComponent({
   methods: {
     update() {
       const tier = this.tier;
-      if (tier > DimBoost.maxDimensionsUnlockable && !this.isDoomed) return;
+      if (tier > DimBoost.maxDimensionsUnlockable && !this.isDoomed) {
+        return;
+      }
       const dimension = AntimatterDimension(tier);
       this.isUnlocked = dimension.isAvailableForPurchase;
       const buyUntil10 = player.buyUntil10;
@@ -88,19 +104,23 @@ export default defineComponent({
       this.howManyCanBuy.copyFrom(buyUntil10 ? dimension.howManyCanBuy : Decimal.min(dimension.howManyCanBuy, 1));
       this.singleCost.copyFrom(dimension.cost);
       this.until10Cost.copyFrom(dimension.cost.times(Decimal.max(dimension.howManyCanBuy, 1)));
-      this.rateOfChange.copyFrom(dimension.rateOfChange)
+      this.rateOfChange.copyFrom(dimension.rateOfChange);
       this.isAffordable = dimension.isAffordable;
       this.buyUntil10 = buyUntil10;
       this.isContinuumActive = Laitela.continuumActive;
-      if (this.isContinuumActive) this.continuumValue.copyFrom(dimension.continuumValue);
-      this.isShown =
-        (DimBoost.totalBoosts.gt(0) && DimBoost.totalBoosts.add(3).gte(tier)) || PlayerProgress.infinityUnlocked();
+      if (this.isContinuumActive) {
+        this.continuumValue.copyFrom(dimension.continuumValue);
+      }
+      this.isShown
+        = (DimBoost.totalBoosts.gt(0) && DimBoost.totalBoosts.add(3).gte(tier)) || PlayerProgress.infinityUnlocked();
       this.isCostsAD = NormalChallenge(6).isRunning && tier > 2 && !this.isContinuumActive;
-      this.hasTutorial = (tier === 1 && Tutorial.isActive(TUTORIAL_STATE.DIM1)) ||
-        (tier === 2 && Tutorial.isActive(TUTORIAL_STATE.DIM2));
+      this.hasTutorial = (tier === 1 && Tutorial.isActive(TUTORIAL_STATE.DIM1))
+        || (tier === 2 && Tutorial.isActive(TUTORIAL_STATE.DIM2));
     },
     buy() {
-      if (this.isContinuumActive) return;
+      if (this.isContinuumActive) {
+        return;
+      }
       if (this.howManyCanBuy.eq(1)) {
         buyOneDimension(this.tier);
       } else {
@@ -114,16 +134,16 @@ export default defineComponent({
       return {
         "o-primary-btn o-primary-btn--new": true,
         "o-primary-btn--disabled": (!this.isAffordable && !this.isContinuumActive) || !this.isUnlocked || this.isCapped,
-        "o-non-clickable o-continuum": this.isContinuumActive
+        "o-non-clickable o-continuum": this.isContinuumActive,
       };
     },
     buttonTextClass() {
       return {
         "button-content l-modern-buy-ad-text": true,
-        "tutorial--glow": this.isAffordable && this.hasTutorial
+        "tutorial--glow": this.isAffordable && this.hasTutorial,
       };
-    }
-  }
+    },
+  },
 });
 </script>
 

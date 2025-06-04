@@ -1,5 +1,3 @@
-/* eslint-disable max-depth */
-/* eslint-disable camelcase */
 import { MultiplierTabHelper } from "./helper-functions";
 import { multiplierTabValues } from "./values";
 
@@ -22,7 +20,9 @@ const propList = {
 for (const prop of dynamicGenProps) {
   propList[prop] = [];
   for (const toCopy of Object.keys(multiplierTabValues[prop])) {
-    if (toCopy !== "total") propList[prop].push(toCopy);
+    if (toCopy !== "total") {
+      propList[prop].push(toCopy);
+    }
   }
 }
 
@@ -30,16 +30,22 @@ for (const prop of dynamicGenProps) {
 // Results in an array of ["key_1", "key_2", ... , "key_8"]
 function append8(key) {
   const props = [];
-  for (let dim = 1; dim <= 8; dim++) props.push(`${key}_${dim}`);
+  for (let dim = 1; dim <= 8; dim++) {
+    props.push(`${key}_${dim}`);
+  }
   return props;
 }
 
 // Helper method to create very long lists of entries in the tree; format is "RESOURCE_SOURCE_DIMENSION"
 function getProps(resource, tier) {
   const props = propList[resource].map(s => `${resource}_${s}`);
-  if (!tier) return props;
+  if (!tier) {
+    return props;
+  }
   const newProps = [];
-  for (const effect of props) newProps.push(`${effect}_${tier}`);
+  for (const effect of props) {
+    newProps.push(`${effect}_${tier}`);
+  }
   return newProps;
 }
 
@@ -48,58 +54,58 @@ function getProps(resource, tier) {
 // specification, all children props are dynamically added based on the arrays in the helper functions above
 export const multiplierTabTree = {
   AM_total: [
-    ["AD_total", "tickspeed_total", "AM_effarigAM"]
+    ["AD_total", "tickspeed_total", "AM_effarigAM"],
   ],
   AD_total: [
     getProps("AD"),
-    append8("AD_total")
+    append8("AD_total"),
   ],
   ID_total: [
     getProps("ID"),
-    append8("ID_total")
+    append8("ID_total"),
   ],
   TD_total: [
     getProps("TD"),
-    append8("TD_total")
+    append8("TD_total"),
   ],
   IP_total: [
-    getProps("IP")
+    getProps("IP"),
   ],
   IP_base: [
-    ["IP_antimatter", "IP_divisor"]
+    ["IP_antimatter", "IP_divisor"],
   ],
   EP_total: [
-    getProps("EP")
+    getProps("EP"),
   ],
   EP_base: [
-    ["EP_IP", "EP_divisor"]
+    ["EP_IP", "EP_divisor"],
   ],
   TP_total: [
-    getProps("TP")
+    getProps("TP"),
   ],
   DT_total: [
-    getProps("DT")
+    getProps("DT"),
   ],
   tickspeed_total: [
-    ["tickspeed_base", "tickspeed_upgrades", "tickspeed_galaxies", "tickspeed_pelleTickspeedPow"]
+    ["tickspeed_base", "tickspeed_upgrades", "tickspeed_galaxies", "tickspeed_pelleTickspeedPow"],
   ],
   tickspeed_upgrades: [
-    ["tickspeedUpgrades_purchased", "tickspeedUpgrades_free"]
+    ["tickspeedUpgrades_purchased", "tickspeedUpgrades_free"],
   ],
   tickspeed_galaxies: [
-    ["galaxies_antimatter", "galaxies_replicanti", "galaxies_tachyon", "galaxies_nerfPelle"]
+    ["galaxies_antimatter", "galaxies_replicanti", "galaxies_tachyon", "galaxies_nerfPelle"],
   ],
   infinities_total: [
-    getProps("infinities")
+    getProps("infinities"),
   ],
   eternities_total: [
-    getProps("eternities")
+    getProps("eternities"),
   ],
   gamespeed_total: [
-    getProps("gamespeed")
+    getProps("gamespeed"),
   ],
   replicanti_total: [
-    getProps("replicanti")
+    getProps("replicanti"),
   ],
 };
 
@@ -159,8 +165,12 @@ for (const dim of ["ID", "TD"]) {
 
 // Dynamically generate all values from existing values, but broken down by dimension
 for (const res of dimTypes) {
-  for (const prop of getProps(res)) multiplierTabTree[prop] = [append8(prop)];
-  for (let dim = 1; dim <= 8; dim++) multiplierTabTree[`${res}_total_${dim}`] = [getProps(res, dim)];
+  for (const prop of getProps(res)) {
+    multiplierTabTree[prop] = [append8(prop)];
+  }
+  for (let dim = 1; dim <= 8; dim++) {
+    multiplierTabTree[`${res}_total_${dim}`] = [getProps(res, dim)];
+  }
 }
 
 // A few dynamically-generated props are largely useless in terms of what they connect to, in that they have very few
@@ -169,7 +179,7 @@ const removedRegexes = ["AD_sacrifice", "AD_breakInfinityUpgrade", "AD_nerfIC", 
   "ID_replicanti", "ID_infinityChallenge", "ID_eternityUpgrades",
   "TD_achievement", "TD_eternityUpgrade", "TD_dilationUpgrade", "TD_realityUpgrade",
   ".._achievementMult", ".._glyph", ".._alchemy", ".._imaginaryUpgrade", ".._iap",
-  ".._nerfV", ".._nerfCursed", ".._nerfPelle", ".._pelle"
+  ".._nerfV", ".._nerfCursed", ".._nerfPelle", ".._pelle",
 ];
 const removedProps = Object.keys(multiplierTabTree)
   .filter(key => removedRegexes.some(regex => key.match(regex)));
@@ -191,7 +201,7 @@ for (let dim = 1; dim <= 7; dim++) {
   multiplierTabTree[`ID_purchase_${dim}`] = [[`ID_basePurchase_${dim}`, `ID_tesseractPurchase_${dim}`,
     "ID_powPurchase"]];
 }
-multiplierTabTree.ID_purchase_8 = [[`ID_basePurchase_8`, `ID_infinityGlyphSacrifice`, "ID_powPurchase"]];
+multiplierTabTree.ID_purchase_8 = [["ID_basePurchase_8", "ID_infinityGlyphSacrifice", "ID_powPurchase"]];
 
 // These are also added one layer deep
 for (let dim = 1; dim <= 7; dim++) {
@@ -203,14 +213,18 @@ multiplierTabTree.TD_purchase_8 = [["TD_basePurchase_8", "TD_timeGlyphSacrifice"
 // Dynamically fill effects which only affect certain dimensions, as noted in targetedEffects
 for (const res of dimTypes) {
   for (const eff of Object.keys(targetedEffects)) {
-    if (!targetedEffects[eff][res]) continue;
+    if (!targetedEffects[eff][res]) {
+      continue;
+    }
     multiplierTabTree[`${res}_${eff}`] = [[]];
     for (const id of targetedEffects[eff][res]) {
       for (let dim = 1; dim <= 8; dim++) {
         const propStr = `${res}_${eff}_${dim}`;
         const dimStr = `${res}${dim}`;
         if (targetedEffects[eff].checkFn(id, dimStr)) {
-          if (!multiplierTabTree[propStr]) multiplierTabTree[propStr] = [[]];
+          if (!multiplierTabTree[propStr]) {
+            multiplierTabTree[propStr] = [[]];
+          }
           multiplierTabTree[propStr][0].push(`general_${eff}_${id}_${dimStr}`);
         }
       }
@@ -222,7 +236,9 @@ for (const res of dimTypes) {
 // Dynamically fill effects which affect single resources as well
 for (const res of singleRes) {
   for (const eff of Object.keys(targetedEffects)) {
-    if (!targetedEffects[eff][res]) continue;
+    if (!targetedEffects[eff][res]) {
+      continue;
+    }
     multiplierTabTree[`${res}_${eff}`] = [[]];
     for (const ach of targetedEffects[eff][res]) {
       multiplierTabTree[`${res}_${eff}`][0].push(`general_${eff}_${ach}`);
@@ -231,8 +247,8 @@ for (const res of singleRes) {
 }
 
 // Fill in eternity upgrade entries
-multiplierTabTree.ID_eternityUpgrade = [[`ID_eu1`, `ID_eu2`, `ID_eu3`]];
-multiplierTabTree.TD_eternityUpgrade = [[`TD_eu1`, `TD_eu2`]];
+multiplierTabTree.ID_eternityUpgrade = [["ID_eu1", "ID_eu2", "ID_eu3"]];
+multiplierTabTree.TD_eternityUpgrade = [["TD_eu1", "TD_eu2"]];
 for (let dim = 1; dim <= 8; dim++) {
   multiplierTabTree[`ID_eternityUpgrade_${dim}`] = [[`ID_eu1_${dim}`, `ID_eu2_${dim}`, `ID_eu3_${dim}`]];
   multiplierTabTree[`TD_eternityUpgrade_${dim}`] = [[`TD_eu1_${dim}`, `TD_eu2_${dim}`]];

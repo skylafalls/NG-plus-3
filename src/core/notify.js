@@ -1,4 +1,4 @@
-export const notify = (function() {
+export const notify = (function () {
   const template = document.createElement("div");
   template.classList.add("o-notification");
   const enterAnimation = "a-notification--enter";
@@ -15,14 +15,18 @@ export const notify = (function() {
     container.append(el);
     let entered = false;
     function stopEnter() {
-      if (entered) return;
+      if (entered) {
+        return;
+      }
       entered = true;
       el.classList.remove(enterAnimation);
     }
     setTimeout(() => stopEnter(), 500);
     let leaving = false;
     function leave() {
-      if (leaving) return;
+      if (leaving) {
+        return;
+      }
       leaving = true;
       stopEnter();
       el.classList.add(leaveAnimation);
@@ -41,6 +45,6 @@ export const notify = (function() {
     automator: (text, duration) => showNotification(text, "o-notification--automator", duration),
     blackHole: (text, duration) => showNotification(text, "o-notification--black-hole", duration),
     strike: (text, duration) => showNotification(text, "o-notification--strike", duration),
-    showBlackHoles: true
+    showBlackHoles: true,
   };
 }());

@@ -1,8 +1,13 @@
 import { BitUpgradeState } from "../../utils";
 
 class PelleStrikeState extends BitUpgradeState {
-  get bits() { return player.celestials.pelle.progressBits; }
-  set bits(value) { player.celestials.pelle.progressBits = value; }
+  get bits() {
+    return player.celestials.pelle.progressBits;
+  }
+
+  set bits(value) {
+    player.celestials.pelle.progressBits = value;
+  }
 
   get hasStrike() {
     return this.isUnlocked;
@@ -39,7 +44,9 @@ class PelleStrikeState extends BitUpgradeState {
     player.celestials.pelle.collapsed.rifts = false;
 
     // If it's paradox, reset the records
-    if (this.id === 5) Pelle.resetResourcesForDilation();
+    if (this.id === 5) {
+      Pelle.resetResourcesForDilation();
+    }
     Tab.celestials.pelle.show();
     EventHub.dispatch(GAME_EVENT.PELLE_STRIKE_UNLOCKED);
   }
@@ -47,5 +54,5 @@ class PelleStrikeState extends BitUpgradeState {
 
 export const PelleStrikes = mapGameDataToObject(
   GameDatabase.celestials.pelle.strikes,
-  config => new PelleStrikeState(config)
+  config => new PelleStrikeState(config),
 );

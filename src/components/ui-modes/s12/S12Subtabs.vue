@@ -6,7 +6,7 @@ export default {
   props: {
     tab: {
       type: Object,
-      required: true
+      required: true,
     },
   },
   data() {
@@ -35,7 +35,9 @@ export default {
       return player.options.lastOpenSubtab[this.tab.id] === id && !S12Windows.isMinimised;
     },
     getSubtabsPosition() {
-      if (!this.$refs.subtabs) return "0px";
+      if (!this.$refs.subtabs) {
+        return "0px";
+      }
       const centerPt = S12Windows.tabs.tabButtonPositions[this.tab.id];
       const subtabsWidth = this.$refs.subtabs.offsetWidth;
       const minLeft = 5 + subtabsWidth / 2, maxLeft = this.windowWidth - minLeft;

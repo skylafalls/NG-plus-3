@@ -9,7 +9,7 @@ export default defineComponent({
   name: "NotationModal",
   components: {
     ModalWrapper,
-    SliderComponent
+    SliderComponent,
   },
   data() {
     return {
@@ -21,7 +21,9 @@ export default defineComponent({
     sampleNums() {
       const largestExponent = "123456789012345";
       const numbers = [];
-      for (let digits = 4; digits < 16; digits++) numbers.push(Decimal.pow10(largestExponent.slice(0, digits)));
+      for (let digits = 4; digits < 16; digits++) {
+        numbers.push(Decimal.pow10(largestExponent.slice(0, digits)));
+      }
       return numbers;
     },
     sliderProps() {
@@ -30,7 +32,7 @@ export default defineComponent({
         max: 15,
         interval: 1,
         width: "100%",
-        tooltip: false
+        tooltip: false,
       };
     },
   },
@@ -61,13 +63,17 @@ export default defineComponent({
     adjustSliderComma(value) {
       this.commaDigits = value;
       player.options.notationDigits.comma = value;
-      if (value > this.notationDigits) this.adjustSliderNotation(value);
+      if (value > this.notationDigits) {
+        this.adjustSliderNotation(value);
+      }
     },
     adjustSliderNotation(value) {
       this.notationDigits = value;
       player.options.notationDigits.notation = value;
-      if (value < this.commaDigits) this.adjustSliderComma(value);
-    }
+      if (value < this.commaDigits) {
+        this.adjustSliderComma(value);
+      }
+    },
   },
 });
 </script>

@@ -6,20 +6,20 @@ export default {
   name: "ECTimeStudy",
   components: {
     TimeStudyButton,
-    HintText
+    HintText,
   },
   props: {
     setup: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {
       hasRequirement: false,
       requirement: {
         current: new Decimal(),
-        total: new Decimal()
+        total: new Decimal(),
       },
       completions: 0,
       showTotalCompletions: false,
@@ -49,7 +49,7 @@ export default {
     },
     needsSecondLinebreak() {
       return [3, 4, 7].includes(this.study.id);
-    }
+    },
   },
   methods: {
     update() {
@@ -61,7 +61,9 @@ export default {
       this.showTotalCompletions = !Enslaved.isRunning || id !== 1;
       this.isRunning = EternityChallenge.current?.id === id;
       this.isUnlocked = ec.isUnlocked;
-      if (!this.hasRequirement || id === 11 || id === 12) return;
+      if (!this.hasRequirement || id === 11 || id === 12) {
+        return;
+      }
       const requirement = this.requirement;
       if (this.hasNumberRequirement) {
         requirement.total = study.requirementTotal;
@@ -70,8 +72,8 @@ export default {
         requirement.total.copyFrom(study.requirementTotal);
         requirement.current.copyFrom(study.requirementCurrent.min(requirement.total));
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

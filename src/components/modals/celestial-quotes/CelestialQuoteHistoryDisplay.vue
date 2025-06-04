@@ -4,19 +4,19 @@ import CelestialQuoteLine from "./CelestialQuoteLine";
 export default {
   name: "CelestialQuoteHistoryDisplay",
   components: {
-    CelestialQuoteLine
+    CelestialQuoteLine,
   },
   props: {
     quotes: {
       type: Array,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {
       focusedQuoteId: 0,
       unlockedQuotes: [],
-      lastProgress: Date.now()
+      lastProgress: Date.now(),
     };
   },
   computed: {
@@ -71,21 +71,21 @@ export default {
     // Doesn't need to be reactive because any quotes which are unlocked will temp hide this modal first
     this.unlockedQuotes = this.quotes.filter(x => x.isUnlocked).map(x => ({ quote: x, currentLine: 0 }));
     this.$nextTick(() => {
-      this.on$(GAME_EVENT.ARROW_KEY_PRESSED, arrow => {
+      this.on$(GAME_EVENT.ARROW_KEY_PRESSED, (arrow) => {
         switch (arrow[0]) {
-          case 'up': {
+          case "up": {
             this.progressUp();
             break;
           }
-          case 'down': {
+          case "down": {
             this.progressDown();
             break;
           }
-          case 'left': {
+          case "left": {
             this.progressLeft();
             break;
           }
-          case 'right': {
+          case "right": {
             this.progressRight();
             break;
           }
@@ -98,45 +98,55 @@ export default {
       return this.focusedQuoteId === quote && this.currentQuoteLine === line;
     },
     quoteStyle(quote, line) {
-      const scale = quote === this.focusedQuoteId ? 1 - (line !== this.currentQuoteLine) * 0.3
+      const scale = quote === this.focusedQuoteId
+        ? 1 - (line !== this.currentQuoteLine) * 0.3
         : 1 - Math.abs(quote - this.focusedQuoteId) / 8;
       const additionalTranslate = quote === this.focusedQuoteId && line !== this.currentQuoteLine
         ? `translateX(${(line - this.currentQuoteLine) * 110 + Math.sign(line - this.currentQuoteLine) * 20}%)`
         : "";
       return {
-        top: `calc(50vh + ${easeOut(quote - this.focusedQuoteId) * 16}rem)`,
-        transform: `translate(-50%, -50%) scale(${Math.max(scale, 0)}) ${additionalTranslate}`,
-        opacity: Number(line === this.unlockedQuotes[quote].currentLine || quote === this.focusedQuoteId),
-        visibility: line === this.unlockedQuotes[quote].currentLine || quote === this.focusedQuoteId ? "visible"
+        "top": `calc(50vh + ${easeOut(quote - this.focusedQuoteId) * 16}rem)`,
+        "transform": `translate(-50%, -50%) scale(${Math.max(scale, 0)}) ${additionalTranslate}`,
+        "opacity": Number(line === this.unlockedQuotes[quote].currentLine || quote === this.focusedQuoteId),
+        "visibility": line === this.unlockedQuotes[quote].currentLine || quote === this.focusedQuoteId
+          ? "visible"
           : "hidden",
-        "z-index": -Math.abs(quote - this.focusedQuoteId)
+        "z-index": -Math.abs(quote - this.focusedQuoteId),
       };
     },
     progressUp() {
-      if (Date.now() - this.lastProgress < 150) return;
+      if (Date.now() - this.lastProgress < 150) {
+        return;
+      }
       this.focusedQuoteId = Math.max(0, this.focusedQuoteId - 1);
       this.lastProgress = Date.now();
     },
     progressDown() {
-      if (Date.now() - this.lastProgress < 150) return;
+      if (Date.now() - this.lastProgress < 150) {
+        return;
+      }
       this.focusedQuoteId = Math.min(this.unlockedQuotes.length - 1, this.focusedQuoteId + 1);
       this.lastProgress = Date.now();
     },
     progressLeft() {
-      if (Date.now() - this.lastProgress < 150) return;
+      if (Date.now() - this.lastProgress < 150) {
+        return;
+      }
       this.focusedQuote.currentLine = Math.max(0, this.focusedQuote.currentLine - 1);
       this.lastProgress = Date.now();
     },
     progressRight() {
-      if (Date.now() - this.lastProgress < 150) return;
+      if (Date.now() - this.lastProgress < 150) {
+        return;
+      }
       this.focusedQuote.currentLine = Math.min(this.focusedQuote.quote.totalLines - 1,
         this.focusedQuote.currentLine + 1);
       this.lastProgress = Date.now();
     },
     close() {
       Quote.clearHistory();
-    }
-  }
+    },
+  },
 };
 
 function easeOut(x) {

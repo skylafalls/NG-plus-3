@@ -4,7 +4,9 @@ import { GameMechanicState } from "./game-mechanics";
 export const Speedrun = {
   officialFixedSeed: 69420,
   unlock() {
-    if (player.speedrun.isUnlocked) return;
+    if (player.speedrun.isUnlocked) {
+      return;
+    }
     Modal.message.show(`You have unlocked Speedrun Mode! This allows you to start a new save file with some slight
       changes which can be helpful if you're trying to complete the game as quickly as possible. The option to
       start a Speedrun Save is now available in the Options tab, under Saving. Choosing to start a Speedrun Save
@@ -21,33 +23,39 @@ export const Speedrun = {
     switch (key) {
       case SPEEDRUN_SEED_STATE.FIXED: {
         player.reality.initialSeed = this.officialFixedSeed;
-        player.speedrun.initialSeed = this.officialFixedSeed;return;
+        player.speedrun.initialSeed = this.officialFixedSeed; return;
       }
       case SPEEDRUN_SEED_STATE.RANDOM: {
         newSeed = Math.floor(1e13 * Math.random());
         player.reality.initialSeed = newSeed;
-        player.speedrun.initialSeed = newSeed;return;
+        player.speedrun.initialSeed = newSeed; return;
       }
       case SPEEDRUN_SEED_STATE.PLAYER: {
         player.reality.initialSeed = seed;
-        player.speedrun.initialSeed = seed;return;
+        player.speedrun.initialSeed = seed; return;
       }
-      default: {throw new Error("Unrecognized speedrun seed setting option");
+      default: {
+        throw new Error("Unrecognized speedrun seed setting option");
       }
     }
   },
   seedModeText(rec) {
     const record = rec ?? player.speedrun;
     switch (record.seedSelection) {
-      case SPEEDRUN_SEED_STATE.UNKNOWN: {return `No seed data (old save)`;
+      case SPEEDRUN_SEED_STATE.UNKNOWN: {
+        return "No seed data (old save)";
       }
-      case SPEEDRUN_SEED_STATE.FIXED: {return `Official fixed seed (${record.initialSeed})`;
+      case SPEEDRUN_SEED_STATE.FIXED: {
+        return `Official fixed seed (${record.initialSeed})`;
       }
-      case SPEEDRUN_SEED_STATE.RANDOM: {return `Random seed (${record.initialSeed})`;
+      case SPEEDRUN_SEED_STATE.RANDOM: {
+        return `Random seed (${record.initialSeed})`;
       }
-      case SPEEDRUN_SEED_STATE.PLAYER: {return `Player seed (${record.initialSeed})`;
+      case SPEEDRUN_SEED_STATE.PLAYER: {
+        return `Player seed (${record.initialSeed})`;
       }
-      default: {throw new Error("Unrecognized speedrun seed option in seedModeText");
+      default: {
+        throw new Error("Unrecognized speedrun seed option in seedModeText");
       }
     }
   },
@@ -57,7 +65,9 @@ export const Speedrun = {
       const id = Math.floor((1e7 - 1) * Math.random()) + 1;
       return `AD Player #${"0".repeat(6 - Math.floor(Math.log10(id)))}${id}`;
     }
-    if (name.length > 40) return `${name.slice(0, 37)}...`;
+    if (name.length > 40) {
+      return `${name.slice(0, 37)}...`;
+    }
     return name;
   },
   // Hard-resets the current save and puts it in a state ready to be "unpaused" once resources start being generated
@@ -71,10 +81,14 @@ export const Speedrun = {
     player.speedrun.name = name;
 
     // We make a few assumptions on settings which are likely to be changed for all speedrunners
-    for (const key of Object.keys(player.options.confirmations)) player.options.confirmations[key] = false;
+    for (const key of Object.keys(player.options.confirmations)) {
+      player.options.confirmations[key] = false;
+    }
     player.options.confirmations.glyphSelection = true;
     for (const key of Object.keys(player.options.animations)) {
-      if (typeof player.options.animations[key] === "boolean") player.options.animations[key] = false;
+      if (typeof player.options.animations[key] === "boolean") {
+        player.options.animations[key] = false;
+      }
     }
 
     // A few achievements are given for free to mitigate weird strategies at the beginning of runs or unavoidable
@@ -90,7 +104,9 @@ export const Speedrun = {
   // Speedruns are initially paused until startTimer is called, which happens as soon as the player purchases a AD or
   // uses the Konami code. Until then, they're free to do whatever they want with the UI
   startTimer() {
-    if (player.speedrun.hasStarted) return;
+    if (player.speedrun.hasStarted) {
+      return;
+    }
     player.speedrun.hasStarted = true;
     player.speedrun.startDate = Date.now();
     player.lastUpdate = Date.now();
@@ -102,14 +118,18 @@ export const Speedrun = {
   // which causes any direct changes done in storage.js to fall out of scope afterwards. We also don't want to change
   // this state at the beginning in case people want to share identical single-segment saves before starting the timer.
   setSegmented(state) {
-    if (this.isPausedAtStart()) return;
+    if (this.isPausedAtStart()) {
+      return;
+    }
     player.speedrun.isSegmented = state;
   },
   mostRecentMilestone() {
     const newestTime = player.speedrun.records.max();
-    if (newestTime === 0) return 0;
+    if (newestTime === 0) {
+      return 0;
+    }
     return player.speedrun.records.indexOf(newestTime);
-  }
+  },
 };
 
 class SpeedrunMilestone extends GameMechanicState {
@@ -127,12 +147,16 @@ class SpeedrunMilestone extends GameMechanicState {
   }
 
   tryComplete(args) {
-    if (!this.config.checkRequirement(args)) return;
+    if (!this.config.checkRequirement(args)) {
+      return;
+    }
     this.complete();
   }
 
   complete() {
-    if (this.isReached || !player.speedrun.isActive) return;
+    if (this.isReached || !player.speedrun.isActive) {
+      return;
+    }
     // Rounding slightly reduces filesize by removing weird float rounding
     player.speedrun.records[this.config.id] = Math.round(player.records.trueTimePlayed);
     GameUI.notify.success(`Speedrun Milestone Reached: ${this.name}`);

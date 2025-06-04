@@ -14,7 +14,7 @@ export default {
     NodeRing,
     NodeBackground,
     NodeOverlay,
-    ProgressConnector
+    ProgressConnector,
   },
   data: () => ({
     nodeState: null,
@@ -23,7 +23,7 @@ export default {
     db() {
       return {
         ...GameDatabase.celestials.navigation,
-        ...GameDatabase.celestials.navSigils
+        ...GameDatabase.celestials.navSigils,
       };
     },
     drawOrder() {
@@ -71,7 +71,7 @@ export default {
         order.sort((a, b) => a.drawOrder - b.drawOrder);
       }
       return order;
-    }
+    },
   },
   created() {
     this.nodeState = Object.keys(this.db).mapToObject(
@@ -79,14 +79,13 @@ export default {
       () => ({
         visible: false,
         complete: 0,
-      })
+      }),
     );
   },
   mounted() {
-    // eslint-disable-next-line no-unused-vars
     const panLimiter = (oldPan, newPan) => {
       // In the callback context, "this" is the svgPanZoom object.
-      // eslint-disable-next-line no-invalid-this
+
       const sizes = this.getSizes();
       const leftLimit = sizes.width - ((sizes.viewBox.x + sizes.viewBox.width) * sizes.realZoom);
       const rightLimit = -sizes.viewBox.x * sizes.realZoom;
@@ -94,7 +93,7 @@ export default {
       const bottomLimit = -sizes.viewBox.y * sizes.realZoom;
       return {
         x: Math.max(leftLimit, Math.min(rightLimit, newPan.x)),
-        y: Math.max(topLimit, Math.min(bottomLimit, newPan.y))
+        y: Math.max(topLimit, Math.min(bottomLimit, newPan.y)),
       };
     };
     this.panZoom = svgPanZoom(this.$refs.celestialNavigationSVG, {
@@ -107,8 +106,12 @@ export default {
       maxZoom: 1.5,
       beforePan: panLimiter,
     });
-    if (CelestialNavigationViewportCache.pan) this.panZoom.pan(CelestialNavigationViewportCache.pan);
-    if (CelestialNavigationViewportCache.zoom) this.panZoom.zoom(CelestialNavigationViewportCache.zoom);
+    if (CelestialNavigationViewportCache.pan) {
+      this.panZoom.pan(CelestialNavigationViewportCache.pan);
+    }
+    if (CelestialNavigationViewportCache.zoom) {
+      this.panZoom.zoom(CelestialNavigationViewportCache.zoom);
+    }
   },
   beforeDestroy() {
     if (this.panZoom) {
@@ -123,7 +126,9 @@ export default {
       for (const key of Object.keys(this.db)) {
         // The GameUI code forces update() to be called upon its initialization, which may force this to be called
         // before created() on this component is actually called; this suppresses any initial errors on-creation
-        if (!this.nodeState) continue;
+        if (!this.nodeState) {
+          continue;
+        }
         this.nodeState[key].visible = this.db[key].visible();
         this.nodeState[key].complete = this.db[key].complete();
       }
@@ -134,7 +139,7 @@ export default {
     nodeVisibility(obj) {
       return this.nodeState[obj.nodeId].visible ? "visible" : "hidden";
     },
-  }
+  },
 };
 export function cubicBezierArrayToPath(a, initialCommand = "M") {
   const prefix = `${initialCommand} ${a[0].p0.x} ${a[0].p0.y}\n`;

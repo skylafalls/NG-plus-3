@@ -6,12 +6,12 @@ export default {
   props: {
     tab: {
       type: Object,
-      required: true
+      required: true,
     },
     tabPosition: {
       type: Number,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {
@@ -25,7 +25,7 @@ export default {
   computed: {
     isCurrentTab() {
       return this.tab.isOpen && !S12Windows.isMinimised;
-    }
+    },
   },
   methods: {
     update() {
@@ -36,7 +36,7 @@ export default {
         this.tabName = Pelle.transitionText(
           this.tab.name,
           Pelle.endTabNames[this.tabPosition],
-          Math.clamp(GameEnd.endState - (this.tab.id % 4) / 10, 0, 1)
+          Math.clamp(GameEnd.endState - (this.tab.id % 4) / 10, 0, 1),
         );
       } else {
         this.tabName = this.tab.name;
@@ -45,7 +45,9 @@ export default {
       S12Windows.tabs.tabButtonPositions[this.tab.id] = this.getSubtabsPosition();
     },
     getSubtabsPosition() {
-      if (!this.$refs.taskbarIcon) return "0px";
+      if (!this.$refs.taskbarIcon) {
+        return "0px";
+      }
       return this.$refs.taskbarIcon.offsetLeft + this.$refs.taskbarIcon.offsetWidth / 2;
     },
   },

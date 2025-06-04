@@ -8,11 +8,13 @@ export class TickspeedAutobuyerState extends UpgradeableAutobuyerState {
   }
 
   get name() {
-    return `Tickspeed`;
+    return "Tickspeed";
   }
 
   get isUnlocked() {
-    if (Pelle.isDisabled("tickspeedAutobuyer")) return false;
+    if (Pelle.isDisabled("tickspeedAutobuyer")) {
+      return false;
+    }
     return this.canBeUpgraded;
   }
 
@@ -59,7 +61,7 @@ export class TickspeedAutobuyerState extends UpgradeableAutobuyerState {
   toggleMode() {
     this.mode = [
       AUTOBUYER_MODE.BUY_SINGLE,
-      AUTOBUYER_MODE.BUY_MAX
+      AUTOBUYER_MODE.BUY_MAX,
     ]
       .nextSibling(this.mode);
   }
@@ -83,7 +85,9 @@ export class TickspeedAutobuyerState extends UpgradeableAutobuyerState {
   }
 
   purchase() {
-    if (!this.canUnlockSlowVersion) return;
+    if (!this.canUnlockSlowVersion) {
+      return;
+    }
     this.data.isBought = true;
   }
 
@@ -93,7 +97,9 @@ export class TickspeedAutobuyerState extends UpgradeableAutobuyerState {
 
   reset() {
     super.reset();
-    if (EternityMilestone.keepAutobuyers.isReached || PelleUpgrade.keepAutobuyers.canBeApplied) return;
+    if (EternityMilestone.keepAutobuyers.isReached || PelleUpgrade.keepAutobuyers.canBeApplied) {
+      return;
+    }
     this.data.mode = AUTOBUYER_MODE.BUY_SINGLE;
     this.data.isUnlocked = false;
     this.data.isBought = false;

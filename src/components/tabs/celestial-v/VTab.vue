@@ -12,7 +12,7 @@ export default {
     CelestialQuoteHistory,
     VUnlockRequirement,
     PrimaryButton,
-    GlyphSetPreview
+    GlyphSetPreview,
   },
   data() {
     return {
@@ -36,34 +36,34 @@ export default {
       return {
         "o-v-milestone": true,
         "o-v-milestone--unlocked": this.canUnlockCelestial,
-        "c-v-unlock-button--enabled": this.canUnlockCelestial
+        "c-v-unlock-button--enabled": this.canUnlockCelestial,
       };
     },
     // If V is flipped, change the layout of the grid
     hexGrid() {
       return this.isFlipped && this.wantsFlipped
         ? [
-          VRunUnlocks.all[6],
-          {},
-          {},
-          {},
-          { isRunButton: true },
-          VRunUnlocks.all[7],
-          VRunUnlocks.all[8],
-          {},
-          {}
-        ]
+            VRunUnlocks.all[6],
+            {},
+            {},
+            {},
+            { isRunButton: true },
+            VRunUnlocks.all[7],
+            VRunUnlocks.all[8],
+            {},
+            {},
+          ]
         : [
-          VRunUnlocks.all[0],
-          VRunUnlocks.all[1],
-          {},
-          VRunUnlocks.all[5],
-          { isRunButton: true },
-          VRunUnlocks.all[2],
-          VRunUnlocks.all[4],
-          VRunUnlocks.all[3],
-          {}
-        ];
+            VRunUnlocks.all[0],
+            VRunUnlocks.all[1],
+            {},
+            VRunUnlocks.all[5],
+            { isRunButton: true },
+            VRunUnlocks.all[2],
+            VRunUnlocks.all[4],
+            VRunUnlocks.all[3],
+            {},
+          ];
     },
     vUnlock: () => VUnlocks.vAchievementUnlock,
     runMilestones() {
@@ -71,12 +71,12 @@ export default {
         [
           VUnlocks.shardReduction,
           VUnlocks.adPow,
-          VUnlocks.fastAutoEC
+          VUnlocks.fastAutoEC,
         ],
         [
           VUnlocks.autoAutoClean,
           VUnlocks.achievementBH,
-          VUnlocks.raUnlock
+          VUnlocks.raUnlock,
         ],
       ];
     },
@@ -86,7 +86,7 @@ export default {
         "c-v-run-button": true,
         "c-v-run-button--running": this.isRunning,
         "c-celestial-run-button--clickable": !this.isDoomed,
-        "o-pelle-disabled-pointer": this.isDoomed
+        "o-pelle-disabled-pointer": this.isDoomed,
       };
     },
     runDescription() {
@@ -109,10 +109,14 @@ export default {
       this.hasAlchemy = Ra.unlocks.unlockGlyphAlchemy.canBeApplied;
     },
     unlockCelestial() {
-      if (V.canUnlockCelestial) V.unlockCelestial();
+      if (V.canUnlockCelestial) {
+        V.unlockCelestial();
+      }
     },
     startRun() {
-      if (this.isDoomed) return;
+      if (this.isDoomed) {
+        return;
+      }
       Modal.celestials.show({ name: "V's", number: 3 });
     },
     has(info) {
@@ -130,7 +134,9 @@ export default {
       return new Decimal(this.runRecords[hex.id]).gt(0) || hex.completions > 0;
     },
     reduceGoals(hex) {
-      if (!Currency.perkPoints.purchase(hex.reductionCost)) return;
+      if (!Currency.perkPoints.purchase(hex.reductionCost)) {
+        return;
+      }
       const steps = hex.config.reductionStepSize ? hex.config.reductionStepSize : 1;
       player.celestials.v.goalReductionSteps[hex.id] += steps;
       for (const unlock of VRunUnlocks.all) {
@@ -148,7 +154,9 @@ export default {
     hexColor(hex) {
       const completions = hex.completions;
       const maxed = hex.config.values.length;
-      if (completions === maxed) return "var(--color-v--base)";
+      if (completions === maxed) {
+        return "var(--color-v--base)";
+      }
       const r = 255 - 5 * completions;
       const g = 255 - 10 * completions;
       const b = 255 - 20 * completions;
@@ -159,8 +167,8 @@ export default {
     },
     createCursedGlyph() {
       Glyphs.giveCursedGlyph();
-    }
-  }
+    },
+  },
 };
 </script>
 

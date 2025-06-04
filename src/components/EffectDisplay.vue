@@ -1,28 +1,28 @@
 <script>
 import { isDecimal, isFunction, isNumber } from "@/utility";
+import { defineComponent } from "vue";
 
-/* eslint-disable no-empty-function */
-export default {
+export default defineComponent({
   name: "EffectDisplay",
   props: {
     config: {
       type: Object,
       required: false,
-      default: undefined
+      default: undefined,
     },
     br: {
       type: Boolean,
-      required: false
+      required: false,
     },
     label: {
       type: String,
       default: "Currently",
-      required: false
+      required: false,
     },
     ignoreCapped: {
       type: Boolean,
       required: false,
-      default: false
+      default: false,
     },
   },
   data() {
@@ -32,7 +32,7 @@ export default {
       // Number.MAX_VALUE doesn't really matter here, but we need it because
       // undefined values are not allowed for data properties
       cap: new Decimal(Number.MAX_VALUE),
-      hasCap: false
+      hasCap: false,
     };
   },
   computed: {
@@ -47,7 +47,7 @@ export default {
     },
     effectDisplay() {
       return this.formatEffect(this.reachedCap ? this.cap : this.effectValue);
-    }
+    },
   },
   watch: {
     config: {
@@ -58,7 +58,9 @@ export default {
         const effect = config?.effect;
         const formatEffect = config?.formatEffect;
         this.isVisible = effect !== undefined && formatEffect !== undefined;
-        if (!this.isVisible) return;
+        if (!this.isVisible) {
+          return;
+        }
         this.formatEffect = formatEffect;
 
         if (isNumber(effect)) {
@@ -72,8 +74,8 @@ export default {
         }
 
         if (!isFunction(effect)) {
-          throw new Error(`EffectDisplay config.effect has ` +
-            ` unsupported type "${typeof effect}"`);
+          throw new Error("EffectDisplay config.effect has "
+            + ` unsupported type "${typeof effect}"`);
         }
 
         const value = effect();
@@ -85,8 +87,8 @@ export default {
           this.effectValue = Decimal.fromDecimal(value);
           this.updateEffect = () => this.effectValue.copyFrom(effect());
         } else {
-          throw new Error(`EffectDisplay config.effect is a function which returns` +
-            ` unsupported type "${typeof effect}"`);
+          throw new Error("EffectDisplay config.effect is a function which returns"
+            + ` unsupported type "${typeof effect}"`);
         }
 
         let cap = config.cap;
@@ -125,10 +127,10 @@ export default {
             return;
           }
 
-          throw new Error(`EffectDisplay config.cap is a function which returns` +
-            ` unsupported type "${typeof effect}"`);
+          throw new Error("EffectDisplay config.cap is a function which returns"
+            + ` unsupported type "${typeof effect}"`);
         }
-      }
+      },
     },
   },
   beforeCreate() {
@@ -139,9 +141,9 @@ export default {
     update() {
       this.updateEffect();
       this.updateCap();
-    }
-  }
-};
+    },
+  },
+});
 </script>
 
 <template>

@@ -38,13 +38,13 @@ export class MasteryStudyTreeLayout {
     const normalRowLayout = new TimeStudyRowLayout({
       itemWidth: 18 * scaling,
       itemHeight: 10 * scaling,
-      spacing: 3 * scaling
+      spacing: 3 * scaling,
     });
 
     const wideRowLayout = new TimeStudyRowLayout({
       itemWidth: 12 * scaling,
       itemHeight: 10 * scaling,
-      spacing: 0.6 * scaling
+      spacing: 0.6 * scaling,
     });
     const normalRow = (...items) => new TimeStudyRow(normalRowLayout, items);
     const wideRow = (...items) => new TimeStudyRow(wideRowLayout, items, true);
@@ -55,15 +55,14 @@ export class MasteryStudyTreeLayout {
     /**
      * @type {TimeStudyRow[]}
      */
-    /* eslint-disable no-multi-spaces, space-in-parens, func-call-spacing */
+
     // Mastery Studies
     this.rows.push(
-      normalRow(                               MS(11)                                 ),
-      normalRow(              MS(21),          MS(22),          MS(23)                ),
-      wideRow  (    MS(31),    MS(32),    MS(33),    MS(34),    MS(35),    MS(36),    ),
-      normalRow(              EC(13),                             EC(14)              ),
-    )
-    /* eslint-enable no-multi-spaces, space-in-parens, func-call-spacing */
+      normalRow(MS(11)),
+      normalRow(MS(21), MS(22), MS(23)),
+      wideRow (MS(31), MS(32), MS(33), MS(34), MS(35), MS(36)),
+      normalRow(EC(13), EC(14)),
+    );
 
     /**
      * @type {TimeStudySetup[]}
@@ -73,11 +72,13 @@ export class MasteryStudyTreeLayout {
       const row = this.rows[rowIndex];
       for (let columnIndex = 0; columnIndex < row.items.length; columnIndex++) {
         const study = row.items[columnIndex];
-        if (study === null) continue;
+        if (study === null) {
+          continue;
+        }
         const setup = new TimeStudySetup({
           study,
           row: rowIndex,
-          column: columnIndex
+          column: columnIndex,
         });
         if (row.isWide) {
           setup.isSmall = true;
@@ -125,5 +126,5 @@ export const STUDY_TREE_LAYOUT_TYPE = {
   NORMAL: 0,
   get current() {
     return this.NORMAL;
-  }
+  },
 };

@@ -8,11 +8,13 @@ export class GalaxyAutobuyerState extends UpgradeableAutobuyerState {
   }
 
   get name() {
-    return `Antimatter Galaxy`;
+    return "Antimatter Galaxy";
   }
 
   get isUnlocked() {
-    if (Pelle.isDisabled("galaxyAutobuyer")) return false;
+    if (Pelle.isDisabled("galaxyAutobuyer")) {
+      return false;
+    }
     return this.canBeUpgraded;
   }
 

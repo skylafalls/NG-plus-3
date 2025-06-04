@@ -6,7 +6,7 @@ export default {
   components: { PrimaryButton },
   data() {
     return {
-      showSpectate: Boolean
+      showSpectate: Boolean,
     };
   },
   methods: {
@@ -16,9 +16,11 @@ export default {
     },
     swap() {
       GameEnd.creditsClosed = !GameEnd.creditsClosed;
-      if (!GameEnd.creditsEverClosed) GameEnd.creditsEverClosed = true;
-    }
-  }
+      if (!GameEnd.creditsEverClosed) {
+        GameEnd.creditsEverClosed = true;
+      }
+    },
+  },
 };
 </script>
 

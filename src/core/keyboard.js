@@ -2,7 +2,9 @@ import Mousetrap from "mousetrap";
 
 // Add all numpad keys to Mousetrap (keycodes 97-105 correspond to numpad 1-9)
 const numpadKeys = {};
-for (let num = 1; num <= 9; num++) numpadKeys[num + 96] = `num${num}`;
+for (let num = 1; num <= 9; num++) {
+  numpadKeys[num + 96] = `num${num}`;
+}
 Mousetrap.addKeycodes(numpadKeys);
 
 function getKeys(combination) {
@@ -128,9 +130,9 @@ function executeKey(action) {
 }
 
 function executeHotkey(action) {
-  if (!player.options.hotkeys ||
-    document.activeElement.type === "text" ||
-    document.activeElement.type === "textarea") {
+  if (!player.options.hotkeys
+    || document.activeElement.type === "text"
+    || document.activeElement.type === "textarea") {
     return;
   }
   return executeKey(action);

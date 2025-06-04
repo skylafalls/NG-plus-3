@@ -4,14 +4,18 @@ export const MultiplierTabHelper = {
   // Helper method for counting enabled dimensions
   activeDimCount(type) {
     switch (type) {
-      case 'AD': {return Math.clamp(AntimatterDimensions.all.filter(ad => ad.isProducing).length,
+      case "AD": {
+        return Math.clamp(AntimatterDimensions.all.filter(ad => ad.isProducing).length,
           1, EternityChallenge(7).isRunning ? 7 : 8);
       }
-      case 'ID': {return InfinityDimensions.all.filter(id => id.isProducing).length;
+      case "ID": {
+        return InfinityDimensions.all.filter(id => id.isProducing).length;
       }
-      case 'TD': {return TimeDimensions.all.filter(td => td.isProducing).length;
+      case "TD": {
+        return TimeDimensions.all.filter(td => td.isProducing).length;
       }
-      default: {throw new Error("Unrecognized Dimension type in Multiplier tab GameDB entry");
+      default: {
+        throw new Error("Unrecognized Dimension type in Multiplier tab GameDB entry");
       }
     }
   },
@@ -28,7 +32,7 @@ export const MultiplierTabHelper = {
       Achievement(178),
       InfinityChallenge(5).reward,
       PelleUpgrade.galaxyPower,
-      PelleRifts.decay.milestones[1]
+      PelleRifts.decay.milestones[1],
     ).mul(Pelle.specialGlyphEffect.power);
   },
 
@@ -41,12 +45,20 @@ export const MultiplierTabHelper = {
     let galFrac, tickFrac;
     if (effectiveCount.lt(3)) {
       let baseMult = 1.1245;
-      if (player.galaxies.eq(1)) baseMult = 1.11888888;
-      if (player.galaxies.eq(2)) baseMult = 1.11267177;
+      if (player.galaxies.eq(1)) {
+        baseMult = 1.11888888;
+      }
+      if (player.galaxies.eq(2)) {
+        baseMult = 1.11267177;
+      }
       if (NormalChallenge(5).isRunning) {
         baseMult = 1.08;
-        if (player.galaxies.eq(1)) baseMult = 1.07632;
-        if (player.galaxies.eq(2)) baseMult = 1.072;
+        if (player.galaxies.eq(1)) {
+          baseMult = 1.07632;
+        }
+        if (player.galaxies.eq(2)) {
+          baseMult = 1.072;
+        }
       }
       // This is needed for numerical consistency with the other conditional case
       baseMult = new Decimal(baseMult).div(0.965 ** 2);
@@ -82,20 +94,26 @@ export const MultiplierTabHelper = {
       Achievement(36),
       Achievement(45),
       Achievement(66),
-      Achievement(83)
+      Achievement(83),
     );
     let baseFrac = base.log10().div(Tickspeed.perSecond.log10());
 
     // We want to make sure to zero out components in some edge cases
-    if (base.eq(1)) baseFrac = DC.D0;
-    if (effectiveCount.eq(0)) galFrac = DC.D0;
+    if (base.eq(1)) {
+      baseFrac = DC.D0;
+    }
+    if (effectiveCount.eq(0)) {
+      galFrac = DC.D0;
+    }
 
     // Normalize the sum by splitting tickspeed and galaxies across what's leftover besides the base value. These three
     // values must be scaled so that they sum to 1 and none are negative
     let factor = baseFrac.sub(1).div(tickFrac.add(galFrac));
     // The actual base tickspeed calculation multiplies things in a different order, which can lead to precision issues
     // when no tickspeed upgrades have been bought if we don't explicitly set this to zero
-    if (Tickspeed.totalUpgrades.eq(0)) factor = DC.D0;
+    if (Tickspeed.totalUpgrades.eq(0)) {
+      factor = DC.D0;
+    }
     return {
       base: baseFrac,
       tickspeed: tickFrac.mul(factor),
@@ -107,20 +125,26 @@ export const MultiplierTabHelper = {
   // expected to be a three-character string "XXN", eg. "AD3" or "TD2"
   achievementDimCheck(ach, dimStr) {
     switch (ach) {
-      case 23: {return dimStr === "AD8";
+      case 23: {
+        return dimStr === "AD8";
       }
       case 28:
       case 31:
       case 68:
-      case 71: {return dimStr === "AD1";
+      case 71: {
+        return dimStr === "AD1";
       }
-      case 94: {return dimStr === "ID1";
+      case 94: {
+        return dimStr === "ID1";
       }
-      case 34: {return dimStr.slice(0, 2) === "AD" && Number(dimStr.charAt(2)) !== 8;
+      case 34: {
+        return dimStr.slice(0, 2) === "AD" && Number(dimStr.charAt(2)) !== 8;
       }
-      case 64: {return dimStr.slice(0, 2) === "AD" && Number(dimStr.charAt(2)) <= 4;
+      case 64: {
+        return dimStr.slice(0, 2) === "AD" && Number(dimStr.charAt(2)) <= 4;
       }
-      default: {return true;
+      default: {
+        return true;
       }
     }
   },
@@ -128,21 +152,29 @@ export const MultiplierTabHelper = {
   // Helper method to check for whether a time study affects a particular dimension or not, see achievementDimCheck()
   timeStudyDimCheck(ts, dimStr) {
     switch (ts) {
-      case 11: {return dimStr === "TD1";
+      case 11: {
+        return dimStr === "TD1";
       }
-      case 71: {return dimStr.slice(0, 2) === "AD" && Number(dimStr.charAt(2)) !== 8;
+      case 71: {
+        return dimStr.slice(0, 2) === "AD" && Number(dimStr.charAt(2)) !== 8;
       }
-      case 72: {return dimStr === "ID4";
+      case 72: {
+        return dimStr === "ID4";
       }
-      case 73: {return dimStr === "TD3";
+      case 73: {
+        return dimStr === "TD3";
       }
-      case 214: {return dimStr === "AD8";
+      case 214: {
+        return dimStr === "AD8";
       }
-      case 227: {return dimStr === "TD4";
+      case 227: {
+        return dimStr === "TD4";
       }
-      case 234: {return dimStr === "AD1";
+      case 234: {
+        return dimStr === "AD1";
       }
-      default: {return true;
+      default: {
+        return true;
       }
     }
   },
@@ -151,14 +183,18 @@ export const MultiplierTabHelper = {
   ICDimCheck(ic, dimStr) {
     switch (ic) {
       case 1:
-      case 6: {return dimStr.slice(0, 2) === "ID";
+      case 6: {
+        return dimStr.slice(0, 2) === "ID";
       }
       case 3:
-      case 4: {return dimStr.slice(0, 2) === "AD";
+      case 4: {
+        return dimStr.slice(0, 2) === "AD";
       }
-      case 8: {return dimStr.slice(0, 2) === "AD" && Number(dimStr.charAt(2)) > 1 && Number(dimStr.charAt(2)) < 8;
+      case 8: {
+        return dimStr.slice(0, 2) === "AD" && Number(dimStr.charAt(2)) > 1 && Number(dimStr.charAt(2)) < 8;
       }
-      default: {return false;
+      default: {
+        return false;
       }
     }
   },
@@ -167,16 +203,21 @@ export const MultiplierTabHelper = {
   ECDimCheck(ec, dimStr) {
     switch (ec) {
       case 1:
-      case 10: {return dimStr.slice(0, 2) === "TD";
+      case 10: {
+        return dimStr.slice(0, 2) === "TD";
       }
-      case 2: {return dimStr === "ID1";
+      case 2: {
+        return dimStr === "ID1";
       }
       case 4:
-      case 9: {return dimStr.slice(0, 2) === "ID";
+      case 9: {
+        return dimStr.slice(0, 2) === "ID";
       }
-      case 7: {return dimStr === "ID8";
+      case 7: {
+        return dimStr === "ID8";
       }
-      default: {return false;
+      default: {
+        return false;
       }
     }
   },
@@ -190,17 +231,17 @@ export const MultiplierTabHelper = {
     // Calculate an average black hole speedup factor
     const bh1 = BlackHole(1);
     const bh2 = BlackHole(2);
-    const avgBH = 1 + (bh1.isUnlocked ? bh1.dutyCycle * (bh1.power - 1) : 0) +
-        (bh2.isUnlocked ? bh1.dutyCycle * bh2.dutyCycle * bh1.power * (bh2.power - 1) : 0);
+    const avgBH = 1 + (bh1.isUnlocked ? bh1.dutyCycle * (bh1.power - 1) : 0)
+      + (bh2.isUnlocked ? bh1.dutyCycle * bh2.dutyCycle * bh1.power * (bh2.power - 1) : 0);
 
     return {
       current: currBH,
-      average: avgBH
+      average: avgBH,
     };
   },
 
   pluralizeDimensions(dims) {
-    return dims === 1 ? 'Dimension\u00A0' : "Dimensions";
+    return dims === 1 ? "Dimension\u00A0" : "Dimensions";
   },
 
   // All of the following NC12-related functions are to make the parsing within the GameDB entry easier in terms of
@@ -237,5 +278,5 @@ export const MultiplierTabHelper = {
 
   isNC12ProducingEven() {
     return this.evenDimNC12Production().gt(this.oddDimNC12Production());
-  }
+  },
 };

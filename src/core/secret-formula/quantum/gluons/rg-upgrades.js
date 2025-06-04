@@ -1,0 +1,56 @@
+export const rgGluonUpgrades = [
+  {
+    id: 1,
+    cost: () => new Decimal(1),
+    description: () => "Remote Antimatter Galaxy scaling is 50% weaker.",
+    effect: () => 0.5,
+  },
+  {
+    id: 2,
+    cost: () => new Decimal(2),
+    description: () => "Tachyonic Galaxies strengthens the overall effectiveness of galaxies.",
+    effect: () => player.dilation.totalTachyonGalaxies.plus(1).log10().div(10).plus(1),
+    formatEffect: value => `${formatPercents(value, 2)} stronger`,
+  },
+  {
+    id: 3,
+    cost: () => new Decimal(5),
+    description: () => "Dimension Boosts boosts 1st Meta Dimensions.",
+    effect: () => DimBoost.totalBoosts.plus(1).pow(33),
+    formatEffect: value => formatX(value, 2),
+  },
+  {
+    id: 4,
+    cost: () => new Decimal(100),
+    description: () => "All Galaxies are 50% stronger but positrons & electrons are 30% weaker and Antimatter Galaxies are 75% weaker.",
+    effect: () => 1.5,
+  },
+  {
+    id: 5,
+    cost: () => new Decimal(7e15),
+    description: () => "Gain more quarks based on current Antimatter.",
+    effect: () => Currency.antimatter.value.plus(1).logPow(0.2),
+    formatEffect: value => formatX(value, 2),
+  },
+  {
+    id: 6,
+    cost: () => new Decimal(4e19),
+    description: () => "Distant & Remote Antimatter Galaxies scale slower based on Meta-Antimatter.",
+    effect: () => Currency.metaAntimatter.value.plus(1).log10().plus(1).log2(),
+    formatEffect: value => `${formatPercents(value, 2)} weaker`,
+  },
+  {
+    id: 7,
+    cost: () => new Decimal(3e25),
+    description: () => "Electrons are stronger based on Dimension Boosts.",
+    effect: () => DimBoost.totalBoosts.plus(1).log10().plus(1),
+    formatEffect: value => formatPow(value, 2),
+  },
+  {
+    id: 8,
+    cost: () => new Decimal("1e570"),
+    description: () => "RG Gluons raises the half-life of free preons.",
+    effect: () => player.quantum.gluons.rg.plus(1).log10(),
+    formatEffect: value => formatX(value, 2),
+  },
+];

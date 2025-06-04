@@ -16,5 +16,5 @@ export const eternity = {
     normal: normalTimeStudies,
     mastery: masteryStudies,
   },
-  upgrades: eternityUpgrades
+  upgrades: eternityUpgrades,
 };

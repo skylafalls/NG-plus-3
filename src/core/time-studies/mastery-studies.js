@@ -40,8 +40,12 @@ export class MasteryStudyState extends TimeStudyState {
   }
 
   purchase(auto = false) {
-    if (this.isBought || !this.isAffordable || !this.canBeBought) return false;
-    if (GameEnd.creditsEverClosed) return false;
+    if (this.isBought || !this.isAffordable || !this.canBeBought) {
+      return false;
+    }
+    if (GameEnd.creditsEverClosed) {
+      return false;
+    }
     player.timestudy.mastery.push(this.id);
     Currency.timeTheorems.subtract(this.cost);
     TimeStudyTree.commitToGameState([MasteryStudy(this.id)]);
@@ -51,7 +55,7 @@ export class MasteryStudyState extends TimeStudyState {
 
 MasteryStudyState.studies = mapGameData(
   GameDatabase.eternity.timeStudies.mastery,
-  config => new MasteryStudyState(config)
+  config => new MasteryStudyState(config),
 );
 
 MasteryStudyState.all = MasteryStudyState.studies.filter(e => e !== undefined);

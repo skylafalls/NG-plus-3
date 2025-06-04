@@ -11,9 +11,15 @@ export default {
   },
   computed: {
     resetText() {
-      if (this.isDoomed) return "Start this Armageddon over";
-      if (this.isInCelestialReality && !this.resetCelestial) return "Exit this Celestial early";
-      if (this.isInCelestialReality && this.resetCelestial) return "Restart this Celestial";
+      if (this.isDoomed) {
+        return "Start this Armageddon over";
+      }
+      if (this.isInCelestialReality && !this.resetCelestial) {
+        return "Exit this Celestial early";
+      }
+      if (this.isInCelestialReality && this.resetCelestial) {
+        return "Restart this Celestial";
+      }
       return "Start this Reality over";
     },
   },
@@ -26,19 +32,27 @@ export default {
     },
     resetReality() {
       const confirms = player.options.confirmations;
-      if (GameEnd.creditsClosed) return;
+      if (GameEnd.creditsClosed) {
+        return;
+      }
       if (this.isInCelestialReality) {
-        if (confirms.exitChallenge) Modal.exitChallenge.show({
-          challengeName: "a Celestial Reality",
-          normalName: "Reality",
-          hasHigherLayers: false,
-          exitFn: () => beginProcessReality(getRealityProps(true))
-        });
-        else beginProcessReality(getRealityProps(true));
-      } else if (confirms.resetReality) Modal.resetReality.show();
-      else beginProcessReality(getRealityProps(true));
+        if (confirms.exitChallenge) {
+          Modal.exitChallenge.show({
+            challengeName: "a Celestial Reality",
+            normalName: "Reality",
+            hasHigherLayers: false,
+            exitFn: () => beginProcessReality(getRealityProps(true)),
+          });
+        } else {
+          beginProcessReality(getRealityProps(true));
+        }
+      } else if (confirms.resetReality) {
+        Modal.resetReality.show();
+      } else {
+        beginProcessReality(getRealityProps(true));
+      }
     },
-  }
+  },
 };
 </script>
 

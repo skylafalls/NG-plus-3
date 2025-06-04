@@ -1,5 +1,7 @@
 <script>
-export default {
+import { defineComponent } from "vue";
+
+export default defineComponent({
   name: "TickspeedRow",
   data() {
     return {
@@ -22,12 +24,14 @@ export default {
     classObject() {
       return {
         "l-tickspeed-container": true,
-        "l-tickspeed-container--hidden": !this.isVisible
+        "l-tickspeed-container--hidden": !this.isVisible,
       };
     },
     multiplierDisplay() {
-      if (InfinityChallenge(3).isRunning) return `Multiply all Antimatter Dimensions by
+      if (InfinityChallenge(3).isRunning) {
+        return `Multiply all Antimatter Dimensions by
         ${formatX(this.galaxyCount.times(0.005).add(1.05))}`;
+      }
       const tickmult = this.mult;
       return `${formatX(tickmult.reciprocal(), 2, 3)} faster / upgrade.`;
     },
@@ -39,10 +43,14 @@ export default {
     },
     upgradeCount() {
       const purchased = this.purchasedTickspeed;
-      if (!this.freeTickspeed) return quantifyInt("Purchased Upgrade", purchased);
-      if (purchased.eq(0) || this.isContinuumActive) return `${formatInt(this.freeTickspeed, 3)} Free Upgrades`;
+      if (!this.freeTickspeed) {
+        return quantifyInt("Purchased Upgrade", purchased);
+      }
+      if (purchased.eq(0) || this.isContinuumActive) {
+        return `${formatInt(this.freeTickspeed, 3)} Free Upgrades`;
+      }
       return `${formatInt(purchased, 3)} Purchased + ${formatInt(this.freeTickspeed, 3)} Free`;
-    }
+    },
   },
   methods: {
     update() {
@@ -50,7 +58,9 @@ export default {
       this.freeTickspeed.copyFrom(FreeTickspeed.amount);
       this.isEC9 = EternityChallenge(9).isRunning;
       this.isVisible = Tickspeed.isUnlocked || this.isEC9;
-      if (!this.isVisible) return;
+      if (!this.isVisible) {
+        return;
+      }
       this.mult.copyFrom(Tickspeed.multiplier);
       this.cost.copyFrom(Tickspeed.cost);
       this.isAffordable = Tickspeed.isAvailableForPurchase && Tickspeed.isAffordable;
@@ -58,7 +68,9 @@ export default {
       this.gameSpeedMult = getGameSpeedupForDisplay();
       this.galaxyCount.copyFrom(player.galaxies);
       this.isContinuumActive = Laitela.continuumActive;
-      if (this.isContinuumActive) this.continuumValue = Tickspeed.continuumValue;
+      if (this.isContinuumActive) {
+        this.continuumValue = Tickspeed.continuumValue;
+      }
       this.hasTutorial = Tutorial.isActive(TUTORIAL_STATE.TICKSPEED);
     },
     buttonClass() {
@@ -67,11 +79,11 @@ export default {
         "tickspeed-btn": true,
         "o-primary-btn--disabled": !this.isAffordable && !this.isContinuumActive,
         "o-non-clickable o-continuum": this.isContinuumActive,
-        "tutorial--glow": this.isAffordable && this.hasTutorial
+        "tutorial--glow": this.isAffordable && this.hasTutorial,
       };
     },
-  }
-};
+  },
+});
 </script>
 
 <template>

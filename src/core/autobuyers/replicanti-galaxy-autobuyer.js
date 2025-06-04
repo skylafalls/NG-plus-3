@@ -6,7 +6,7 @@ export class ReplicantiGalaxyAutobuyerState extends AutobuyerState {
   }
 
   get name() {
-    return `Replicanti Galaxy`;
+    return "Replicanti Galaxy";
   }
 
   get isUnlocked() {
@@ -22,7 +22,9 @@ export class ReplicantiGalaxyAutobuyerState extends AutobuyerState {
   }
 
   tick() {
-    if (!this.isEnabled) return;
+    if (!this.isEnabled) {
+      return;
+    }
     replicantiGalaxy(true);
   }
 }

@@ -20,7 +20,7 @@ export default defineComponent({
     DilationTimeStudy,
     SecretTimeStudy,
     TimeStudyConnection,
-    QuantumTimeStudy
+    QuantumTimeStudy,
   },
   data() {
     return {
@@ -52,15 +52,15 @@ export default defineComponent({
     treeStyleObject() {
       return {
         width: `${this.layout.width}rem`,
-        height: `${this.layout.height}rem`
+        height: `${this.layout.height}rem`,
       };
     },
     respecClassObject() {
       return {
         "o-primary-btn--subtab-option": true,
-        "o-primary-btn--respec-active": this.respec
+        "o-primary-btn--respec-active": this.respec,
       };
-    }
+    },
   },
   watch: {
     respec(newValue) {
@@ -69,7 +69,7 @@ export default defineComponent({
     vLevel() {
       // When vLevel changes, we recompute the study tree because of triad studies
       this.$recompute("layout");
-    }
+    },
   },
   created() {
     const incrementRenderedCount = () => {
@@ -119,7 +119,7 @@ export default defineComponent({
       }
       throw new TypeError("Unknown Time Study type");
     },
-  }
+  },
 });
 </script>
 

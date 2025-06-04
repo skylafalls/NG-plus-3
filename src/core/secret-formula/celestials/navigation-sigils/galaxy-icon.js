@@ -22,11 +22,11 @@ const SigilAttributes = {
  * @member {Object} draw  Object whose props (thickness, layer) determine the thickness and z-index of this element
  * @member {String} colorOverride Color to use for rendering the element, used instead of SigilAttributes.color
  */
-// eslint-disable-next-line max-params
+
 function sigilShape(type, att, draw, colorOverride) {
   let pos, path, pathStart, pathEnd;
   switch (type) {
-    case 'circle': {
+    case "circle": {
       pos = att.center;
       path = LogarithmicSpiral.fromPolarEndpoints(att.center, 0, att.radius * SigilAttributes.size,
         1, att.radius * SigilAttributes.size);
@@ -34,7 +34,7 @@ function sigilShape(type, att, draw, colorOverride) {
       pathEnd = att.finalAngle;
       break;
     }
-    case 'arc': {
+    case "arc": {
       pos = att.center;
       pathStart = att.initAngle;
       pathEnd = att.finalAngle;
@@ -42,7 +42,8 @@ function sigilShape(type, att, draw, colorOverride) {
         pathEnd, att.finalRadius * SigilAttributes.size);
       break;
     }
-    default: {throw Error("Unrecognized shape in sigil specification");
+    default: {
+      throw Error("Unrecognized shape in sigil specification");
     }
   }
 
@@ -63,7 +64,7 @@ function sigilShape(type, att, draw, colorOverride) {
       path,
       fill: colorOverride ?? SigilAttributes.color,
       completeWidth: SigilAttributes.size * draw.thickness,
-      noBG: true
+      noBG: true,
     },
   };
 }

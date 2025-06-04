@@ -3,7 +3,9 @@ function averageRun(allRuns) {
   // Filter out all runs which have the default infinite value for time, but if we're left with no valid runs then we
   // take just one entry so that the averages also have the same value and we don't get division by zero.
   let runs = allRuns.filter(run => run[0] < 1e290);
-  if (runs.length === 0) runs = [allRuns[0]];
+  if (runs.length === 0) {
+    runs = [allRuns[0]];
+  }
 
   const longestRow = allRuns.map(r => r.length).max();
   const avgAttr = [];
@@ -24,8 +26,8 @@ export default {
   props: {
     layer: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {
@@ -98,18 +100,23 @@ export default {
           this.selectedResources = [2, 3];
           break;
         }
-        default: {throw new Error("Unrecognized Statistics tab resource type");
+        default: {
+          throw new Error("Unrecognized Statistics tab resource type");
         }
       }
       this.resourceTitles = [names[this.selectedResources[0]], names[this.selectedResources[1]]];
 
       // Entries always have all values, but sometimes the trailing ones will be blank or zero which we want to hide
-      const lastIndex = arr => {
+      const lastIndex = (arr) => {
         let val = arr.length;
         while (val > 0) {
           const curr = arr[val - 1];
-          if (typeof curr === "string" && curr !== "") return val;
-          if (typeof curr !== "string" && Decimal.neq(curr, 0)) return val;
+          if (typeof curr === "string" && curr !== "") {
+            return val;
+          }
+          if (typeof curr !== "string" && Decimal.neq(curr, 0)) {
+            return val;
+          }
           val--;
         }
         return 0;
@@ -119,45 +126,68 @@ export default {
     clone(runs) {
       return runs.map(run =>
         run.map(item =>
-          (item instanceof Decimal ? Decimal.fromDecimal(item) : item)
-        )
+          (item instanceof Decimal ? Decimal.fromDecimal(item) : item),
+        ),
       );
     },
     infoArray(run, index) {
       let name;
-      if (index === 0) name = "Last";
-      else if (index === 10) name = "Average";
-      else name = `${formatInt(index + 1)} ago`;
+      if (index === 0) {
+        name = "Last";
+      } else if (index === 10) {
+        name = "Average";
+      } else {
+        name = `${formatInt(index + 1)} ago`;
+      }
 
       const cells = [name, this.gameTime(run)];
-      if (this.hasRealTime) cells.push(this.realTime(run));
-      if (this.hasRealTime) cells.push(this.trueTime(run));
+      if (this.hasRealTime) {
+        cells.push(this.realTime(run));
+      }
+      if (this.hasRealTime) {
+        cells.push(this.trueTime(run));
+      }
 
       const resources = [this.prestigeCurrencyGain(run), this.prestigeCurrencyRate(run),
         this.prestigeCountGain(run), this.prestigeCountRate(run)];
       cells.push(resources[this.selectedResources[0]]);
       cells.push(resources[this.selectedResources[1]]);
 
-      if (this.hasChallenges) cells.push(this.challengeText(run));
+      if (this.hasChallenges) {
+        cells.push(this.challengeText(run));
+      }
       for (let i = 0; i < this.layer.extra?.length && cells.length <= this.longestRow; i++) {
-        if (!this.layer.showExtra[i]()) continue;
+        if (!this.layer.showExtra[i]()) {
+          continue;
+        }
         const formatFn = this.layer.formatExtra[i];
         const val = run[i + 5] ?? 0;
-        if (this.layer.allowRate[i] && this.showRate) cells.push(this.rateText(run, run[i + 5]));
-        else cells.push(formatFn(val));
+        if (this.layer.allowRate[i] && this.showRate) {
+          cells.push(this.rateText(run, run[i + 5]));
+        } else {
+          cells.push(formatFn(val));
+        }
       }
 
       return cells;
     },
     infoCol() {
       const cells = ["Run", this.hasRealTime ? "Game Time" : "Time in Run"];
-      if (this.hasRealTime) cells.push("Real Time");
-      if (this.hasRealTime) cells.push("True Time");
+      if (this.hasRealTime) {
+        cells.push("Real Time");
+      }
+      if (this.hasRealTime) {
+        cells.push("True Time");
+      }
       cells.push(...this.resourceTitles);
-      if (this.hasChallenges) cells.push("Challenge");
+      if (this.hasChallenges) {
+        cells.push("Challenge");
+      }
 
       for (let index = 0; index < this.layer.extra?.length && cells.length <= this.longestRow; index++) {
-        if (!this.layer.showExtra[index]()) continue;
+        if (!this.layer.showExtra[index]()) {
+          continue;
+        }
         cells.push((this.layer.allowRate[index] && this.showRate)
           ? this.layer.rateString[index]
           : this.layer.extra[index]);
@@ -174,14 +204,18 @@ export default {
       return timeDisplayShort(new Decimal(run[0]));
     },
     prestigeCurrencyGain(run) {
-      if (this.hasIM && this.layer.name === "Reality") return `${format(run[8], 2)} iM`;
+      if (this.hasIM && this.layer.name === "Reality") {
+        return `${format(run[8], 2)} iM`;
+      }
       return `${format(run[3], 2)} ${this.points}`;
     },
     prestigeCountGain(run) {
       return quantify(this.singular, run[4]);
     },
     prestigeCurrencyRate(run) {
-      if (this.hasIM && this.layer.name === "Reality") return "N/A";
+      if (this.hasIM && this.layer.name === "Reality") {
+        return "N/A";
+      }
       return this.rateText(run, run[3]);
     },
     prestigeCountRate(run) {
@@ -224,15 +258,15 @@ export default {
       }
       return {
         width,
-        border: "0.05rem solid #999999",
-        margin: "-0.05rem",
-        padding: "0.2rem 0",
+        "border": "0.05rem solid #999999",
+        "margin": "-0.05rem",
+        "padding": "0.2rem 0",
         "border-bottom-width": isHeader ? "0.3rem" : "0.1rem",
         "font-weight": isHeader ? "bold" : null,
-        color: "var(--color-text)",
+        "color": "var(--color-text)",
       };
-    }
-  }
+    },
+  },
 };
 </script>
 

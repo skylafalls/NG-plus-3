@@ -33,20 +33,22 @@ export class TimeStudyTree {
     this.selectedStudies = [];
     this.startEC = false;
     switch (typeof studies) {
-      case 'string': {if (TimeStudyTree.isValidImportString(studies)) {
+      case "string": {
+        if (TimeStudyTree.isValidImportString(studies)) {
           this.attemptBuyArray(this.parseStudyImport(studies), false);
         }
         break;
       }
-      case 'object': {
+      case "object": {
         this.attemptBuyArray([...studies], false);
         this.selectedStudies = [...studies];
         break;
       }
-      case 'undefined': {
+      case "undefined": {
         break;
       }
-      default: {throw new Error("Unrecognized input parameter for TimeStudyTree constructor");
+      default: {
+        throw new Error("Unrecognized input parameter for TimeStudyTree constructor");
       }
     }
   }
@@ -74,9 +76,13 @@ export class TimeStudyTree {
 
   // Parses out the EC number from an import string (returns 0 for invalid or nonexistent EC ids)
   static getECFromString(input) {
-    if (!this.isValidImportString(input)) return 0;
+    if (!this.isValidImportString(input)) {
+      return 0;
+    }
     const parts = input.split("|");
-    if (parts.length === 0) return 0;
+    if (parts.length === 0) {
+      return 0;
+    }
     // Note: parseInt() seems to silently ignore the presence of "!"
     return parseInt(parts[1], 10);
   }
@@ -87,9 +93,13 @@ export class TimeStudyTree {
   static commitToGameState(studyArray, auto = true, startEC = false) {
     for (const item of studyArray) {
       const study = typeof item === "number" ? TimeStudy(item) : item;
-      if (study && !study.isBought) study.purchase(auto);
+      if (study && !study.isBought) {
+        study.purchase(auto);
+      }
       // Note: This will automatically (silently) fail if we try to start an EC while we have a different one unlocked
-      if (startEC && study instanceof ECTimeStudyState) EternityChallenge(study.id).start(auto);
+      if (startEC && study instanceof ECTimeStudyState) {
+        EternityChallenge(study.id).start(auto);
+      }
     }
     GameCache.currentStudyTree.invalidate();
   }
@@ -107,7 +117,7 @@ export class TimeStudyTree {
       ["dark", [222, 224, 226, 228, 232, 234]],
       ...(Ra.unlocks.unlockHardV.canBeApplied
         ? [["triad", [301, 302, 303, 304].slice(0, Ra.unlocks.unlockHardV.effectOrDefault(0))]]
-        : [])
+        : []),
     ]);
   }
 
@@ -168,7 +178,9 @@ export class TimeStudyTree {
       this.invalidStudies.push(`EC${ecID}`);
       return output;
     }
-    if (ecID !== 0) output.push(TimeStudy.eternityChallenge(ecID));
+    if (ecID !== 0) {
+      output.push(TimeStudy.eternityChallenge(ecID));
+    }
     return output;
   }
 
@@ -200,7 +212,9 @@ export class TimeStudyTree {
   attemptBuyArray(studyArray, checkCosts) {
     for (const study of studyArray) {
       const toBuy = typeof study === "object" ? study : TimeStudy(study);
-      if (this.hasRequirements(toBuy)) this.buySingleStudy(toBuy, checkCosts);
+      if (this.hasRequirements(toBuy)) {
+        this.buySingleStudy(toBuy, checkCosts);
+      }
     }
   }
 
@@ -209,7 +223,9 @@ export class TimeStudyTree {
   // EC secondary requirements
   hasRequirements(study, checkOnlyStructure = false) {
     // Import strings can contain repeated or undefined entries
-    if (!study || this.purchasedStudies.includes(study)) return false;
+    if (!study || this.purchasedStudies.includes(study)) {
+      return false;
+    }
 
     // Because the player data may not reflect the state of the TimeStudyTree object's purchasedStudies,
     // we have to do all the checks here with purchasedStudies. study.isBought and similar functions cannot be used.
@@ -236,9 +252,11 @@ export class TimeStudyTree {
       }
     }
     if (study instanceof ECTimeStudyState) {
-      if (this.purchasedStudies.some(s => s instanceof ECTimeStudyState)) return false;
-      const hasForbiddenStudies = !Perk.studyECRequirement.isBought &&
-        study.config.secondary.forbiddenStudies?.some(s => check(s));
+      if (this.purchasedStudies.some(s => s instanceof ECTimeStudyState)) {
+        return false;
+      }
+      const hasForbiddenStudies = !Perk.studyECRequirement.isBought
+        && study.config.secondary.forbiddenStudies?.some(s => check(s));
       // We want to only check the structure for script template error instructions
       if (checkOnlyStructure) {
         return reqSatisfied && !hasForbiddenStudies;
@@ -264,11 +282,15 @@ export class TimeStudyTree {
     if (checkCosts) {
       const maxTT = Currency.timeTheorems.value.add(GameCache.currentStudyTree.value.spentTheorems[0]);
       const hasTT = this.spentTheorems[0].add(config.cost.gte(maxTT));
-      if (!hasTT || !hasST) return;
+      if (!hasTT || !hasST) {
+        return;
+      }
     }
 
     // Don't add the costs nor add the study if it is one using ST and there are none
-    if (maxST === 0 && stNeeded > 0) return;
+    if (maxST === 0 && stNeeded > 0) {
+      return;
+    }
     this.spentTheorems[0] = this.spentTheorems[0].add(config.cost);
     this.spentTheorems[1] += stNeeded;
 
@@ -280,8 +302,12 @@ export class TimeStudyTree {
   }
 
   get allowedDimPathCount() {
-    if (DilationUpgrade.timeStudySplit.isBought) return 3;
-    if (this.purchasedStudies.includes(TimeStudy(201))) return 2;
+    if (DilationUpgrade.timeStudySplit.isBought) {
+      return 3;
+    }
+    if (this.purchasedStudies.includes(TimeStudy(201))) {
+      return 2;
+    }
     return 1;
   }
 

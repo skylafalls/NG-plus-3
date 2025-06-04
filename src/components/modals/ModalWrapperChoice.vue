@@ -8,67 +8,69 @@ export default {
   components: {
     PrimaryButton,
     ModalConfirmationCheck,
-    ModalCloseButton
+    ModalCloseButton,
   },
   props: {
     cancelClass: {
       type: String,
       required: false,
-      default: "o-primary-btn--width-medium c-modal-message__okay-btn"
+      default: "o-primary-btn--width-medium c-modal-message__okay-btn",
     },
     confirmClass: {
       type: String,
       required: false,
-      default: "o-primary-btn--width-medium c-modal-message__okay-btn c-modal__confirm-btn"
+      default: "o-primary-btn--width-medium c-modal-message__okay-btn c-modal__confirm-btn",
     },
     showCancel: {
       type: Boolean,
       required: false,
-      default: true
+      default: true,
     },
     showConfirm: {
       type: Boolean,
       required: false,
-      default: true
+      default: true,
     },
     option: {
       type: String,
       required: false,
-      default: undefined
+      default: undefined,
     },
     confirmFn: {
       type: Function,
       required: false,
-      default: undefined
+      default: undefined,
     },
     cancelFn: {
       type: Function,
       required: false,
-      default: undefined
-    }
+      default: undefined,
+    },
   },
   created() {
     this.on$(GAME_EVENT.ENTER_PRESSED, this.doConfirm);
   },
   methods: {
     doConfirm() {
-      if (this.confirmFn) this.confirmFn();
-      else {
+      if (this.confirmFn) {
+        this.confirmFn();
+      } else {
         this.$emit("confirm");
         EventHub.dispatch(GAME_EVENT.CLOSE_MODAL);
       }
     },
     doCancel() {
-      if (this.cancelFn) this.cancelFn();
-      else {
+      if (this.cancelFn) {
+        this.cancelFn();
+      } else {
         this.$emit("cancel");
         EventHub.dispatch(GAME_EVENT.CLOSE_MODAL);
       }
     },
     closeModal() {
       EventHub.dispatch(GAME_EVENT.CLOSE_MODAL);
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -83,7 +85,6 @@ export default {
         <slot name="header" />
       </span>
     </span>
-
 
     <slot />
 

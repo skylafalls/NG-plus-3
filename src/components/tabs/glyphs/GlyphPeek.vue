@@ -4,7 +4,7 @@ import GlyphSetPreview from "@/components/GlyphSetPreview";
 export default {
   name: "GlyphPeek",
   components: {
-    GlyphSetPreview
+    GlyphSetPreview,
   },
   data() {
     return {
@@ -33,7 +33,9 @@ export default {
     refreshGlyphs() {
       this.canRefresh = true;
       this.glyphs = GlyphSelection.upcomingGlyphs;
-      for (const glyph of this.glyphs) Glyphs.applyGamespeed(glyph);
+      for (const glyph of this.glyphs) {
+        Glyphs.applyGamespeed(glyph);
+      }
       this.level = gainedGlyphLevel().actualLevel;
     },
     showModal() {
@@ -44,8 +46,8 @@ export default {
         isGlyphSelection: true,
         showSetName: false,
       });
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -27,15 +27,17 @@ export default {
       return {
         "o-prestige-button": true,
         "o-infinity-button": true,
-        "o-infinity-button--unavailable": !this.canUnlock
+        "o-infinity-button--unavailable": !this.canUnlock,
       };
     },
   },
   methods: {
     update() {
-      this.isVisible = player.break && !InfinityDimension(8).isUnlocked && !Player.canEternity &&
-        !EternityMilestone.autoUnlockID.isReached;
-      if (!this.isVisible) return;
+      this.isVisible = player.break && !InfinityDimension(8).isUnlocked && !Player.canEternity
+        && !EternityMilestone.autoUnlockID.isReached;
+      if (!this.isVisible) {
+        return;
+      }
       const nextDimension = InfinityDimensions.next();
       this.canUnlock = nextDimension.canUnlock;
       this.hasIPUnlock = nextDimension.hasIPUnlock;
@@ -44,7 +46,7 @@ export default {
     },
     tryUnlockNextInfinityDimension() {
       InfinityDimensions.unlockNext();
-    }
+    },
   },
 };
 </script>

@@ -6,7 +6,7 @@ export class TimeTheoremAutobuyerState extends AutobuyerState {
   }
 
   get name() {
-    return `Time Theorem`;
+    return "Time Theorem";
   }
 
   get isUnlocked() {
@@ -18,7 +18,10 @@ export class TimeTheoremAutobuyerState extends AutobuyerState {
   }
 
   tick() {
-    if (this.hasUnlimitedBulk) TimeTheorems.buyMax(true);
-    else TimeTheorems.buyOneOfEach();
+    if (this.hasUnlimitedBulk) {
+      TimeTheorems.buyMax(true);
+    } else {
+      TimeTheorems.buyOneOfEach();
+    }
   }
 }

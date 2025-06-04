@@ -18,17 +18,19 @@ export default {
       bestShardRate: new Decimal(),
       bestShardRateVal: new Decimal(),
       ppGained: new Decimal(),
-      celestialRunText: ["", "", "", "", ""]
+      celestialRunText: ["", "", "", "", ""],
     };
   },
   computed: {
     formatMachinesGained() {
-      if (this.machinesGained.gt(0)) return `Machines gained: ${format(this.machinesGained, 2)}`;
+      if (this.machinesGained.gt(0)) {
+        return `Machines gained: ${format(this.machinesGained, 2)}`;
+      }
       return "No Machines gained";
     },
     formatMachineStats() {
       if (!PlayerProgress.realityUnlocked() && this.nextMachineEP.gt("1e8000")) {
-        return `(Capped this Reality!)`;
+        return "(Capped this Reality!)";
       }
       if (this.machinesGained.gt(0) && this.machinesGained.lt(100)) {
         return `(Next at ${format(this.nextMachineEP, 2)} EP)`;
@@ -45,7 +47,9 @@ export default {
       return "";
     },
     formatGlyphLevel() {
-      if (this.glyphLevel.gte(1e4)) return `Glyph level: ${formatInt(this.glyphLevel)}`;
+      if (this.glyphLevel.gte(1e4)) {
+        return `Glyph level: ${formatInt(this.glyphLevel)}`;
+      }
       return `Glyph level: ${formatInt(this.glyphLevel)} (${this.nextGlyphPercent} to next)`;
     },
     showShardsRate() {
@@ -60,13 +64,15 @@ export default {
         "c-reality-button--locked": !this.canReality,
         "c-reality-button--special": this.showSpecialEffect,
       };
-    }
+    },
   },
   methods: {
     percentToNextGlyphLevelText() {
       const glyphState = getGlyphLevelInputs();
       let level = glyphState.actualLevel;
-      if (!level.isFinite()) level = new Decimal();
+      if (!level.isFinite()) {
+        level = new Decimal();
+      }
       const decimalPoints = this.glyphLevel.gt(1e3) ? 0 : 1;
       return `${formatPercents(level.sub(level.floor()).clampMax(0.999), decimalPoints)}`;
     },
@@ -80,8 +86,12 @@ export default {
       }
       function EPforRM(rm) {
         const adjusted = Decimal.divide(rm, MachineHandler.realityMachineMultiplier);
-        if (adjusted.lte(1)) return Decimal.pow10(4000);
-        if (adjusted.lte(10)) return Decimal.pow10(adjusted.add(26).mul(4000).div(27));
+        if (adjusted.lte(1)) {
+          return Decimal.pow10(4000);
+        }
+        if (adjusted.lte(10)) {
+          return Decimal.pow10(adjusted.add(26).mul(4000).div(27));
+        }
         let result = Decimal.pow10(adjusted.max(1).log10().div(3).add(1).mul(4e3));
         if (!PlayerProgress.realityUnlocked() && result.gte("1e6000")) {
           result = result.div("1e6000").pow(4).times("1e6000");
@@ -124,7 +134,9 @@ export default {
       return `${resource} ${formatX(before, 2, 2)} ➜ ${formatX(after, 2, 2)}`;
     },
     formatThresholdText(condition, threshold, resourceName) {
-      if (condition) return "";
+      if (condition) {
+        return "";
+      }
       return `(${format(threshold, 2, 2)} ${resourceName} to improve)`;
     },
     // Make the button have a visual animation if Realitying will give a reward
@@ -132,10 +144,10 @@ export default {
       if (Teresa.isRunning && Teresa.rewardMultiplier(Currency.antimatter.value).gt(Teresa.runRewardMultiplier)) {
         return true;
       }
-      return Currency.eternityPoints.value.max(1).log10().gte(4000) &&
-        ((Effarig.isRunning && !EffarigUnlock.reality.isUnlocked) || (Enslaved.isRunning && !Enslaved.isCompleted));
-    }
-  }
+      return Currency.eternityPoints.value.max(1).log10().gte(4000)
+        && ((Effarig.isRunning && !EffarigUnlock.reality.isUnlocked) || (Enslaved.isRunning && !Enslaved.isCompleted));
+    },
+  },
 };
 </script>
 

@@ -20,7 +20,7 @@ export const AutomatorPanels = {
   DATA_TRANSFER: 4,
   CONSTANTS: 5,
   TEMPLATES: 6,
-  BLOCKS: 7
+  BLOCKS: 7,
 };
 
 export default {
@@ -49,7 +49,7 @@ export default {
       runningScriptID: 0,
       totalChars: 0,
       scriptCount: 0,
-      canMakeNewScript: true
+      canMakeNewScript: true,
     };
   },
   computed: {
@@ -60,7 +60,7 @@ export default {
       set(value) {
         this.$viewModel.tabs.reality.automator.fullScreen = value;
         AutomatorData.isEditorFullscreen = value;
-      }
+      },
     },
     fullScreenIconClass() {
       return this.fullScreen ? "fa-compress-arrows-alt" : "fa-expand-arrows-alt";
@@ -82,8 +82,10 @@ export default {
       },
       set(value) {
         this.$viewModel.tabs.reality.automator.editorScriptID = value;
-        if (AutomatorTextUI.editor) AutomatorTextUI.editor.performLint();
-      }
+        if (AutomatorTextUI.editor) {
+          AutomatorTextUI.editor.performLint();
+        }
+      },
     },
     currentScriptContent() {
       return player.reality.automator.scripts[this.currentScriptID].content;
@@ -93,7 +95,7 @@ export default {
     },
     errorStyle() {
       return {
-        "background-color": this.errorCount === 0 ? "" : "red"
+        "background-color": this.errorCount === 0 ? "" : "red",
       };
     },
     maxTotalChars() {
@@ -117,7 +119,7 @@ export default {
   watch: {
     infoPaneID(newValue) {
       player.reality.automator.currentInfoPane = newValue;
-    }
+    },
   },
   created() {
     this.on$(GAME_EVENT.GAME_LOAD, () => this.onGameLoad());
@@ -149,7 +151,9 @@ export default {
       }
     },
     importScript() {
-      if (!this.canMakeNewScript) return;
+      if (!this.canMakeNewScript) {
+        return;
+      }
       Modal.importScriptData.show();
     },
     onGameLoad() {
@@ -184,7 +188,9 @@ export default {
 
       this.$nextTick(() => {
         BlockAutomator.updateEditor(this.currentScript);
-        if (!this.isBlock && AutomatorTextUI.editor) AutomatorTextUI.editor.performLint();
+        if (!this.isBlock && AutomatorTextUI.editor) {
+          AutomatorTextUI.editor.performLint();
+        }
       });
     },
     fixAutomatorTypeDocs() {
@@ -217,7 +223,9 @@ export default {
       // Trim off leading and trailing whitespace
       const trimmed = this.$refs.renameInput.value.match(/^\s*(.*?)\s*$/u);
       let newName = "";
-      if (trimmed.length === 2 && trimmed[1].length > 0) newName = trimmed[1];
+      if (trimmed.length === 2 && trimmed[1].length > 0) {
+        newName = trimmed[1];
+      }
 
       if (newName.length > AutomatorData.MAX_ALLOWED_SCRIPT_NAME_LENGTH) {
         this.isNameTooLong = true;
@@ -232,8 +240,8 @@ export default {
       return {
         "c-automator__button--active": this.infoPaneID === id,
       };
-    }
-  }
+    },
+  },
 };
 </script>
 

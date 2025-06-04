@@ -7,7 +7,7 @@ export default defineComponent({
   name: "TimeDilationTab",
   components: {
     DilationButton,
-    DilationUpgradeButton
+    DilationUpgradeButton,
   },
   data() {
     return {
@@ -52,8 +52,8 @@ export default defineComponent({
           DilationUpgrade.mdMultTickspeed,
           DilationUpgrade.mdBuffDT,
           DilationUpgrade.mdEffectBuff,
-          DilationUpgrade.dtMultMA
-        ]
+          DilationUpgrade.dtMultMA,
+        ],
       ];
     },
     // This might be negative due to rift drain, so we need to add "+" iff the value is positive. The actual
@@ -66,13 +66,13 @@ export default defineComponent({
       return [
         DilationUpgrade.dtGainPelle,
         DilationUpgrade.galaxyMultiplier,
-        DilationUpgrade.tickspeedPower
+        DilationUpgrade.tickspeedPower,
       ];
     },
     pelleUpgrades() {
       return [
         DilationUpgrade.galaxyThresholdPelle,
-        DilationUpgrade.flatDilationMult
+        DilationUpgrade.flatDilationMult,
       ];
     },
     ttGenerator() {
@@ -85,13 +85,17 @@ export default defineComponent({
     allRebuyables() {
       const upgradeRows = [];
       upgradeRows.push(this.rebuyables);
-      if (this.hasPelleDilationUpgrades) upgradeRows.push(this.pelleRebuyables);
+      if (this.hasPelleDilationUpgrades) {
+        upgradeRows.push(this.pelleRebuyables);
+      }
       return upgradeRows;
     },
     allSingleUpgrades() {
       const upgradeRows = [];
       upgradeRows.push(...this.upgrades);
-      if (this.hasPelleDilationUpgrades) upgradeRows.push(this.pelleUpgrades);
+      if (this.hasPelleDilationUpgrades) {
+        upgradeRows.push(this.pelleUpgrades);
+      }
       upgradeRows.push([this.ttGenerator]);
       return upgradeRows;
     },
@@ -129,10 +133,13 @@ export default defineComponent({
       this.maxDT.copyFrom(player.records.thisReality.maxDT);
 
       const estimateText = getDilationTimeEstimate(this.maxDT);
-      if (this.dilatedTimeIncome.lte(0)) this.toMaxTooltip = "No DT gain";
-      else this.toMaxTooltip = estimateText.startsWith("<") ? "Currently Increasing" : estimateText;
-    }
-  }
+      if (this.dilatedTimeIncome.lte(0)) {
+        this.toMaxTooltip = "No DT gain";
+      } else {
+        this.toMaxTooltip = estimateText.startsWith("<") ? "Currently Increasing" : estimateText;
+      }
+    },
+  },
 });
 </script>
 

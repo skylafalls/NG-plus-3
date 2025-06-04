@@ -12,7 +12,7 @@ export default {
   name: "ImportSaveModal",
   components: {
     ModalWrapperChoice,
-    PrimaryButton
+    PrimaryButton,
   },
   data() {
     return {
@@ -69,22 +69,30 @@ export default {
       this.updateOfflineSettings();
 
       switch (this.offlineImport) {
-        case OFFLINE_PROGRESS_TYPE.IMPORTED: {return "Using imported save settings";
+        case OFFLINE_PROGRESS_TYPE.IMPORTED: {
+          return "Using imported save settings";
         }
-        case OFFLINE_PROGRESS_TYPE.LOCAL: {return "Using existing save settings";
+        case OFFLINE_PROGRESS_TYPE.LOCAL: {
+          return "Using existing save settings";
         }
-        case OFFLINE_PROGRESS_TYPE.IGNORED: {return "Will not simulate offline time";
+        case OFFLINE_PROGRESS_TYPE.IGNORED: {
+          return "Will not simulate offline time";
         }
-        default: {throw new Error("Unrecognized offline progress setting for importing");
+        default: {
+          throw new Error("Unrecognized offline progress setting for importing");
         }
       }
     },
     offlineDetails() {
       if (this.offlineImport === OFFLINE_PROGRESS_TYPE.IGNORED) {
-        return `Save will be imported without offline progress.`;
+        return "Save will be imported without offline progress.";
       }
-      if (!GameStorage.offlineEnabled) return "This setting will not apply any offline progress after importing.";
-      if (this.isFromFuture) return "Offline progress cannot be simulated due to an inconsistent system clock time.";
+      if (!GameStorage.offlineEnabled) {
+        return "This setting will not apply any offline progress after importing.";
+      }
+      if (this.isFromFuture) {
+        return "Offline progress cannot be simulated due to an inconsistent system clock time.";
+      }
 
       const durationInMs = Date.now() - this.player.lastUpdate;
       const ticks = GameStorage.maxOfflineTicks(durationInMs);
@@ -98,7 +106,7 @@ export default {
     },
     willLoseSpeedrun() {
       return player.speedrun.isUnlocked && !this.player.speedrun?.isUnlocked;
-    }
+    },
   },
   mounted() {
     this.$refs.input.select();
@@ -132,7 +140,9 @@ export default {
       }
     },
     importSave() {
-      if (!this.inputIsValid) return;
+      if (!this.inputIsValid) {
+        return;
+      }
       this.emitClose();
       GameStorage.import(this.input);
     },

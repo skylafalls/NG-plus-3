@@ -6,7 +6,7 @@ export default {
   name: "SingleGlyphCustomzationPanel",
   components: {
     GlyphComponent,
-    PrimaryButton
+    PrimaryButton,
   },
   data() {
     return {
@@ -16,7 +16,9 @@ export default {
   },
   computed: {
     glyph() {
-      if (this.glyphID === -1) return null;
+      if (this.glyphID === -1) {
+        return null;
+      }
       const g = Glyphs.findById(this.glyphID);
       return {
         type: g.type,
@@ -30,19 +32,33 @@ export default {
     },
     typeCosmetic() {
       const changes = [];
-      if (GlyphAppearanceHandler.symbolMap[this.glyph.type]) changes.push("Symbol");
-      if (GlyphAppearanceHandler.colorMap[this.glyph.type]) changes.push("Color");
-      if (changes.length === 0) return "None";
+      if (GlyphAppearanceHandler.symbolMap[this.glyph.type]) {
+        changes.push("Symbol");
+      }
+      if (GlyphAppearanceHandler.colorMap[this.glyph.type]) {
+        changes.push("Color");
+      }
+      if (changes.length === 0) {
+        return "None";
+      }
       return changes.join("/");
     },
     specialCosmetic() {
-      if (this.glyph.cosmetic) return this.glyph.cosmetic.capitalize();
+      if (this.glyph.cosmetic) {
+        return this.glyph.cosmetic.capitalize();
+      }
       const changes = [];
-      if (this.glyph.symbol) changes.push("Symbol");
-      if (this.glyph.color) changes.push("Color");
-      if (changes.length === 0) return "None";
+      if (this.glyph.symbol) {
+        changes.push("Symbol");
+      }
+      if (this.glyph.color) {
+        changes.push("Color");
+      }
+      if (changes.length === 0) {
+        return "None";
+      }
       return changes.join("/");
-    }
+    },
   },
   created() {
     // Whenever the inventory changes, this glyph might not exist afterwards
@@ -56,17 +72,23 @@ export default {
   },
   methods: {
     update() {
-      this.isVisible = player.reality.glyphs.cosmetics.active && (GlyphAppearanceHandler.availableTypes.length > 0 ||
-        CosmeticGlyphTypes.list.some(t => t.isCosmetic && t.isUnlocked()));
+      this.isVisible = player.reality.glyphs.cosmetics.active && (GlyphAppearanceHandler.availableTypes.length > 0
+        || CosmeticGlyphTypes.list.some(t => t.isCosmetic && t.isUnlocked()));
     },
     dragover(event) {
-      if (!event.dataTransfer.types.includes(GLYPH_MIME_TYPE)) return;
+      if (!event.dataTransfer.types.includes(GLYPH_MIME_TYPE)) {
+        return;
+      }
       event.preventDefault();
     },
     drop(event) {
-      if (!event.dataTransfer.types.includes(GLYPH_MIME_TYPE)) return;
+      if (!event.dataTransfer.types.includes(GLYPH_MIME_TYPE)) {
+        return;
+      }
       const id = parseInt(event.dataTransfer.getData(GLYPH_MIME_TYPE), 10);
-      if (isNaN(id)) return;
+      if (isNaN(id)) {
+        return;
+      }
       EventHub.dispatch(GAME_EVENT.GLYPH_VISUAL_CHANGE);
       this.glyphID = id;
       this.$recompute("glyph");
@@ -74,7 +96,7 @@ export default {
     openModal() {
       Modal.singleGlyphAppearance.show({ glyphId: this.glyphID });
     },
-  }
+  },
 };
 </script>
 

@@ -4,8 +4,8 @@ export default {
   props: {
     blackHole: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {
@@ -23,21 +23,23 @@ export default {
     },
     id() {
       return this.blackHole.id;
-    }
+    },
   },
   methods: {
     update() {
       const { blackHole } = this;
       this.isUnlocked = blackHole.isUnlocked;
-      if (!this.isUnlocked) return;
+      if (!this.isUnlocked) {
+        return;
+      }
       this.isPermanent = blackHole.isPermanent;
       this.isActive = blackHole.isActive;
       this.isCharged = blackHole.isCharged;
       this.nextChange = TimeSpan.fromSeconds(new Decimal(blackHole.timeWithPreviousActiveToNextStateChange))
         .toStringShort();
       this.state = blackHole.displayState;
-    }
-  }
+    },
+  },
 };
 </script>
 
