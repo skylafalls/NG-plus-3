@@ -981,9 +981,11 @@ window.player = {
   pair: {
     electrons: DC.D0,
     positrons: DC.D0,
+    dischargedGalaxies: DC.D0,
+    supersonicBoosts: DC.D0,
     positronUpgrades: Array.repeat(DC.D0, 4),
     electronUpgrades: Array.repeat(DC.D0, 4),
-  }
+  },
 };
 
 export const Player = {
