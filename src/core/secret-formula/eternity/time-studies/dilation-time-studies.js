@@ -50,7 +50,7 @@ export const dilationTimeStudies = [
     description: "Unlock Meta Dimensions",
     cost: DC.E24,
     requirement: () => TimeStudy.timeDimension(8).isBought
-      && player.records.thisReality.maxEP.add(1).gte(DC.NUMMAX),
+      && player.records.thisReality.maxEP.add(1).gte(DC.E4000),
   },
   {
     id: 7,
@@ -58,5 +58,12 @@ export const dilationTimeStudies = [
     cost: DC.D1,
     requirement: () => TimeStudy.metaDimensions.isBought
       && DilationUpgrade.dtMultMA.isBought,
+  },
+  {
+    id: 8,
+    description: "Unlock Pair Production",
+    cost: new Decimal(1e175),
+    requirement: () => PlayerProgress.quantumUnlocked() && EternityChallenge(14).isFullyCompleted
+      && EternityChallenge(13).isFullyCompleted && player.records.bestQuantum.netQuarks.gte(50),
   },
 ];

@@ -1,7 +1,8 @@
 <script>
-import ChallengeGridCell from "@/components/ChallengeGridCell";
+import ChallengeGridCell from "@/components/ChallengeGridCell.vue";
+import { defineComponent } from "vue";
 
-export default {
+export default defineComponent({
   name: "ChallengeGrid",
   components: {
     ChallengeGridCell,
@@ -17,7 +18,7 @@ export default {
       default: () => true,
     },
   },
-};
+});
 </script>
 
 <template>

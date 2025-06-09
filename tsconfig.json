@@ -2,11 +2,8 @@
   "compilerOptions": {
     /* Important settings */
     "noEmit": true,
-    "allowJs": false,
+    "allowJs": true,
     "moduleDetection": "force",
-    "composite": true,
-    "experimentalDecorators": true,
-    "erasableSyntaxOnly": true,
     "verbatimModuleSyntax": true,
 
     /* Bundler settings */
@@ -21,17 +18,14 @@
     "moduleResolution": "Bundler",
     "isolatedModules": true,
     "resolveJsonModule": true,
-    "skipLibCheck": true,
 
     /* Linting settings */
     "strict": true,
-    "noImplicitThis": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
     "noImplicitOverride": true,
-    "noImplicitReturns": true,
     "noUncheckedIndexedAccess": true,
 
     /* Misc. settings */
@@ -48,14 +42,11 @@
   },
   "include": [
     "**/*.js",
-    "**/*.mjs",
-    "**/*.cjs",
     "**/*.ts",
-    "**/*.mts",
-    "**/*.cts",
     "**/*.tsx",
     "**/*.jsx",
-    "src/**/*.vue"
+    "src/**/*.vue",
+    "src/typings/*.d.ts"
   ],
   "noEmit": true
 }

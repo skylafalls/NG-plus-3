@@ -4,7 +4,7 @@ import { DimensionState } from "./dimension";
 export function metaDimensionCommonMultiplier() {
   let multiplier = DC.D1;
 
-  multiplier = multiplier.times(Achievements.power);
+  // multiplier = multiplier.times(Achievements.power);
   multiplier = multiplier.timesEffectsOf(
     DilationUpgrade.mdMultTickspeed,
     MasteryStudy(32),
@@ -41,7 +41,7 @@ class MetaDimensionState extends DimensionState {
     return new ExponentialCostScaling({
       baseCost: this._baseCost,
       baseIncrease: this._baseCostMultiplier,
-      costScale: new Decimal(100),
+      costScale: new Decimal(15),
       scalingCostThreshold: DC.NUMMAX,
     });
   }
@@ -232,7 +232,7 @@ export const MetaDimensions = {
   },
 
   get dimensionBoostMultiplier() {
-    let multiplier = player.meta.bestAntimatter.sub(10).pow(this.metaAMtoDimBoostExponent).max(1);
+    let multiplier = player.records.thisQuantum.bestMA.sub(10).pow(this.metaAMtoDimBoostExponent).max(1);
     if (EternityChallenge(14).isRunning) {
       return new Decimal(1);
     }
@@ -401,7 +401,7 @@ export const MetaDimensions = {
       const tier = Decimal.min(targetResets.add(3), this.maxDimensionsUnlockable).toNumber();
       let amount = DC.D20;
       const discount = new Decimal(0);
-      amount = amount.add(targetResets.sub(5).mul(DC.D15.sub(discount)).round());
+      amount = amount.add(targetResets.sub(5).max(0).mul(DC.D15.sub(discount)).round());
       amount = Decimal.round(amount);
 
       return new DimBoostRequirement(tier, amount);

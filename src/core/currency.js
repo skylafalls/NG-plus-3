@@ -720,7 +720,7 @@ Currency.metaAntimatter = new class extends DecimalCurrency {
 
   set value(value) {
     player.meta.antimatter = value;
-    player.meta.bestAntimatter = player.meta.bestAntimatter.max(value);
+    player.records.thisQuantum.bestMA = player.records.thisQuantum.bestMA.max(value);
   }
 
   get productionPerSecond() {

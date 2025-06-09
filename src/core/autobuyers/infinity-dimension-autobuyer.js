@@ -22,7 +22,7 @@ export class InfinityDimensionAutobuyerState extends IntervaledAutobuyerState {
   }
 
   get interval() {
-    return 1000 * Perk.autobuyerFasterID.effectOrDefault(1) / PerkShopUpgrade.autoSpeed.effectOrDefault(1);
+    return 50;
   }
 
   get isUnlocked() {

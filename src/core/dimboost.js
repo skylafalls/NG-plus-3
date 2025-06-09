@@ -34,20 +34,13 @@ export class DimBoost {
       TimeStudy(231),
       Achievement(117),
       Achievement(142),
-      GlyphEffect.dimBoostPower,
-      PelleRifts.recursion.milestones[0],
-    ).powEffectsOf(InfinityUpgrade.dimboostMult.chargedEffect);
-    if (GlyphAlteration.isAdded("effarig")) {
-      boost = boost.pow(getSecondaryGlyphEffect("effarigforgotten"));
-    }
+    )
     return boost;
   }
 
   static multiplierToNDTier(tier) {
     const normalBoostMult = DimBoost.power.pow(this.purchasedBoosts.add(1).sub(tier)).clampMin(1);
-    const imaginaryBoostMult = DimBoost.power.times(ImaginaryUpgrade(24).effectOrDefault(1))
-      .pow(this.imaginaryBoosts).clampMin(1);
-    return normalBoostMult.times(imaginaryBoostMult);
+    return normalBoostMult;
   }
 
   static get maxDimensionsUnlockable() {
@@ -223,9 +216,7 @@ export function softReset(tempBulk, forcedADReset = false, forcedAMReset = false
   EventHub.dispatch(GAME_EVENT.DIMBOOST_BEFORE, bulk);
   player.dimensionBoosts = (Decimal.max(DC.D0, player.dimensionBoosts.add(bulk)));
   resetChallengeStuff();
-  const canKeepDimensions = Pelle.isDoomed
-    ? PelleUpgrade.dimBoostResetsNothing.canBeApplied
-    : Perk.antimatterNoReset.canBeApplied;
+  const canKeepDimensions = EternityMilestone.noADReset.canBeApplied;
   if (forcedADReset || !canKeepDimensions) {
     AntimatterDimensions.reset();
     player.sacrificed = DC.D0;

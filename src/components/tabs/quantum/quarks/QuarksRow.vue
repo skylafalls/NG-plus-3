@@ -2,6 +2,7 @@
 import { defineComponent } from "vue";
 
 export default defineComponent({
+  name: "QuarksRow",
   props: {
     color: {
       type: String,
@@ -11,8 +12,8 @@ export default defineComponent({
       type: String,
       required: true,
     },
-    formatFunction: {
-      type: Function,
+    formatType: {
+      type: String,
       required: true,
     },
   },
@@ -47,12 +48,25 @@ export default defineComponent({
       this.powerEffect.copyFrom(Quarks.powerEffects[this.color]);
       this.powerGain.copyFrom(Quarks.getGain("powers", this.color));
     },
+    formatFunction(value, precision, precisionUnder1000) {
+      switch (this.formatType) {
+        case "multiplier": {
+          return formatX(value, precision, precisionUnder1000);
+        }
+        case "percentile": {
+          return formatPercents(value.sub(1), precision, precisionUnder1000);
+        }
+        default: {
+          throw new TypeError(`Unknown format type: ${this.formatFunction}`);
+        }
+      }
+    },
   },
 });
 </script>
 
 <template>
-  <tr :style="styling">
+  <tr :class="styling">
     <td>
       <span class="quantum-quarks-amount">
         {{ format(quarkColorAmount) }}

@@ -61,6 +61,10 @@ window.player = {
       unlocked: 0,
       requirementBits: 0,
     },
+    quantum: {
+      current: [],
+      completions: Array.repeat(0, 9),
+    }
   },
   auto: {
     autobuyersOn: true,
@@ -206,6 +210,8 @@ window.player = {
     singularity: { isActive: false },
     ipMultBuyer: { isActive: false },
     epMultBuyer: { isActive: false },
+    electrons: { isActive: false },
+    positrons: { isActive: false },
   },
   infinityPoints: DC.D0,
   infinities: DC.D0,
@@ -359,8 +365,20 @@ window.player = {
       trueTime: 0,
       maxTP: DC.D0,
       bestAM: DC.D0,
+      bestMA: DC.D0,
     },
     bestQuantum: {
+      time: DC.D0,
+      realTime: DC.D0,
+      trueTime: 0,
+      netQuarks: DC.D0,
+    },
+    thisFundament: {
+      time: DC.D0,
+      realTime: DC.D0,
+      trueTime: 0,
+    },
+    bestFundament: {
       time: DC.D0,
       realTime: DC.D0,
       trueTime: 0,
@@ -945,7 +963,6 @@ window.player = {
   },
   meta: {
     antimatter: DC.D0,
-    bestAntimatter: DC.D0,
     dimensions: Array.range(0, 8).map(() => ({
       bought: DC.D0,
       amount: DC.D0,
@@ -977,14 +994,14 @@ window.player = {
       gb: [],
       br: [],
     },
-  },
-  pair: {
-    electrons: DC.D0,
-    positrons: DC.D0,
-    dischargedGalaxies: DC.D0,
-    supersonicBoosts: DC.D0,
-    positronUpgrades: Array.repeat(DC.D0, 4),
-    electronUpgrades: Array.repeat(DC.D0, 4),
+    pair: {
+      electrons: DC.D0,
+      positrons: DC.D0,
+      dischargedGalaxies: DC.D0,
+      supersonicBoosts: DC.D0,
+      positronUpgrades: Array.repeat(DC.D0, 4),
+      electronUpgrades: Array.repeat(DC.D0, 4),
+    },
   },
 };
 
@@ -1084,6 +1101,7 @@ export const Player = {
         };
       }
 
+      // oxlint-disable-next-line no-fallthrough
       case "eternity": {
         player.requirementChecks.eternity = {
           onlyAD1: true,
@@ -1093,6 +1111,7 @@ export const Player = {
         };
       }
 
+      // oxlint-disable-next-line no-fallthrough
       case "infinity": {
         player.requirementChecks.infinity = {
           maxAll: false,

@@ -11,6 +11,10 @@ export class PlayerProgress {
     return new Decimal(this._player.eternities).gt(0) || this.isRealityUnlocked;
   }
 
+  get isQuantumUnlocked() {
+    return player.quantum.times.gte(1);
+  }
+
   get isRealityUnlocked() {
     return new Decimal(this._player.realities).gt(0);
   }
@@ -49,6 +53,10 @@ export class PlayerProgress {
 
   static realityUnlocked() {
     return PlayerProgress.current.isRealityUnlocked;
+  }
+
+  static quantumUnlocked() {
+    return PlayerProgress.current.isQuantumUnlocked;
   }
 
   static seenAlteredSpeed() {

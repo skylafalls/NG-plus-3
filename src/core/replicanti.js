@@ -7,13 +7,7 @@ export const ReplicantiGrowth = {
     return Math.log10(Number.MAX_VALUE);
   },
   get scaleFactor() {
-    if (PelleStrikes.eternity.hasStrike && Replicanti.amount.gte(DC.E2000)) {
-      return 10;
-    }
-    if (Pelle.isDoomed) {
-      return 2;
-    }
-    return AlchemyResource.cardinality.effectValue;
+    return 2;
   },
 };
 
@@ -552,7 +546,11 @@ export const ReplicantiUpgrade = {
     }
 
     get extra() {
-      return Effects.max(0, TimeStudy(131)).add(PelleRifts.decay.milestones[2].effectOrDefault(0));
+      let extraRGs = Effects.max(0, TimeStudy(131)).add(PelleRifts.decay.milestones[2].effectOrDefault(0));
+      if (PlayerProgress.quantumUnlocked()) {
+        extraRGs = extraRGs.times(Quarks.powerEffects.green);
+      }
+      return extraRGs;
     }
 
     bulkPurchaseCalc() {
@@ -606,6 +604,7 @@ export const ReplicantiUpgrade = {
 
     autobuyerTick() {
       // This isn't a hot enough autobuyer to worry about doing an actual inverse.
+      // (proceeds to inplement an actual inverse)
       const bulk = this.bulkPurchaseCalc();
       if (!bulk || bulk.floor().sub(this.value).lte(0)) {
         return;
@@ -633,7 +632,7 @@ export const ReplicantiUpgrade = {
         logCost = logCost.add(logDistantScaling.times(numDistant).times(numDistant.add(9)).div(2));
       }
       if (count.gt(remoteReplicatedGalaxyStart)) {
-        const logRemoteScaling = DC.D5;
+        const logRemoteScaling = new Decimal(1e5).powEffectOf(MasteryStudy(36)).log10();
         const numRemote = count.sub(remoteReplicatedGalaxyStart);
         // The formula x * (x + 1) * (2 * x + 1) / 6 is the sum of the first n squares.
         logCost = logCost.add(logRemoteScaling.times(numRemote).times(numRemote.add(1))

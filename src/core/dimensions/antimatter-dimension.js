@@ -445,9 +445,6 @@ class AntimatterDimensionState extends DimensionState {
     return ratio.min(this.remainingUntil10).max(0).floor();
   }
 
-  /**
-   * @returns {InfinityUpgrade}
-   */
   get infinityUpgrade() {
     switch (this.tier) {
       case 1:
@@ -470,9 +467,6 @@ class AntimatterDimensionState extends DimensionState {
     return false;
   }
 
-  /**
-   * @returns {Decimal}
-   */
   get rateOfChange() {
     const tier = this.tier;
     if (tier === 8
@@ -492,9 +486,6 @@ class AntimatterDimensionState extends DimensionState {
     return toGain.times(getGameSpeedupForDisplay()).div(10);
   }
 
-  /**
-   * @returns {boolean}
-   */
   get isProducing() {
     const tier = this.tier;
     if ((EternityChallenge(3).isRunning && tier > 4)
@@ -698,7 +689,7 @@ class AntimatterDimensionState extends DimensionState {
 /**
  * @function
  * @param {number} tier
- * @return {AntimatterDimensionState}
+ * @returns {AntimatterDimensionState}
  */
 export const AntimatterDimension = AntimatterDimensionState.createAccessor();
 
@@ -721,26 +712,37 @@ export const AntimatterDimensions = {
     }
   },
 
-  get buyTenMultiplierPreElectrons() {
-    if (NormalChallenge(7).isRunning) {
-      return DC.D2.min(DimBoost.totalBoosts.div(5).add(1));
-    }
+  buyTenMultiplierAddons: {
+    get multiplier() {
+      if (NormalChallenge(7).isRunning) {
+        return DC.D2.min(DimBoost.totalBoosts.div(5).add(1));
+      }
 
-    let mult = DC.D2.plusEffectsOf(
-      Achievement(141).effects.buyTenMult,
-      EternityChallenge(3).reward,
-    );
+      let mult = Effects.sum(
+        Achievement(141).effects.buyTenMult,
+        EternityChallenge(3).reward,
+      );
 
-    mult = mult.timesEffectsOf(
-      InfinityUpgrade.buy10Mult,
-      Achievement(58),
-    );
+      mult = mult.timesEffectsOf(
+        InfinityUpgrade.buy10Mult,
+        Achievement(58),
+        PairProduction.electronEffect,
+      );
 
-    return mult;
+      return mult;
+    },
+    get powerer() {
+      let exp = DC.D1;
+      exp = exp.timesEffectOf(PairProduction.positronEffect);
+      return exp;
+    },
   },
 
   get buyTenMultiplier() {
-    return this.buyTenMultiplierPreElectrons;
+    let multiplier = DC.D2;
+    multiplier = multiplier.times(this.buyTenMultiplierAddons.multiplier);
+    multiplier = multiplier.pow(this.buyTenMultiplierAddons.powerer);
+    return multiplier;
   },
 
   tick(diff) {

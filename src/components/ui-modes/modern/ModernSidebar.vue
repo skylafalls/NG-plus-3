@@ -1,8 +1,9 @@
 <script>
-import ModernSidebarCurrency from "./ModernSidebarCurrency";
-import ModernTabButton from "./ModernTabButton";
+import { defineComponent } from "vue";
+import ModernSidebarCurrency from "./ModernSidebarCurrency.vue";
+import ModernTabButton from "./ModernTabButton.vue";
 
-export default {
+export default defineComponent({
   name: "ModernSidebar",
   components: {
     ModernSidebarCurrency,
@@ -20,10 +21,10 @@ export default {
   methods: {
     update() {
       this.isHidden = AutomatorData.isEditorFullscreen;
-      this.tabVisibilities = [true, true, true, true, true, true, true, true, true, true, true];
+      this.tabVisibilities = [true, true, true, true, true, true, true, true, true, true, true, true];
     },
   },
-};
+});
 </script>
 
 <template>

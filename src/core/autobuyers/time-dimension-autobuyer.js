@@ -18,7 +18,7 @@ export class TimeDimensionAutobuyerState extends IntervaledAutobuyerState {
   }
 
   get interval() {
-    return 1000 / PerkShopUpgrade.autoSpeed.effectOrDefault(1);
+    return 50;
   }
 
   get isUnlocked() {

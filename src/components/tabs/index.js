@@ -44,6 +44,9 @@ import VTab from "./celestial-v/VTab.vue";
 
 import MetaDimensionsTab from "./meta-dimensions/MetaDimensionsTab.vue";
 import MasteryStudiesTab from "./time-studies/MasteryStudiesTab.vue";
+import QuarksTab from "./quantum/quarks/QuarksTab.vue";
+import PairProductionTab from "./quantum/pair-production/PairProductionTab.vue";
+import QuantumChallengesTab from "./quantum/quantum-challenges/QuantumChallengesTab.vue";
 
 const TabComponents = {
   AntimatterDimensionsTab,
@@ -91,6 +94,9 @@ const TabComponents = {
 
   MetaDimensionsTab,
   MasteryStudiesTab,
+  QuarksTab,
+  PairProductionTab,
+  QuantumChallengesTab,
 };
 
 export default TabComponents;

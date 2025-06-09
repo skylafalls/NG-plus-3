@@ -186,6 +186,9 @@ MasteryStudy.allConnections = (function () {
     [EC(14), MS(34)],
     [EC(14), MS(35)],
     [EC(14), MS(36)],
+
+    [TimeStudy.pairProduction, EC(13)],
+    [TimeStudy.pairProduction, EC(14)],
   ].map(props => new TimeStudyConnection(props[0], props[1], props[2]));
 
   return connections;

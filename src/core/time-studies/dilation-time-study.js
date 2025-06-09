@@ -52,8 +52,7 @@ export class DilationTimeStudyState extends TimeStudyState {
         Currency.tachyonParticles.bumpTo(getTP(Ra.unlocks.unlockDilationStartingTP.effectOrDefault(0), false));
       }
       TabNotification.dilationAfterUnlock.tryTrigger();
-    }
-    if (this.id === 6) {
+    } else if (this.id === 6) {
       if (!quiet) {
         Tab.dimensions.meta.show();
         Currency.metaAntimatter.bumpTo(10);
@@ -93,6 +92,10 @@ TimeStudy.metaDimensions = DilationTimeStudyState.studies[6];
  * @type {DilationTimeStudyState}
  */
 TimeStudy.masteryStudies = DilationTimeStudyState.studies[7];
+/**
+ * @type {DilationTimeStudyState}
+ */
+TimeStudy.pairProduction = DilationTimeStudyState.studies[8];
 
 TimeStudy.boughtDilationTS = function () {
   return player.dilation.studies.map(id => DilationTimeStudyState.studies[id]);

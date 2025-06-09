@@ -39,7 +39,6 @@
     "eslint/no-empty-function": "error",
     "eslint/no-eq-null": "error",
     "eslint/no-unused-expressions": "error",
-    "eslint/curly": "warn",
     "eslint/default-case-last": "warn",
     "eslint/default-param-last": "error",
     "eslint/grouped-accessor-pairs": "error",

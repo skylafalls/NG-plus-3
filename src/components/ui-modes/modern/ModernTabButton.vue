@@ -132,6 +132,10 @@ export default {
   background-color: var(--color-reality);
 }
 
+.o-tab-btn--quantum::before {
+  background-color: var(--color-quantum);
+}
+
 .o-tab-btn--celestial::before {
   background-color: var(--color-celestials);
 }

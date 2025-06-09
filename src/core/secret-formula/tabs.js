@@ -249,6 +249,15 @@ export const tabs = [
         id: 2,
         hidable: true,
       },
+      {
+        key: "quantum",
+        name: "Quantum Challenges",
+        symbol: "⚛",
+        component: "QuantumChallengesTab",
+        condition: () => PlayerProgress.quantumUnlocked(),
+        id: 3,
+        hidable: true,
+      },
     ],
   },
   {
@@ -267,7 +276,7 @@ export const tabs = [
         symbol: "<i class='fas fa-arrow-up'></i>",
         component: "InfinityUpgradesTab",
         condition: () =>
-          PlayerProgress.realityUnlocked()
+          PlayerProgress.quantumUnlocked()
           || PlayerProgress.eternityUnlocked()
           || PlayerProgress.infinityUnlocked(),
         id: 0,
@@ -279,7 +288,7 @@ export const tabs = [
         symbol: "∝",
         component: "BreakInfinityTab",
         condition: () =>
-          PlayerProgress.realityUnlocked()
+          PlayerProgress.quantumUnlocked()
           || PlayerProgress.eternityUnlocked()
           || PlayerProgress.infinityUnlocked(),
         id: 1,
@@ -291,7 +300,7 @@ export const tabs = [
         symbol: "Ξ",
         component: "ReplicantiTab",
         condition: () =>
-          PlayerProgress.realityUnlocked()
+          PlayerProgress.quantumUnlocked()
           || PlayerProgress.eternityUnlocked()
           || PlayerProgress.infinityUnlocked(),
         id: 2,
@@ -305,7 +314,7 @@ export const tabs = [
     hideAt: 1.8,
     UIClass: "o-tab-btn--eternity",
     condition: () =>
-      PlayerProgress.realityUnlocked()
+      PlayerProgress.quantumUnlocked()
       || PlayerProgress.eternityUnlocked(),
     before: "EternityPointsHeader",
     id: 7,
@@ -356,12 +365,39 @@ export const tabs = [
     ],
   },
   {
+    key: "quantum",
+    name: "Quantum",
+    hideAt: 2.2,
+    UIClass: "o-tab-btn--quantum",
+    condition: () => PlayerProgress.quantumUnlocked(),
+    id: 8,
+    hidable: true,
+    subtabs: [
+      {
+        key: "quarks",
+        name: "Colored Quarks",
+        symbol: "<i class='fas fa-circle'></i>",
+        component: "QuarksTab",
+        id: 0,
+        hidable: true,
+      },
+      {
+        key: "pairs",
+        name: "Pair Production",
+        symbol: "⌬",
+        component: "PairProductionTab",
+        id: 1,
+        hidable: true,
+      },
+    ],
+  },
+  {
     key: "reality",
     name: "Reality",
     hideAt: 2.3,
     UIClass: "o-tab-btn--reality",
     condition: () => false,
-    id: 8,
+    id: 9,
     hidable: true,
     subtabs: [
       {
@@ -423,7 +459,7 @@ export const tabs = [
     hideAt: 2.4,
     UIClass: "o-tab-btn--celestial",
     condition: () => false,
-    id: 9,
+    id: 10,
     hidable: true,
     subtabs: [
       {
@@ -504,7 +540,7 @@ export const tabs = [
     newUIClass: "shop",
     hideAt: 1.5,
     condition: () => Cloud.isAvailable,
-    id: 10,
+    id: 11,
     hidable: true,
     subtabs: [
       {

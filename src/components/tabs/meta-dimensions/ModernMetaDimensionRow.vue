@@ -159,7 +159,7 @@ export default defineComponent({
 </template>
 
 <style scoped>
-.l-modern-buy-ad-text {
+.l-modern-buy-md-text {
   display: flex;
   flex-direction: column;
 }

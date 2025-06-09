@@ -2,7 +2,7 @@
 import ModalWrapperChoice from "@/components/modals/ModalWrapperChoice";
 
 export default {
-  name: "EternityChallengeStartModal",
+  name: "InfinityChallengeStartModal",
   components: {
     ModalWrapperChoice,
   },
@@ -14,21 +14,21 @@ export default {
   },
   computed: {
     challenge() {
-      return EternityChallenge(this.id);
+      return QuantumChallenge(this.id);
     },
     challengeIsCompleted() {
-      return this.challenge.isFullyCompleted;
+      return this.challenge.isCompleted;
     },
     message() {
-      return `You will go eternal (if possible) and start a new Eternity within the Challenge, with all the
+      return `You will reset quantum physics (if possible) and start a new Quantum within the Challenge with all the
         Challenge-specific restrictions and modifiers active.
         To complete the Challenge${this.challengeIsCompleted ? "" : " and gain its reward"},
         you must reach the Challenge goal of
-        ${format(this.challenge.currentGoal)} Infinity Points. You can complete Eternity Challenges up to
-        ${formatInt(5)} times, with increasing goals and bonuses.`;
+        ${format(QuantumChallenge(this.id).goal.am)} Antimatter and ${format(QuantumChallenge(this.id).goal.ma)} Meta-Antimatter.
+        Positrons are disabled regardless of upgrades.`;
     },
     entranceLabel() {
-      return `You are about to enter Eternity Challenge ${this.id}`;
+      return `You are about to enter Quantum Challenge ${this.id}`;
     },
     reward() {
       let rewardDescription = this.challenge._config.reward.description;
@@ -42,7 +42,7 @@ export default {
       if (typeof conditionOfChallenge === "function") {
         conditionOfChallenge = conditionOfChallenge();
       }
-      return `Inside this Eternity Challenge, ${conditionOfChallenge}`;
+      return `Inside this Quantum Challenge, ${conditionOfChallenge}`;
     },
   },
   created() {
@@ -51,8 +51,7 @@ export default {
   },
   methods: {
     handleYesClick() {
-      this.challenge.start(true);
-      EventHub.ui.offAll(this);
+      this.challenge.start();
     },
   },
 };

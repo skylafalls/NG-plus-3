@@ -72,7 +72,7 @@ export function softcap(parameters) {
     }
 
     case SoftcapModes.DilationTier2: {
-      return Decimal.pow10(parameters.BaseResource.div(start).log(power).log10().pow(power)).mul(start);
+      return Decimal.pow10(parameters.BaseResource.div(start).log10().log10().pow(power).pow10()).mul(start);
     }
 
     case SoftcapModes.RepeatedLogarithm: {
@@ -358,10 +358,3 @@ export class CostHandler {
     return true;
   }
 }
-
-window.scale = scale;
-window.softcap = softcap;
-window.scaleAllLevels = scaleAllLevels;
-window.SoftcapModes = SoftcapModes;
-window.ScalingTypes = ScalingTypes;
-window.CostHandler = CostHandler;

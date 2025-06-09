@@ -38,7 +38,7 @@ export function getTickSpeedMultiplier() {
     InfinityChallenge(5).reward,
     PelleUpgrade.galaxyPower,
     PelleRifts.decay.milestones[1],
-  );
+  ).times(Quarks.powerEffects.red);
   if (galaxies.lt(3)) {
     // Magic numbers are to retain balancing from before while displaying
     // them now as positive multipliers rather than negative percentages
@@ -241,8 +241,7 @@ export const FreeTickspeed = {
   BASE_SOFTCAP: new Decimal(3e5),
   GROWTH_RATE: new Decimal(6e-6).add(1),
   GROWTH_EXP: DC.D2,
-  tickmult: () => DC.D1.add(Effects.min(1.33, TimeStudy(171)).sub(1)).mul(
-    Decimal.max(getAdjustedGlyphEffect("cursedtickspeed"), 1)),
+  tickmult: () => DC.D1.add(Effects.min(1.33, TimeStudy(171)).sub(1)),
 
   get amount() {
     return player.totalTickGained;

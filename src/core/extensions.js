@@ -145,7 +145,7 @@ Array.range = function (start, count) {
  * @returns {number[]}
  */
 Array.repeat = function (value, count) {
-  return Array(count).fill(value);
+  return Array.from({ length: count }).fill(value);
 };
 
 /**

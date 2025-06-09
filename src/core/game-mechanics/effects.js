@@ -5,7 +5,7 @@ import { DC } from "../constants";
 export const Effects = {
   /**
    * @param effectSources
-   * @return {Decimal}
+   * @returns {Decimal}
    */
   sum(...effectSources) {
     let result = DC.D0;
@@ -14,7 +14,7 @@ export const Effects = {
   },
   /**
    * @param effectSources
-   * @return {Number}
+   * @returns {Number}
    */
   nSum(...effectSources) {
     let result = 0;
@@ -23,7 +23,7 @@ export const Effects = {
   },
   /**
    * @param effectSources
-   * @return {Decimal}
+   * @returns {Decimal}
    */
   product(...effectSources) {
     let result = DC.D1;
@@ -33,7 +33,7 @@ export const Effects = {
   /**
    * @param {Number | Decimal} defaultValue
    * @param effectSources
-   * @return {Decimal}
+   * @returns {Decimal}
    */
   last(defaultValue, ...effectSources) {
     if (!isDecimal(defaultValue)) {
@@ -59,7 +59,7 @@ export const Effects = {
   /**
    * @param {Number | Decimal} defaultValue
    * @param effectSources
-   * @return {Decimal}
+   * @returns {Decimal}
    */
   max(defaultValue, ...effectSources) {
     if (!isDecimal(defaultValue)) {
@@ -72,7 +72,7 @@ export const Effects = {
   /**
    * @param {Number} defaultValue
    * @param effectSources
-   * @return {Number}
+   * @returns {Number}
    */
   nMax(defaultValue, ...effectSources) {
     let result = defaultValue;
@@ -82,7 +82,7 @@ export const Effects = {
   /**
    * @param {Number | Decimal} defaultValue
    * @param effectSources
-   * @return {Decimal}
+   * @returns {Decimal}
    */
   min(defaultValue, ...effectSources) {
     if (!isDecimal(defaultValue)) {
@@ -95,7 +95,7 @@ export const Effects = {
   /**
    * @param {Number} defaultValue
    * @param effectSources
-   * @return {Number}
+   * @returns {Number}
    */
   nMin(defaultValue, ...effectSources) {
     let result = defaultValue;

@@ -209,7 +209,13 @@ export const dilationUpgrades = {
     id: 17,
     cost: 1e15,
     description: "Generate Time Theorems based on Tachyon Particles",
-    effect: () => Currency.tachyonParticles.value.div(20000),
+    effect: () => {
+      let gain = Currency.tachyonParticles.value.div(20000);
+      if (gain.gte(1e170)) {
+        gain = Decimal.pow10(gain.div(1e170).log10().pow(0.75)).mul(1e170);
+      }
+      return gain;
+    },
     formatEffect: value => `${format(value, 2, 1)}/sec`,
   },
   dtGainPelle: rebuyable({

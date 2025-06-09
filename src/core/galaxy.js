@@ -224,7 +224,8 @@ export class Galaxy {
 export function galaxyReset() {
   EventHub.dispatch(GAME_EVENT.GALAXY_RESET_BEFORE);
   player.galaxies = player.galaxies.add(1);
-  if (!Achievement(143).isUnlocked || (Pelle.isDoomed && !PelleUpgrade.galaxyNoResetDimboost.canBeApplied)) {
+  if (!Achievement(143).isUnlocked || (Pelle.isDoomed && !PelleUpgrade.galaxyNoResetDimboost.canBeApplied)
+    || EternityMilestone.noADReset.canBeApplied) {
     player.dimensionBoosts = DC.D0;
   }
   softReset(0);

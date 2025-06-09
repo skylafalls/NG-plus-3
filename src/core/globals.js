@@ -85,9 +85,11 @@ export * from "./black-hole";
 export * from "./machines";
 export * from "./devtools";
 export * from "./news-ticker";
-export * from "./shop";
 export * from "./tabs";
 export * from "./tab-notifications";
 export * from "./speedrun";
 
 export * from "./automator/script-templates";
+
+export * from "./quantum/index.js";
+export * from "./scaling.js";

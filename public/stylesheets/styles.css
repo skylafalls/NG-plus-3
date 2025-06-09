@@ -745,6 +745,16 @@ button:focus {
   background: var(--color-reality);
 }
 
+.o-tab-btn--quantum {
+  color: var(--color-quantum);
+  background-color: var(--color-prestige--accent);
+  border-color: var(--color-quantum);
+}
+
+.o-tab-btn--quantum:hover {
+  background: var(--color-quantum);
+}
+
 .o-tab-btn--celestial {
   color: var(--color-celestials);
   background-color: var(--color-prestige--accent);

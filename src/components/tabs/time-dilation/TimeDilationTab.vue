@@ -56,11 +56,8 @@ export default defineComponent({
         ],
       ];
     },
-    // This might be negative due to rift drain, so we need to add "+" iff the value is positive. The actual
-    // addition of a negative sign (or not) is assumed to be handled in a notation-specific way
     dilatedTimeGainText() {
-      const sign = this.dilatedTimeIncome.gte(0) ? "+" : "";
-      return `${sign}${format(this.dilatedTimeIncome, 2, 1)}`;
+      return formatGain(this.dilatedTime, this.dilatedTimeIncome, 2, 1);
     },
     pelleRebuyables() {
       return [
@@ -160,7 +157,7 @@ export default defineComponent({
       You have
       <span class="c-dilation-tab__dilated-time">{{ format(dilatedTime, 2, 1) }}</span>
       Dilated Time.
-      <span class="c-dilation-tab__dilated-time-income">{{ dilatedTimeGainText }}/s</span>
+      <span class="c-dilation-tab__dilated-time-income">{{ dilatedTimeGainText }}</span>
     </span>
     <span>
       Next

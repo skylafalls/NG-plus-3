@@ -135,10 +135,6 @@ export function buyDilationUpgrade(id, bulk = 1) {
 export function maxPurchaseDilationUpgrades() {
   let didBuy = false;
   for (let i = 1; i < 5; i++) {
-    if (i === 2 && !DilationUpgrade.galaxyThreshold.isCapped) {
-      Currency.dilatedTime.reset();
-      buyDilationUpgrade(2, Infinity);
-    }
     buyDilationUpgrade(i, Infinity);
   }
   return didBuy;
@@ -240,14 +236,10 @@ export function getTachyonGain(requireEternity) {
 // Returns the minimum antimatter needed in order to gain more TP; used only for display purposes
 export function getTachyonReq() {
   let effectiveTP = Currency.tachyonParticles.value.dividedBy(tachyonGainMultiplier());
-  if (Enslaved.isRunning) {
-    effectiveTP = effectiveTP.pow(1 / Enslaved.tachyonNerf);
-  }
   return Decimal.pow10(
     effectiveTP
       .times(Math.pow(400, 1.5))
-      .pow(Decimal.add(1.5, DilationUpgrade.tachyonExponent.effectOrDefault(0)).recip())
-      .toNumber(),
+      .pow(Decimal.add(1.5, DilationUpgrade.tachyonExponent.effectOrDefault(0)).recip()),
   );
 }
 

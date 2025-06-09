@@ -33,8 +33,6 @@ class QuarkMultUpgrade extends GameMechanicState {
     return !this.isCapped && Currency.quarks.gte(this.cost) && this.isRequirementSatisfied;
   }
 
-  // This is only ever called with amount = 1 or within buyMax under conditions that ensure the scaling doesn't
-  // change mid-purchase
   purchase(amount = 1) {
     if (!this.canBeBought) {
       return;
@@ -61,11 +59,11 @@ export const Quarks = {
   multiplierUpgrade: new QuarkMultUpgrade(GameDatabase.quantum.quarkMultiplierConfig),
   get netTotal() {
     let total = Currency.quarks.value;
-    total = total.plus(Quarks.amounts.red).plus(Quarks.amount.green).plus(Quarks.amount.blue);
+    total = total.plus(Quarks.amount.red).plus(Quarks.amount.green).plus(Quarks.amount.blue);
     return total;
   },
 
-  amounts: {
+  amount: {
     get red() {
       return player.quantum.colors.red;
     },
@@ -105,5 +103,9 @@ export const Quarks = {
     get blue() {
       return Quarks.powers.blue.plus(1).logPow(0.5);
     },
+  },
+
+  getGain(type, color) {
+    return new Decimal(0);
   },
 };

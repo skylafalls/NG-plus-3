@@ -1,7 +1,8 @@
 <script>
-import HintText from "@/components/HintText";
+import HintText from "@/components/HintText.vue";
+import { defineComponent } from "vue";
 
-export default {
+export default defineComponent({
   name: "ChallengeBox",
   components: {
     HintText,
@@ -82,7 +83,7 @@ export default {
       this.infinities.copyFrom(Currency.infinities);
     },
   },
-};
+});
 </script>
 
 <template>

@@ -38,9 +38,6 @@ window.formatFloat = function formatFloat(value, digits) {
   if (isEND()) {
     return "END";
   }
-  if (Notations.current.isPainful) {
-    return format(value, Math.max(2, digits), digits);
-  }
   return formatWithCommas(value.toFixed(digits));
 };
 
@@ -360,8 +357,17 @@ function formatInternal(num, precision = 2, precisionUnder1000 = 2, small = fals
     );
   }
 
-  if (num.gte("e1e6")) {
+  if (num.gte("e1e15")) {
     return exponentialFormat(num, 0, false);
+  }
+  if (num.gte("e1e14")) {
+    return exponentialFormat(num, 0);
+  }
+  if (num.gte("e1e13")) {
+    return exponentialFormat(num, 1);
+  }
+  if (num.gte("e1e12")) {
+    return exponentialFormat(num, 2);
   }
   if (num.gte(e6)) {
     return exponentialFormat(num, precision);
@@ -423,41 +429,41 @@ function invertOOM(x) {
   return x;
 }
 
-window.formatGain = function formatGain(base, gain, precision = 2) {
+window.formatGain = function formatGain(base, gain, precision = 0, precisionUnder1000 = 0) {
   const next = base.plus(gain);
   const sqrt10 = 3.1622776601683795;
   let difference;
 
   difference = next.plus(10).slog(10).sub(base.plus(10).slog(10));
   if (difference.gte(10) || (difference.gte(sqrt10) && base.gte("10^^10"))) {
-    return `(+^^${format(difference, precision)}/sec)`;
+    return `(+^^${format(difference, precision, precisionUnder1000)}/sec)`;
   }
 
   difference = next.plus(1).log10().plus(1).log10().plus(1).log10().plus(1).log10()
     .div(base.plus(1).log10().plus(1).log10().plus(1).log10().plus(1).log10()).log10();
   if (difference.gte(10) || (difference.gte(sqrt10) && base.gte("eeee1e1000"))) {
-    return `(+${format(difference, precision)} OoM^5/sec)`;
+    return `(+${format(difference.mul(20), precision, precisionUnder1000)} OoM^5/sec)`;
   }
 
   difference = next.plus(1).log10().plus(1).log10().plus(1).log10().div(base.plus(1).log10().plus(1).log10().plus(1).log10()).log10();
   if (difference.gte(10) || (difference.gte(sqrt10) && base.gte("eee1e1000"))) {
-    return `(+${format(difference, precision)} OoM^4/sec)`;
+    return `(+${format(difference.mul(20), precision, precisionUnder1000)} OoM^4/sec)`;
   }
 
   difference = next.plus(1).log10().plus(1).log10().div(base.plus(1).log10().plus(1).log10()).log10();
   if (difference.gte(10) || (difference.gte(sqrt10) && base.gte("ee1e1000"))) {
-    return `(+${format(difference, precision)} OoM^3/sec)`;
+    return `(+${format(difference.mul(20), precision, precisionUnder1000)} OoM^3/sec)`;
   }
 
   difference = next.plus(1).log10().div(base.plus(1).log10()).log10();
   if (difference.gte(10) || (difference.gte(sqrt10) && base.gte("e1e1000"))) {
-    return `(+${format(difference, precision)} OoM^2/sec)`;
+    return `(+${format(difference.mul(20), precision, precisionUnder1000)} OoM^2/sec)`;
   }
 
-  difference = next.div(base).log10();
+  difference = next.div(base);
   if (difference.gte(10) || (difference.gte(sqrt10) && base.gte("1e1000"))) {
-    return `(+${format(difference, precision)} OoM/sec)`;
+    return `(+${format(difference.log10().mul(20), precision, precisionUnder1000)} OoM/sec)`;
   }
 
-  return `(+${format(gain, precision)}/sec)`;
+  return `(+${format(gain, precision, precisionUnder1000)}/sec)`;
 };

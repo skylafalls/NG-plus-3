@@ -1101,7 +1101,7 @@ export function simulateTime(seconds, real, fast) {
   }
 }
 
-window.onload = function () {
+window.addEventListener("load", function () {
   const supportedBrowser = browserCheck();
   GameUI.initialized = supportedBrowser;
   ui.view.initialized = supportedBrowser;
@@ -1114,15 +1114,15 @@ window.onload = function () {
     document.querySelector("#loading").style.display = "none";
     document.querySelector("#browser-warning").style.display = "flex";
   }
-};
+});
 
-window.onfocus = function () {
+window.addEventListener("focus", function () {
   setShiftKey(false);
-};
+});
 
-window.onblur = function () {
+window.addEventListener("blur", function () {
   GameKeyboard.stopSpins();
-};
+});
 
 export function setShiftKey(isDown) {
   ui.view.shiftDown = isDown;

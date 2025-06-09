@@ -2,8 +2,9 @@
 import wordShift from "@/core/word-shift";
 
 import { isFunction, isString } from "@/utility";
+import { defineComponent } from "vue";
 
-export default {
+export default defineComponent({
   name: "DescriptionDisplay",
   props: {
     config: {
@@ -100,7 +101,7 @@ export default {
       this.updateFunction();
     },
   },
-};
+});
 </script>
 
 <template>

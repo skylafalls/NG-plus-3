@@ -19,6 +19,8 @@ import { sidebarResources } from "./sidebar-resources";
 import { speedrunMilestones } from "./speedrun-milestones";
 import { tabNotifications } from "./tab-notifications";
 import { tabs } from "./tabs";
+import { quantum } from "./quantum";
+
 
 export const GameDatabase = {
   achievements,
@@ -42,6 +44,7 @@ export const GameDatabase = {
   speedrunMilestones,
   tabNotifications,
   tabs,
+  quantum,
 };
 
 window.GameDatabase = GameDatabase;

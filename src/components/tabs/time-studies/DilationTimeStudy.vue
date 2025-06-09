@@ -36,10 +36,13 @@ export default {
           total Time Theorems`;
       }
       if (this.id === 6) {
-        return `Requirement: ${format(Decimal.dNumberMax)} Eternity Points`;
+        return `Requirement: ${format("1e4000")} Eternity Points`;
       }
       if (this.id === 7) {
         return `Requirement: ${format(1e100)} Time Dilation upgrade`;
+      }
+      if (this.id === 8) {
+        return `Requirement: ${formatInt(5)} EC13 & EC14 completions, ${formatInt(50)} net quarks within your best Quantum`;
       }
       return "";
     },
@@ -80,7 +83,8 @@ export default {
         case 6: {
           return () => Tab.dimensions.meta.show();
         }
-        case 7: {
+        case 7:
+        case 8: {
           return () => {};
         }
         default: {

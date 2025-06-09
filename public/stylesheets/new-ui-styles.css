@@ -177,6 +177,10 @@ body.t-s12 {
   border-left-color: var(--color-reality);
 }
 
+.o-tab-btn--quantum::after {
+  border-left-color: var(--color-quantum);
+}
+
 .o-tab-btn--celestial::after {
   border-left-color: var(--color-celestials);
 }
@@ -323,6 +327,16 @@ body.t-s12 {
 
 .o-tab-btn--reality .o-subtab__tooltip::after {
   border-top-color: var(--color-reality);
+}
+
+.o-tab-btn--quantum .o-subtab__tooltip {
+  color: var(--color-quantum);
+  background: var(--color-prestige--accent);
+  border-color: var(--color-quantum);
+}
+
+.o-tab-btn--quantum .o-subtab__tooltip::after {
+  border-top-color: var(--color-quantum);
 }
 
 .o-tab-btn--celestial .o-subtab__tooltip {

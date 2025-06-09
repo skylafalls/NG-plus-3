@@ -35,7 +35,7 @@ export const masteryStudies = [
   },
   {
     id: "M31",
-    cost: new Decimal("1e145"),
+    cost: new Decimal("1e165"),
     requirement: [21],
     reqType: TS_REQUIREMENT_TYPE.AT_LEAST_ONE,
     description: () => "Dimension Boosts scale by 1 less 8th Antimatter Dimension",
@@ -43,7 +43,7 @@ export const masteryStudies = [
   },
   {
     id: "M32",
-    cost: new Decimal("1e145"),
+    cost: new Decimal("1e165"),
     requirement: [21],
     reqType: TS_REQUIREMENT_TYPE.AT_LEAST_ONE,
     description: () => "Dimension Boosts boosts Meta Dimensions at a reduced rate",
@@ -52,7 +52,7 @@ export const masteryStudies = [
   },
   {
     id: "M33",
-    cost: new Decimal("1e145"),
+    cost: new Decimal("1e165"),
     requirement: [22],
     reqType: TS_REQUIREMENT_TYPE.AT_LEAST_ONE,
     description: () => "Meta-Dimension Boosts boosts Dilated Time production",
@@ -61,7 +61,7 @@ export const masteryStudies = [
   },
   {
     id: "M34",
-    cost: new Decimal("1e145"),
+    cost: new Decimal("1e165"),
     requirement: [22],
     reqType: TS_REQUIREMENT_TYPE.AT_LEAST_ONE,
     description: () => "Gain more Tachyon Particles based on Antimatter Galaxies",
@@ -70,14 +70,14 @@ export const masteryStudies = [
   },
   {
     id: "M35",
-    cost: new Decimal("1e145"),
+    cost: new Decimal("1e165"),
     requirement: [23],
     reqType: TS_REQUIREMENT_TYPE.AT_LEAST_ONE,
     description: () => "The Replicanti chance upgrade can go above 100%",
   },
   {
     id: "M36",
-    cost: new Decimal("1e145"),
+    cost: new Decimal("1e165"),
     requirement: [23],
     reqType: TS_REQUIREMENT_TYPE.AT_LEAST_ONE,
     description: () => "Remote Replicanti Galaxy scaling is 30% weaker",

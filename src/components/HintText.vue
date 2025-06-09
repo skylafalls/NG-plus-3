@@ -1,5 +1,7 @@
 <script>
-export default {
+import { defineComponent } from 'vue'
+
+export default defineComponent({
   name: "HintText",
   props: {
     type: {
@@ -14,7 +16,7 @@ export default {
       return this.$viewModel.shiftDown || player.options.showHintText[this.type];
     },
   },
-};
+});
 </script>
 
 <template>

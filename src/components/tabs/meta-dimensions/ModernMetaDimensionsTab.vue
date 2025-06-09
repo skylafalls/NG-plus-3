@@ -1,8 +1,9 @@
 <script>
 import MetaDimensionRow from "@/components/tabs/meta-dimensions/ModernMetaDimensionRow.vue";
 import DimensionBoostRow from "@/components/tabs/meta-dimensions/ModernDimensionBoostRow.vue";
+import { defineComponent } from "vue";
 
-export default {
+export default defineComponent({
   name: "ModernMetaDimensionsTab",
   components: {
     MetaDimensionRow,
@@ -41,14 +42,14 @@ export default {
 
       this.buy10Mult.copyFrom(MetaDimensions.buyTenMultiplier);
       this.metaAntimatter.copyFrom(Currency.metaAntimatter);
-      this.metaAntimatterBest.copyFrom(player.meta.bestAntimatter);
+      this.metaAntimatterBest.copyFrom(player.records.thisQuantum.bestMA);
       this.dimBoostMultiplier.copyFrom(MetaDimensions.dimensionBoostMultiplier);
       this.dimBoostMultiplierPower.copyFrom(MetaDimensions.metaAMtoDimBoostExponent);
 
       this.multiplierText = `Buy 10 Dimension purchase multiplier: ${formatX(this.buy10Mult, 2, 2)}`;
     },
   },
-};
+});
 </script>
 
 <template>

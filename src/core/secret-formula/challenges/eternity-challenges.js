@@ -211,7 +211,7 @@ export const eternityChallenges = [
   {
     id: 13,
     description: () => "Infinity Dimensions are disabled and nullify Dimension Boost's effect to Antimatter Dimensions.",
-    goal: new Decimal("1e3.85e6"),
+    goal: new Decimal("1e9e6"),
     pelleGoal: DC.BEMAX,
     goalIncrease: new Decimal("e5.555e5"),
     reward: {
@@ -224,7 +224,7 @@ export const eternityChallenges = [
     id: 14,
     description: () => `You are stuck in IC3, and all replicanti boosts except to ID are nullified.
       Free tickspeed upgrades count five times as much towards the IC3 boost, and meta-antimatter is disabled.`,
-    goal: new Decimal("1e1e6"),
+    goal: new Decimal("1e4e6"),
     pelleGoal: DC.BEMAX,
     goalIncrease: new Decimal("e2.25e5"),
     reward: {

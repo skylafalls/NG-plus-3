@@ -1,8 +1,9 @@
 <script>
-import PrimaryButton from "@/components/PrimaryButton";
-import PrimaryToggleButton from "@/components/PrimaryToggleButton";
+import PrimaryButton from "@/components/PrimaryButton.vue";
+import PrimaryToggleButton from "@/components/PrimaryToggleButton.vue";
+import { defineComponent } from "vue";
 
-export default {
+export default defineComponent({
   name: "ChallengeTabHeader",
   components: {
     PrimaryButton,
@@ -52,7 +53,7 @@ export default {
       }
     },
   },
-};
+});
 </script>
 
 <template>
