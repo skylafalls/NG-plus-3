@@ -28,6 +28,15 @@ export default defineComponent({
     config() {
       return this.challenge.config;
     },
+    rewardConfig() {
+      const challenge = this.challenge;
+      const config = this.config.reward;
+      return {
+        effect: () => config.effect(config.id === 7 ? challenge.completions + 1 : challenge.completions),
+        formatEffect: config.formatEffect,
+        cap: config.cap,
+      };
+    },
     name() {
       return `QC${this.challenge.id}`;
     },
@@ -67,7 +76,7 @@ export default defineComponent({
           title="Reward:"
         />
         <EffectDisplay
-          :config="config.reward"
+          :config="rewardConfig"
         />
       </div>
     </template>

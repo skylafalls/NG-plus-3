@@ -305,6 +305,7 @@ class TimeDimensionState extends DimensionState {
 
   get productionPerSecond() {
     if (EternityChallenge(1).isRunning || EternityChallenge(10).isRunning
+      || QuantumChallenge(8).isRunning
       || (Laitela.isRunning && this.tier > Laitela.maxAllowedDimension)) {
       return DC.D0;
     }
@@ -323,10 +324,12 @@ class TimeDimensionState extends DimensionState {
 
   get rateOfChange() {
     const tier = this._tier;
-    if (tier === 8) {
+    if (tier === 8 || (QuantumChallenge(4).isRunning && tier > 6)) {
       return DC.D0;
     }
-    const toGain = TimeDimension(tier + 1).productionPerSecond;
+    const toGain = QuantumChallenge(4).isRunning
+      ? TimeDimension(tier + 2).productionPerSecond
+      : TimeDimension(tier + 1).productionPerSecond;
     return toGain.times(getGameSpeedupForDisplay()).div(10);
   }
 
@@ -393,12 +396,18 @@ export const TimeDimensions = {
   },
 
   tick(diff) {
-    for (let tier = 8; tier > 1; tier--) {
-      TimeDimension(tier).produceDimensions(TimeDimension(tier - 1), diff.div(10));
+    let maxTierProduced = 7;
+    let nextTierOffset = 1;
+    if (QuantumChallenge(4).isRunning) {
+      maxTierProduced--;
+      nextTierOffset++;
+    }
+    for (let tier = maxTierProduced; tier >= 1; --tier) {
+      TimeDimension(tier + nextTierOffset).produceDimensions(TimeDimension(tier), diff.div(10));
     }
 
     if (EternityChallenge(7).isRunning) {
-      TimeDimension(1).produceDimensions(InfinityDimension(8), diff);
+      TimeDimension(1).produceDimensions(InfinityDimension(QuantumChallenge(4).isRunning ? 7 : 8), diff);
     } else {
       TimeDimension(1).produceCurrency(Currency.timeShards, diff);
     }

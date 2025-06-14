@@ -35,7 +35,6 @@ export default defineComponent({
 <template>
   <div class="l-challenges-tab">
     <ChallengeTabHeader />
-    <div>{{ nextAtDisplay }}</div>
     <ChallengeGrid
       v-slot="{ challenge }"
       :challenges="challenges"

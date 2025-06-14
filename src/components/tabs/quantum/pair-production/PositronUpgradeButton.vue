@@ -85,8 +85,8 @@ export default defineComponent({
 }
 
 .o-positron-upgrade-btn--unavailable {
-  color: black;
-  background-color: #f7f7f7;
+  color: white;
+  background-color: #484b11;
 }
 
 .o-positron-upgrade-btn--unclickable {

@@ -29,11 +29,11 @@ class QuantumChallengeState extends GameMechanicState {
   }
 
   get completions() {
-    return player.challenge.quantum.completions[this.id];
+    return player.challenge.quantum.completions[this.id - 1];
   }
 
   set completions(newValue) {
-    player.challenge.quantum.completions[this.id] = newValue;
+    player.challenge.quantum.completions[this.id - 1] = newValue;
   }
 
   get isRunning() {

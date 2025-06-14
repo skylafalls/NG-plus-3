@@ -558,16 +558,24 @@ export const ReplicantiUpgrade = {
       const logBase = new Decimal(170);
       const logBaseIncrease = (EternityChallenge(6).isRunning) ? DC.D2 : new Decimal(25);
       const logCostScaling = (EternityChallenge(6).isRunning) ? DC.D2 : DC.D5;
-      const distantReplicatedGalaxyStart = GlyphInfo.replication.sacrificeInfo.effect().add(100);
-      const remoteReplicatedGalaxyStart = GlyphInfo.replication.sacrificeInfo.effect().add(1000);
-      const logDistantScaling = new Decimal(1e50).log10();
-      const logRemoteScaling = new Decimal(1e5).powEffectOf(MasteryStudy(36)).log10();
+      let distantReplicatedGalaxyStart = GlyphInfo.replication.sacrificeInfo.effect().add(100);
+      let remoteReplicatedGalaxyStart = GlyphInfo.replication.sacrificeInfo.effect().add(1000);
+      let logDistantScaling = new Decimal(1e50).log10();
+      let logRemoteScaling = new Decimal(1e5).powEffectOf(MasteryStudy(36)).log10();
+
+      if (QuantumChallenge(5).isRunning) {
+        distantReplicatedGalaxyStart = new Decimal(1);
+        remoteReplicatedGalaxyStart = new Decimal(1);
+        logDistantScaling = new Decimal(1000);
+        logRemoteScaling = new Decimal(25);
+      }
 
       const cur = Currency.infinityPoints.value.times(TimeStudy(233).effectOrDefault(1)).max(1).log10();
 
       if (logBase.gt(cur)) {
         return;
       }
+
       let a = logCostScaling.div(2);
       let b = logBaseIncrease.sub(logCostScaling.div(2));
       let c = logBase.sub(cur);
@@ -620,19 +628,25 @@ export const ReplicantiUpgrade = {
       const logBase = new Decimal(170);
       const logBaseIncrease = EternityChallenge(6).isRunning ? 2 : 25;
       const logCostScaling = EternityChallenge(6).isRunning ? 2 : 5;
-      const distantReplicatedGalaxyStart = GlyphInfo.replication.sacrificeInfo.effect().add(100);
-      const remoteReplicatedGalaxyStart = GlyphInfo.replication.sacrificeInfo.effect().add(1000);
+      let distantReplicatedGalaxyStart = GlyphInfo.replication.sacrificeInfo.effect().add(100);
+      let remoteReplicatedGalaxyStart = GlyphInfo.replication.sacrificeInfo.effect().add(1000);
       let logCost = logBase.add(count.times(logBaseIncrease))
         .add((count.times(count.sub(1)).div(2)).times(logCostScaling));
+
+      if (QuantumChallenge(5).isRunning) {
+        distantReplicatedGalaxyStart = new Decimal(1);
+        remoteReplicatedGalaxyStart = new Decimal(1);
+      }
+
       if (count.gt(distantReplicatedGalaxyStart)) {
-        const logDistantScaling = new Decimal(50);
+        const logDistantScaling = QuantumChallenge(5).isRunning ? new Decimal(1000) : new Decimal(50);
         // When distant scaling kicks in, the price increase jumps by a few extra steps.
         // So, the difference between successive scales goes 5, 5, 5, 255, 55, 55, ...
         const numDistant = count.sub(distantReplicatedGalaxyStart);
         logCost = logCost.add(logDistantScaling.times(numDistant).times(numDistant.add(9)).div(2));
       }
       if (count.gt(remoteReplicatedGalaxyStart)) {
-        const logRemoteScaling = new Decimal(1e5).powEffectOf(MasteryStudy(36)).log10();
+        const logRemoteScaling = QuantumChallenge(5).isRunning ? new Decimal(25) : new Decimal(1e5).powEffectOf(MasteryStudy(36)).log10();
         const numRemote = count.sub(remoteReplicatedGalaxyStart);
         // The formula x * (x + 1) * (2 * x + 1) / 6 is the sum of the first n squares.
         logCost = logCost.add(logRemoteScaling.times(numRemote).times(numRemote.add(1))

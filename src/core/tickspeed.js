@@ -27,7 +27,7 @@ export function getTickSpeedMultiplier() {
   if (InfinityChallenge(3).isRunning) {
     return DC.D1;
   }
-  if (Ra.isRunning) {
+  if (Ra.isRunning || QuantumChallenge(2).isRunning) {
     return DC.C1D1_1245;
   }
   let galaxies = effectiveBaseGalaxies();

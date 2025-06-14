@@ -373,7 +373,7 @@ function formatInternal(num, precision = 2, precisionUnder1000 = 2, small = fals
     return exponentialFormat(num, precision);
   }
   if (num.gte(e3)) {
-    return commaFormat(num, 0);
+    return commaFormat(num, precisionUnder1000);
   }
   if (num.gte(thousandth) || !small) {
     return regularFormat(num, precisionUnder1000);

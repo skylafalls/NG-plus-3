@@ -106,6 +106,9 @@ class MetaDimensionState extends DimensionState {
    * @returns {boolean}
    */
   get isProducing() {
+    if (QuantumChallenge(4).isRunning && tier > 2) {
+      return false;
+    }
     return this.totalAmount.gt(0);
   }
 
@@ -193,6 +196,11 @@ class MetaDimensionState extends DimensionState {
   }
 
   get productionPerSecond() {
+    const tier = this.tier;
+    if (QuantumChallenge(1).isRunning && tier > 2) {
+      return DC.D0;
+    }
+
     let amount = this.totalAmount;
     let production = amount.times(this.multiplier);
     return production;
@@ -225,7 +233,7 @@ export const MetaDimensions = {
   all: MetaDimension.index.compact(),
 
   get metaAMtoDimBoostExponent() {
-    let exponent = new Decimal(8);
+    let exponent = QuantumChallenge(3).isRunning ? Currency.metaAntimatter.value.plus(1).log10().max(1) : new Decimal(8);
     exponent = Effects.max(exponent, DilationUpgrade.mdEffectBuff);
     exponent = exponent.plusEffectOf(EternityChallenge(13).reward);
     return exponent;
@@ -233,7 +241,7 @@ export const MetaDimensions = {
 
   get dimensionBoostMultiplier() {
     let multiplier = player.records.thisQuantum.bestMA.sub(10).pow(this.metaAMtoDimBoostExponent).max(1);
-    if (EternityChallenge(14).isRunning) {
+    if (EternityChallenge(14).isRunning || QuantumChallenge(7).isRunning) {
       return new Decimal(1);
     }
     return multiplier;
@@ -254,12 +262,19 @@ export const MetaDimensions = {
   get buyTenMultiplier() {
     let mult = DC.D2;
     mult = mult.timesEffectOf(DilationUpgrade.mdBuffDT);
+    if (QuantumChallenge(1).isRunning) {
+      mult = mult.timesEffectOf(PairProduction.electronEffect);
+    }
     return mult;
   },
 
   tick(diff) {
     let maxTierProduced = 7;
     let nextTierOffset = 1;
+    if (QuantumChallenge(4).isRunning) {
+      maxTierProduced--;
+      nextTierOffset++;
+    }
     for (let tier = maxTierProduced; tier >= 1; --tier) {
       MetaDimension(tier + nextTierOffset).produceDimensions(MetaDimension(tier), diff.div(10));
     }
@@ -361,6 +376,9 @@ export const MetaDimensions = {
     get power() {
       let boost = new Decimal(2);
       boost = boost.timesEffectOf(DilationUpgrade.mdBuffDT);
+      if (QuantumChallenge(4).isRunning || QuantumChallenge(8).isRunning) {
+        return DC.D1;
+      }
       return boost;
     },
 
@@ -400,8 +418,11 @@ export const MetaDimensions = {
       const targetResets = MetaDimensions.boost.purchasedBoosts.add(bulk);
       const tier = Decimal.min(targetResets.add(3), this.maxDimensionsUnlockable).toNumber();
       let amount = DC.D20;
-      const discount = new Decimal(0);
+      const discount = new Decimal(0).plusEffectOf(QuantumChallenge(4));
       amount = amount.add(targetResets.sub(5).max(0).mul(DC.D15.sub(discount)).round());
+      if (QuantumChallenge(5).isRunning) {
+        amount = Decimal.pow(targetResets.sub(1), 3).add(targetResets).add(amount).sub(1);
+      }
       amount = Decimal.round(amount);
 
       return new DimBoostRequirement(tier, amount);
@@ -508,6 +529,9 @@ export const MetaDimensions = {
 
       const ad = MetaDimension(tier).totalAmount;
       let calcBoosts = ad.sub(amount).div(multiplierPerDB);
+      if (QuantumChallenge(5).isRunning) {
+        calcBoosts = decimalCubicSolution(DC.D1, DC.D1.neg(), multiplierPerDB.add(2), ad.add(18).neg());
+      }
 
       calcBoosts = calcBoosts.add(4);
       // Dimension boosts 1-4 dont use 8th dims, 1-2 dont use 6th dims, so add those extras afterwards.

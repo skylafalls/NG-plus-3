@@ -20,6 +20,7 @@ export default defineComponent({
       metaAntimatterBest: new Decimal(0),
       dimBoostMultiplier: new Decimal(0),
       dimBoostMultiplierPower: new Decimal(0),
+      isQC3Running: false,
     };
   },
   methods: {
@@ -39,6 +40,7 @@ export default defineComponent({
     update() {
       this.hasDimensionBoosts = player.meta.boosts.gt(0);
       this.buyUntil10 = player.meta.buyUntil10;
+      this.isQC3Running = QuantumChallenge(3).isRunning;
 
       this.buy10Mult.copyFrom(MetaDimensions.buyTenMultiplier);
       this.metaAntimatter.copyFrom(Currency.metaAntimatter);
@@ -78,7 +80,7 @@ export default defineComponent({
         <br>
         which is translated to a
         <span class="c-meta-dim-description__accent">{{ formatX(dimBoostMultiplier, 2) }}</span>
-        multiplier on the effectiveness of Dimension Boosts.
+        {{ isQC3Running ? "multiplier on all Infinity Dimensions" : "multiplier on the effectiveness of Dimension Boosts." }}
       </p>
     </div>
     <span>{{ multiplierText }}</span>

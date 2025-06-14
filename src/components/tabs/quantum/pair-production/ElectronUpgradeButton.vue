@@ -85,8 +85,8 @@ export default defineComponent({
 }
 
 .o-electron-upgrade-btn--unavailable {
-  color: black;
-  background-color: #f7f7f7;
+  color: white;
+  background-color: #122439;
 }
 
 .o-electron-upgrade-btn--unclickable {

@@ -117,6 +117,9 @@ class InfinityDimensionState extends DimensionState {
   get rateOfChange() {
     const tier = this.tier;
     let toGain = DC.D0;
+    if (QuantumChallenge(4).isRunning && tier === 7) {
+      return DC.D0;
+    }
     if (tier === 8) {
       // We need a extra 10x here (since ID8 production is per-second and
       // other ID production is per-10-seconds).
@@ -124,6 +127,8 @@ class InfinityDimensionState extends DimensionState {
       if (EternityChallenge(7).isRunning) {
         EternityChallenge(7).applyEffect(v => toGain = v.times(10));
       }
+    } else if (QuantumChallenge(4).isRunning) {
+      toGain = InfinityDimension(tier + 2).productionPerSecond;
     } else {
       toGain = InfinityDimension(tier + 1).productionPerSecond;
     }
@@ -132,6 +137,7 @@ class InfinityDimensionState extends DimensionState {
 
   get productionPerSecond() {
     if (EternityChallenge(2).isRunning || EternityChallenge(10).isRunning || EternityChallenge(13).isRunning
+      || QuantumChallenge(8).isRunning
       || (Laitela.isRunning && this.tier > Laitela.maxAllowedDimension)) {
       return DC.D0;
     }
@@ -150,6 +156,11 @@ class InfinityDimensionState extends DimensionState {
     if (EternityChallenge(11).isRunning) {
       return DC.D1;
     }
+
+    if (QuantumChallenge(3).isRunning) {
+      return MetaDimensions.dimensionBoostMultiplier;
+    }
+
     let mult = GameCache.infinityDimensionCommonMultiplier.value
       .timesEffectsOf(
         tier === 1 ? Achievement(94) : null,
@@ -394,8 +405,14 @@ export const InfinityDimensions = {
   },
 
   tick(diff) {
-    for (let tier = 8; tier > 1; tier--) {
-      InfinityDimension(tier).produceDimensions(InfinityDimension(tier - 1), diff.div(10));
+    let maxTierProduced = 7;
+    let nextTierOffset = 1;
+    if (QuantumChallenge(4).isRunning) {
+      maxTierProduced--;
+      nextTierOffset++;
+    }
+    for (let tier = maxTierProduced; tier >= 1; --tier) {
+      InfinityDimension(tier + nextTierOffset).produceDimensions(InfinityDimension(tier), diff.div(10));
     }
 
     if (EternityChallenge(7).isRunning) {

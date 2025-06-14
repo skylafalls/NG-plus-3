@@ -19,6 +19,10 @@ export const DimBoost = {
       return DC.D1;
     }
 
+    if (QuantumChallenge(3).isRunning) {
+      return replicantiMult().plus(1).logPow(0.7);
+    }
+
     let boost = new Decimal(Effects.max(
       2,
       InfinityUpgrade.dimboostMult,
@@ -52,7 +56,7 @@ export const DimBoost = {
   },
 
   get maxBoosts() {
-    if (Ra.isRunning) {
+    if (Ra.isRunning || QuantumChallenge(6).isRunning) {
       // Ra makes boosting impossible. Note that this function isn't called
       // when giving initial boosts, so the player will still get those.
       return DC.D0;
@@ -90,6 +94,9 @@ export const DimBoost = {
       if (Ra.isRunning) {
         return "Locked (Ra's Reality)";
       }
+      if (QuantumChallenge(6).isRunning) {
+        return "Locked (Quantum Challenge 6)";
+      }
       if (InfinityChallenge(1).isRunning) {
         return "Locked (Infinity Challenge 1)";
       }
@@ -122,7 +129,7 @@ export const DimBoost = {
     } else if (tier === 8) {
       amount = amount.add(targetResets.sub(5).mul(DC.D15.sub(discount)).round());
     }
-    if (EternityChallenge(5).isRunning) {
+    if (EternityChallenge(5).isRunning || QuantumChallenge(5).isRunning) {
       amount = Decimal.pow(targetResets.sub(1), 3).add(targetResets).add(amount).sub(1);
     }
 
@@ -335,7 +342,7 @@ function maxBuyDimBoosts() {
   const ad = AntimatterDimension(tier).totalAmount;
   let calcBoosts = ad.sub(amount).div(multiplierPerDB);
 
-  if (EternityChallenge(5).isRunning) {
+  if (EternityChallenge(5).isRunning || QuantumChallenge(5).isRunning) {
     calcBoosts = decimalCubicSolution(DC.D1, DC.D1.neg(), multiplierPerDB.add(2), ad.add(18).neg());
   }
 

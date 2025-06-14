@@ -3,13 +3,6 @@ import { GameMechanicState, RebuyableMechanicState } from "../game-mechanics";
 class ElectronsEffectState extends GameMechanicState {
   constructor() {
     super({});
-    this.cachedEffectValue = new Lazy(() => {
-      let eff = player.quantum.pair.electrons.pow(1.25);
-      if (eff.gte(1e6)) {
-        eff = eff.div(1e6).pow(0.7).mul(1e12);
-      }
-      return eff;
-    });
   }
 
   get isCustomEffect() {
@@ -17,11 +10,16 @@ class ElectronsEffectState extends GameMechanicState {
   }
 
   get effectValue() {
-    return this.cachedEffectValue.value;
+    let eff = player.quantum.pair.electrons.plus(1).pow(1.25);
+    if (eff.gte(1e6)) {
+      eff = eff.div(1e6).pow(0.7).mul(1e6);
+    }
+    return eff;
   }
 
   get canBeApplied() {
-    return (PlayerProgress.quantumUnlocked() && TimeStudy.pairProduction.isBought) || true;
+    return ((PlayerProgress.quantumUnlocked() && TimeStudy.pairProduction.isBought) || true)
+      && !QuantumChallenge.isRunning;
   }
 
   get type() {
@@ -31,13 +29,6 @@ class ElectronsEffectState extends GameMechanicState {
 class PositronsEffectState extends GameMechanicState {
   constructor() {
     super({});
-    this.cachedEffectValue = new Lazy(() => {
-      let eff = player.quantum.pair.positrons.plus(1);
-      if (eff.gte(1e5)) {
-        eff = eff.div(1e5).pow(0.5).mul(1e5);
-      }
-      return eff;
-    });
   }
 
   get isCustomEffect() {
@@ -45,11 +36,16 @@ class PositronsEffectState extends GameMechanicState {
   }
 
   get effectValue() {
-    return this.cachedEffectValue.value;
+    let eff = player.quantum.pair.positrons.plus(1);
+    if (eff.gte(1e5)) {
+      eff = eff.div(1e5).pow(0.5).mul(1e5);
+    }
+    return eff;
   }
 
   get canBeApplied() {
-    return (PlayerProgress.quantumUnlocked() && TimeStudy.pairProduction.isBought) || true;
+    return ((PlayerProgress.quantumUnlocked() && TimeStudy.pairProduction.isBought) || true)
+      && !QuantumChallenge.isRunning;
   }
 }
 
@@ -137,6 +133,7 @@ class ElectronsUpgradeState extends RebuyableMechanicState {
   purchase() {
     while (this.currency.gte(this.cost)) {
       this.boughtAmount = this.boughtAmount.plus(1);
+      this.currency.sub(this.cost).max(0);
     }
   }
 }
@@ -224,6 +221,7 @@ class PositronsUpgradeState extends RebuyableMechanicState {
   purchase() {
     while (this.currency.gte(this.cost)) {
       this.boughtAmount = this.boughtAmount.plus(1);
+      this.currency.sub(this.cost).max(0);
     }
   }
 }
@@ -259,15 +257,17 @@ export const PairProduction = {
     if (!this.canDischarge) {
       return false;
     }
-    player.quantum.pair.dischargedGalaxies = player.galaxies;
-
-    player.quantum.pair.positrons = player.quantum.pair.positrons
-      .plus(player.quantum.pair.dischargedGalaxies.mul(this.positronMultiplier));
-    player.quantum.pair.electrons = player.quantum.pair.electrons
-      .plus(player.quantum.pair.dischargedGalaxies.mul(this.electronMultiplier));
-
-    this.electronEffect.cachedEffectValue.invalidate();
-    this.positronEffect.cachedEffectValue.invalidate();
+    this.updateDischarges();
     return true;
   },
+
+  updateDischarges() {
+    const sacrificableGalaxies = player.galaxies.sub(player.quantum.pair.dischargedGalaxies);
+    const gainedPositrons = sacrificableGalaxies.mul(this.positronMultiplier).max(0);
+    const gainedElectrons = sacrificableGalaxies.mul(this.electronMultiplier).max(0);
+
+    player.quantum.pair.dischargedGalaxies = player.galaxies;
+    player.quantum.pair.positrons = player.quantum.pair.positrons.plus(gainedPositrons);
+    player.quantum.pair.electrons = player.quantum.pair.electrons.plus(gainedElectrons);
+  }
 };

@@ -1,11 +1,12 @@
 <script>
-import wordShift from "@/core/word-shift";
+import wordShift from "@/core/word-shift.js";
 
-import DescriptionDisplay from "@/components/DescriptionDisplay";
-import EffectDisplay from "@/components/EffectDisplay";
-import EternityChallengeBoxWrapper from "./EternityChallengeBoxWrapper";
+import DescriptionDisplay from "@/components/DescriptionDisplay.vue";
+import EffectDisplay from "@/components/EffectDisplay.vue";
+import EternityChallengeBoxWrapper from "./EternityChallengeBoxWrapper.vue";
+import { defineComponent } from "vue";
 
-export default {
+export default defineComponent({
   name: "EternityChallengeBox",
   components: {
     EternityChallengeBoxWrapper,
@@ -91,7 +92,7 @@ export default {
       return format(this.challenge.goalAtCompletions(completions), 2, 1);
     },
   },
-};
+});
 </script>
 
 <template>

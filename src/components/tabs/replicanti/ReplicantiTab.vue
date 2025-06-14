@@ -8,8 +8,9 @@ import PrimaryButton from "@/components/PrimaryButton.vue";
 import ReplicantiGainText from "./ReplicantiGainText.vue";
 
 import ReplicantiGalaxyButton from "./ReplicantiGalaxyButton.vue";
+import { defineComponent } from "vue";
 
-export default {
+export default defineComponent({
   name: "ReplicantiTab",
   components: {
     PrimaryButton,
@@ -103,7 +104,10 @@ export default {
     },
     boostText() {
       const boostList = [];
-      boostList.push(`a <span class="c-replicanti-description__accent">${formatX(this.mult, 2, 2)}</span>
+      boostList.push(this.isInQC3
+        ? `a <span class="c-replicanti-description__accent">${formatX(this.mult.plus(1).logPow(0.7), 2, 2)}</span>
+        multiplier on Dimension Boosts`
+        : `a <span class="c-replicanti-description__accent">${formatX(this.mult, 2, 2)}</span>
         multiplier on all Infinity Dimensions`);
       if (this.hasTDMult) {
         boostList.push(`a <span class="c-replicanti-description__accent">${formatX(this.multTD, 2, 2)}</span>
@@ -148,6 +152,7 @@ export default {
         return;
       }
       this.isInEC8 = EternityChallenge(8).isRunning;
+      this.isInQC3 = QuantumChallenge(3).isRunning;
       if (this.isInEC8) {
         this.ec8Purchases = player.eterc8repl;
       }
@@ -196,7 +201,7 @@ export default {
       return coeff.times(nextMilestone.divide(this.amount).pow(postScale).minus(1));
     },
   },
-};
+});
 </script>
 
 <template>

@@ -490,7 +490,8 @@ class AntimatterDimensionState extends DimensionState {
     const tier = this.tier;
     if ((EternityChallenge(3).isRunning && tier > 4)
       || (NormalChallenge(10).isRunning && tier > 6)
-      || (Laitela.isRunning && tier > Laitela.maxAllowedDimension)) {
+      || (Laitela.isRunning && tier > Laitela.maxAllowedDimension)
+      || (QuantumChallenge(4).isRunning && tier > 2)) {
       return false;
     }
     return this.totalAmount.gt(0);
@@ -653,7 +654,9 @@ class AntimatterDimensionState extends DimensionState {
 
   get productionPerSecond() {
     const tier = this.tier;
-    if (Laitela.isRunning && tier > Laitela.maxAllowedDimension) {
+    if ((Laitela.isRunning && tier > Laitela.maxAllowedDimension)
+      || (QuantumChallenge(1).isRunning && tier > 2)
+    ) {
       return DC.D0;
     }
     let amount = this.totalAmount;
@@ -727,6 +730,7 @@ export const AntimatterDimensions = {
         InfinityUpgrade.buy10Mult,
         Achievement(58),
         PairProduction.electronEffect,
+        QuantumChallenge(6),
       );
 
       return mult;
@@ -742,6 +746,9 @@ export const AntimatterDimensions = {
     let multiplier = DC.D2;
     multiplier = multiplier.times(this.buyTenMultiplierAddons.multiplier);
     multiplier = multiplier.pow(this.buyTenMultiplierAddons.powerer);
+    if (QuantumChallenge(5).isRunning || QuantumChallenge(7).isRunning) {
+      return DC.D1;
+    }
     return multiplier;
   },
 

@@ -7,7 +7,7 @@ export const quantumChallenges = [
     goal: { am: DC.BEMAX, ma: DC.BEMAX },
     reward: {
       description: () => `Add ${formatX(0.5)} to Electron's production factor for each QC completion and Electrons affects Dilated Time production.`,
-      effect: completions => PairProduction.electronEffect.effectOrDefault(1).pow(completions),
+      effect: completions => PairProduction.electronEffect.effectOrDefault(new Decimal(1)).pow(completions),
       formatEffect: value => formatX(value, 2, 0),
     },
   },
@@ -17,7 +17,7 @@ export const quantumChallenges = [
     goal: { am: DC.BEMAX, ma: DC.BEMAX },
     reward: {
       description: () => "Gain more Tachyonic Galaxies.",
-      effect: completions => completions ?? 1,
+      effect: completions => (completions * 0.25) + 1,
       formatEffect: value => formatX(value, 0, 1),
     },
   },
@@ -37,6 +37,7 @@ export const quantumChallenges = [
     description: () => `Automatic Big Crunch Challenge is applied to all dimension types.
       Meta-Dimension Boosts scale slower but their effects are nullified.`,
     goal: { am: DC.BEMAX, ma: DC.BEMAX },
+    effect: () => 5,
     reward: {
       description: () => "All even Meta Dimensions boosts all odd Meta Dimensions.",
       effect: (completions) => {
@@ -44,7 +45,6 @@ export const quantumChallenges = [
         for (const tier of Array.range(0, 8)) {
           multiplier = multiplier.times(player.meta.dimensions[tier].amount);
         }
-        console.log(typeof completions)
         multiplier = multiplier.logPow(0.2 + (completions * 0.05));
         return multiplier;
       },
@@ -67,6 +67,7 @@ export const quantumChallenges = [
     description: () => `You are trapped in Infinity Challenges 1, 3, and 7 and you
       can't gain Dimension Boosts. The AD per-10 multiplier is buffed to compensate.`,
     goal: { am: DC.BEMAX, ma: DC.BEMAX },
+    effect: () => new Decimal("1e33"),
     reward: {
       description: () => "Electrons are stronger based on Dimension Boosts.",
       effect: completions => DimBoost.totalBoosts.pow(0.3 + (completions * 0.05)),
@@ -76,8 +77,9 @@ export const quantumChallenges = [
   {
     id: 7,
     description: () => `Antimatter & Meta Dimensions scale by 1.80e308x instead of their normal rates.
-      Pair Production and Meta-Antimatter's effect is disabled.`,
-    effect: Number.MAX_VALUE,
+      The multiplier per-10 dimensions and Meta-Antimatter's effect is disabled.`,
+    goal: { am: DC.BEMAX, ma: DC.BEMAX },
+    effect: () => Number.MAX_VALUE,
     reward: {
       description: () => `Meta-Dimensions post-${format(Number.MAX_VALUE, 2, 0)} scale slower.`,
       effect: completions => completions * 5,

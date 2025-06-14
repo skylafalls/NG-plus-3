@@ -18,7 +18,7 @@ export const electronMultiplierUpgrades = [
   {
     id: 3,
     initialCost: new Decimal(100),
-    increment: new Decimal(2.2),
+    increment: new Decimal(2.5),
     currencyDisplay: "Meta-Antimatter",
     multiplierIncrement: () => new Decimal(0.25),
     formatCost: value => format(value, 2, 0),
@@ -26,7 +26,7 @@ export const electronMultiplierUpgrades = [
   {
     id: 4,
     initialCost: new Decimal(5),
-    increment: new Decimal(1.1),
+    increment: new Decimal(1.08),
     currencyDisplay: "Meta-Dimension Boosts",
     multiplierIncrement: () => new Decimal(0.25),
     formatCost: value => format(value, 2, 0),
@@ -37,7 +37,7 @@ export const positronMultiplierUpgrades = [
   {
     id: 1,
     initialCost: new Decimal(100),
-    increment: new Decimal(1.28),
+    increment: new Decimal(1.5),
     currencyDisplay: "Time Thorems",
     multiplierIncrement: () => new Decimal(0.1),
     formatCost: value => format(value, 2, 0),
@@ -45,7 +45,7 @@ export const positronMultiplierUpgrades = [
   {
     id: 2,
     initialCost: new Decimal(10),
-    increment: new Decimal(Math.PI),
+    increment: new Decimal(4),
     currencyDisplay: "Dilated Time",
     multiplierIncrement: () => new Decimal(0.1),
     formatCost: value => format(value, 2, 0),
@@ -53,7 +53,7 @@ export const positronMultiplierUpgrades = [
   {
     id: 3,
     initialCost: new Decimal(100),
-    increment: new Decimal(2.5),
+    increment: new Decimal(3),
     currencyDisplay: "Meta-Antimatter",
     multiplierIncrement: () => new Decimal(0.1),
     formatCost: value => format(value, 2, 0),
@@ -61,7 +61,7 @@ export const positronMultiplierUpgrades = [
   {
     id: 4,
     initialCost: new Decimal(5),
-    increment: new Decimal(1.15),
+    increment: new Decimal(1.2),
     currencyDisplay: "Meta-Dimension Boosts",
     multiplierIncrement: () => new Decimal(0.1),
     formatCost: value => format(value, 2, 0),

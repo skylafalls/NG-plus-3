@@ -149,6 +149,11 @@ export function getTachyonGalaxyMult(thresholdUpgrade) {
   const power = DilationUpgrade.galaxyThresholdPelle.canBeApplied
     ? DilationUpgrade.galaxyThresholdPelle.effectValue
     : DC.D1;
+
+  if (QuantumChallenge(5).isRunning) {
+    return new Decimal(Math.PI * 100);
+  }
+
   return thresholdMult.mul(glyphReduction).add(1).pow(power);
 }
 
