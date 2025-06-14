@@ -18,9 +18,6 @@ function mergeIntoGlobal(object) {
 import * as Utils from "./core/utils.js";
 mergeIntoGlobal(Utils);
 
-import * as GameDB from "./core/secret-formula/index.js";
-mergeIntoGlobal(GameDB);
-
 // This is a list of legacy stuff, please don't add
 // any more globals to the component files
 
@@ -37,6 +34,9 @@ import * as PerksTab from "@/components/tabs/perks/PerksTab.vue";
 mergeIntoGlobal(PerksTab);
 
 // End of legacy stuff
+
+import * as GameDB from "./core/secret-formula/index.js";
+mergeIntoGlobal(GameDB);
 
 import * as core from "./core/globals.js";
 mergeIntoGlobal(core);

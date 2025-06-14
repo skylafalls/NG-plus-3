@@ -8,6 +8,11 @@ window.PRESTIGE_EVENT = {
   REALITY: 4,
 };
 
+/**
+ * @template T
+ * @param {T} obj
+ * @returns {import("utility-types").DeepReadonly<T>}
+ */
 function deepFreeze(obj) {
   Object.keys(obj).forEach((prop) => {
     const reference = obj[prop];

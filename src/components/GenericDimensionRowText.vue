@@ -31,7 +31,7 @@ export default {
   computed: {
     rateText() {
       return this.rate.neq(0)
-        ? ` ${formatGain(this.amount, this.rate, 2)}`
+        ? ` ${formatGain(this.amount, this.rate, 2, 2)}`
         : "";
     },
     amountText() {

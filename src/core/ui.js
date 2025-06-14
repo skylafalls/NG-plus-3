@@ -33,6 +33,7 @@ Vue.mixin({
     }
 
     for (const key in watchers) {
+      if (!Object.hasOwn(watchers, key)) continue;
       makeRecomputable(watchers[key], key, recomputed);
     }
 
@@ -79,8 +80,8 @@ Vue.mixin({
     formatPostBreak(value, places, placesUnder1000) {
       return formatPostBreak(value, places, placesUnder1000);
     },
-    formatGain(value, gain, precision) {
-      return formatGain(value, gain, precision);
+    formatGain(value, gain, precision, precisionUnder1000) {
+      return formatGain(value, gain, precision, precisionUnder1000);
     },
     pluralize,
     quantify,
@@ -108,7 +109,7 @@ const ReactivityComplainer = {
       throw new Error(`Boi you fukked up - ${path} became REACTIVE (oh shite)`);
     }
     for (const key in obj) {
-      if (!Object.prototype.hasOwnProperty.call(obj, key)) {
+      if (!Object.hasOwn(obj, key)) {
         continue;
       }
       const prop = obj[key];

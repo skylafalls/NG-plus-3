@@ -16,7 +16,11 @@ export function effectiveBaseGalaxies() {
   let freeGalaxies = player.dilation.totalTachyonGalaxies;
   freeGalaxies = freeGalaxies.mul(DC.D1.add(Decimal.max(0, Replicanti.amount.max(1).log10().div(1e6))
     .times(AlchemyResource.alternation.effectValue)));
-  return Decimal.max(player.galaxies.add(GalaxyGenerator.galaxies).add(replicantiGalaxies).add(freeGalaxies), 0);
+  let antimatterGalaxies = player.galaxies;
+  if (TimeStudy.pairProduction.isBought) {
+    antimatterGalaxies = antimatterGalaxies.sub(player.quantum.pair.dischargedGalaxies);
+  }
+  return Decimal.max(antimatterGalaxies.add(GalaxyGenerator.galaxies).add(replicantiGalaxies).add(freeGalaxies), 0);
 }
 
 export function getTickSpeedMultiplier() {

@@ -51,7 +51,7 @@ export default {
     v-if="shouldDisplay"
     class="c-prestige-button-container"
   >
-    <span>You have <span class="c-game-header__antimatter">{{ format(antimatter, 2) }}</span> antimatter {{ formatGain(antimatter, antimatterPerSec, 2) }}</span>
+    <span>You have <span class="c-game-header__antimatter">{{ format(antimatter, 2) }}</span> antimatter {{ formatGain(antimatter, antimatterPerSec, 2, 2) }}</span>
     <div
       v-if="hasRealityButton"
       class="c-reality-container"

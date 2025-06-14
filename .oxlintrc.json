@@ -1,5 +1,5 @@
 {
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "$schema": "https://raw.githubusercontent.com/oxc-project/oxc/refs/heads/main/npm/oxlint/configuration_schema.json",
   "categories": {
     "correctness": "error",
     "suspicious": "error",
@@ -76,12 +76,12 @@
     "unicorn/filename-case": ["warn", {
       "case": "kebab-case"
     }],
+    "unicorn/no-new-array": "off",
     "import/no-cycle": "error",
     "import/no-dynamic-require": "error",
     "import/unambiguous": "error",
     "import/consistent-type-specifier-style": ["error", "prefer-inline"],
     "import/first": "error",
-    "import/export": "error",
     "oxc/no-const-enum": "error",
     "oxc/no-map-spread": "error",
     "oxc/bad-bitwise-operator": "error",

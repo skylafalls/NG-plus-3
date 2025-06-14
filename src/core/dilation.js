@@ -238,7 +238,7 @@ export function getTachyonReq() {
   let effectiveTP = Currency.tachyonParticles.value.dividedBy(tachyonGainMultiplier());
   return Decimal.pow10(
     effectiveTP
-      .times(Math.pow(400, 1.5))
+      .times(Decimal.pow(400, Decimal.add(1.5, DilationUpgrade.tachyonExponent.effectOrDefault(0))))
       .pow(Decimal.add(1.5, DilationUpgrade.tachyonExponent.effectOrDefault(0)).recip()),
   );
 }

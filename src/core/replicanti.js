@@ -536,7 +536,7 @@ export const ReplicantiUpgrade = {
         increase = increase.times(DC.E50.pow(galaxies.sub(this.distantRGStart).add(5)));
       }
       if (galaxies.gte(this.remoteRGStart)) {
-        increase = increase.times(DC.E5.pow(Decimal.pow(galaxies.sub(this.remoteRGStart).add(1), 2)));
+        increase = increase.times(new Decimal(1e5).powEffectOf(MasteryStudy(36)).log10().pow(Decimal.pow(galaxies.sub(this.remoteRGStart).add(1), 2)));
       }
       return increase;
     }

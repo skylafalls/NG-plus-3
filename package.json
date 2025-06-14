@@ -37,17 +37,18 @@
   },
   "devDependencies": {
     "@stylistic/eslint-plugin": "^4.4.1",
-    "@types/bun": "^1.2.15",
+    "@types/bun": "^1.2.16",
     "@vitejs/plugin-vue2": "^2.3.3",
     "browserslist-useragent-regexp": "^3.0.2",
-    "eslint": "^9.28.0",
+    "eslint": "^9.29.0",
     "eslint-plugin-vue": "^10.2.0",
-    "oxlint": "^0.17.0",
+    "oxlint": "^1.1.0",
     "stylelint": "^16.20.0",
     "stylelint-config-recommended-vue": "^1.6.0",
     "stylelint-config-standard": "^38.0.0",
     "stylelint-order": "^5.0.0",
     "typescript": "^5.8.3",
-    "vite": "npm:rolldown-vite@^6.3.18"
+    "utility-types": "^3.11.0",
+    "vite": "npm:rolldown-vite@^6.3.19"
   }
 }

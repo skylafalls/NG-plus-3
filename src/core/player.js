@@ -211,6 +211,9 @@ window.player = {
     ipMultBuyer: { isActive: false },
     epMultBuyer: { isActive: false },
     electrons: { isActive: false },
+    pairProduction: {
+      isActive: false,
+    },
     positrons: { isActive: false },
   },
   infinityPoints: DC.D0,
@@ -998,7 +1001,6 @@ window.player = {
       electrons: DC.D0,
       positrons: DC.D0,
       dischargedGalaxies: DC.D0,
-      supersonicBoosts: DC.D0,
       positronUpgrades: Array.repeat(DC.D0, 4),
       electronUpgrades: Array.repeat(DC.D0, 4),
     },
@@ -1064,7 +1066,7 @@ export const Player = {
 
   get infinityLimit() {
     const challenge = NormalChallenge.current || InfinityChallenge.current;
-    return challenge === undefined ? DC.BIMAX : challenge.goal;
+    return challenge === undefined ? DC.BEMAX : challenge.goal;
   },
 
   get eternityGoal() {

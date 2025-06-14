@@ -69,7 +69,7 @@ Decimal.maxReducer = function (a, b) {
 
 Decimal.prototype.copyFrom = function (decimal) {
   if (!(decimal instanceof Decimal) && !(decimal instanceof DecimalCurrency)) {
-    throw "Copy value is not Decimal or DecimalCurrency";
+    throw new TypeError("Copy value is not Decimal or DecimalCurrency");
   }
   this.mag = decimal.mag;
   this.layer = decimal.layer;
