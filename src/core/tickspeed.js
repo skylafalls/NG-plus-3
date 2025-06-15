@@ -42,7 +42,7 @@ export function getTickSpeedMultiplier() {
     InfinityChallenge(5).reward,
     PelleUpgrade.galaxyPower,
     PelleRifts.decay.milestones[1],
-  ).times(Quarks.powerEffects.red);
+  );
   if (galaxies.lt(3)) {
     // Magic numbers are to retain balancing from before while displaying
     // them now as positive multipliers rather than negative percentages

@@ -43,10 +43,10 @@ export default defineComponent({
   },
   methods: {
     update() {
-      this.quarkColorAmount.copyFrom(Quarks.amount[this.color]);
-      this.quarkPower.copyFrom(Quarks.powers[this.color]);
-      this.powerEffect.copyFrom(Quarks.powerEffects[this.color]);
-      this.powerGain.copyFrom(Quarks.getGain("powers", this.color));
+      this.quarkColorAmount.copyFrom(Quarks[this.color].amount);
+      this.quarkPower.copyFrom(Quarks[this.color].powers);
+      this.powerEffect.copyFrom(Quarks[this.color].effect());
+      this.powerGain.copyFrom(Quarks[this.color].gain());
     },
     formatFunction(value, precision, precisionUnder1000) {
       switch (this.formatType) {

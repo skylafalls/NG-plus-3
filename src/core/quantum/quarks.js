@@ -57,55 +57,43 @@ class QuarkMultUpgrade extends GameMechanicState {
 
 export const Quarks = {
   multiplierUpgrade: new QuarkMultUpgrade(GameDatabase.quantum.quarkMultiplierConfig),
+
   get netTotal() {
     let total = Currency.quarks.value;
     total = total.plus(Quarks.amount.red).plus(Quarks.amount.green).plus(Quarks.amount.blue);
     return total;
   },
 
-  amount: {
-    get red() {
-      return player.quantum.colors.red;
-    },
-
-    get green() {
-      return player.quantum.colors.green;
-    },
-
-    get blue() {
-      return player.quantum.colors.blue;
-    },
+  get red() {
+    return {
+      amount: player.quantum.colors.red,
+      powers: player.quantum.quarkPowers.red,
+      effect: () => player.quantum.quarkPowers.red.plus(1).log10().sqrt().div(50).plus(1),
+      gain: () => new Decimal(0),
+    };
   },
 
-  powers: {
-    get red() {
-      return player.quantum.quarkPowers.red;
-    },
-
-    get green() {
-      return player.quantum.quarkPowers.green;
-    },
-
-    get blue() {
-      return player.quantum.quarkPowers.blue;
-    },
+  get green() {
+    return {
+      amount: player.quantum.colors.green,
+      powers: player.quantum.quarkPowers.green,
+      effect: () => player.quantum.quarkPowers.green.plus(1).log10().root(5).plus(1),
+      gain: () => new Decimal(0),
+    };
   },
 
-  powerEffects: {
-    get red() {
-      return Quarks.powers.red.plus(1).log10().sqrt().div(50).plus(1);
-    },
-
-    get green() {
-      return Quarks.powers.green.plus(1).log10().root(5).plus(1);
-    },
-
-    get blue() {
-      return Quarks.powers.blue.plus(1).logPow(0.5);
-    },
+  get blue() {
+    return {
+      amount: player.quantum.colors.green,
+      powers: player.quantum.quarkPowers.green,
+      effect: () => player.quantum.quarkPowers.green.plus(1).logPow(0.5),
+      gain: () => new Decimal(0),
+    };
   },
 
-  getGain(type, color) {
-    return new Decimal(0);
-  },
+  get gain() {
+    const logDivisor = 924.7641466797505;
+    let baseGain = player.meta.antimatter.plus(1).log10().div(logDivisor).max(0);
+    return baseGain;
+  }
 };

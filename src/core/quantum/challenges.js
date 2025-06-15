@@ -58,8 +58,8 @@ class QuantumChallengeState extends GameMechanicState {
     if (!this.isUnlocked || this.isRunning) {
       return;
     }
-    quantumReset(true);
-    player.challenge.quantum.current.unshift(this.id);
+    doQuantum(true);
+    player.challenge.quantum.current.push(this.id);
   }
 
   get isCompleted() {
@@ -67,6 +67,7 @@ class QuantumChallengeState extends GameMechanicState {
   }
 
   complete() {
+    player.challenge.quantum.current.pop();
     player.challenge.quantum.completions[this.id] = 1;
   }
 

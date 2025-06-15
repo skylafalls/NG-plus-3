@@ -64,7 +64,7 @@ window.player = {
     quantum: {
       current: [],
       completions: Array.repeat(0, 9),
-    }
+    },
   },
   auto: {
     autobuyersOn: true,
@@ -277,6 +277,7 @@ window.player = {
       maxGlyphs: 0,
       slowestBH: DC.D1,
     },
+    quantum: {},
     permanent: {
       emojiGalaxies: DC.D0,
       singleTickspeed: 0,
@@ -437,7 +438,7 @@ window.player = {
     mastery: [],
     shopMinimized: false,
     preferredPaths: [[], 0],
-    presets: Array(6).fill({
+    presets: new Array(6).fill({
       name: "",
       studies: "",
     }),
@@ -1101,6 +1102,13 @@ export const Player = {
           maxGlyphs: glyphCount,
           slowestBH: BlackHoles.areNegative ? player.blackHoleNegative : DC.D1,
         };
+      }
+
+      // Quantum currently doesn't have any requirement checks but we still allow this
+      // option to make the reset logic work properly.
+      // oxlint-disable-next-line no-fallthrough
+      case "quantum": {
+        player.requirementChecks.quantum = {};
       }
 
       // oxlint-disable-next-line no-fallthrough

@@ -741,3 +741,13 @@ Currency.quarks = new class extends DecimalCurrency {
     player.quantum.quarks = value;
   }
 }();
+
+Currency.quantums = new class extends DecimalCurrency {
+  get value() {
+    return player.quantum.times;
+  }
+
+  set value(value) {
+    player.quantum.times = value;
+  }
+}();

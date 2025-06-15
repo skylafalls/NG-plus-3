@@ -548,7 +548,7 @@ export const ReplicantiUpgrade = {
     get extra() {
       let extraRGs = Effects.max(0, TimeStudy(131)).add(PelleRifts.decay.milestones[2].effectOrDefault(0));
       if (PlayerProgress.quantumUnlocked()) {
-        extraRGs = extraRGs.times(Quarks.powerEffects.green);
+        extraRGs = extraRGs.times(Quarks.green.effect());
       }
       return extraRGs;
     }
