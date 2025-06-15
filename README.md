@@ -1,6 +1,6 @@
 # Antimatter Dimensions NG+3
 
-This is a port of [Aarex's NG+3 mod](https://github.com/aarextiakhiao/NG-plus-3) onto the Antimatter Dimensions Reality Update,
+This is a port of [Aarex's NG+3 mod](https://github.com/aarextiaokhiao/NG-plus-3) onto the Antimatter Dimensions Reality Update,
 bringing a more modernized style.
 
 ## Run
