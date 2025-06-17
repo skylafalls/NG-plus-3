@@ -29,6 +29,8 @@ export default {
       extraTesseracts: new Decimal(0),
       creditsClosed: false,
       showLockedDimCostNote: true,
+      convSoftcapStart: new Decimal(0),
+      convSoftcapEffect: new Decimal(0),
     };
   },
   computed: {
@@ -64,6 +66,8 @@ export default {
       this.boughtTesseracts.copyFrom(Tesseracts.bought);
       this.extraTesseracts.copyFrom(Tesseracts.extra);
       this.creditsClosed = GameEnd.creditsEverClosed;
+      this.convSoftcapEffect.copyFrom(InfinityDimensions.convSoftcapEffect);
+      this.convSoftcapStart.copyFrom(InfinityDimensions.convSoftcapStart);
     },
     maxAll() {
       InfinityDimensions.buyMax();
@@ -141,6 +145,9 @@ export default {
     <div v-else>
       All Infinity Dimensions except for the 8th are limited to a maximum of {{ format(totalDimCap, 2) }}
       purchases each.
+    </div>
+    <div v-if="infinityPower.gte(convSoftcapStart)">
+      Your Infinity Power conversion rate is being decreased by /{{ format(convSoftcapEffect, 2, 1) }} after {{ format(convSoftcapStart, 2, 2) }} Infinity Power.
     </div>
     <div>You are getting {{ format(powerPerSecond, 2, 0) }} {{ incomeType }} per second.</div>
     <b

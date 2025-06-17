@@ -35,6 +35,7 @@ export default defineComponent({
 <template>
   <div class="l-challenges-tab">
     <ChallengeTabHeader />
+    Within Quantum Challenges, only Electrons work while Positrons are disabled.
     <ChallengeGrid
       v-slot="{ challenge }"
       :challenges="challenges"

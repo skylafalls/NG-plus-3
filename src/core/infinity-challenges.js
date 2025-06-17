@@ -37,7 +37,7 @@ class InfinityChallengeState extends GameMechanicState {
 
   get isRunning() {
     if (QuantumChallenge(6).isRunning) {
-      return this.id === 1 || this.id === 3 || this.id === 7;
+      return this.id === 3 || this.id === 7;
     }
     return player.challenge.infinity.current === this.id || (this.id === 3 && EternityChallenge(14).isRunning);
   }

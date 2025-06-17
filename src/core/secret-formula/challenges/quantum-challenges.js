@@ -7,7 +7,7 @@ export const quantumChallenges = [
     goal: { am: DC.BEMAX, ma: DC.BEMAX },
     reward: {
       description: () => `Add ${formatX(0.5)} to Electron's production factor for each QC completion and Electrons affects Dilated Time production.`,
-      effect: completions => PairProduction.electronEffect.effectOrDefault(new Decimal(1)).pow(completions),
+      effect: completions => PairProduction.electronEffect.effectOrDefault(new Decimal(1)).pow(completions + 1),
       formatEffect: value => formatX(value, 2, 0),
     },
   },
@@ -28,14 +28,14 @@ export const quantumChallenges = [
     goal: { am: DC.BEMAX, ma: DC.BEMAX },
     reward: {
       description: () => "Infinity Power also affects Meta Dimensions at a heavily reduced rate.",
-      effect: completions => Currency.infinityPower.value.plus(1).logPow(completions * 0.1),
+      effect: completions => Currency.infinityPower.value.plus(1).logPow((completions * 0.025) + 0.1),
       formatEffect: value => formatX(value, 2, 2),
     },
   },
   {
     id: 4,
     description: () => `Automatic Big Crunch Challenge is applied to all dimension types.
-      Meta-Dimension Boosts scale slower but their effects are nullified.`,
+      Meta-Dimension Boosts scale slower but their effec  ts are nullified.`,
     goal: { am: DC.BEMAX, ma: DC.BEMAX },
     effect: () => 5,
     reward: {
@@ -45,7 +45,7 @@ export const quantumChallenges = [
         for (const tier of Array.range(0, 8)) {
           multiplier = multiplier.times(player.meta.dimensions[tier].amount);
         }
-        multiplier = multiplier.logPow(0.2 + (completions * 0.05));
+        multiplier = multiplier.max(1).logPow(0.2 + (completions * 0.1));
         return multiplier;
       },
       formatEffect: value => formatX(value, 2, 2),
@@ -58,7 +58,7 @@ export const quantumChallenges = [
     goal: { am: DC.BEMAX, ma: DC.BEMAX },
     reward: {
       description: () => "Antimatter affects the Meta-Dimension Boost multiplier at a reduced rate.",
-      effect: completions => player.antimatter.plus(1).logPow(0.03 + (completions / 100)),
+      effect: completions => player.antimatter.plus(1).log10().pow(0.1 + (completions * 0.015)),
       formatEffect: value => formatX(value, 2, 2),
     },
   },
@@ -70,7 +70,7 @@ export const quantumChallenges = [
     effect: () => new Decimal("1e33"),
     reward: {
       description: () => "Electrons are stronger based on Dimension Boosts.",
-      effect: completions => DimBoost.totalBoosts.pow(0.3 + (completions * 0.05)),
+      effect: completions => DimBoost.totalBoosts.pow(0.2 + (completions * 0.02)),
       formatEffect: value => formatX(value, 2, 2),
     },
   },
@@ -83,7 +83,7 @@ export const quantumChallenges = [
     reward: {
       description: () => `Meta-Dimensions post-${format(Number.MAX_VALUE, 2, 0)} scale slower.`,
       effect: completions => completions * 5,
-      formatEffect: value => `${formatX(15)} ➜ ${formatX(15 - value)}`,
+      formatEffect: value => `-${format(value, 0, 0)}x`,
     },
   },
   {
@@ -92,8 +92,8 @@ export const quantumChallenges = [
     goal: { am: DC.BEMAX, ma: DC.BEMAX },
     reward: {
       description: () => "Gain more Extra Replicanti Galaxies.",
-      effect: completions => (completions * 0.1) + 1,
-      formatEffect: value => formatPercents(value, 0),
+      effect: completions => (completions * 0.2) + 1,
+      formatEffect: value => formatPercents(value - 1, 0),
     },
   },
 ];

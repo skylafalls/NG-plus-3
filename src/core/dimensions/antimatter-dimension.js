@@ -733,7 +733,7 @@ export const AntimatterDimensions = {
         QuantumChallenge(6),
       );
 
-      return mult;
+      return mult.max(1);
     },
     get powerer() {
       let exp = DC.D1;

@@ -1,8 +1,9 @@
 <script>
-import FailableEcText from "./FailableEcText";
-import PrimaryButton from "@/components/PrimaryButton";
+import { defineComponent } from "vue";
+import FailableEcText from "./FailableEcText.vue";
+import PrimaryButton from "@/components/PrimaryButton.vue";
 
-export default {
+export default defineComponent({
   name: "HeaderChallengeDisplay",
   components: {
     FailableEcText,
@@ -41,6 +42,11 @@ export default {
           name: () => "Time Dilation",
           isActive: token => token,
           activityToken: () => player.dilation.active,
+        },
+        {
+          name: token => `Quantum Challenge ${token}`,
+          isActive: token => token > 0,
+          activityToken: () => player.challenge.quantum.current,
         },
         {
           name: token => `Eternity Challenge ${token}`,
@@ -214,7 +220,7 @@ export default {
       };
     },
   },
-};
+});
 </script>
 
 <template>

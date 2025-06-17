@@ -10,8 +10,7 @@ if (!String.prototype.includes) {
     if (start + search.length > this.length) {
       return false;
     }
-      return this.indexOf(search, start) !== -1;
-    
+    return this.indexOf(search, start) !== -1;
   };
 }
 

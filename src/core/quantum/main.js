@@ -1,10 +1,17 @@
+import { deepmerge } from "@/utility/deepmerge.js";
+import { DC } from "../constants.js";
+
 /**
  * Resets all pre-quantum player mechanics back to default state.
  */
 export function resetPreQuantumResources() {
   // We reset in order of when the player sees the game mechanic (eg. we reset dilation, then time studies, then eternities)
   // I'm not really sure why, but it seems like a nice way to organize it.
-  // Stage 1: Time Dilation
+  // Stage Zero: Meta Dimensions (I forgot)
+  MetaDimensions.reset();
+  Currency.metaAntimatter.reset();
+
+  // Stage One: Time Dilation
   player.dilation.studies = [];
   player.dilation.active = false;
   player.dilation.upgrades.clear();
@@ -101,6 +108,7 @@ export function resetPreQuantumResources() {
   player.records.bestEternity.bestEPminReality = DC.D0;
 
   // Stage Nine: Miscellaneous stuff
+  Autobuyers.reset();
   AchievementTimers.marathon2.reset();
   Tab.dimensions.antimatter.show();
   Lazy.invalidateAll();
@@ -129,18 +137,47 @@ function giveQuantumRewards() {
 }
 
 /**
+ * Restores pre-quantum resources from the previous player state.
+ * @param {object} playerState The player state before the reset.
+ */
+export function restorePreQuantumResources(playerState) {
+  return;
+}
+
+/**
+ * This function checks if you can perform a manual/non-forced quantum reset.
+ * @returns {boolean} Returns if you can reset non-forcefully.
+ */
+export function canPerformQuantumReset() {
+  if (QuantumChallenge.isRunning) {
+    if (Currency.antimatter.lt(Player.infinityGoal) && Currency.metaAntimatter.lt(Player.quantumGoal)) {
+      return false;
+    }
+  } else if (Currency.metaAntimatter.lt(Player.quantumGoal)) {
+    return false;
+  }
+
+  return true;
+}
+
+/**
  * Perform a Quantum reset (known in the UI as "study the quantum physics"),
  * giving the rewards as appropriate.
  * @param {boolean} force If this is true, then don't give rewards and skip to resetting everything.
  */
 export function quantumReset(force = false) {
+  const basePlayer = deepmerge({}, player);
   if (force) {
     Currency.quantums.add(1);
     resetPreQuantumResources();
     return;
   }
 
+  if (!canPerformQuantumReset()) {
+    return;
+  }
   EventHub.dispatch(GAME_EVENT.QUANTUM_RESET_BEFORE);
   giveQuantumRewards();
   resetPreQuantumResources();
+  restorePreQuantumResources(basePlayer);
 }

@@ -175,6 +175,7 @@ export function getDilationGainPerSecond() {
       AlchemyResource.dilation,
       Ra.unlocks.continuousTTBoost.effects.dilatedTime,
       Ra.unlocks.peakGamespeedDT,
+      QuantumChallenge(1).reward,
     )
     .times(DilationUpgrade.eternitiesDTSynergy.isBought ? Currency.eternities.value.clampMin(1).pow(0.15) : 1);
   dtRate = dtRate.times(getAdjustedGlyphEffect("dilationDT"));

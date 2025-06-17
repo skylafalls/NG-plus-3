@@ -1,7 +1,8 @@
 <script>
-import PrimaryButton from "@/components/PrimaryButton";
+import PrimaryButton from "@/components/PrimaryButton.vue";
+import { defineComponent } from "vue";
 
-export default {
+export default defineComponent({
   name: "ClassicDimensionBoostRow",
   components: {
     PrimaryButton,
@@ -20,6 +21,7 @@ export default {
       creditsClosed: false,
       requirementText: null,
       hasTutorial: false,
+      supersonicScalingStart: new Decimal(0),
     };
   },
   computed: {
@@ -40,6 +42,17 @@ export default {
         return `${sum} = ${formatInt(parts.sum())}`;
       }
       return sum;
+    },
+    dimBoostName() {
+      if (this.purchasedBoosts.lt(5)) {
+        return "Shift";
+      }
+
+      if (this.purchasedBoosts.gte(this.supersonicScalingStart)) {
+        return "Supersonic";
+      }
+
+      return "Boost";
     },
     classObject() {
       return {
@@ -64,6 +77,7 @@ export default {
         this.requirementText = formatInt(this.purchasedBoosts);
       }
       this.hasTutorial = Tutorial.isActive(TUTORIAL_STATE.DIMBOOST);
+      this.supersonicScalingStart.copyFrom(DimBoost.supersonicScalingStart);
     },
     dimensionBoost(bulk) {
       if (!DimBoost.requirement.isSatisfied || !DimBoost.canBeBought) {
@@ -72,13 +86,13 @@ export default {
       manualRequestDimensionBoost(bulk);
     },
   },
-};
+});
 </script>
 
 <template>
   <div class="c-dimension-row c-antimatter-dim-row c-antimatter-prestige-row">
     <div class="l-dim-row__prestige-text c-dim-row__label c-dim-row__label--amount">
-      Dimension Boost ({{ boostCountText }}):
+      Dimension {{ dimBoostName }} ({{ boostCountText }}):
       requires {{ formatInt(requirement.amount) }} {{ dimName }} Dimensions
     </div>
     <PrimaryButton

@@ -1,14 +1,15 @@
 <script>
-import BigCrunchButton from "../BigCrunchButton";
-import GameHeader from "../GameHeader";
-import NewsTicker from "../NewsTicker";
+import { defineComponent } from "vue";
+import BigCrunchButton from "../BigCrunchButton.vue";
+import GameHeader from "../GameHeader.vue";
+import NewsTicker from "../NewsTicker.vue";
 
-import ClassicSubtabBar from "./ClassicSubtabBar";
-import ClassicTabBar from "./ClassicTabBar";
-import EternityPointsHeader from "@/components/EternityPointsHeader";
-import InfinityPointsHeader from "@/components/InfinityPointsHeader";
+import ClassicSubtabBar from "./ClassicSubtabBar.vue";
+import ClassicTabBar from "./ClassicTabBar.vue";
+import EternityPointsHeader from "@/components/EternityPointsHeader.vue";
+import InfinityPointsHeader from "@/components/InfinityPointsHeader.vue";
 
-export default {
+export default defineComponent({
   name: "ClassicUi",
   components: {
     GameHeader,
@@ -41,7 +42,7 @@ export default {
       this.newGameKey = Pelle.isDoomed;
     },
   },
-};
+});
 </script>
 
 <template>
@@ -53,7 +54,7 @@ export default {
     <link
       rel="stylesheet"
       type="text/css"
-      href="stylesheets/old-ui.css"
+      href="/src/styles/old-ui.css"
     >
     <BigCrunchButton />
     <template v-if="!bigCrunch">

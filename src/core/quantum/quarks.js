@@ -95,5 +95,5 @@ export const Quarks = {
     const logDivisor = 924.7641466797505;
     let baseGain = player.meta.antimatter.plus(1).log10().div(logDivisor).max(0);
     return baseGain;
-  }
+  },
 };

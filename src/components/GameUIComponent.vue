@@ -1,15 +1,16 @@
 <script>
-import BackgroundAnimations from "@/components/BackgroundAnimations";
-import ClassicUi from "@/components/ui-modes/classic/ClassicUi";
-import GameUiComponentFixed from "@/components/GameUiComponentFixed";
-import ModernUi from "@/components/ui-modes/modern/ModernUi";
+import BackgroundAnimations from "@/components/BackgroundAnimations.vue";
+import ClassicUi from "@/components/ui-modes/classic/ClassicUi.vue";
+import GameUiComponentFixed from "@/components/GameUiComponentFixed.vue";
+import ModernUi from "@/components/ui-modes/modern/ModernUi.vue";
 import TabComponents from "@/components/tabs";
 
-import S12DesktopIcons from "@/components/ui-modes/s12/DesktopIcons";
-import S12Ui from "@/components/ui-modes/s12/S12Ui";
-import S12UiFixed from "@/components/ui-modes/s12/S12UiFixed";
+import S12DesktopIcons from "@/components/ui-modes/s12/DesktopIcons.vue";
+import S12Ui from "@/components/ui-modes/s12/S12Ui.vue";
+import S12UiFixed from "@/components/ui-modes/s12/S12UiFixed.vue";
+import { defineComponent } from "vue";
 
-export default {
+export default defineComponent({
   name: "GameUIComponent",
   components: {
     ...TabComponents,
@@ -42,10 +43,10 @@ export default {
       return subtab.config.component;
     },
     themeCss() {
-      return `stylesheets/theme-${this.view.theme}.css`;
+      return `/src/styles/theme-${this.view.theme}.css`;
     },
   },
-};
+});
 </script>
 
 <template>

@@ -21,7 +21,6 @@ import { tabNotifications } from "./tab-notifications";
 import { tabs } from "./tabs";
 import { quantum } from "./quantum";
 
-
 export const GameDatabase = {
   achievements,
   awayProgressTypes,

@@ -9,7 +9,6 @@ const config = [
     rules: {
       "@stylistic/quotes": ["error", "double"],
       "@stylistic/semi": ["error", "always"],
-      "@stylistic/curly-newline": ["error", "always"],
       "@stylistic/brace-style": ["error", "1tbs"],
     },
   },

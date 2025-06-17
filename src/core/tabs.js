@@ -224,6 +224,7 @@ export const Tabs = (function () {
       Tab.challenges,
       Tab.infinity,
       Tab.eternity,
+      Tab.quantum,
       Tab.reality,
       Tab.celestials,
     ],

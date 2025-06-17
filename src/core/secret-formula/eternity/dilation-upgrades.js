@@ -101,8 +101,8 @@ export const dilationUpgrades = {
     },
     effect: (bought) => {
       let eff = Decimal.mul(0.25, bought);
-      if (eff.gte(8)) {
-        eff = eff.div(8).pow(0.4).mul(8);
+      if (eff.gte(5)) {
+        eff = eff.div(5).pow(0.4).mul(5);
       }
       return eff;
     },
@@ -113,7 +113,7 @@ export const dilationUpgrades = {
   doubleGalaxies: {
     id: 5,
     cost: 5e6,
-    description: () => `Gain twice as many Tachyon Galaxies, up to ${formatInt(500)} base Galaxies`,
+    description: () => "Gain twice as many Tachyon Galaxies.",
     effect: 2,
   },
   tdMultReplicanti: {
@@ -175,7 +175,7 @@ export const dilationUpgrades = {
     cost: 1e25,
     description: () => "Eternities and Dilated Time power up each other",
     // The actual effect is handled somewhere else.
-    effect: () => DC.D1,
+    effect: () => Currency.dilatedTime.value,
     formatEffect: _value => `${formatX(Currency.eternities.value.clampMin(1).pow(0.15), 2)} to DT, ${formatX(Currency.dilatedTime.value.clampMin(1).pow(0.1), 2)} to eternities`,
   },
   mdMultTickspeed: {

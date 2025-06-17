@@ -62,8 +62,8 @@ window.player = {
       requirementBits: 0,
     },
     quantum: {
-      current: [],
-      completions: Array.repeat(0, 9),
+      current: 0,
+      completions: [null, ...Array.repeat(0, 8)],
     },
   },
   auto: {
@@ -1024,11 +1024,11 @@ export const Player = {
   },
 
   get isInAnyChallenge() {
-    return this.isInAntimatterChallenge || EternityChallenge.isRunning;
+    return this.isInAntimatterChallenge || EternityChallenge.isRunning || QuantumChallenge.isRunning;
   },
 
   get anyChallenge() {
-    return this.antimatterChallenge || EternityChallenge.current;
+    return this.antimatterChallenge || EternityChallenge.current || QuantumChallenge.current;
   },
 
   get canCrunch() {
@@ -1061,6 +1061,9 @@ export const Player = {
   },
 
   get infinityGoal() {
+    if (QuantumChallenge.isRunning) {
+      return QuantumChallenge.current.goal.am;
+    }
     const challenge = NormalChallenge.current || InfinityChallenge.current;
     return challenge === undefined ? DC.NUMMAX : challenge.goal;
   },
@@ -1074,6 +1077,12 @@ export const Player = {
     return EternityChallenge.isRunning
       ? EternityChallenge.current.currentGoal
       : requiredIPForEP(1);
+  },
+
+  get quantumGoal() {
+    return QuantumChallenge.isRunning
+      ? QuantumChallenge.current.goal.ma
+      : Decimal.dNumberMax.pow(3);
   },
 
   get automatorUnlocked() {

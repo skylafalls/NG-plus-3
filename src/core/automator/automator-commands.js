@@ -653,9 +653,13 @@ export const AutomatorCommands = [
           let purchasedStudies = 0;
           let finalPurchasedTS;
           for (const tsNumber of studies.normal) {
-            if (TimeStudy(tsNumber).isBought) {prePurchasedStudies++;}
-            else if (TimeStudy(tsNumber).purchase(true)) {purchasedStudies++;}
-            else {finalPurchasedTS = finalPurchasedTS ?? tsNumber;}
+            if (TimeStudy(tsNumber).isBought) {
+              prePurchasedStudies++;
+            } else if (TimeStudy(tsNumber).purchase(true)) {
+              purchasedStudies++;
+            } else {
+              finalPurchasedTS = finalPurchasedTS ?? tsNumber;
+            }
           }
           if (prePurchasedStudies + purchasedStudies < studies.normal.length) {
             if (prePurchasedStudies + purchasedStudies === 0) {

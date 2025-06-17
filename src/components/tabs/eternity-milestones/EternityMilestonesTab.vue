@@ -1,7 +1,8 @@
 <script>
-import EternityMilestoneButton from "./EternityMilestoneButton";
+import { defineComponent } from "vue";
+import EternityMilestoneButton from "./EternityMilestoneButton.vue";
 
-export default {
+export default defineComponent({
   name: "EternityMilestonesTab",
   components: {
     EternityMilestoneButton,
@@ -29,7 +30,7 @@ export default {
       return () => this.milestones[(row - 1) * 3 + column - 1];
     },
   },
-};
+});
 </script>
 
 <template>

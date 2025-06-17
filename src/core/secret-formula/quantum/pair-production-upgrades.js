@@ -2,7 +2,7 @@ export const electronMultiplierUpgrades = [
   {
     id: 1,
     initialCost: new Decimal(100),
-    increment: new Decimal(1.25),
+    increment: new Decimal(1.2),
     currencyDisplay: "Time Thorems",
     multiplierIncrement: () => new Decimal(0.25),
     formatCost: value => format(value, 2, 0),
@@ -10,7 +10,7 @@ export const electronMultiplierUpgrades = [
   {
     id: 2,
     initialCost: new Decimal(10),
-    increment: new Decimal(3),
+    increment: new Decimal(2),
     currencyDisplay: "Dilated Time",
     multiplierIncrement: () => new Decimal(0.25),
     formatCost: value => format(value, 2, 0),
@@ -26,7 +26,7 @@ export const electronMultiplierUpgrades = [
   {
     id: 4,
     initialCost: new Decimal(5),
-    increment: new Decimal(1.08),
+    increment: new Decimal(1.05),
     currencyDisplay: "Meta-Dimension Boosts",
     multiplierIncrement: () => new Decimal(0.25),
     formatCost: value => format(value, 2, 0),

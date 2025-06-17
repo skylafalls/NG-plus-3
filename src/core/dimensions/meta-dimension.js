@@ -8,6 +8,7 @@ export function metaDimensionCommonMultiplier() {
   multiplier = multiplier.timesEffectsOf(
     DilationUpgrade.mdMultTickspeed,
     MasteryStudy(32),
+    QuantumChallenge(3).reward,
   );
 
   return multiplier;
@@ -41,7 +42,7 @@ class MetaDimensionState extends DimensionState {
     return new ExponentialCostScaling({
       baseCost: this._baseCost,
       baseIncrease: this._baseCostMultiplier,
-      costScale: new Decimal(15),
+      costScale: new Decimal(15).minusEffectOf(QuantumChallenge(7).reward),
       scalingCostThreshold: DC.NUMMAX,
     });
   }
@@ -190,6 +191,9 @@ class MetaDimensionState extends DimensionState {
 
   get multiplier() {
     let multiplier = GameCache.metaDimensionCommonMultiplier.value;
+    if (this.tier % 2 === 1) {
+      multiplier = multiplier.timesEffectOf(QuantumChallenge(4).reward);
+    }
     multiplier = multiplier.mul(Decimal.pow(MetaDimensions.buyTenMultiplier, this.bought.div(10).floor()));
     multiplier = multiplier.mul(MetaDimensions.boost.multiplierToNDTier(this.tier));
     return multiplier;
@@ -251,6 +255,7 @@ export const MetaDimensions = {
     for (const dimension of MetaDimensions.all) {
       dimension.reset();
     }
+    player.meta.boosts = new Decimal(0);
   },
 
   resetAmountUpToTier(maxTier) {
@@ -375,7 +380,10 @@ export const MetaDimensions = {
   boost: {
     get power() {
       let boost = new Decimal(2);
-      boost = boost.timesEffectOf(DilationUpgrade.mdBuffDT);
+      boost = boost.timesEffectsOf(
+        DilationUpgrade.mdBuffDT,
+        QuantumChallenge(5).reward,
+      );
       if (QuantumChallenge(4).isRunning || QuantumChallenge(8).isRunning) {
         return DC.D1;
       }

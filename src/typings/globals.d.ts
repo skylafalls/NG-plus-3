@@ -1,9 +1,10 @@
 import type { PairProduction as PP } from "@/core/quantum";
-import type { MetaDimensions as MD } from "@/core/dimensions/meta-dimension";
-import type { AntimatterDimensions as AD } from "@/core/dimensions/antimatter-dimension";
-import type { TimeDimensions as TD } from "@/core/dimensions/time-dimension";
-import type { InfinityDimensions as ID } from "@/core/dimensions/infinity-dimension";
-import type { CostHandler, scale, scaleAllLevels, ScalingTypes, softcap, SoftcapModes } from "@/core/scaling";
+import type { MetaDimensions as MD } from "@/core/dimensions/meta-dimension.js";
+import type { AntimatterDimensions as AD } from "@/core/dimensions/antimatter-dimension.js";
+import type { TimeDimensions as TD } from "@/core/dimensions/time-dimension.js";
+import type { InfinityDimensions as ID } from "@/core/dimensions/infinity-dimension.js";
+import type { CostHandler, scale, scaleAllLevels, ScalingTypes, softcap, SoftcapModes } from "@/core/scaling.js";
+import type { dev as D } from "@/core/devtools";
 import type DecimalBE from "break_eternity.js";
 
 declare global {
@@ -18,6 +19,7 @@ declare global {
   const AntimatterDimensions: typeof AD;
   const TimeDimensions: typeof TD;
   const InfinityDimensions: typeof ID;
+  const dev: typeof D;
 
   interface Window {
     Decimal: typeof DecimalBE

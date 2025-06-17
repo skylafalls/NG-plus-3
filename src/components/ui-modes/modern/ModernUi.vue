@@ -1,14 +1,15 @@
 <script>
-import BigCrunchButton from "../BigCrunchButton";
-import HeaderBlackHole from "../HeaderBlackHole";
-import HeaderChallengeDisplay from "../HeaderChallengeDisplay";
-import HeaderChallengeEffects from "../HeaderChallengeEffects";
-import HeaderPrestigeGroup from "../HeaderPrestigeGroup";
-import NewsTicker from "../NewsTicker";
+import { defineComponent } from "vue";
+import BigCrunchButton from "../BigCrunchButton.vue";
+import HeaderBlackHole from "../HeaderBlackHole.vue";
+import HeaderChallengeDisplay from "../HeaderChallengeDisplay.vue";
+import HeaderChallengeEffects from "../HeaderChallengeEffects.vue";
+import HeaderPrestigeGroup from "../HeaderPrestigeGroup.vue";
+import NewsTicker from "../NewsTicker.vue";
 
-import GameSpeedDisplay from "@/components/GameSpeedDisplay";
+import GameSpeedDisplay from "@/components/GameSpeedDisplay.vue";
 
-export default {
+export default defineComponent({
   name: "ModernUi",
   components: {
     BigCrunchButton,
@@ -51,7 +52,7 @@ export default {
       }
     },
   },
-};
+});
 </script>
 
 <template>
@@ -59,7 +60,7 @@ export default {
     <link
       rel="stylesheet"
       type="text/css"
-      href="stylesheets/new-ui-styles.css"
+      href="/src/styles/new-ui-styles.css"
     >
     <div
       :key="newGameKey"

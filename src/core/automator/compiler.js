@@ -518,7 +518,9 @@ class Compiler extends BaseVisitor {
   block(ctx) {
     const output = [];
     if (ctx.command) {
-      for (const cmd of ctx.command) {this.visit(cmd, output);}
+      for (const cmd of ctx.command) {
+        this.visit(cmd, output);
+      }
     }
     return output;
   }

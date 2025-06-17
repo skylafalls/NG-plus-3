@@ -16,8 +16,13 @@ window.format = function format(value, places = 2, placesUnder1000 = 2) {
   if (!isDecimal(value)) {
     value = new Decimal(value);
   }
+
+  if (Decimal.isNaN(value)) {
+    return "NaN";
+  }
+
   if (value.gte(Number.MAX_VALUE) && !player.break) {
-    return "Infinity";
+    return "Infinite";
   }
   return formatInternal(value, places, placesUnder1000);
 };
@@ -45,7 +50,7 @@ window.formatPostBreak = function formatPostBreak(value, places, placesUnder1000
   if (isEND()) {
     return "END";
   }
-  return format(value, places, placesUnder1000);
+  return formatInternal(value, places, placesUnder1000);
 };
 
 window.formatPlus = function formatX(value, places, placesUnder1000) {
@@ -276,7 +281,7 @@ window.makeEnumeration = function makeEnumeration(items) {
 
 window.exponentialFormat = function exponentialFormat(num, precision, mantissa = true) {
   let e = Decimal.log10(num).floor();
-  let m = Decimal.div(num, Decimal.pow(10, e));
+  let m = new Decimal(num.m);
   if (m.toFixed(0) === "10") {
     m = new Decimal(1);
     e = e.add(1);
@@ -336,7 +341,7 @@ const thousandth = new Decimal(0.001);
 const zero = new Decimal(0);
 function formatInternal(num, precision = 2, precisionUnder1000 = 2, small = false) {
   num = new Decimal(num);
-  if (isNaN(num.sign) || isNaN(num.layer) || isNaN(num.mag)) {
+  if (Number.isNaN(num.sign) || Number.isNaN(num.layer) || Number.isNaN(num.mag)) {
     return "NaN";
   }
   if (num.sign < 0) {
@@ -433,6 +438,9 @@ window.formatGain = function formatGain(base, gain, precision = 0, precisionUnde
   const next = base.plus(gain);
   const sqrt10 = 3.1622776601683795;
   let difference;
+  if (gain.eq(0)) {
+    return `(+${format(0, precision, precisionUnder1000)}/sec)`;
+  }
 
   difference = next.plus(10).slog(10).sub(base.plus(10).slog(10));
   if (difference.gte(10) || (difference.gte(sqrt10) && base.gte("10^^10"))) {

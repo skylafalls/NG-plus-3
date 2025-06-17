@@ -44,12 +44,12 @@ export default defineComponent({
         return "Capped";
       }
       const prefix = this.showCostTitle(this.singleCost) ? "Cost: " : "";
-      const suffix = this.isCostsAD ? `${this.costUnit}` : "M-AM";
+      const suffix = this.isCostsAD ? `${this.costUnit}` : "MA";
       return `${prefix} ${format(this.singleCost)} ${suffix}`;
     },
     until10Text() {
       const prefix = `Until ${formatInt(10)},${this.showCostTitle(this.until10Cost) ? " Cost" : ""}`;
-      const suffix = this.isCostsAD ? `${this.costUnit}` : "AM";
+      const suffix = this.isCostsAD ? `${this.costUnit}` : "MA";
       return `${prefix} ${format(this.until10Cost)} ${suffix}`;
     },
     showRow() {
@@ -146,10 +146,6 @@ export default defineComponent({
         <div class="c-dim-purchase-count-tooltip">
           {{ boughtTooltip }}
         </div>
-        <div
-          v-if="hasTutorial"
-          class="fas fa-circle-exclamation l-notification-icon"
-        />
       </PrimaryButton>
       <PrimaryButton
         :enabled="isAffordableUntil10 && !isCapped && isUnlocked"

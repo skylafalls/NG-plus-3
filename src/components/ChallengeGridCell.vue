@@ -1,5 +1,7 @@
 <script>
-export default {
+import { defineComponent } from "vue";
+
+export default defineComponent({
   name: "ChallengeGridCell",
   props: {
     challenge: {
@@ -21,7 +23,7 @@ export default {
       this.isVisible = this.isChallengeVisible(this.challenge);
     },
   },
-};
+});
 </script>
 
 <template>

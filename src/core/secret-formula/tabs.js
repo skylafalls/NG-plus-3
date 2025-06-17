@@ -358,7 +358,7 @@ export const tabs = [
         name: "Time Dilation",
         symbol: "Ψ",
         component: "TimeDilationTab",
-        condition: () => PlayerProgress.dilationUnlocked() || PlayerProgress.realityUnlocked(),
+        condition: () => PlayerProgress.dilationUnlocked() || PlayerProgress.quantumUnlocked(),
         id: 3,
         hidable: true,
       },

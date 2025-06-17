@@ -23,9 +23,8 @@ export default defineComponent({
     classObject() {
       return {
         "o-positron-upgrade-btn": true,
-        "o-positron-upgrade-btn--bought": !this.isUseless && this.isBought,
-        "o-positron-upgrade-btn--available": !this.isUseless && !this.isBought && this.canBeBought,
-        "o-positron-upgrade-btn--unavailable": !this.isUseless && !this.isBought && !this.canBeBought,
+        "o-positron-upgrade-btn--available": this.canBeBought,
+        "o-primary-btn--disabled": !this.canBeBought,
       };
     },
   },
@@ -56,40 +55,29 @@ export default defineComponent({
 
 <style scoped>
 .o-positron-upgrade-btn {
-  background-color: black;
-  border-color: gold;
   font-family: Typewriter, serif;
   font-weight: bold;
-  box-shadow: inset 0px 0px 20px 0px gold;
-  color: gold;
   height: 90px;
   width: 200px;
+  color: white;
+  border-radius: var(--var-border-radius, 0.5rem);
 }
 
 .o-positron-upgrade-btn:hover {
   color: var(--color-text-inverted);
 }
 
-.o-positron-upgrade-btn--bought {
-  color: black;
-  background-color: gold;
-  cursor: default;
-}
-
-.o-positron-upgrade-btn--bought:hover {
-  color: black;
+.o-positron-upgrade-btn--available {
+  background-color: black;
+  border-color: gold;
+  box-shadow: inset 0px 0px 20px 0px gold;
+  color: gold;
+  transition: 200ms;
 }
 
 .o-positron-upgrade-btn--available:hover {
-  background-color: #3b6ca5;
-}
-
-.o-positron-upgrade-btn--unavailable {
+  background-color: gold;
+  box-shadow: none;
   color: white;
-  background-color: #484b11;
-}
-
-.o-positron-upgrade-btn--unclickable {
-  cursor: auto;
 }
 </style>

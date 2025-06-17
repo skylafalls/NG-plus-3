@@ -8,11 +8,11 @@ export class PlayerProgress {
   }
 
   get isEternityUnlocked() {
-    return new Decimal(this._player.eternities).gt(0) || this.isRealityUnlocked;
+    return new Decimal(this._player.eternities).gt(0) || this.isQuantumUnlocked;
   }
 
   get isQuantumUnlocked() {
-    return player.quantum.times.gte(1);
+    return player.quantum.times.gte(1) || this.isRealityUnlocked;
   }
 
   get isRealityUnlocked() {

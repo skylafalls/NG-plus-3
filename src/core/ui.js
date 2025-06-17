@@ -7,7 +7,7 @@ import { useLongPress, useRepeatingClick } from "./longpress";
 import { notify } from "./notify";
 import { state } from "./ui.init";
 
-import GameUIComponent from "@/components/GameUIComponent";
+import GameUIComponent from "@/components/GameUIComponent.vue";
 
 Vue.mixin({
   computed: {
@@ -97,6 +97,7 @@ function makeRecomputable(watcher, key, recomputed) {
   watcher.getter = vm => (recomputed[key], original.call(vm, vm));
 }
 
+// Why is reactivity a bad thing?
 const ReactivityComplainer = {
   complain() {
     this.checkReactivity(player, "player");
@@ -106,7 +107,7 @@ const ReactivityComplainer = {
       return;
     }
     if (obj.__ob__ !== undefined) {
-      throw new Error(`Boi you fukked up - ${path} became REACTIVE (oh shite)`);
+      throw new TypeError(`Boi you fukked up - ${path} became REACTIVE (oh shite)`);
     }
     for (const key in obj) {
       if (!Object.hasOwn(obj, key)) {

@@ -10,7 +10,9 @@ class ElectronsEffectState extends GameMechanicState {
   }
 
   get effectValue() {
-    let eff = player.quantum.pair.electrons.plus(1).pow(1.25);
+    let base = player.quantum.pair.electrons.timesEffectOf(QuantumChallenge(6).reward);
+    let exp = new Decimal(0.33);
+    let eff = base.plus(1).pow(exp);
     if (eff.gte(1e6)) {
       eff = eff.div(1e6).pow(0.7).mul(1e6);
     }
@@ -257,11 +259,6 @@ export const PairProduction = {
     if (!this.canDischarge) {
       return false;
     }
-    this.updateDischarges();
-    return true;
-  },
-
-  updateDischarges() {
     const sacrificableGalaxies = player.galaxies.sub(player.quantum.pair.dischargedGalaxies);
     const gainedPositrons = sacrificableGalaxies.mul(this.positronMultiplier).max(0);
     const gainedElectrons = sacrificableGalaxies.mul(this.electronMultiplier).max(0);
@@ -269,5 +266,14 @@ export const PairProduction = {
     player.quantum.pair.dischargedGalaxies = player.galaxies;
     player.quantum.pair.positrons = player.quantum.pair.positrons.plus(gainedPositrons);
     player.quantum.pair.electrons = player.quantum.pair.electrons.plus(gainedElectrons);
-  }
+    return true;
+  },
+
+  updateDischarges() {
+    const gainedPositrons = player.quantum.pair.dischargedGalaxies.mul(this.positronMultiplier).max(0);
+    const gainedElectrons = player.quantum.pair.dischargedGalaxies.mul(this.electronMultiplier).max(0);
+
+    player.quantum.pair.positrons = player.quantum.pair.positrons.max(gainedPositrons);
+    player.quantum.pair.electrons = player.quantum.pair.electrons.max(gainedElectrons);
+  },
 };

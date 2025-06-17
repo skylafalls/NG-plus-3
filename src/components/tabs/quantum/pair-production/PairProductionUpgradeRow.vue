@@ -11,7 +11,7 @@ export default defineComponent({
     PositronUpgradeButton,
   },
   data: () => ({
-    grid: {}
+    grid: {},
   }),
   computed: {
     allColumnUpgrades() {
@@ -31,8 +31,8 @@ export default defineComponent({
         upgradeObject.positron.push(PositronUpgrade(upgrade));
       }
       this.grid = upgradeObject;
-    }
-  }
+    },
+  },
 });
 </script>
 

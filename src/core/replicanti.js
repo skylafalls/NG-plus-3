@@ -547,9 +547,6 @@ export const ReplicantiUpgrade = {
 
     get extra() {
       let extraRGs = Effects.max(0, TimeStudy(131)).add(PelleRifts.decay.milestones[2].effectOrDefault(0));
-      if (PlayerProgress.quantumUnlocked()) {
-        extraRGs = extraRGs.times(Quarks.green.effect());
-      }
       return extraRGs;
     }
 
@@ -705,10 +702,15 @@ export const Replicanti = {
       return new Decimal(player.replicanti.galaxies);
     },
     get extra() {
-      return Decimal.floor((Effarig.bonusRG).add(Effects.sum(
+      let extraRGs = Decimal.floor((Effarig.bonusRG).add(Effects.sum(
         TimeStudy(225),
         TimeStudy(226),
       )).times(TimeStudy(303).effectOrDefault(1)));
+      if (PlayerProgress.quantumUnlocked()) {
+        extraRGs = extraRGs.times(Quarks.green.effect());
+      }
+      extraRGs = extraRGs.timesEffectOf(QuantumChallenge(8).reward);
+      return extraRGs;
     },
     get total() {
       return this.bought.add(this.extra);

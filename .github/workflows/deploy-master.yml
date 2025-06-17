@@ -1,30 +1,24 @@
-name: Deploy master
-
-env:
-  FIREBASE_CONFIG: ${{ secrets.FIREBASE_CONFIG }}
+name: Deploy to github pages
 
 on:
   push:
     branches:
       - master
   workflow_dispatch:
-    branches:
-      - master
 
 jobs:
   build:
-    name: Deploy 🚀
+    name: Deploy for production
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           lfs: true
-      - uses: actions/setup-node@v2
-        with:
-          node-version: '14'
-          cache: 'npm'
-      - run: npm ci
-      - run: npm run build:master
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install --frozen-lockfile
+      - run: bun run build
       - uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: gh-pages

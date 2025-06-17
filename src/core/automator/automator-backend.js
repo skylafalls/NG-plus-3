@@ -688,7 +688,9 @@ export const AutomatorBackend = {
       }
       const availableConstants = Object.keys(player.reality.automator.constants);
       for (const key of availableConstants) {
-        if (`\\s${key}(\\s|$)`.test(rawLine)) {foundConstants.add(key);}
+        if (`\\s${key}(\\s|$)`.test(rawLine)) {
+          foundConstants.add(key);
+        }
       }
     }
 

@@ -359,6 +359,26 @@ export const InfinityDimensions = {
   all: InfinityDimension.index.compact(),
   HARDCAP_PURCHASES: new Decimal(2000000),
 
+  get convSoftcapStart() {
+    return DC.E1E15;
+  },
+
+  get convSoftcapEffect() {
+    const equation = Currency.infinityPower.value.plus(1).log10().sub(this.convSoftcapStart.log10()).max(1).log10();
+    let formula = equation.times(1.25).plus(equation.times(0.45));
+    if (formula.gte(10)) {
+      formula = formula.times(equation.times(4));
+    }
+    if (formula.gte(200)) {
+      formula = formula.div(200).pow(3).mul(200);
+    }
+    return Decimal.max(formula, 1);
+  },
+
+  get powerConversionRate() {
+    return DC.D7.div(this.convSoftcapEffect);
+  },
+
   unlockNext() {
     if (InfinityDimension(8).isUnlocked) {
       return;
@@ -368,7 +388,7 @@ export const InfinityDimensions = {
 
   next() {
     if (InfinityDimension(8).isUnlocked) {
-      throw "All Infinity Dimensions are unlocked";
+      throw new RangeError("All Infinity Dimensions are unlocked");
     }
     return this.all.first(dim => !dim.isUnlocked);
   },
@@ -453,10 +473,5 @@ export const InfinityDimensions = {
 
     // Try to buy max from the lowest dimension (since lower dimensions have bigger multiplier per purchase)
     unlockedDimensions.forEach(dimension => dimension.buyMax(false));
-  },
-
-  get powerConversionRate() {
-    return getAdjustedGlyphEffect("infinityrate").add(7)
-      .add(PelleUpgrade.infConversion.effectOrDefault(0)).mul(PelleRifts.paradox.milestones[2].effectOrDefault(1));
   },
 };

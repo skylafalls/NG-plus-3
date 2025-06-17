@@ -196,4 +196,14 @@ export const eternityMilestones = {
     eternities: 1e9,
     reward: "Dimension Boosts & Galaxies no longer reset Antimatter Dimensions",
   },
+  placeholder1: {
+    eternities: 1e100,
+    invisible: true,
+    reward: "Dimension Boosts & Galaxies no longer reset Antimatter Dimensions",
+  },
+  placeholder2: {
+    eternities: 1e100,
+    invisible: true,
+    reward: "Dimension Boosts & Galaxies no longer reset Antimatter Dimensions",
+  },
 };

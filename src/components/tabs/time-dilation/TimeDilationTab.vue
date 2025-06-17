@@ -121,12 +121,11 @@ export default defineComponent({
       this.baseGalaxies.copyFrom(player.dilation.baseTachyonGalaxies);
       this.totalGalaxies.copyFrom(player.dilation.totalTachyonGalaxies);
       this.hasPelleDilationUpgrades = PelleRifts.paradox.milestones[0].canBeApplied;
-      if (this.baseGalaxies.lt(500) && DilationUpgrade.doubleGalaxies.isBought) {
-        this.tachyonGalaxyGain = new Decimal(DilationUpgrade.doubleGalaxies.effectValue);
-      } else {
-        this.tachyonGalaxyGain = new Decimal(1);
-      }
-      this.tachyonGalaxyGain = this.tachyonGalaxyGain.times(DilationUpgrade.galaxyMultiplier.effectValue);
+      this.tachyonGalaxyGain = Effects.product(
+        DilationUpgrade.galaxyMultiplier,
+        QuantumChallenge(2).reward,
+        DilationUpgrade.doubleGalaxies,
+      );
       this.maxDT.copyFrom(player.records.thisReality.maxDT);
 
       const estimateText = getDilationTimeEstimate(this.maxDT);
@@ -161,7 +160,7 @@ export default defineComponent({
     </span>
     <span>
       Next
-      <span v-if="tachyonGalaxyGain.gt(1)">{{ format(tachyonGalaxyGain, 3, 0) }}</span>
+      <span v-if="tachyonGalaxyGain.gt(1)">{{ format(tachyonGalaxyGain, 3, 1) }}</span>
       {{ pluralize("Tachyon Galaxy", tachyonGalaxyGain) }} at
       <span
         class="c-dilation-tab__galaxy-threshold"

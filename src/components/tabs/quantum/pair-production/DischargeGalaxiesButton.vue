@@ -12,6 +12,7 @@ export default defineComponent({
     antimatterGalaxies: new Decimal(0),
     dischargeMultPositron: new Decimal(0),
     dischargeMultElectron: new Decimal(0),
+    canDischarge: false,
   }),
   computed: {
     sacrificableGalaxies() {
@@ -25,8 +26,12 @@ export default defineComponent({
     dischargeMultiplier() {
       return `${quantify("Electron", this.dischargeMultElectron, 2, 2)} and ${quantify("Positron", this.dischargeMultPositron, 2, 2)}`;
     },
-    canDischarge() {
-      return PairProduction.canDischarge;
+    classObject() {
+      return {
+        "o-discharge-galaxy-btn": true,
+        "o-discharge-galaxy-btn--available": this.canDischarge,
+        "o-discharge-galaxy-btn--unavailable": !this.canDischarge,
+      };
     },
   },
   methods: {
@@ -35,6 +40,7 @@ export default defineComponent({
       this.antimatterGalaxies.copyFrom(player.galaxies);
       this.dischargeMultElectron.copyFrom(PairProduction.electronMultiplier);
       this.dischargeMultPositron.copyFrom(PairProduction.positronMultiplier);
+      this.canDischarge = PairProduction.canDischarge;
     },
     sacrificeGalaxy() {
       PairProduction.sacrificeGalaxies();
@@ -44,22 +50,48 @@ export default defineComponent({
 </script>
 
 <template>
-  <PrimaryButton
-    class="electron-button"
+  <button
+    :class="classObject"
     style="height: 70px;"
     :enabled="canDischarge"
     @click="sacrificeGalaxy"
   >
     Discharge {{ quantify("Antimatter Galaxy", sacrificableGalaxies) }} for {{ gainedFromDischarge }}<br>
     ({{ dischargeMultiplier }} per antimatter galaxy)
-  </PrimaryButton>
+  </button>
 </template>
 
 <style scoped>
-.electron-button {
+.o-discharge-galaxy-btn {
+  font-family: Typewriter, serif;
+  font-weight: bold;
+  width: 60rem;
+  border-radius: var(--var-border-radius, 0.5rem);
+}
+
+.o-discharge-galaxy-btn:hover {
+  color: var(--color-text-inverted);
+}
+
+.o-discharge-galaxy-btn--available {
   background-color: black;
-  border-color: rgb(0, 132, 255), gold;
-  box-shadow: inset 0px 0px 20px 0px rgb(0, 132, 255), inset 0px 0px 20px 0px gold;
-  color: rgb(0, 132, 255), gold;
+  border-color: rgb(131, 234, 255);
+  box-shadow: inset 0px 0px 20px 0px rgb(131, 234, 255);
+  color: rgb(131, 234, 255);
+  transition: 200ms;
+}
+
+.o-discharge-galaxy-btn--available:hover {
+  background-color: rgb(131, 234, 255);
+  box-shadow: none;
+  color: white;
+}
+
+.o-discharge-galaxy-btn--unavailable {
+  color: white;
+  background: #525252;
+  border: 0.1rem solid var(--color-accent);
+  cursor: default;
+  transition: 200ms;
 }
 </style>

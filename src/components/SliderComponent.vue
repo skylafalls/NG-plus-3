@@ -423,12 +423,11 @@ export default {
       } if (disabledStyle) {
         return [disabledStyle, disabledStyle];
       }
-        return [{
-          backgroundColor: "#ccc",
-        }, {
-          backgroundColor: "#ccc",
-        }];
-      
+      return [{
+        backgroundColor: "#ccc",
+      }, {
+        backgroundColor: "#ccc",
+      }];
     },
     tooltipStyles() {
       if (Array.isArray(this.tooltipStyle)) {

@@ -45,22 +45,22 @@ export default defineComponent({
     <span
       style="font-size:35px"
       class="electron-text"
-    >{{ format(electrons, 2, 2) }}</span> Electrons
+    >{{ format(electrons, 3, 2) }}</span> Electrons
     <span style="font-size: 40px;">|</span>
     <span
       style="font-size:35px"
       class="positron-text"
-    >{{ format(positrons, 2, 2) }}</span> Positrons
+    >{{ format(positrons, 3, 2) }}</span> Positrons
     <br>
     Multiplier per ten dimensions:
     <span
       style="font-size:15px"
       class="electron-text"
-    >{{ formatX(electronEffect, 2, 2) }}</span>,
+    >{{ formatX(electronEffect, 3, 2) }}</span>,
     <span
       style="font-size:15px"
       class="positron-text"
-    >{{ formatPow(positronEffect, 2, 2) }}</span>
+    >{{ formatPow(positronEffect, 3, 2) }}</span>
     → <span class="antimatter-text">{{ multPer10After }}</span>
     <br><br>
     <PairProductionUpgradeRow style="margin: auto;" />

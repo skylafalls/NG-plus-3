@@ -3,6 +3,7 @@ import { getRarity } from "../core/globals";
 import { GlyphInfoVue } from "../../src/components/modals/options/SelectGlyphInfoDropdown";
 
 import GlyphTooltip from "@/components/GlyphTooltip";
+import { defineComponent } from "vue";
 
 // We generate the border effects with CSS gradients; for the sake of flexibility and for dynamically using
 // the glyph color instead of the fixed rarity color, the border patterns are stored below and then parsed
@@ -155,7 +156,7 @@ function generateGradient(data, color, glyph, isCircular) {
   }
 }
 
-export default {
+export default defineComponent({
   name: "GlyphComponent",
   components: {
     GlyphTooltip,
@@ -756,11 +757,11 @@ export default {
         "height": "96%",
         "border-radius": this.circular ? "50%" : "0",
         // Some cases will have undefined lines which need to be removed to combine everything together properly
-        "background": lines.filter(l => l).join(","),
+        "background": lines.filter(Boolean).join(","),
       };
     },
   },
-};
+});
 </script>
 
 <template>

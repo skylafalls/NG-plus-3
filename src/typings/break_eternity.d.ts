@@ -1,3 +1,5 @@
+import type { Effect } from "@/core/game-mechanics";
+
 export type CompareResult = -1 | 0 | 1;
 export type DecimalSource = Decimal | number | string;
 /**
@@ -1313,4 +1315,15 @@ export default class Decimal {
     copyFrom(other: Decimal): void;
     logPow(value: DecimalSource): Decimal;
     logRoot(value: DecimalSource): Decimal;
+    plusEffectOf(effect: Effect): Decimal;
+    plusEffectsOf(...effect: Effect[]): Decimal;
+    minusEffectOf(effect: Effect): Decimal;
+    minusEffectsOf(...effect: Effect[]): Decimal;
+    timesEffectOf(effect: Effect): Decimal;
+    timesEffectsOf(...effect: Effect[]): Decimal;
+    powEffectOf(effect: Effect): Decimal;
+    powEffectsOf(...effect: Effect[]): Decimal;
+    dividedByEffectOf(effect: Effect): Decimal;
+    dividedByEffectsOf(...effect: Effect[]): Decimal;
+    copyFrom(value: Decimal): void;
 }

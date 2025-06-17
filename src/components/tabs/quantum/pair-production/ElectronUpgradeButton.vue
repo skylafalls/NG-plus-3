@@ -23,9 +23,8 @@ export default defineComponent({
     classObject() {
       return {
         "o-electron-upgrade-btn": true,
-        "o-electron-upgrade-btn--bought": !this.isUseless && this.isBought,
-        "o-electron-upgrade-btn--available": !this.isUseless && !this.isBought && this.canBeBought,
-        "o-electron-upgrade-btn--unavailable": !this.isUseless && !this.isBought && !this.canBeBought,
+        "o-electron-upgrade-btn--available": this.canBeBought,
+        "o-primary-btn--disabled": !this.canBeBought,
       };
     },
   },
@@ -56,40 +55,29 @@ export default defineComponent({
 
 <style scoped>
 .o-electron-upgrade-btn {
-  background-color: black;
   font-family: Typewriter, serif;
   font-weight: bold;
-  border-color: rgb(0, 132, 255);
-  box-shadow: inset 0px 0px 20px 0px rgb(0, 132, 255);
-  color: rgb(0, 132, 255);
   height: 90px;
   width: 200px;
+  color: white;
+  border-radius: var(--var-border-radius, 0.5rem);
 }
 
 .o-electron-upgrade-btn:hover {
   color: var(--color-text-inverted);
 }
 
-.o-electron-upgrade-btn--bought {
-  color: black;
-  background-color: rgb(0, 132, 255);
-  cursor: default;
-}
-
-.o-electron-upgrade-btn--bought:hover {
-  color: black;
+.o-electron-upgrade-btn--available {
+  background-color: black;
+  border-color: rgb(0, 132, 255);
+  box-shadow: inset 0px 0px 20px 0px rgb(0, 132, 255);
+  color: rgb(0, 132, 255);
+  transition: 200ms;
 }
 
 .o-electron-upgrade-btn--available:hover {
-  background-color: #3b6ca5;
-}
-
-.o-electron-upgrade-btn--unavailable {
+  background-color: rgb(0, 132, 255);
+  box-shadow: none;
   color: white;
-  background-color: #122439;
-}
-
-.o-electron-upgrade-btn--unclickable {
-  cursor: auto;
 }
 </style>

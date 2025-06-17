@@ -747,7 +747,7 @@ button:focus {
 
 .o-tab-btn--quantum {
   color: var(--color-quantum);
-  background-color: var(--color-prestige--accent);
+  background-color: green;
   border-color: var(--color-quantum);
 }
 

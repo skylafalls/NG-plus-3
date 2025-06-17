@@ -15,6 +15,7 @@ export default {
       creditsClosed: false,
       requirementText: null,
       hasTutorial: false,
+      supersonicScalingStart: new Decimal(0),
     };
   },
   computed: {
@@ -44,6 +45,17 @@ export default {
         "o-pelle-disabled-pointer": this.creditsClosed,
       };
     },
+    dimBoostName() {
+      if (this.purchasedBoosts.lt(5)) {
+        return "Shift";
+      }
+
+      if (this.purchasedBoosts.gte(this.supersonicScalingStart)) {
+        return "Supersonic";
+      }
+
+      return "Boost";
+    },
   },
   methods: {
     update() {
@@ -60,6 +72,7 @@ export default {
         this.requirementText = formatInt(this.purchasedBoosts);
       }
       this.hasTutorial = Tutorial.isActive(TUTORIAL_STATE.DIMBOOST);
+      this.supersonicScalingStart.copyFrom(DimBoost.supersonicScalingStart);
     },
     dimensionBoost(bulk) {
       if (!DimBoost.requirement.isSatisfied || !DimBoost.canBeBought) {
@@ -73,7 +86,7 @@ export default {
 
 <template>
   <div class="reset-container dimboost">
-    <h4>Dimension Boost ({{ boostCountText }})</h4>
+    <h4>Dimension {{ dimBoostName }} ({{ boostCountText }})</h4>
     <span>Requires: {{ formatInt(requirement.amount) }} {{ dimName }} Antimatter D</span>
     <button
       :class="classObject"

@@ -170,6 +170,7 @@ export default {
 
 .l-scaling-text-wrapper {
   height: 2rem;
+  font-size: 1.2rem;
 }
 
 .o-primary-btn--galaxy {

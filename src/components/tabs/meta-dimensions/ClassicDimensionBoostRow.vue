@@ -1,7 +1,8 @@
 <script>
 import PrimaryButton from "@/components/PrimaryButton.vue";
+import { defineComponent } from "vue";
 
-export default {
+export default defineComponent({
   name: "ClassicMetaDimensionBoostRow",
   components: {
     PrimaryButton,
@@ -16,12 +17,10 @@ export default {
       purchasedBoosts: new Decimal(),
       lockText: null,
       unlockedByBoost: null,
-      creditsClosed: false,
       requirementText: null,
     };
   },
   computed: {
-    isDoomed: () => Pelle.isDoomed,
     dimName() {
       return MetaDimension(this.requirement.tier).displayName;
     },
@@ -38,25 +37,19 @@ export default {
     },
     classObject() {
       return {
-        "o-primary-btn--dimboost l-dim-row__prestige-button": true,
-        "o-pelle-disabled-pointer": this.creditsClosed,
+        "o-primary-btn--md-boost l-dim-row__prestige-button": true,
       };
     },
   },
   methods: {
     update() {
-      const requirement = DimBoost.requirement;
+      const requirement = MetaDimensions.boost.requirement;
       this.requirement.tier = requirement.tier;
       this.requirement.amount.copyFrom(requirement.amount);
-      this.isBuyable = requirement.isSatisfied && DimBoost.canBeBought;
-      this.purchasedBoosts.copyFrom(DimBoost.purchasedBoosts);
-      this.imaginaryBoosts.copyFrom(DimBoost.imaginaryBoosts);
-      this.lockText = DimBoost.lockText;
-      this.unlockedByBoost = DimBoost.unlockedByBoost;
-      this.creditsClosed = GameEnd.creditsClosed;
-      if (this.isDoomed) {
-        this.requirementText = formatInt(this.purchasedBoosts);
-      }
+      this.isBuyable = requirement.isSatisfied && MetaDimensions.boost.canBeBought;
+      this.purchasedBoosts.copyFrom(MetaDimensions.boost.purchasedBoosts);
+      this.lockText = MetaDimensions.boost.lockText;
+      this.unlockedByBoost = MetaDimensions.boost.unlockedByBoost;
     },
     dimensionBoost(bulk) {
       if (!MetaDimensions.boost.requirement.isSatisfied || !MetaDimensions.boost.canBeBought) {
@@ -65,7 +58,7 @@ export default {
       MetaDimensions.boost.manualRequest(bulk);
     },
   },
-};
+});
 </script>
 
 <template>
@@ -81,18 +74,14 @@ export default {
       @click.shift.exact="dimensionBoost(false)"
     >
       {{ unlockedByBoost }}
-      <div
-        v-if="hasTutorial"
-        class="fas fa-circle-exclamation l-notification-icon"
-      />
     </PrimaryButton>
   </div>
 </template>
 
 <style scoped>
-.o-primary-btn--dimboost {
-  width: 22rem;
-  height: 5.5rem;
+.o-primary-btn--md-boost {
+  width: 25rem;
+  height: 5rem;
   position: relative;
   font-size: 0.9rem;
 }

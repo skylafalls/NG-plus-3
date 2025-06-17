@@ -24,12 +24,12 @@ window.GlobalErrorHandler = {
   stopGame() {
     GameKeyboard.disable();
     GameIntervals.stop();
-    function clearHandles(set, clear) {
-      let id = set(() => {}, 9999);
+    const clearHandles = (set, clear) => {
+      let id = set(new Function(), 9999);
       while (id--) {
         clear(id);
       }
-    }
+    };
     clearHandles(setInterval, clearInterval);
     clearHandles(setTimeout, clearTimeout);
     clearHandles(requestAnimationFrame, cancelAnimationFrame);
@@ -43,9 +43,9 @@ window.GlobalErrorHandler = {
   },
 };
 
-window.onerror = (event, source) => {
+window.addEventListener("error", (event, source) => {
   if (!source.endsWith(".js")) {
     return;
   }
   GlobalErrorHandler.onerror(event);
-};
+});
