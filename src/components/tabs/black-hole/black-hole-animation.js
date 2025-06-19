@@ -1,4 +1,4 @@
-export const BlackHoleAnimation = (function () {
+export const BlackHoleAnimation = function () {
   const PLANET_SIZE = 1.5;
   const PARTICLE_SIZE = 0.5;
   const PARTICLE_COUNT = 120;
@@ -55,9 +55,18 @@ export const BlackHoleAnimation = (function () {
     update(totalPhase, eccentricity, period) {
       // Update orbital position parameters (polar coordinates centered on hole,
       // theta goes 0 to 1 because I'm apparently stupid)
-      const E0 = eccentricAnomaly(eccentricity, 2 * Math.PI * totalPhase / period);
+      const E0 = eccentricAnomaly(
+        eccentricity,
+        2 * Math.PI * totalPhase / period,
+      );
       const r = SEMIMAJOR_AXIS * (1 - eccentricity * Math.cos(E0));
-      let theta = 2 * Math.atan(Math.sqrt((1 + eccentricity) / (1 - eccentricity) * Math.pow(Math.tan(E0 / 2), 2)));
+      let theta = 2 *
+        Math.atan(
+          Math.sqrt(
+            (1 + eccentricity) / (1 - eccentricity) *
+              Math.pow(Math.tan(E0 / 2), 2),
+          ),
+        );
       if (Math.tan(E0 / 2) < 0) {
         theta *= -1;
       }
@@ -80,7 +89,14 @@ export const BlackHoleAnimation = (function () {
 
     performDraw(context) {
       // Glowing effect to make the hole more visible on dark themes
-      const glow = context.createRadialGradient(200, 200, 0, 200, 200, this.size * 2);
+      const glow = context.createRadialGradient(
+        200,
+        200,
+        0,
+        200,
+        200,
+        this.size * 2,
+      );
       if (BlackHoles.areNegative) {
         glow.addColorStop(0, "rgba(255, 255, 255, 1)");
         glow.addColorStop(0.85, "rgba(190, 190, 190, 1)");
@@ -116,29 +132,38 @@ export const BlackHoleAnimation = (function () {
       this.respawnTick = true;
       this.isInside = BlackHoles.areNegative;
       this.blob = blobs[Math.floor(Math.random() * blobs.length)];
-      this.isBlob = Theme.currentName() === "S11" || player.options.animations.blobHole;
+      this.isBlob = Theme.currentName() === "S11" ||
+        player.options.animations.blobHole;
     }
 
     static randomDistance() {
       return BlackHoles.areNegative
         ? (1.97 * Math.random() + 0.03) * holeSize
-        : holeSize + 0.5 * SEMIMAJOR_AXIS * Math.random() * (BlackHole(1).isActive ? 2 : 1);
+        : holeSize +
+          0.5 * SEMIMAJOR_AXIS * Math.random() *
+            (BlackHole(1).isActive ? 2 : 1);
     }
 
     update(delta, dilationFactor) {
       const baseSpeed = 1.5;
-      const speedFactor = Math.min(Math.pow(Math.max(dilationFactor, 2) / 2, 3), 5);
-      const particleSpeed = baseSpeed * speedFactor * Math.min(delta, 16) / 1000;
+      const speedFactor = Math.min(
+        Math.pow(Math.max(dilationFactor, 2) / 2, 3),
+        5,
+      );
+      const particleSpeed = baseSpeed * speedFactor * Math.min(delta, 16) /
+        1000;
 
       if (!this.isInside) {
         this.preLastAngle = this.lastAngle;
         this.lastAngle = this.angle;
-        this.angle = (this.angle + 20 * particleSpeed * Math.PI * Math.pow(this.distance, -1.5)) % 1;
+        this.angle = (this.angle +
+          20 * particleSpeed * Math.PI * Math.pow(this.distance, -1.5)) % 1;
       }
 
       this.preLastDistance = this.lastDistance;
       this.lastDistance = this.distance;
-      const distFactor = 1 + 0.3 * particleSpeed * Math.pow(this.distance / holeSize, -2);
+      const distFactor = 1 +
+        0.3 * particleSpeed * Math.pow(this.distance / holeSize, -2);
       if (BlackHoles.areNegative) {
         this.distance *= distFactor;
       } else {
@@ -196,7 +221,10 @@ export const BlackHoleAnimation = (function () {
         return;
       }
       const angle = this.isInside ? this.angle : this.preLastAngle;
-      const { x: lastX, y: lastY } = Dot.calculatePosition(this.preLastDistance, angle);
+      const { x: lastX, y: lastY } = Dot.calculatePosition(
+        this.preLastDistance,
+        angle,
+      );
       context.lineCap = "round";
 
       if (this.isBlob) {
@@ -240,10 +268,12 @@ export const BlackHoleAnimation = (function () {
       // Time taken for one orbit (in seconds)
       this.period = BlackHole(1).cycleLength;
       // Fixed-point iteration for eccentricity (I'm really hoping this always converges)
-      const y = (1 - Math.pow(ACTIVE_THRESHOLD, -2)) / (1 - Math.pow(BlackHole(1).power.toNumber(), -2));
+      const y = (1 - Math.pow(ACTIVE_THRESHOLD, -2)) /
+        (1 - Math.pow(BlackHole(1).power.toNumber(), -2));
       let eccentricity = 0.5;
       const maxIter = 1000;
-      const meanAnomaly = 2 * Math.PI * BlackHole(1).duration.div(this.period).clampMax(0.9).toNumber();
+      const meanAnomaly = 2 * Math.PI *
+        BlackHole(1).duration.div(this.period).clampMax(0.9).toNumber();
       for (let k = 0; k < maxIter; k++) {
         const E0 = eccentricAnomaly(eccentricity, meanAnomaly);
         eccentricity = (y - 1) / (y * Math.cos(E0) - 1);
@@ -251,17 +281,18 @@ export const BlackHoleAnimation = (function () {
       this.eccentricity = eccentricity;
 
       // Black Hole size, calculated from orbit shape in order to give the right max boost
-      holeSize = SEMIMAJOR_AXIS * (1 - eccentricity) * (1 - Math.pow(BlackHole(1).power.toNumber(), -2));
+      holeSize = SEMIMAJOR_AXIS * (1 - eccentricity) *
+        (1 - Math.pow(BlackHole(1).power.toNumber(), -2));
       // Prevent planet + hole overlapping
       this.hole = new Hole((holeSize - PLANET_SIZE) / 2);
 
       // Particles (scaled to take the same range as the orbit)
       this.particles = Array.range(0, PARTICLE_COUNT).map(() => new Particle());
-      this.frameRequest = requestAnimationFrame(time => this.update(time));
+      this.frameRequest = requestAnimationFrame((time) => this.update(time));
     }
 
     update(time) {
-      this.frameRequest = requestAnimationFrame(t => this.update(t));
+      this.frameRequest = requestAnimationFrame((t) => this.update(t));
       if (time === undefined || this.lastFrame === undefined) {
         this.lastFrame = time;
         return;
@@ -269,7 +300,11 @@ export const BlackHoleAnimation = (function () {
       const delta = time - this.lastFrame;
       this.lastFrame = time;
 
-      this.planet.update(this.totalPhase().toNumber(), this.eccentricity, this.period.toNumber());
+      this.planet.update(
+        this.totalPhase().toNumber(),
+        this.eccentricity,
+        this.period.toNumber(),
+      );
 
       this.context.clearRect(0, 0, 400, 400);
       this.hole.draw(this.context);
@@ -295,7 +330,8 @@ export const BlackHoleAnimation = (function () {
     totalPhase() {
       const blackHole = BlackHole(1);
       if (blackHole.isActive) {
-        return blackHole.phase.sub(blackHole.duration.div(2)).add(this.period).mod(this.period);
+        return blackHole.phase.sub(blackHole.duration.div(2)).add(this.period)
+          .mod(this.period);
       }
 
       return blackHole.phase.add(blackHole.duration.div(2));
@@ -305,4 +341,4 @@ export const BlackHoleAnimation = (function () {
       cancelAnimationFrame(this.frameRequest);
     }
   };
-}());
+}();

@@ -8,7 +8,7 @@ const config: UserConfig = defineConfig({
     extensions: [".js", ".ts", ".json", ".vue"],
     alias: {
       "@": fileURLToPath(new URL("./src", import.meta.url)),
-    }
+    },
   },
 });
 

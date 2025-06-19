@@ -15,7 +15,8 @@ export const automator = {
       keyword: "STUDIES RESPEC",
       category: 0,
       syntax: "<b>studies respec</b>",
-      description: `This command turns on the respec option, which will respec your Time Studies on the next manual or
+      description:
+        `This command turns on the respec option, which will respec your Time Studies on the next manual or
         automatic Eternity. Note that this does not actually perform an Eternity on its own; make sure your Autobuyer
         is on or you manually run the ETERNITY command (although ETERNITY has its own built-in respec option).`,
       examples: [
@@ -29,7 +30,8 @@ export const automator = {
       category: 0,
       syntax: `<b>studies</b> [nowait] <b>load id</b> <u>selector</u><br>
         <b>studies</b> [nowait] <b>load name</b> <u>name</u>`,
-      description: "Loads a Time Study preset, as if you had clicked on the button in the Time Study tab.",
+      description:
+        "Loads a Time Study preset, as if you had clicked on the button in the Time Study tab.",
       sections: [
         {
           name: "INPUTS",
@@ -50,7 +52,8 @@ export const automator = {
             },
             {
               header: "<i>name</i>",
-              description: "Finds and loads the specified Time Study preset by its given name. This is case-sensitive.",
+              description:
+                "Finds and loads the specified Time Study preset by its given name. This is case-sensitive.",
             },
           ],
         },
@@ -67,7 +70,8 @@ export const automator = {
       keyword: "STUDIES PURCHASE",
       category: 0,
       syntax: "<b>studies</b> [nowait] <b>purchase <u>study_list</u></b>",
-      description: "Purchase Time Studies specified from a list of Time Studies.",
+      description:
+        "Purchase Time Studies specified from a list of Time Studies.",
       sections: [
         {
           name: "INPUTS",
@@ -108,7 +112,8 @@ export const automator = {
         <b>infinity</b> [nowait]<br>
         <b>eternity</b> [nowait] [respec]<br>
         <b>reality</b> [nowait] [respec]`,
-      description: `Triggers an Infinity, Eternity, or Reality reset if possible, otherwise the automator will wait at
+      description:
+        `Triggers an Infinity, Eternity, or Reality reset if possible, otherwise the automator will wait at
         this command until it becomes possible. If you find that your script often gets stuck on this command, an
         Autobuyer may be triggering a prestige before the Automator reaches this line - consider using <i>nowait</i> or
         adjusting your Autobuyer settings using AUTO.`,
@@ -174,7 +179,8 @@ export const automator = {
       syntax: `
         <b>start</b> ec<u>N</u><br>
         <b>start</b> dilation`,
-      description: `Start a specified Eternity Challenge or a Dilated Eternity. This command will also attempt
+      description:
+        `Start a specified Eternity Challenge or a Dilated Eternity. This command will also attempt
         to unlock the EC if not unlocked, but will not do the same for Dilation (use UNLOCK command to do that).
         If you are already in the specified EC or Dilated Eternity, running this command again will do nothing;
         otherwise, the Automator will keep attempting to start the Eternity until it succeeds.`,
@@ -191,7 +197,8 @@ export const automator = {
       syntax: `<b>auto infinity</b> [setting]<br>
         <b>auto eternity</b> [setting]<br>
         <b>auto reality</b> [setting]`,
-      description: `Turns prestige Autobuyers on or off and allows you to change their settings. If the setting option
+      description:
+        `Turns prestige Autobuyers on or off and allows you to change their settings. If the setting option
         is not present, this command will toggle the Autobuyer state, turning it off if it is on and turning it on if
         it is off. <b>This command will not work if you try to modify an Autobuyer or setting you do not have.</b>`,
       sections: [
@@ -209,12 +216,14 @@ export const automator = {
             },
             {
               header: "<u><i>number</i></u> x highest",
-              description: `Usable with Infinity and Eternity only. Turns the Autobuyer on and sets it to
+              description:
+                `Usable with Infinity and Eternity only. Turns the Autobuyer on and sets it to
                 "X times highest" mode.`,
             },
             {
               header: "<i><u>number</u> <u>currency</u></i>",
-              description: `Turns the Autobuyer on and sets it to trigger at a specific amount. The currency must
+              description:
+                `Turns the Autobuyer on and sets it to trigger at a specific amount. The currency must
                 match the autobuyer type (IP, EP, or RM). This will select "Reality Machines" mode for the Reality
                 Autobuyer. Glyph Level mode cannot be changed or set via the Automator, only manually.`,
             },
@@ -235,7 +244,8 @@ export const automator = {
       keyword: "BLACK HOLE",
       category: 2,
       syntax: "<b>black hole</b> <u>state</u>",
-      description: `Toggles the speedup effect from the Black Hole on or off. Turning the Black Hole on via the
+      description:
+        `Toggles the speedup effect from the Black Hole on or off. Turning the Black Hole on via the
         Automator does not bypass the gradual acceleration from off to max speed which occurs before they are
         permanent.`,
       examples: [
@@ -249,7 +259,8 @@ export const automator = {
       keyword: "STORE GAME TIME",
       category: 2,
       syntax: "<b>store game time</b> <u>action</u>",
-      description: "Changes whether or not the Black Hole is storing time. Also allows usage of stored time.",
+      description:
+        "Changes whether or not the Black Hole is storing time. Also allows usage of stored time.",
       sections: [
         {
           name: "ACTIONS",
@@ -280,14 +291,15 @@ export const automator = {
       isUnlocked: () => true,
       keyword: "NOTIFY",
       category: 3,
-      syntax: "<b>notify</b> \"<u>text</u>\"",
-      description: `Takes the specified text and posts it in the top-right corner as
+      syntax: '<b>notify</b> "<u>text</u>"',
+      description:
+        `Takes the specified text and posts it in the top-right corner as
         a text notification, in the same spot and style as other notifications such as auto-save
         and achievement/upgrade unlocks. Can be useful for seeing automator status while
         on tabs other than the Automator tab.`,
       examples: [
-        "notify \"Dilation reached\"",
-        "notify \"ECs completed\"",
+        'notify "Dilation reached"',
+        'notify "ECs completed"',
       ],
     },
     {
@@ -296,7 +308,8 @@ export const automator = {
       keyword: "Adding Comments",
       category: 3,
       syntax: "<b>#</b> text<br><b>//</b> text",
-      description: `Allows you to leave a note to yourself within your script. This may be
+      description:
+        `Allows you to leave a note to yourself within your script. This may be
         useful for organizing or keeping track of which parts of your script do various things,
         in a way that appears more readable than just the commands. These commands mainly serve as a tool to
         help you keep the steps of your scripts easier to follow if desired.`,
@@ -336,7 +349,8 @@ export const automator = {
       keyword: "WAIT",
       category: 4,
       syntax: "<b>wait</b> <u>condition</u>",
-      description: `Forces Automator to wait for some condition or event. To wait for a certain duration of time,
+      description:
+        `Forces Automator to wait for some condition or event. To wait for a certain duration of time,
         use the PAUSE command instead.`,
       sections: [
         {
@@ -382,7 +396,8 @@ export const automator = {
       keyword: "PAUSE",
       category: 4,
       syntax: "<b>pause</b> <u>interval</u>",
-      description: `Tells the automator to stop moving forward and executing commands for a certain amount of time.
+      description:
+        `Tells the automator to stop moving forward and executing commands for a certain amount of time.
         Note that if the pause duration is shorter than the automator's execution speed, the automator will wait until
         the next execution tick before moving on.`,
       examples: [
@@ -396,13 +411,15 @@ export const automator = {
           items: [
             {
               header: "<i>Specified Interval</i>",
-              description: `This command accepts time units of milliseconds ("ms"), seconds ("s", "sec", or "seconds"),
+              description:
+                `This command accepts time units of milliseconds ("ms"), seconds ("s", "sec", or "seconds"),
                 minutes ("m", "min", or "minutes"), and hours ("h" or "hours"). You cannot provide just a number and
                 nothing else; a unit of time must be specified.`,
             },
             {
               header: "<i>Defined Constant</i>",
-              description: `A defined constant may be used instead, see the definition panel. The defined value will
+              description:
+                `A defined constant may be used instead, see the definition panel. The defined value will
                 be assumed to be in units of seconds.`,
             },
           ],
@@ -412,19 +429,22 @@ export const automator = {
           items: [
             {
               header: "<i>Offline Side-effects</i>",
-              description: `This command may behave undesirably when it runs during offline progress due to limited
+              description:
+                `This command may behave undesirably when it runs during offline progress due to limited
                 tick count. A 1-second pause that is usually 20-30 ticks might be only 1 game tick when processing
                 hours of offline progress, which might not be enough for the resources needed for the rest of the
                 script.`,
             },
             {
               header: "<i>Alternatives</i>",
-              description: `Using another command like 'WAIT' will allow you to set it for a certain resource amount,
+              description:
+                `Using another command like 'WAIT' will allow you to set it for a certain resource amount,
                 in order to ensure that the game has the proper state before moving onward.`,
             },
             {
               header: "<i>Manual Skip</i>",
-              description: `You can manually force the Automator to continue execution past a PAUSE command without
+              description:
+                `You can manually force the Automator to continue execution past a PAUSE command without
                 waiting the entire specified time by stepping forward one line (to put it on the next one) and then
                 resuming execution. If you find yourself doing this regularly, consider modifying your script.`,
             },
@@ -440,7 +460,8 @@ export const automator = {
       syntax: `<b>if</b> <u>condition</u> {<br>
         <blockquote>commands</blockquote>
         }`,
-      description: `Defines an inner block of block of the automator script which will only be executed if the specified
+      description:
+        `Defines an inner block of block of the automator script which will only be executed if the specified
         comparison is true when this line is reached. If the comparison is false, the automator will instead skip to the
         first line after the block and continue execution from there.`,
       examples: [
@@ -458,7 +479,8 @@ export const automator = {
         }<br><b>until</b> <u>prestige_event</u> {<br>
           <blockquote>commands</blockquote>
         }`,
-      description: `Defines an inner block of the script where commands are repeated; the comparison is checked at the
+      description:
+        `Defines an inner block of the script where commands are repeated; the comparison is checked at the
         start and every time the loop repeats. If the condition is true when the UNTIL statement is first reached, the
         inner block of commands will be skipped entirely.
         <br><br>
@@ -479,7 +501,8 @@ export const automator = {
       syntax: `<b>while</b> <u>comparison</u> {<br>
         <blockquote>commands</blockquote>
       }`,
-      description: `Defines an inner block of the script where commands are repeated; the comparison is checked at the
+      description:
+        `Defines an inner block of the script where commands are repeated; the comparison is checked at the
         start and every time the loop repeats. If the condition is false when the WHILE statement is first reached, the
         inner block of commands will be skipped entirely.`,
       examples: [
@@ -493,7 +516,8 @@ export const automator = {
       keyword: "STOP",
       category: 4,
       syntax: "<b>stop</b>",
-      description: `When the Automator runs this line, it will stop execution as if you clicked the
+      description:
+        `When the Automator runs this line, it will stop execution as if you clicked the
         <i class="fas fa-stop"></i> button on the control panel in the top-left of the Automator. This
         does not need to be placed at the end of every script in order to stop them, as turning off the
         <i class="fas fa-sync-alt"></i> option on the left panel will do this automatically.
@@ -508,7 +532,8 @@ export const automator = {
       isUnlocked: () => true,
       keyword: "Currency List",
       category: 4,
-      syntax: "<i>You can use these in any IF, WHILE, UNTIL, or WAIT command</i>",
+      syntax:
+        "<i>You can use these in any IF, WHILE, UNTIL, or WAIT command</i>",
       description: () => {
         const filterText = EffarigUnlock.glyphFilter.isUnlocked
           ? "<b>filter score</b> - Glyph filter score of the Glyph which your filter will select this Reality<br>"
@@ -593,7 +618,8 @@ export const automator = {
       syntax: `<b>header_command</b> {<br>
         <blockquote>inner_commands</blockquote>
         }`,
-      description: `Some commands are associated with an "inner block" of commands. This inner block can contain still
+      description:
+        `Some commands are associated with an "inner block" of commands. This inner block can contain still
         contain any other valid command, but may or may not actually get executed based on what the state of the game is
         when <b>header_command</b> is executed. This allows you to repeat some commands over and over (eg. Time Study
         purchasing), or to skip them entirely (eg. not entering an EC if it already has full completions). These blocks
@@ -624,9 +650,11 @@ export const automator = {
   otherAutomatorPoints: [
     {
       name: "Reality Count",
-      automatorPoints: () => 2 * Decimal.clampMax(Currency.realities.value, 50).mantissa
-        * (10 ** Decimal.clampMax(Currency.realities.value, 50).exponent),
-      shortDescription: () => `+${formatInt(2)} per Reality, up to ${formatInt(50)} Realities`,
+      automatorPoints: () =>
+        2 * Decimal.clampMax(Currency.realities.value, 50).mantissa *
+        (10 ** Decimal.clampMax(Currency.realities.value, 50).exponent),
+      shortDescription: () =>
+        `+${formatInt(2)} per Reality, up to ${formatInt(50)} Realities`,
       symbol: "Ϟ",
     },
     {

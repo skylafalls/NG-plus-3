@@ -67,15 +67,21 @@ export const Pelle = {
     Glyphs.harshAutoClean();
     if (!Glyphs.unequipAll()) {
       Modal.hideAll();
-      Modal.message.show(`Dooming your Reality will unequip your Glyphs. Some of your
-        Glyphs could not be unequipped due to lack of inventory space.`, 1);
+      Modal.message.show(
+        `Dooming your Reality will unequip your Glyphs. Some of your
+        Glyphs could not be unequipped due to lack of inventory space.`,
+        1,
+      );
       return;
     }
     Glyphs.harshAutoClean();
     if (Glyphs.freeInventorySpace < 5) {
       Modal.hideAll();
-      Modal.message.show(`You must have enough empty unprotected Glyph slots for
-        ${formatInt(5)} additional Glyphs in order to Doom your Reality.`, 1);
+      Modal.message.show(
+        `You must have enough empty unprotected Glyph slots for
+        ${formatInt(5)} additional Glyphs in order to Doom your Reality.`,
+        1,
+      );
       return;
     }
     for (const type of GlyphInfo.basicGlyphTypes) {
@@ -111,22 +117,34 @@ export const Pelle = {
     AutomatorBackend.stop();
 
     // Force-unhide all tabs except for the shop tab, for which we retain the hide state instead
-    const shopTab = ~1 & (1 << GameDatabase.tabs.find(t => t.key === "shop").id);
+    const shopTab = ~1 &
+      (1 << GameDatabase.tabs.find((t) => t.key === "shop").id);
     player.options.hiddenTabBits &= shopTab;
 
     // Force unhide MOST subtabs, although some of the tabs get ignored since they don't contain any
     // meaningful interactable gameplay elements in Doomed
-    const tabsToIgnore = new Set(["statistics", "achievements", "reality", "celestials"]);
-    const ignoredIDs = new Set(GameDatabase.tabs.filter(t => tabsToIgnore.has(t.key)).map(t => t.id));
+    const tabsToIgnore = new Set([
+      "statistics",
+      "achievements",
+      "reality",
+      "celestials",
+    ]);
+    const ignoredIDs = new Set(
+      GameDatabase.tabs.filter((t) => tabsToIgnore.has(t.key)).map((t) => t.id),
+    );
     for (let tabIndex = 0; tabIndex < GameDatabase.tabs.length; tabIndex++) {
-      player.options.hiddenSubtabBits[tabIndex] &= ignoredIDs.has(tabIndex) ? -1 : 0;
+      player.options.hiddenSubtabBits[tabIndex] &= ignoredIDs.has(tabIndex)
+        ? -1
+        : 0;
     }
     Pelle.quotes.initial.show();
     GameStorage.save(true);
   },
 
   get displayName() {
-    return Date.now() % 4000 > 500 ? "Pelle" : wordShift.randomCrossWords("Pelle");
+    return Date.now() % 4000 > 500
+      ? "Pelle"
+      : wordShift.randomCrossWords("Pelle");
   },
 
   get isUnlocked() {
@@ -143,7 +161,9 @@ export const Pelle = {
       return true;
     }
     if (!disabledMechanicUnlocks[mechanic]) {
-      console.error(`Mechanic ${mechanic} isn't present in the disabledMechanicUnlocks!`);
+      console.error(
+        `Mechanic ${mechanic} isn't present in the disabledMechanicUnlocks!`,
+      );
       return true;
     }
 
@@ -180,8 +200,10 @@ export const Pelle = {
 
   gameLoop(diff) {
     if (this.isDoomed) {
-      Currency.realityShards.add(this.realityShardGainPerSecond.times(diff).div(1000));
-      PelleRifts.all.forEach(r => r.fill(diff));
+      Currency.realityShards.add(
+        this.realityShardGainPerSecond.times(diff).div(1000),
+      );
+      PelleRifts.all.forEach((r) => r.fill(diff));
     }
   },
 
@@ -194,8 +216,40 @@ export const Pelle = {
   },
 
   get disabledAchievements() {
-    return [164, 156, 143, 142, 141, 137, 134, 133, 132, 131, 126, 125, 118, 117, 116, 113, 111, 104, 103, 95, 93, 92,
-      91, 87, 85, 78, 76, 74, 65, 55, 54, 37];
+    return [
+      164,
+      156,
+      143,
+      142,
+      141,
+      137,
+      134,
+      133,
+      132,
+      131,
+      126,
+      125,
+      118,
+      117,
+      116,
+      113,
+      111,
+      104,
+      103,
+      95,
+      93,
+      92,
+      91,
+      87,
+      85,
+      78,
+      76,
+      74,
+      65,
+      55,
+      54,
+      37,
+    ];
   },
 
   get uselessInfinityUpgrades() {
@@ -207,18 +261,76 @@ export const Pelle = {
   },
 
   get disabledRUPGs() {
-    return [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 19, 20, 22, 23, 24];
+    return [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      19,
+      20,
+      22,
+      23,
+      24,
+    ];
   },
 
   get uselessPerks() {
-    return [10, 12, 13, 14, 15, 16, 17, 30, 40, 41, 42, 43, 44, 45, 46, 51, 52,
-      53, 60, 61, 62, 80, 81, 82, 83, 100, 103, 104, 105, 106, 201, 202, 203, 204];
+    return [
+      10,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      30,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      51,
+      52,
+      53,
+      60,
+      61,
+      62,
+      80,
+      81,
+      82,
+      83,
+      100,
+      103,
+      104,
+      105,
+      106,
+      201,
+      202,
+      203,
+      204,
+    ];
   },
 
   get specialGlyphEffect() {
-    const isUnlocked = this.isDoomed && PelleRifts.chaos.milestones[1].canBeApplied;
-    const description = this.getSpecialGlyphEffectDescription(this.activeGlyphType);
-    const isActive = type => isUnlocked && this.activeGlyphType === type;
+    const isUnlocked = this.isDoomed &&
+      PelleRifts.chaos.milestones[1].canBeApplied;
+    const description = this.getSpecialGlyphEffectDescription(
+      this.activeGlyphType,
+    );
+    const isActive = (type) => isUnlocked && this.activeGlyphType === type;
     return {
       isUnlocked,
       description,
@@ -234,32 +346,42 @@ export const Pelle = {
       dilation: isActive("dilation")
         ? Decimal.pow(player.dilation.totalTachyonGalaxies, 1.5).max(1)
         : DC.D1,
-      power: isActive("power")
-        ? 1.02
-        : 1,
-      companion: isActive("companion")
-        ? 1.34
-        : 1,
-      isScaling: () => ["infinity", "time", "replication", "dilation"].includes(this.activeGlyphType),
+      power: isActive("power") ? 1.02 : 1,
+      companion: isActive("companion") ? 1.34 : 1,
+      isScaling: () =>
+        ["infinity", "time", "replication", "dilation"].includes(
+          this.activeGlyphType,
+        ),
     };
   },
   getSpecialGlyphEffectDescription(type) {
     switch (type) {
       case "infinity": {
-        return `Infinity Point gain ${player.challenge.eternity.current <= 8
-          ? formatX(Currency.infinityPoints.value.plus(1).pow(0.2), 2)
-          : formatX(DC.D1, 2)} (based on current IP)`;
+        return `Infinity Point gain ${
+          player.challenge.eternity.current <= 8
+            ? formatX(Currency.infinityPoints.value.plus(1).pow(0.2), 2)
+            : formatX(DC.D1, 2)
+        } (based on current IP)`;
       }
       case "time": {
-        return `Eternity Point gain ${formatX(Currency.eternityPoints.value.plus(1).pow(0.3), 2)}
+        return `Eternity Point gain ${
+          formatX(Currency.eternityPoints.value.plus(1).pow(0.3), 2)
+        }
           (based on current EP)`;
       }
       case "replication": {
-        return `Replication speed ${formatX(10 ** 53 ** (PelleRifts.vacuum.percentage), 2)} \
+        return `Replication speed ${
+          formatX(10 ** 53 ** (PelleRifts.vacuum.percentage), 2)
+        } \
         (based on ${wordShift.wordCycle(PelleRifts.vacuum.name)})`;
       }
       case "dilation": {
-        return `Dilated Time gain ${formatX(Decimal.pow(player.dilation.totalTachyonGalaxies, 1.5).max(1), 2)}
+        return `Dilated Time gain ${
+          formatX(
+            Decimal.pow(player.dilation.totalTachyonGalaxies, 1.5).max(1),
+            2,
+          )
+        }
           (based on Tachyon Galaxies)`;
       }
       case "power": {
@@ -310,13 +432,15 @@ export const Pelle = {
       ep = ep.times(5);
     }
 
-    const gain = am.add(2).log10().add(ip.add(2).log10()).add(ep.add(2).log10()).div(1.64).pow(7.5);
+    const gain = am.add(2).log10().add(ip.add(2).log10()).add(ep.add(2).log10())
+      .div(1.64).pow(7.5);
 
     return gain.lt(1) ? gain : Decimal.floor(gain.minus(this.cel.remnants));
   },
 
   realityShardGain(remnants) {
-    return Decimal.pow(10, Decimal.pow(remnants, (1 / 7.5)).times(4)).minus(1).div(1e3);
+    return Decimal.pow(10, Decimal.pow(remnants, 1 / 7.5).times(4)).minus(1)
+      .div(1e3);
   },
 
   get realityShardGainPerSecond() {
@@ -341,7 +465,12 @@ export const Pelle = {
   },
 
   antimatterDimensionMult(x) {
-    return Decimal.pow(10, Decimal.log10(x.add(1)).add(x.pow(5.1).div(1e3)).add(DC.D4.pow(x).div(1e19)));
+    return Decimal.pow(
+      10,
+      Decimal.log10(x.add(1)).add(x.pow(5.1).div(1e3)).add(
+        DC.D4.pow(x).div(1e19),
+      ),
+    );
   },
 
   get activeGlyphType() {
@@ -355,7 +484,8 @@ export const Pelle = {
   // Transition text from "from" to "to", stage is 0-1, 0 is fully "from" and 1 is fully "to"
   // Also adds more zalgo the bigger the stage
   transitionText(from, to, stage = 0) {
-    const len = Math.round((from.length * (1 - stage) + to.length * stage) * 1e8) / 1e8;
+    const len =
+      Math.round((from.length * (1 - stage) + to.length * stage) * 1e8) / 1e8;
     const toInterval = len * (1 - stage);
     let req = toInterval;
     let str = "";
@@ -372,7 +502,8 @@ export const Pelle = {
     return zalgo(str, Math.floor(stage ** 2 * 7));
   },
 
-  endTabNames: "End Is Nigh Destruction Is Imminent Help Us Good Bye Forever".split(" "),
+  endTabNames: "End Is Nigh Destruction Is Imminent Help Us Good Bye Forever"
+    .split(" "),
 
   quotes: Quotes.pelle,
 
@@ -525,11 +656,15 @@ export class PelleUpgradeState extends SetPurchasableMechanicState {
 
 export const PelleUpgrade = mapGameDataToObject(
   GameDatabase.celestials.pelle.upgrades,
-  config => (config.rebuyable
+  (
+    config,
+  ) => (config.rebuyable
     ? new RebuyablePelleUpgradeState(config)
-    : new PelleUpgradeState(config)
-  ),
+    : new PelleUpgradeState(config)),
 );
 
-PelleUpgrade.rebuyables = PelleUpgrade.all.filter(u => u.isRebuyable);
-PelleUpgrade.singles = PelleUpgrade.all.filter(u => !u.isRebuyable).sort((a, b) => a.cost - b.cost);
+PelleUpgrade.rebuyables = PelleUpgrade.all.filter((u) => u.isRebuyable);
+PelleUpgrade.singles = PelleUpgrade.all.filter((u) => !u.isRebuyable).sort((
+  a,
+  b,
+) => a.cost - b.cost);

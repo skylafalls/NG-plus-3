@@ -2,7 +2,9 @@ import { GameMechanicState } from "./game-mechanics";
 
 export function tryCompleteInfinityChallenges() {
   if (EternityMilestone.autoIC.isReached) {
-    const toComplete = InfinityChallenges.all.filter(x => x.isUnlocked && !x.isCompleted);
+    const toComplete = InfinityChallenges.all.filter((x) =>
+      x.isUnlocked && !x.isCompleted
+    );
     for (const challenge of toComplete) {
       challenge.complete();
     }
@@ -31,15 +33,19 @@ class InfinityChallengeState extends GameMechanicState {
   }
 
   get isUnlocked() {
-    return player.records.thisEternity.maxAM.gte(this.unlockAM) || (Achievement(133).isUnlocked && !Pelle.isDoomed)
-      || (PelleUpgrade.keepInfinityChallenges.canBeApplied && Pelle.cel.records.totalAntimatter.gte(this.unlockAM));
+    return player.records.thisEternity.maxAM.gte(this.unlockAM) ||
+      (Achievement(133).isUnlocked && !Pelle.isDoomed) ||
+      (PelleUpgrade.keepInfinityChallenges.canBeApplied &&
+        Pelle.cel.records.totalAntimatter.gte(this.unlockAM));
   }
 
   get isRunning() {
     if (QuantumChallenge(6).isRunning) {
-      return this.id === 3 || this.id === 7;
+      return this.id === 1 || this.id === 2 || this.id === 3 || this.id === 6 ||
+        this.id === 7;
     }
-    return player.challenge.infinity.current === this.id || (this.id === 3 && EternityChallenge(14).isRunning);
+    return player.challenge.infinity.current === this.id ||
+      (this.id === 3 && EternityChallenge(14).isRunning);
   }
 
   requestStart() {
@@ -106,7 +112,8 @@ class InfinityChallengeState extends GameMechanicState {
     if (bestTimes[this.id - 1].lte(player.records.thisInfinity.time)) {
       return;
     }
-    player.challenge.infinity.bestTimes[this.id - 1] = player.records.thisInfinity.time;
+    player.challenge.infinity.bestTimes[this.id - 1] =
+      player.records.thisInfinity.time;
     GameCache.infinityChallengeTimeSum.invalidate();
   }
 
@@ -123,7 +130,9 @@ class InfinityChallengeState extends GameMechanicState {
  * @param {number} id
  * @return {InfinityChallengeState}
  */
-export const InfinityChallenge = InfinityChallengeState.createAccessor(GameDatabase.challenges.infinity);
+export const InfinityChallenge = InfinityChallengeState.createAccessor(
+  GameDatabase.challenges.infinity,
+);
 
 /**
  * @returns {InfinityChallengeState}
@@ -152,7 +161,7 @@ export const InfinityChallenges = {
     player.challenge.infinity.completedBits = 0;
   },
   get nextIC() {
-    return InfinityChallenges.all.find(x => !x.isUnlocked);
+    return InfinityChallenges.all.find((x) => !x.isUnlocked);
   },
   get nextICUnlockAM() {
     return this.nextIC?.unlockAM;
@@ -179,7 +188,10 @@ export const InfinityChallenges = {
       // This has a reasonably high likelihood of happening when the player isn't looking at the game, so
       // we also give it a tab notification
       TabNotification.ICUnlock.clearTrigger();
-      GameUI.notify.infinity(`You have unlocked Infinity Challenge ${ic.id}`, 7000);
+      GameUI.notify.infinity(
+        `You have unlocked Infinity Challenge ${ic.id}`,
+        7000,
+      );
       TabNotification.ICUnlock.tryTrigger();
     }
   },
@@ -187,6 +199,6 @@ export const InfinityChallenges = {
    * @returns {InfinityChallengeState[]}
    */
   get completed() {
-    return InfinityChallenges.all.filter(ic => ic.isCompleted);
+    return InfinityChallenges.all.filter((ic) => ic.isCompleted);
   },
 };

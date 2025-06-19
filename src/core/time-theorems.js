@@ -6,15 +6,15 @@ import { Currency } from "./currency";
  */
 export class TimeTheoremPurchaseType {
   /**
-  * @abstract
-  */
+   * @abstract
+   */
   get amount() {
     throw new NotImplementedError();
   }
 
   /**
-  * @abstract
-  */
+   * @abstract
+   */
   set amount(value) {
     throw new NotImplementedError();
   }
@@ -24,8 +24,8 @@ export class TimeTheoremPurchaseType {
   }
 
   /**
-  * @abstract
-  */
+   * @abstract
+   */
   get currency() {
     throw new NotImplementedError();
   }
@@ -50,9 +50,16 @@ export class TimeTheoremPurchaseType {
 
   get bulkPossible() {
     if (Perk.ttFree.canBeApplied) {
-      return this.currency.value.divide(this.cost).max(1).log10().div(this.costIncrement.max(1).log10()).add(1).floor();
+      return this.currency.value.divide(this.cost).max(1).log10().div(
+        this.costIncrement.max(1).log10(),
+      ).add(1).floor();
     }
-    return Decimal.affordGeometricSeries(this.currency.value, this.cost, this.costIncrement, 0);
+    return Decimal.affordGeometricSeries(
+      this.currency.value,
+      this.cost,
+      this.costIncrement,
+      0,
+    );
   }
 
   // Note: This is actually just the cost of the largest term of the geometric series. If buying EP without the
@@ -88,7 +95,9 @@ export class TimeTheoremPurchaseType {
     amntPur = amntPur.sub(1).max(0);
     Currency.timeTheorems.add(amntPur);
     this.add(amntPur);
-    if (!Perk.ttFree.canBeApplied && this.currency.layer <= 1 && amntPur.neq(0)) {
+    if (
+      !Perk.ttFree.canBeApplied && this.currency.layer <= 1 && amntPur.neq(0)
+    ) {
       this.currency.subtract(this.cost);
     }
     // Can we afford another? If not, just return that we definitely bought some already
@@ -195,8 +204,13 @@ export const TimeTheorems = {
       return true;
     }
     if (!auto) {
-      Modal.message.show(`You need to buy at least ${formatInt(1)} Time Dimension before you can purchase
-      Time Theorems.`, { closeEvent: GAME_EVENT.REALITY_RESET_AFTER });
+      Modal.message.show(
+        `You need to buy at least ${
+          formatInt(1)
+        } Time Dimension before you can purchase
+      Time Theorems.`,
+        { closeEvent: GAME_EVENT.REALITY_RESET_AFTER },
+      );
     }
     return false;
   },
@@ -238,7 +252,7 @@ export const TimeTheorems = {
 
   calculateTimeStudiesCost() {
     let totalCost = TimeStudy.boughtNormalTS()
-      .map(ts => ts.cost)
+      .map((ts) => ts.cost)
       .reduce(Decimal.sumReducer, new Decimal());
     const ecStudy = TimeStudy.eternityChallenge.current();
     if (ecStudy !== undefined) {

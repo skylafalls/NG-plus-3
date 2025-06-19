@@ -37,7 +37,9 @@ class RaUnlockState extends GameMechanicState {
   }
 
   get displayIcon() {
-    return this.disabledByPelle ? "<span class=\"fas fa-ban\"></span>" : this.config.displayIcon;
+    return this.disabledByPelle
+      ? '<span class="fas fa-ban"></span>'
+      : this.config.displayIcon;
   }
 
   get pet() {
@@ -66,7 +68,7 @@ class RaUnlockState extends GameMechanicState {
 
 const unlocks = mapGameDataToObject(
   GameDatabase.celestials.ra.unlocks,
-  config => new RaUnlockState(config),
+  (config) => new RaUnlockState(config),
 );
 
 class RaPetState extends GameMechanicState {
@@ -186,11 +188,15 @@ class RaPetState extends GameMechanicState {
   }
 
   get memoryUpgradeCapped() {
-    return this.memoryUpgradeCost.gte(Ra.requiredMemoriesForLevel(Ra.levelCap - 1).div(2));
+    return this.memoryUpgradeCost.gte(
+      Ra.requiredMemoriesForLevel(Ra.levelCap - 1).div(2),
+    );
   }
 
   get chunkUpgradeCapped() {
-    return this.chunkUpgradeCost.gte(Ra.requiredMemoriesForLevel(Ra.levelCap - 1).div(2));
+    return this.chunkUpgradeCost.gte(
+      Ra.requiredMemoriesForLevel(Ra.levelCap - 1).div(2),
+    );
   }
 
   purchaseMemoryUpgrade() {
@@ -223,7 +229,7 @@ class RaPetState extends GameMechanicState {
 
   get unlocks() {
     return Ra.unlocks.all
-      .filter(x => x.pet === this)
+      .filter((x) => x.pet === this)
       .sort((a, b) => a.level - b.level);
   }
 
@@ -234,7 +240,9 @@ class RaPetState extends GameMechanicState {
       : 0;
     // Adding memories from half of the gained chunks this tick results in the best mathematical behavior
     // for very long simulated ticks
-    const newMemories = seconds.mul(this.memoryChunks.add(newMemoryChunks.div(2)))
+    const newMemories = seconds.mul(
+      this.memoryChunks.add(newMemoryChunks.div(2)),
+    )
       .mul(Ra.productionPerMemoryChunk).mul(this.memoryUpgradeCurrentMult);
     this.memoryChunks = this.memoryChunks.add(newMemoryChunks);
     this.memories = this.memories.add(newMemories);
@@ -251,7 +259,7 @@ class RaPetState extends GameMechanicState {
 
 const pets = mapGameDataToObject(
   GameDatabase.celestials.ra.pets,
-  config => new RaPetState(config),
+  (config) => new RaPetState(config),
 );
 
 export const Ra = {
@@ -288,7 +296,10 @@ export const Ra = {
     }
   },
   get productionPerMemoryChunk() {
-    let res = Effects.product(Ra.unlocks.continuousTTBoost.effects.memories, Achievement(168));
+    let res = Effects.product(
+      Ra.unlocks.continuousTTBoost.effects.memories,
+      Achievement(168),
+    );
     for (const pet of Ra.pets.all) {
       if (pet.isUnlocked) {
         res = res.mul(pet.memoryProductionMultiplier);
@@ -316,7 +327,9 @@ export const Ra = {
     if (boostList.length === 2) {
       return `${boostList[0]} and ${boostList[1]}`;
     }
-    return `${boostList.slice(0, -1).join(", ")}, and ${boostList[boostList.length - 1]}`;
+    return `${boostList.slice(0, -1).join(", ")}, and ${
+      boostList[boostList.length - 1]
+    }`;
   },
   // This is the exp required ON "level" in order to reach "level + 1"
   requiredMemoriesForLevel(level) {
@@ -325,26 +338,34 @@ export const Ra = {
     }
     const adjustedLevel = Decimal.pow(level, 2).div(10).add(level);
     const post15Scaling = Decimal.pow(1.5, Decimal.max(0, level - 15));
-    return Decimal.floor(Decimal.pow(adjustedLevel, 5.52).mul(post15Scaling).mul(DC.E6));
+    return Decimal.floor(
+      Decimal.pow(adjustedLevel, 5.52).mul(post15Scaling).mul(DC.E6),
+    );
   },
   // Returns a string containing a time estimate for gaining a specific amount of exp (UI only)
   timeToGoalString(pet, expToGain) {
     // Quadratic formula for growth (uses constant growth for a = 0)
     const a = Enslaved.isStoringRealTime
       ? DC.D0
-      : Ra.productionPerMemoryChunk.mul(pet.memoryUpgradeCurrentMult).mul(pet.memoryChunksPerSecond).div(2);
-    const b = Ra.productionPerMemoryChunk.mul(pet.memoryUpgradeCurrentMult).mul(pet.memoryChunks);
+      : Ra.productionPerMemoryChunk.mul(pet.memoryUpgradeCurrentMult).mul(
+        pet.memoryChunksPerSecond,
+      ).div(2);
+    const b = Ra.productionPerMemoryChunk.mul(pet.memoryUpgradeCurrentMult).mul(
+      pet.memoryChunks,
+    );
     const c = expToGain.neg();
     const estimate = a === 0
       ? c.neg().div(b)
       : decimalQuadraticSolution(a, b, c);
     if (Number.isFinite(estimate)) {
-      return `in ${TimeSpan.fromSeconds(new Decimal(estimate)).toStringShort()}`;
+      return `in ${
+        TimeSpan.fromSeconds(new Decimal(estimate)).toStringShort()
+      }`;
     }
     return "";
   },
   get totalPetLevel() {
-    return this.pets.all.map(pet => (pet.isUnlocked ? pet.level : 0)).nSum();
+    return this.pets.all.map((pet) => (pet.isUnlocked ? pet.level : 0)).nSum();
   },
   get levelCap() {
     return 25;
@@ -383,7 +404,12 @@ export const Ra = {
   // It also includes the 1% IP time study, Teresa's 1% EP upgrade, and the charged RM generation upgrade. Note that
   // removing the hardcap of 10 may cause runaways.
   theoremBoostFactor() {
-    return Decimal.min(10, Decimal.max(0, Currency.timeTheorems.value.add(1).log10().sub(350)).div(50));
+    return Decimal.min(
+      10,
+      Decimal.max(0, Currency.timeTheorems.value.add(1).log10().sub(350)).div(
+        50,
+      ),
+    );
   },
   get isUnlocked() {
     return V.spaceTheorems >= 36;
@@ -409,7 +435,9 @@ export const Ra = {
   updateAlchemyFlow(realityRealTime) {
     const perSecond = DC.E3.div(realityRealTime);
     for (const resource of AlchemyResources.all) {
-      resource.ema.addValue((resource.amount.sub(resource.before)).mul(perSecond));
+      resource.ema.addValue(
+        (resource.amount.sub(resource.before)).mul(perSecond),
+      );
       resource.before = resource.amount;
     }
   },
@@ -429,8 +457,12 @@ export const Ra = {
     return 25000;
   },
   get momentumValue() {
-    const hoursFromUnlock = TimeSpan.fromMilliseconds(player.celestials.ra.momentumTime).totalHours;
-    return Decimal.min(hoursFromUnlock.times(0.005).add(1), AlchemyResource.momentum.effectValue);
+    const hoursFromUnlock =
+      TimeSpan.fromMilliseconds(player.celestials.ra.momentumTime).totalHours;
+    return Decimal.min(
+      hoursFromUnlock.times(0.005).add(1),
+      AlchemyResource.momentum.effectValue,
+    );
   },
   quotes: Quotes.ra,
   symbol: "<i class='fas fa-sun'></i>",
@@ -466,16 +498,21 @@ export const GlyphAlteration = {
     return Ra.unlocks.alteredGlyphs.canBeApplied;
   },
   isAdded(type) {
-    return this.isUnlocked && this.getSacrificePower(type).gte(this.additionThreshold);
+    return this.isUnlocked &&
+      this.getSacrificePower(type).gte(this.additionThreshold);
   },
   isEmpowered(type) {
-    return this.isUnlocked && this.getSacrificePower(type).gte(this.empowermentThreshold);
+    return this.isUnlocked &&
+      this.getSacrificePower(type).gte(this.empowermentThreshold);
   },
   isBoosted(type) {
-    return this.isUnlocked && this.getSacrificePower(type).gte(this.boostingThreshold);
+    return this.isUnlocked &&
+      this.getSacrificePower(type).gte(this.boostingThreshold);
   },
   sacrificeBoost(type) {
-    const capped = this.getSacrificePower(type).clampMax(GlyphSacrificeHandler.maxSacrificeForEffects);
+    const capped = this.getSacrificePower(type).clampMax(
+      GlyphSacrificeHandler.maxSacrificeForEffects,
+    );
     return capped.div(this.boostingThreshold).clampMin(1).log10().div(2);
   },
   baseAdditionColor(isDark = Theme.current().isDark()) {
@@ -493,7 +530,9 @@ export const GlyphAlteration = {
   },
   getEmpowermentColor(type) {
     const isDark = CosmeticGlyphTypes[type].currentColor.bg === "black";
-    return this.isEmpowered(type) ? this.baseEmpowermentColor(isDark) : undefined;
+    return this.isEmpowered(type)
+      ? this.baseEmpowermentColor(isDark)
+      : undefined;
   },
   getBoostColor(type) {
     const isDark = CosmeticGlyphTypes[type].currentColor.bg === "black";

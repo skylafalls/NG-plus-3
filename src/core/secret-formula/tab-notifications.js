@@ -13,9 +13,10 @@ export const tabNotifications = {
         tab: "normal",
       },
     ],
-    condition: () => !PlayerProgress.realityUnlocked()
-      && !PlayerProgress.eternityUnlocked()
-      && !PlayerProgress.infinityUnlocked(),
+    condition: () =>
+      !PlayerProgress.realityUnlocked() &&
+      !PlayerProgress.eternityUnlocked() &&
+      !PlayerProgress.infinityUnlocked(),
     events: [GAME_EVENT.BIG_CRUNCH_BEFORE],
   },
   breakInfinity: {
@@ -26,8 +27,10 @@ export const tabNotifications = {
         tab: "break",
       },
     ],
-    condition: () => !PlayerProgress.realityUnlocked()
-      && !PlayerProgress.eternityUnlocked() && Autobuyer.bigCrunch.hasMaxedInterval,
+    condition: () =>
+      !PlayerProgress.realityUnlocked() &&
+      !PlayerProgress.eternityUnlocked() &&
+      Autobuyer.bigCrunch.hasMaxedInterval,
   },
   IDUnlock: {
     id: 2,
@@ -37,8 +40,9 @@ export const tabNotifications = {
         tab: "infinity",
       },
     ],
-    condition: () => !PlayerProgress.realityUnlocked()
-      && !PlayerProgress.eternityUnlocked() && !InfinityDimension(2).isUnlocked,
+    condition: () =>
+      !PlayerProgress.realityUnlocked() &&
+      !PlayerProgress.eternityUnlocked() && !InfinityDimension(2).isUnlocked,
   },
   ICUnlock: {
     id: 3,
@@ -48,8 +52,9 @@ export const tabNotifications = {
         tab: "infinity",
       },
     ],
-    condition: () => !PlayerProgress.realityUnlocked()
-      && !PlayerProgress.eternityUnlocked(),
+    condition: () =>
+      !PlayerProgress.realityUnlocked() &&
+      !PlayerProgress.eternityUnlocked(),
   },
   replicanti: {
     id: 4,
@@ -59,8 +64,10 @@ export const tabNotifications = {
         tab: "replicanti",
       },
     ],
-    condition: () => !PlayerProgress.realityUnlocked()
-      && !PlayerProgress.eternityUnlocked() && Currency.infinityPoints.gte(DC.E140),
+    condition: () =>
+      !PlayerProgress.realityUnlocked() &&
+      !PlayerProgress.eternityUnlocked() &&
+      Currency.infinityPoints.gte(DC.E140),
     events: [GAME_EVENT.BIG_CRUNCH_AFTER],
   },
   firstEternity: {
@@ -83,8 +90,9 @@ export const tabNotifications = {
         tab: "time",
       },
     ],
-    condition: () => !PlayerProgress.realityUnlocked()
-      && !PlayerProgress.eternityUnlocked(),
+    condition: () =>
+      !PlayerProgress.realityUnlocked() &&
+      !PlayerProgress.eternityUnlocked(),
     events: [GAME_EVENT.ETERNITY_RESET_BEFORE],
   },
   dilationAfterUnlock: {
@@ -106,8 +114,12 @@ export const tabNotifications = {
       },
     ],
     condition: () => false,
-    events: [GAME_EVENT.ETERNITY_RESET_AFTER, GAME_EVENT.SAVE_CONVERTED_FROM_PREVIOUS_VERSION,
-      GAME_EVENT.OFFLINE_CURRENCY_GAINED, GAME_EVENT.ACHIEVEMENT_UNLOCKED],
+    events: [
+      GAME_EVENT.ETERNITY_RESET_AFTER,
+      GAME_EVENT.SAVE_CONVERTED_FROM_PREVIOUS_VERSION,
+      GAME_EVENT.OFFLINE_CURRENCY_GAINED,
+      GAME_EVENT.ACHIEVEMENT_UNLOCKED,
+    ],
   },
   blackHoleUnlock: {
     id: 8,
@@ -117,7 +129,8 @@ export const tabNotifications = {
         tab: "hole",
       },
     ],
-    condition: () => !BlackHoles.areUnlocked && Currency.realityMachines.gte(100),
+    condition: () =>
+      !BlackHoles.areUnlocked && Currency.realityMachines.gte(100),
     events: [GAME_EVENT.REALITY_RESET_AFTER],
   },
   automatorUnlock: {
@@ -143,7 +156,8 @@ export const tabNotifications = {
         tab: "teresa",
       },
     ],
-    condition: () => player.celestials.teresa.pouredAmount === 0 && Teresa.isUnlocked,
+    condition: () =>
+      player.celestials.teresa.pouredAmount === 0 && Teresa.isUnlocked,
     events: [GAME_EVENT.REALITY_UPGRADE_BOUGHT],
   },
   alchemyUnlock: {

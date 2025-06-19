@@ -82,35 +82,47 @@ window.TimeSpan = class TimeSpan {
    * @returns {Decimal}
    */
   get days() {
-    return Decimal.floor(this.totalDays.sub(this.totalDays.div(365).floor().times(365)));
+    return Decimal.floor(
+      this.totalDays.sub(this.totalDays.div(365).floor().times(365)),
+    );
   }
 
   /**
    * @returns {Decimal}
    */
   get hours() {
-    return Decimal.floor(this.totalHours.sub(this.totalHours.div(24).floor().times(24)));
+    return Decimal.floor(
+      this.totalHours.sub(this.totalHours.div(24).floor().times(24)),
+    );
   }
 
   /**
    * @returns {Decimal}
    */
   get minutes() {
-    return Decimal.floor(this.totalMinutes.sub(this.totalMinutes.div(60).floor().times(60)));
+    return Decimal.floor(
+      this.totalMinutes.sub(this.totalMinutes.div(60).floor().times(60)),
+    );
   }
 
   /**
    * @returns {Decimal}
    */
   get seconds() {
-    return Decimal.floor(this.totalSeconds.sub(this.totalSeconds.div(60).floor().times(60)));
+    return Decimal.floor(
+      this.totalSeconds.sub(this.totalSeconds.div(60).floor().times(60)),
+    );
   }
 
   /**
    * @returns {Decimal}
    */
   get milliseconds() {
-    return Decimal.floor(this.totalMilliseconds.sub(this.totalMilliseconds.div(1e3).floor().times(1e3)));
+    return Decimal.floor(
+      this.totalMilliseconds.sub(
+        this.totalMilliseconds.div(1e3).floor().times(1e3),
+      ),
+    );
   }
 
   /**
@@ -216,7 +228,11 @@ window.TimeSpan = class TimeSpan {
       addComponent(value, name);
     }
     function addComponent(value, name) {
-      parts.push(value.eq(1) ? `${formatInt(value)} ${name}` : `${formatInt(value)} ${name}s`);
+      parts.push(
+        value.eq(1)
+          ? `${formatInt(value)} ${name}`
+          : `${formatInt(value)} ${name}s`,
+      );
     }
     addCheckedComponent(this.years, "year");
     addCheckedComponent(this.days, "day");
@@ -227,7 +243,9 @@ window.TimeSpan = class TimeSpan {
     if (parts.length === 0) {
       return `${formatInt(0)} seconds`;
     }
-    return [parts.slice(0, -1).join(", "), parts.slice(-1)[0]].join(parts.length < 2 ? "" : " and ");
+    return [parts.slice(0, -1).join(", "), parts.slice(-1)[0]].join(
+      parts.length < 2 ? "" : " and ",
+    );
   }
 
   /**
@@ -271,7 +289,9 @@ window.TimeSpan = class TimeSpan {
         if (Decimal.floor(this.totalHours).eq(0)) {
           return `${formatHMS(this.minutes)}:${sec}`;
         }
-        return `${formatHMS(Decimal.floor(this.totalHours))}:${formatHMS(this.minutes)}:${sec}`;
+        return `${formatHMS(Decimal.floor(this.totalHours))}:${
+          formatHMS(this.minutes)
+        }:${sec}`;
       }
       if (this.totalMinutes.lt(60)) {
         return `${format(this.totalMinutes, 0, 2)} minutes`;
@@ -281,9 +301,13 @@ window.TimeSpan = class TimeSpan {
       }
     }
     if (this.totalDays.lt(500)) {
-      return `${isSpeedrun ? this.totalDays.toFixed(2) : format(this.totalDays, 0, 2)} days`;
+      return `${
+        isSpeedrun ? this.totalDays.toFixed(2) : format(this.totalDays, 0, 2)
+      } days`;
     }
-    return `${isSpeedrun ? this.totalYears.toFixed(3) : format(this.totalYears, 3, 2)} years`;
+    return `${
+      isSpeedrun ? this.totalYears.toFixed(3) : format(this.totalYears, 3, 2)
+    } years`;
 
     function formatHMS(value) {
       const s = value.toString();

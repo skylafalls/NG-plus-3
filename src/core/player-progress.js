@@ -4,7 +4,8 @@ export class PlayerProgress {
   }
 
   get isInfinityUnlocked() {
-    return new Decimal(this._player.infinities).gt(0) || this.isEternityUnlocked;
+    return new Decimal(this._player.infinities).gt(0) ||
+      this.isEternityUnlocked;
   }
 
   get isEternityUnlocked() {
@@ -65,10 +66,10 @@ export class PlayerProgress {
   }
 
   static challengeCompleted() {
-    return NormalChallenges.all.slice(1).some(c => c.isCompleted);
+    return NormalChallenges.all.slice(1).some((c) => c.isCompleted);
   }
 
   static infinityChallengeCompleted() {
-    return InfinityChallenges.all.some(c => c.isCompleted);
+    return InfinityChallenges.all.some((c) => c.isCompleted);
   }
 }

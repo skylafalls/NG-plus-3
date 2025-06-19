@@ -1,4 +1,7 @@
-import { RebuyableMechanicState, SetPurchasableMechanicState } from "./game-mechanics";
+import {
+  RebuyableMechanicState,
+  SetPurchasableMechanicState,
+} from "./game-mechanics";
 import { SpeedrunMilestones } from "./speedrun";
 
 export class BreakInfinityUpgradeState extends SetPurchasableMechanicState {
@@ -42,7 +45,9 @@ class RebuyableBreakInfinityUpgradeState extends RebuyableMechanicState {
 
 export const BreakInfinityUpgrade = mapGameDataToObject(
   GameDatabase.infinity.breakUpgrades,
-  config => (config.rebuyable
+  (
+    config,
+  ) => (config.rebuyable
     ? new RebuyableBreakInfinityUpgradeState(config)
     : new BreakInfinityUpgradeState(config)),
 );

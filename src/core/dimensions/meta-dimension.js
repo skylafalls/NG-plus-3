@@ -21,7 +21,9 @@ function onBuyDimension(tier) {
 // This function doesn't do cost checking as challenges generally modify costs, it just buys and updates dimensions
 function buyUntilTen(tier) {
   const dimension = MetaDimension(tier);
-  dimension.amount = Decimal.round(dimension.amount.plus(dimension.remainingUntil10));
+  dimension.amount = Decimal.round(
+    dimension.amount.plus(dimension.remainingUntil10),
+  );
   dimension.bought = dimension.bought.add(dimension.remainingUntil10);
   onBuyDimension(tier);
 }
@@ -29,9 +31,29 @@ function buyUntilTen(tier) {
 class MetaDimensionState extends DimensionState {
   constructor(tier) {
     super(() => player.meta.dimensions, tier);
-    const BASE_COSTS = [null, DC.E1, DC.E2, DC.E4, DC.E6, DC.E9, DC.E13, DC.E18, DC.E24];
+    const BASE_COSTS = [
+      null,
+      DC.E1,
+      DC.E2,
+      DC.E4,
+      DC.E6,
+      DC.E9,
+      DC.E13,
+      DC.E18,
+      DC.E24,
+    ];
     this._baseCost = BASE_COSTS[tier];
-    const BASE_COST_MULTIPLIERS = [null, DC.E3, DC.E4, DC.E5, DC.E6, DC.E8, DC.E10, DC.E12, DC.E15];
+    const BASE_COST_MULTIPLIERS = [
+      null,
+      DC.E3,
+      DC.E4,
+      DC.E5,
+      DC.E6,
+      DC.E8,
+      DC.E10,
+      DC.E12,
+      DC.E15,
+    ];
     this._baseCostMultiplier = BASE_COST_MULTIPLIERS[tier];
   }
 
@@ -51,7 +73,9 @@ class MetaDimensionState extends DimensionState {
    * @returns {Decimal}
    */
   get cost() {
-    return this.costScale.calculateCost(this.bought.div(DC.E1).floor().add(this.costBumps));
+    return this.costScale.calculateCost(
+      this.bought.div(DC.E1).floor().add(this.costBumps),
+    );
   }
 
   /** @returns {number} */
@@ -107,7 +131,7 @@ class MetaDimensionState extends DimensionState {
    * @returns {boolean}
    */
   get isProducing() {
-    if (QuantumChallenge(4).isRunning && tier > 2) {
+    if (QuantumChallenge(4).isRunning && tier > 6) {
       return false;
     }
     return this.totalAmount.gt(0);
@@ -137,7 +161,10 @@ class MetaDimensionState extends DimensionState {
     // It's safe to use dimension.currencyAmount because this is
     // a dimension-only method (so don't just copy it over to tickspeed).
     // We need to use dimension.currencyAmount here because of different costs in NC6.
-    const contVal = this.costScale.getContinuumValue(this.currencyAmount, DC.E1);
+    const contVal = this.costScale.getContinuumValue(
+      this.currencyAmount,
+      DC.E1,
+    );
     return contVal ? contVal.times(Laitela.matterExtraPurchaseFactor) : DC.D0;
   }
 
@@ -156,8 +183,8 @@ class MetaDimensionState extends DimensionState {
   }
 
   /**
-    * @returns {boolean}
-    */
+   * @returns {boolean}
+   */
   get isAffordable() {
     return this.cost.lte(this.currencyAmount);
   }
@@ -173,7 +200,8 @@ class MetaDimensionState extends DimensionState {
     if (MetaDimensions.boost.totalBoosts.add(4).lt(this.tier)) {
       return false;
     }
-    const hasPrevTier = this.tier === 1 || MetaDimension(this.tier - 1).totalAmount.gt(0);
+    const hasPrevTier = this.tier === 1
+      || MetaDimension(this.tier - 1).totalAmount.gt(0);
     if (!hasPrevTier) {
       return false;
     }
@@ -194,17 +222,17 @@ class MetaDimensionState extends DimensionState {
     if (this.tier % 2 === 1) {
       multiplier = multiplier.timesEffectOf(QuantumChallenge(4).reward);
     }
+
+    if (this.tier === 1) {
+      multiplier = multiplier.timesEffectOf(GluonUpgrade.redGreen(3));
+    }
+
     multiplier = multiplier.mul(Decimal.pow(MetaDimensions.buyTenMultiplier, this.bought.div(10).floor()));
     multiplier = multiplier.mul(MetaDimensions.boost.multiplierToNDTier(this.tier));
     return multiplier;
   }
 
   get productionPerSecond() {
-    const tier = this.tier;
-    if (QuantumChallenge(1).isRunning && tier > 2) {
-      return DC.D0;
-    }
-
     let amount = this.totalAmount;
     let production = amount.times(this.multiplier);
     return production;
@@ -237,14 +265,18 @@ export const MetaDimensions = {
   all: MetaDimension.index.compact(),
 
   get metaAMtoDimBoostExponent() {
-    let exponent = QuantumChallenge(3).isRunning ? Currency.metaAntimatter.value.plus(1).log10().max(1) : new Decimal(8);
+    let exponent = QuantumChallenge(3).isRunning
+      ? Currency.metaAntimatter.value.plus(1).log10().max(1)
+      : new Decimal(8);
     exponent = Effects.max(exponent, DilationUpgrade.mdEffectBuff);
     exponent = exponent.plusEffectOf(EternityChallenge(13).reward);
     return exponent;
   },
 
   get dimensionBoostMultiplier() {
-    let multiplier = player.records.thisQuantum.bestMA.sub(10).pow(this.metaAMtoDimBoostExponent).max(1);
+    let multiplier = player.records.thisQuantum.bestMA.sub(10).pow(
+      this.metaAMtoDimBoostExponent,
+    ).max(1);
     if (EternityChallenge(14).isRunning || QuantumChallenge(7).isRunning) {
       return new Decimal(1);
     }
@@ -255,7 +287,6 @@ export const MetaDimensions = {
     for (const dimension of MetaDimensions.all) {
       dimension.reset();
     }
-    player.meta.boosts = new Decimal(0);
   },
 
   resetAmountUpToTier(maxTier) {
@@ -281,7 +312,10 @@ export const MetaDimensions = {
       nextTierOffset++;
     }
     for (let tier = maxTierProduced; tier >= 1; --tier) {
-      MetaDimension(tier + nextTierOffset).produceDimensions(MetaDimension(tier), diff.div(10));
+      MetaDimension(tier + nextTierOffset).produceDimensions(
+        MetaDimension(tier),
+        diff.div(10),
+      );
     }
     MetaDimension(1).produceCurrency(Currency.metaAntimatter, diff);
   },
@@ -357,7 +391,9 @@ export const MetaDimensions = {
 
     // This is the bulk-buy math, explicitly ignored if abnormal cost increases are active
     const maxBought = dimension.costScale.getMaxBought(
-      Decimal.floor(dimension.bought.div(10)).add(dimension.costBumps), dimension.currencyAmount, DC.E1,
+      Decimal.floor(dimension.bought.div(10)).add(dimension.costBumps),
+      dimension.currencyAmount,
+      DC.E1,
     );
     if (maxBought === null) {
       return;
@@ -368,7 +404,9 @@ export const MetaDimensions = {
     }
     dimension.amount = dimension.amount.plus(buying);
     dimension.bought = dimension.bought.add(buying);
-    dimension.currencyAmount = dimension.currencyAmount.minus(Decimal.pow10(maxBought.logPrice)).max(0);
+    dimension.currencyAmount = dimension.currencyAmount.minus(
+      Decimal.pow10(maxBought.logPrice),
+    ).max(0);
   },
 
   maxAll() {
@@ -391,7 +429,9 @@ export const MetaDimensions = {
     },
 
     multiplierToNDTier(tier) {
-      const normalBoostMult = this.power.pow(this.purchasedBoosts.add(1).sub(tier)).clampMin(1);
+      const normalBoostMult = this.power.pow(
+        this.purchasedBoosts.add(1).sub(tier),
+      ).clampMin(1);
       return normalBoostMult;
     },
 
@@ -400,7 +440,9 @@ export const MetaDimensions = {
     },
 
     get canUnlockNewDimension() {
-      return MetaDimensions.boost.purchasedBoosts.add(4).lt(MetaDimensions.boost.maxDimensionsUnlockable);
+      return MetaDimensions.boost.purchasedBoosts.add(4).lt(
+        MetaDimensions.boost.maxDimensionsUnlockable,
+      );
     },
 
     get maxBoosts() {
@@ -422,20 +464,6 @@ export const MetaDimensions = {
       return this.bulkRequirement(1);
     },
 
-    bulkRequirement(bulk) {
-      const targetResets = MetaDimensions.boost.purchasedBoosts.add(bulk);
-      const tier = Decimal.min(targetResets.add(3), this.maxDimensionsUnlockable).toNumber();
-      let amount = DC.D20;
-      const discount = new Decimal(0).plusEffectOf(QuantumChallenge(4));
-      amount = amount.add(targetResets.sub(5).max(0).mul(DC.D15.sub(discount)).round());
-      if (QuantumChallenge(5).isRunning) {
-        amount = Decimal.pow(targetResets.sub(1), 3).add(targetResets).add(amount).sub(1);
-      }
-      amount = Decimal.round(amount);
-
-      return new DimBoostRequirement(tier, amount);
-    },
-
     get unlockedByBoost() {
       if (MetaDimensions.boost.lockText !== null) {
         return MetaDimensions.boost.lockText;
@@ -444,11 +472,16 @@ export const MetaDimensions = {
       const allNDUnlocked = EternityMilestone.unlockAllND.isReached;
 
       let newUnlock = "";
-      if (!allNDUnlocked && boosts.lt(MetaDimensions.boost.maxDimensionsUnlockable - 4)) {
+      if (
+        !allNDUnlocked
+        && boosts.lt(MetaDimensions.boost.maxDimensionsUnlockable - 4)
+      ) {
         newUnlock = `unlock the ${formatInt(boosts.add(5))}th Dimension`;
       }
 
-      const formattedMultText = `give a ${formatX(MetaDimensions.boost.power, 2, 1)} multiplier `;
+      const formattedMultText = `give a ${
+        formatX(MetaDimensions.boost.power, 2, 1)
+      } multiplier `;
       let dimensionRange = "to the 1st Dimension";
       if (boosts.gt(0)) {
         dimensionRange = `to Dimensions 1-${Decimal.min(boosts.add(1), 8)}`;
@@ -463,7 +496,8 @@ export const MetaDimensions = {
       } else if (newUnlock === "") {
         boostEffects = `${formattedMultText} ${dimensionRange}`;
       } else {
-        boostEffects = `${newUnlock} and ${formattedMultText} ${dimensionRange}`;
+        boostEffects
+          = `${newUnlock} and ${formattedMultText} ${dimensionRange}`;
       }
 
       if (boostEffects === "") {
@@ -489,12 +523,6 @@ export const MetaDimensions = {
     },
 
     manualRequest(bulk) {
-      if (!MetaDimensions.boost.requirement.isSatisfied) {
-        return false;
-      }
-      if (!MetaDimensions.boost.canBeBought) {
-        return false;
-      }
       this.request(bulk);
     },
 
@@ -505,11 +533,28 @@ export const MetaDimensions = {
       if (!MetaDimensions.boost.canBeBought) {
         return false;
       }
-      if (bulk > 1) {
+      if (bulk) {
         this.maxBuy();
       } else {
         this.dimensionBoostReset(1);
       }
+    },
+
+    bulkRequirement(bulk) {
+      let targetResets = MetaDimensions.boost.purchasedBoosts.add(bulk);
+      let amount = DC.D20;
+      const tier = Decimal.min(
+        targetResets.add(3),
+        this.maxDimensionsUnlockable,
+      ).toNumber();
+      const discount = new Decimal(0);
+
+      amount = amount.add(
+        targetResets.sub(5).max(0).mul(DC.D15.sub(discount)).round(),
+      );
+      amount = Decimal.round(amount);
+
+      return new DimBoostRequirement(tier, amount);
     },
 
     maxBuy() {
@@ -537,9 +582,6 @@ export const MetaDimensions = {
 
       const ad = MetaDimension(tier).totalAmount;
       let calcBoosts = ad.sub(amount).div(multiplierPerDB);
-      if (QuantumChallenge(5).isRunning) {
-        calcBoosts = decimalCubicSolution(DC.D1, DC.D1.neg(), multiplierPerDB.add(2), ad.add(18).neg());
-      }
 
       calcBoosts = calcBoosts.add(4);
       // Dimension boosts 1-4 dont use 8th dims, 1-2 dont use 6th dims, so add those extras afterwards.
@@ -554,11 +596,18 @@ export const MetaDimensions = {
       this.dimensionBoostReset(minBoosts);
     },
 
-    dimensionBoostReset(tempBulk, forcedADReset = false, forcedAMReset = false) {
-      const bulk = Decimal.min(tempBulk, this.maxBoosts.sub(player.meta.boosts));
-      player.meta.boosts = (Decimal.max(DC.D0, player.meta.boosts.add(bulk)));
-      MetaDimensions.reset();
-      Currency.metaAntimatter.reset();
+    dimensionBoostReset(
+      tempBulk,
+      forcedADReset = false,
+      forcedAMReset = false,
+    ) {
+      const bulk = Decimal.min(
+        tempBulk,
+        this.maxBoosts.sub(player.meta.boosts),
+      );
+      player.meta.boosts = Decimal.max(DC.D0, player.meta.boosts.add(bulk));
+      if (!forcedADReset) MetaDimensions.reset();
+      if (!forcedAMReset) Currency.metaAntimatter.reset();
     },
   },
 };

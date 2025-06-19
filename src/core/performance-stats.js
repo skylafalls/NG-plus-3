@@ -24,7 +24,9 @@ export const PerformanceStats = {
     if (!this.isOn) {
       return;
     }
-    const blockRoot = this.currentBlocks.length > 0 ? this.currentBlocks.last().childBlocks : this.stats;
+    const blockRoot = this.currentBlocks.length > 0
+      ? this.currentBlocks.last().childBlocks
+      : this.stats;
     let block = blockRoot[blockName];
     if (block === undefined) {
       block = {
@@ -63,7 +65,10 @@ export const PerformanceStats = {
         }
         const block = rootBlock[blockName];
         const records = block.records;
-        while (records.length > 1 && records.last().timestamp - records.first().timestamp > samplePeriod) {
+        while (
+          records.length > 1 &&
+          records.last().timestamp - records.first().timestamp > samplePeriod
+        ) {
           records.shift();
         }
         text += `${"-".repeat(indentLevel)}${blockName}: `;

@@ -6,24 +6,36 @@ export function updateNormalAndInfinityChallenges(diff) {
     if (AntimatterDimension(2).amount.neq(0)) {
       Currency.matter.bumpTo(1);
       // These caps are values which occur at approximately e308 IP
-      const cappedBase = Decimal.clampMax(DimBoost.totalBoosts, 400).div(200).add(1.03)
+      const cappedBase = Decimal.clampMax(DimBoost.totalBoosts, 400).div(200)
+        .add(1.03)
         .add(Decimal.clampMax(player.galaxies, 100).div(100));
       Currency.matter.multiply(Decimal.pow(cappedBase, diff.div(20)));
     }
-    if (Currency.matter.gt(Currency.antimatter.value) && NormalChallenge(11).isRunning && !Player.canCrunch) {
+    if (
+      Currency.matter.gt(Currency.antimatter.value) &&
+      NormalChallenge(11).isRunning && !Player.canCrunch
+    ) {
       const values = [Currency.antimatter.value, Currency.matter.value];
       softReset(0, true, true);
-      Modal.message.show(`Your ${format(values[0], 2, 2)} antimatter was annihilated
-        by ${format(values[1], 2, 2)} matter.`, { closeEvent: GAME_EVENT.BIG_CRUNCH_AFTER }, 1);
+      Modal.message.show(
+        `Your ${format(values[0], 2, 2)} antimatter was annihilated
+        by ${format(values[1], 2, 2)} matter.`,
+        { closeEvent: GAME_EVENT.BIG_CRUNCH_AFTER },
+        1,
+      );
     }
   }
 
   if (NormalChallenge(3).isRunning) {
-    player.chall3Pow = player.chall3Pow.times(DC.D1_00038.pow(diff.div(100))).clampMax(DC.NUMMAX);
+    player.chall3Pow = player.chall3Pow.times(DC.D1_00038.pow(diff.div(100)))
+      .clampMax(DC.NUMMAX);
   }
 
   if (NormalChallenge(2).isRunning) {
-    player.chall2Pow = Decimal.min(player.chall2Pow.add(diff.div(100).div(1800)), 1);
+    player.chall2Pow = Decimal.min(
+      player.chall2Pow.add(diff.div(100).div(1800)),
+      1,
+    );
   }
 
   if (InfinityChallenge(2).isRunning) {
@@ -34,7 +46,11 @@ export function updateNormalAndInfinityChallenges(diff) {
       player.ic2Count %= 400;
     } else {
       // Do not change to diff, as this may lead to a sacrifice softlock with high gamespeed
-      player.ic2Count += Math.clamp(Date.now() - player.lastUpdate, 1, 21600000);
+      player.ic2Count += Math.clamp(
+        Date.now() - player.lastUpdate,
+        1,
+        21600000,
+      );
     }
   }
 }
@@ -46,8 +62,9 @@ class NormalChallengeState extends GameMechanicState {
 
   get isRunning() {
     const isPartOfIC1 = this.id !== 9 && this.id !== 12;
-    return player.challenge.normal.current === this.id || (isPartOfIC1 && InfinityChallenge(1).isRunning)
-      || (this.id === 12 && QuantumChallenge(4).isRunning);
+    return player.challenge.normal.current === this.id ||
+      (isPartOfIC1 && InfinityChallenge(1).isRunning) ||
+      (this.id === 12 && QuantumChallenge(4).isRunning);
   }
 
   get isOnlyActiveChallenge() {
@@ -98,7 +115,9 @@ class NormalChallengeState extends GameMechanicState {
     bigCrunchReset(true, true);
     player.challenge.normal.current = this.id;
     player.challenge.infinity.current = 0;
-    if (Enslaved.isRunning && EternityChallenge(6).isRunning && this.id === 10) {
+    if (
+      Enslaved.isRunning && EternityChallenge(6).isRunning && this.id === 10
+    ) {
       EnslavedProgress.challengeCombo.giveProgress();
       Enslaved.quotes.ec6C10.show();
     }
@@ -138,7 +157,9 @@ class NormalChallengeState extends GameMechanicState {
     if (player.records.thisInfinity.time.gte(bestTimes[this.id - 2])) {
       return;
     }
-    player.challenge.normal.bestTimes[this.id - 2].copyFrom(player.records.thisInfinity.time);
+    player.challenge.normal.bestTimes[this.id - 2].copyFrom(
+      player.records.thisInfinity.time,
+    );
     GameCache.challengeTimeSum.invalidate();
     GameCache.worstChallengeTime.invalidate();
   }
@@ -156,7 +177,9 @@ class NormalChallengeState extends GameMechanicState {
  * @param {number} id
  * @return {NormalChallengeState}
  */
-export const NormalChallenge = NormalChallengeState.createAccessor(GameDatabase.challenges.normal);
+export const NormalChallenge = NormalChallengeState.createAccessor(
+  GameDatabase.challenges.normal,
+);
 
 /**
  * @returns {NormalChallengeState}

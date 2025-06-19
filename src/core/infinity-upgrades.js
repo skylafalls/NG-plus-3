@@ -1,4 +1,7 @@
-import { GameMechanicState, SetPurchasableMechanicState } from "./game-mechanics";
+import {
+  GameMechanicState,
+  SetPurchasableMechanicState,
+} from "./game-mechanics";
 import { DC } from "./constants";
 
 class ChargedInfinityUpgradeState extends GameMechanicState {
@@ -16,7 +19,10 @@ export class InfinityUpgradeState extends SetPurchasableMechanicState {
   constructor(config) {
     super(config);
     if (config.charged) {
-      this._chargedEffect = new ChargedInfinityUpgradeState(config.charged, this);
+      this._chargedEffect = new ChargedInfinityUpgradeState(
+        config.charged,
+        this,
+      );
     }
   }
 
@@ -66,11 +72,11 @@ export class InfinityUpgradeState extends SetPurchasableMechanicState {
   }
 
   get canCharge() {
-    return this.isBought
-      && this.hasChargeEffect
-      && !this.isCharged
-      && Ra.chargesLeft !== 0
-      && !Pelle.isDisabled("chargedInfinityUpgrades");
+    return this.isBought &&
+      this.hasChargeEffect &&
+      !this.isCharged &&
+      Ra.chargesLeft !== 0 &&
+      !Pelle.isDisabled("chargedInfinityUpgrades");
   }
 
   charge() {
@@ -102,7 +108,9 @@ export function totalIPMult() {
       DilationUpgrade.ipMultDT,
       GlyphEffect.ipMult,
     );
-  ipMult = ipMult.times(Replicanti.amount.powEffectOf(AlchemyResource.exponential));
+  ipMult = ipMult.times(
+    Replicanti.amount.powEffectOf(AlchemyResource.exponential),
+  );
   return ipMult;
 }
 
@@ -138,7 +146,12 @@ class InfinityIPMultUpgrade extends GameMechanicState {
   get cost() {
     if (this.purchaseCount.gte(this.purchasesAtIncrease)) {
       return this.config.costIncreaseThreshold
-        .times(Decimal.pow(this.costIncrease, this.purchaseCount.sub(this.purchasesAtIncrease)));
+        .times(
+          Decimal.pow(
+            this.costIncrease,
+            this.purchaseCount.sub(this.purchasesAtIncrease),
+          ),
+        );
     }
     return Decimal.pow(this.costIncrease, this.purchaseCount.add(1));
   }
@@ -172,7 +185,8 @@ class InfinityIPMultUpgrade extends GameMechanicState {
   }
 
   get canBeBought() {
-    return !Pelle.isDoomed && !this.isCapped && Currency.infinityPoints.gte(this.cost) && this.isRequirementSatisfied;
+    return !Pelle.isDoomed && !this.isCapped &&
+      Currency.infinityPoints.gte(this.cost) && this.isRequirementSatisfied;
   }
 
   // This is only ever called with amount = 1 or within buyMax under conditions that ensure the scaling doesn't
@@ -184,7 +198,9 @@ class InfinityIPMultUpgrade extends GameMechanicState {
     if (!TimeStudy(181).isBought) {
       Autobuyer.bigCrunch.bumpAmount(DC.D2.pow(amount));
     }
-    Currency.infinityPoints.subtract(Decimal.sumGeometricSeries(amount, this.cost, this.costIncrease, 0));
+    Currency.infinityPoints.subtract(
+      Decimal.sumGeometricSeries(amount, this.cost, this.costIncrease, 0),
+    );
     player.IPMultPurchases = player.IPMultPurchases.add(amount);
     GameUI.update();
   }
@@ -195,8 +211,15 @@ class InfinityIPMultUpgrade extends GameMechanicState {
     }
     if (!this.hasIncreasedCost) {
       // Only allow IP below the softcap to be used
-      const availableIP = Currency.infinityPoints.value.clampMax(this.config.costIncreaseThreshold);
-      const purchases = Decimal.affordGeometricSeries(availableIP, this.cost, this.costIncrease, 0);
+      const availableIP = Currency.infinityPoints.value.clampMax(
+        this.config.costIncreaseThreshold,
+      );
+      const purchases = Decimal.affordGeometricSeries(
+        availableIP,
+        this.cost,
+        this.costIncrease,
+        0,
+      );
       if (purchases.lte(0)) {
         return;
       }
@@ -206,8 +229,15 @@ class InfinityIPMultUpgrade extends GameMechanicState {
     // (for example, we have 1e4000000 IP and no mult - first it will go to (but not including) 1e3000000 and then
     // it will go in this part)
     if (this.hasIncreasedCost) {
-      const availableIP = Currency.infinityPoints.value.clampMax(this.config.costCap);
-      const purchases = Decimal.affordGeometricSeries(availableIP, this.cost, this.costIncrease, 0);
+      const availableIP = Currency.infinityPoints.value.clampMax(
+        this.config.costCap,
+      );
+      const purchases = Decimal.affordGeometricSeries(
+        availableIP,
+        this.cost,
+        this.costIncrease,
+        0,
+      );
       if (purchases.lte(0)) {
         return;
       }
@@ -218,7 +248,9 @@ class InfinityIPMultUpgrade extends GameMechanicState {
 
 export const InfinityUpgrade = mapGameDataToObject(
   GameDatabase.infinity.upgrades,
-  config => (config.id === "ipMult"
+  (
+    config,
+  ) => (config.id === "ipMult"
     ? new InfinityIPMultUpgrade(config)
     : new InfinityUpgradeState(config)),
 );

@@ -37,7 +37,7 @@ Vue.mixin({
       makeRecomputable(watchers[key], key, recomputed);
     }
 
-    this.$recompute = key => recomputed[key] = !recomputed[key];
+    this.$recompute = (key) => recomputed[key] = !recomputed[key];
     Vue.observable(recomputed);
   },
   destroyed() {
@@ -94,7 +94,7 @@ function makeRecomputable(watcher, key, recomputed) {
   const original = watcher.getter;
   recomputed[key] = true;
 
-  watcher.getter = vm => (recomputed[key], original.call(vm, vm));
+  watcher.getter = (vm) => (recomputed[key], original.call(vm, vm));
 }
 
 // Why is reactivity a bad thing?
@@ -107,7 +107,9 @@ const ReactivityComplainer = {
       return;
     }
     if (obj.__ob__ !== undefined) {
-      throw new TypeError(`Boi you fukked up - ${path} became REACTIVE (oh shite)`);
+      throw new TypeError(
+        `Boi you fukked up - ${path} became REACTIVE (oh shite)`,
+      );
     }
     for (const key in obj) {
       if (!Object.hasOwn(obj, key)) {
@@ -127,9 +129,10 @@ export const GameUI = {
   flushPromise: undefined,
   initialized: false,
   globalClickListener: null,
-  touchDevice: ("ontouchstart" in window
-    || window.navigator.maxTouchPoints > 0 || window.navigator.msMaxTouchPoints > 0
-    || (window.DocumentTouch && document instanceof DocumentTouch)),
+  touchDevice: ("ontouchstart" in window ||
+    window.navigator.maxTouchPoints > 0 ||
+    window.navigator.msMaxTouchPoints > 0 ||
+    (window.DocumentTouch && document instanceof DocumentTouch)),
   dispatch(event, args) {
     const index = this.events.indexOf(event);
     if (index !== -1) {
@@ -174,15 +177,15 @@ export const GameUI = {
   },
 };
 
-export const UIID = (function () {
+export const UIID = function () {
   let id = 0;
   return { next: () => id++ };
-}());
+}();
 
 VTooltip.options.defaultClass = "general-tooltip";
 VTooltip.options.popover.defaultBaseClass = "general-tooltip";
-VTooltip.options.defaultTemplate
-  = "<div role=\"tooltip\"><div class=\"tooltip-arrow\"></div><div class=\"tooltip-inner\"></div></div>";
+VTooltip.options.defaultTemplate =
+  '<div role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>';
 Vue.use(VTooltip);
 
 (function () {
@@ -190,7 +193,7 @@ Vue.use(VTooltip);
 
   Vue.config.optionMergeStrategies.methods = (parentVal, childVal, vm, key) => {
     const result = methodStrategy(parentVal, childVal, vm, key);
-    const hasUpdate = val => val && val.update;
+    const hasUpdate = (val) => val && val.update;
     if (!hasUpdate(parentVal) || !hasUpdate(childVal)) {
       return result;
     }
@@ -200,7 +203,7 @@ Vue.use(VTooltip);
     };
     return result;
   };
-}());
+})();
 
 useLongPress(Vue);
 useRepeatingClick(Vue);
@@ -260,5 +263,5 @@ export const ui = new Vue({
       }
     },
   },
-  render: h => h(GameUIComponent),
+  render: (h) => h(GameUIComponent),
 });

@@ -78,12 +78,14 @@ export class DimBoostAutobuyerState extends UpgradeableAutobuyerState {
 
   get interval() {
     return this.isBuyMaxUnlocked
-      ? TimeSpan.fromSeconds(new Decimal(this.buyMaxInterval)).totalMilliseconds.toNumber()
+      ? TimeSpan.fromSeconds(new Decimal(this.buyMaxInterval)).totalMilliseconds
+        .toNumber()
       : super.interval;
   }
 
   get canTick() {
-    return DimBoost.canBeBought && DimBoost.requirement.isSatisfied && super.canTick;
+    return DimBoost.canBeBought && DimBoost.requirement.isSatisfied &&
+      super.canTick;
   }
 
   get resetTickOn() {
@@ -96,12 +98,15 @@ export class DimBoostAutobuyerState extends UpgradeableAutobuyerState {
     // at the start of infinities down by about 20%.
     // After "Yo dawg, I heard you liked reskins...", it doesn't matter much
     // which we do (less than 1 tick difference, it seems).
-    return this.isBuyMaxUnlocked ? PRESTIGE_EVENT.INFINITY : PRESTIGE_EVENT.ANTIMATTER_GALAXY;
+    return this.isBuyMaxUnlocked
+      ? PRESTIGE_EVENT.INFINITY
+      : PRESTIGE_EVENT.ANTIMATTER_GALAXY;
   }
 
   tick() {
     if (this.isBuyMaxUnlocked) {
-      const galaxyCondition = !this.limitUntilGalaxies || player.galaxies.gte(this.galaxies);
+      const galaxyCondition = !this.limitUntilGalaxies ||
+        player.galaxies.gte(this.galaxies);
       if (!DimBoost.canUnlockNewDimension && !galaxyCondition) {
         return;
       }
@@ -110,8 +115,10 @@ export class DimBoostAutobuyerState extends UpgradeableAutobuyerState {
       return;
     }
 
-    const limitCondition = !this.limitDimBoosts || DimBoost.purchasedBoosts.lt(this.maxDimBoosts);
-    const galaxyCondition = this.limitUntilGalaxies && player.galaxies.gte(this.galaxies);
+    const limitCondition = !this.limitDimBoosts ||
+      DimBoost.purchasedBoosts.lt(this.maxDimBoosts);
+    const galaxyCondition = this.limitUntilGalaxies &&
+      player.galaxies.gte(this.galaxies);
     if (limitCondition || galaxyCondition) {
       requestDimensionBoost(false);
       super.tick();

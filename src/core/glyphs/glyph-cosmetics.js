@@ -16,7 +16,8 @@ class CosmeticGlyphType {
   // types and must be false for cursed, reality, and companion glyphs. However, we use it to determine
   // if a type should be displayed at all in the case of cosmetic types
   get canCustomize() {
-    return (!this.isCosmetic || (this.isUnlocked?.() ?? true)) && (this._canCustomize?.() ?? true);
+    return (!this.isCosmetic || (this.isUnlocked?.() ?? true)) &&
+      (this._canCustomize?.() ?? true);
   }
 
   get defaultSymbol() {
@@ -27,7 +28,9 @@ class CosmeticGlyphType {
   }
 
   get defaultColor() {
-    const color = this.id === "reality" ? GlyphAppearanceHandler.realityColor : this._defaultColor;
+    const color = this.id === "reality"
+      ? GlyphAppearanceHandler.realityColor
+      : this._defaultColor;
     const isNormallyDark = !GlyphAppearanceHandler.isLightBG;
     return {
       border: color,
@@ -42,7 +45,8 @@ class CosmeticGlyphType {
     }
     return {
       symbol: custom,
-      blur: !(this.preventBlur || GlyphAppearanceHandler.unblurredSymbols.includes(custom)),
+      blur: !(this.preventBlur ||
+        GlyphAppearanceHandler.unblurredSymbols.includes(custom)),
     };
   }
 
@@ -75,20 +79,23 @@ function getGlyphTypes() {
 
 const functionalGlyphs = mapGameDataToObject(
   getGlyphTypes(),
-  config => new CosmeticGlyphType(config, false),
+  (config) => new CosmeticGlyphType(config, false),
 );
 
 const cosmeticGlyphs = mapGameDataToObject(
   GameDatabase.reality.cosmeticGlyphs,
-  config => new CosmeticGlyphType(config, true),
+  (config) => new CosmeticGlyphType(config, true),
 );
 
 export const CosmeticGlyphTypes = {
   ...functionalGlyphs,
   ...cosmeticGlyphs,
   get list() {
-    return Object.keys({ ...GameDatabase.reality.glyphTypes, ...GameDatabase.reality.cosmeticGlyphs })
-      .map(e => CosmeticGlyphTypes[e]);
+    return Object.keys({
+      ...GameDatabase.reality.glyphTypes,
+      ...GameDatabase.reality.cosmeticGlyphs,
+    })
+      .map((e) => CosmeticGlyphTypes[e]);
   },
 };
 
@@ -106,16 +113,16 @@ export const GlyphAppearanceHandler = {
   },
   get availableSymbols() {
     return Object.values(GameDatabase.reality.glyphCosmeticSets)
-      .filter(s => this.unlockedSets.includes(s.id))
-      .map(s => s.symbol)
-      .filter(s => s);
+      .filter((s) => this.unlockedSets.includes(s.id))
+      .map((s) => s.symbol)
+      .filter((s) => s);
   },
   // Sort the colors by hue, otherwise finding specific colors would be a mess for UX.
   // However, colors "close enough to grayscale" are sorted separately and first
   get availableColors() {
     const sortedArray = Object.values(GameDatabase.reality.glyphCosmeticSets)
-      .filter(s => this.unlockedSets.includes(s.id))
-      .flatMap(s => s.color)
+      .filter((s) => this.unlockedSets.includes(s.id))
+      .flatMap((s) => s.color)
       .sort((a, b) => {
         const getHue = (hex) => {
           const parts = hex.split("#");
@@ -141,13 +148,13 @@ export const GlyphAppearanceHandler = {
         };
         return getHue(a) - getHue(b);
       })
-      .filter(c => c);
+      .filter((c) => c);
 
     // We want two rows in the color selection Vue component, but that displays options in columns (one column
     // per set of symbol options). Here we do a bit of array manipulation to lay out colors as two rows, separated
     // by BG color and with the longer row on top (UI doesn't handle empty top-row spots well)
-    const blackArr = sortedArray.filter(c => c.charAt(0) === "B");
-    const whiteArr = sortedArray.filter(c => c.charAt(0) === "W");
+    const blackArr = sortedArray.filter((c) => c.charAt(0) === "B");
+    const whiteArr = sortedArray.filter((c) => c.charAt(0) === "W");
     const longer = blackArr.length > whiteArr.length ? blackArr : whiteArr;
     const shorter = blackArr.length > whiteArr.length ? whiteArr : blackArr;
     const combined = [];
@@ -163,14 +170,14 @@ export const GlyphAppearanceHandler = {
   },
   get availableTypes() {
     return Object.values(GameDatabase.reality.cosmeticGlyphs)
-      .map(type => CosmeticGlyphTypes[type.id])
-      .filter(type => type.isUnlocked())
-      .map(type => type.id);
+      .map((type) => CosmeticGlyphTypes[type.id])
+      .filter((type) => type.isUnlocked())
+      .map((type) => type.id);
   },
   get unblurredSymbols() {
     return Object.values(GameDatabase.reality.glyphCosmeticSets)
-      .filter(s => s.preventBlur)
-      .flatMap(s => s.symbol);
+      .filter((s) => s.preventBlur)
+      .flatMap((s) => s.symbol);
   },
   // Note: This can *technically* be inconsistent with the actual number of sets, but only y a cheated save.
   get expectedSetCount() {
@@ -203,7 +210,9 @@ export const GlyphAppearanceHandler = {
   getRarityColor(strength, type) {
     const rarityEntry = getRarity(strength);
     const isLight = CosmeticGlyphTypes[type].currentColor.bg === "white";
-    const colorKey = `${isLight ? "light" : "dark"}${player.options.highContrastRarity ? "HighContrast" : "Color"}`;
+    const colorKey = `${isLight ? "light" : "dark"}${
+      player.options.highContrastRarity ? "HighContrast" : "Color"
+    }`;
     return rarityEntry[colorKey];
   },
   getColorProps(colorStr) {
@@ -253,7 +262,9 @@ export const GlyphAppearanceHandler = {
     return [...new Set(player.reality.glyphs.cosmetics.unlockedFromNG)];
   },
   get lockedSets() {
-    return Object.keys(GameDatabase.reality.glyphCosmeticSets).filter(set => !this.unlockedSets.includes(set));
+    return Object.keys(GameDatabase.reality.glyphCosmeticSets).filter((set) =>
+      !this.unlockedSets.includes(set)
+    );
   },
   // Unlocks the set chosen in the modal, choosing a random available one as a fallback. This is only called for
   // sets unlocked through game completions
@@ -273,7 +284,10 @@ export const GlyphAppearanceHandler = {
 
     player.reality.glyphs.cosmetics.unlockedFromNG.push(unlocked);
     const entry = GameDatabase.reality.glyphCosmeticSets[unlocked];
-    GameUI.notify.info(`You have unlocked the "${entry.name}" Set for Glyph cosmetics!`, 10000);
+    GameUI.notify.info(
+      `You have unlocked the "${entry.name}" Set for Glyph cosmetics!`,
+      10000,
+    );
     GlyphAppearanceHandler.chosenFromModal = null;
     this.applyNotification();
   },
@@ -287,7 +301,9 @@ export const GlyphAppearanceHandler = {
   // be called on import and not on page load, as there is a minor async delay on-load which will cause STD purchases
   // to not be accounted for when loading an already-existing local save
   clearInvalidCosmetics() {
-    const allGlyphs = player.reality.glyphs.active.concat(player.reality.glyphs.inventory);
+    const allGlyphs = player.reality.glyphs.active.concat(
+      player.reality.glyphs.inventory,
+    );
     const allSymbols = new Set(GlyphAppearanceHandler.availableSymbols.flat());
     const allColors = new Set(GlyphAppearanceHandler.availableSymbols.flat());
     for (const glyph of allGlyphs) {

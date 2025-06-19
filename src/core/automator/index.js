@@ -1,8 +1,6 @@
 import "./automator-codemirror";
 
-export {
-  forbiddenConstantPatterns,
-} from "./lexer";
+export { forbiddenConstantPatterns } from "./lexer";
 
 export {
   blockifyTextAutomator,

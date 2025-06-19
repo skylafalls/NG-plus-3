@@ -15,15 +15,13 @@ export default {
       window.open(links[Math.floor(Math.random() * links.length)]);
     },
     image: "desktop--windows-media-player.png",
-  },
-  {
+  }, {
     name: "Discord",
     action() {
       window.open("https://discord.gg/ST9NaXa");
     },
     image: "desktop--discord-logo.png",
-  },
-  {
+  }, {
     name: "Games",
     action() {
       Modal.s12Games.show();

@@ -4,7 +4,8 @@ import { createToken, Lexer } from "chevrotain";
 
 import { DC } from "../constants";
 
-const createCategory = name => createToken({ name, pattern: Lexer.NA, longer_alt: Identifier });
+const createCategory = (name) =>
+  createToken({ name, pattern: Lexer.NA, longer_alt: Identifier });
 
 // Shorthand for creating tokens and adding them to a list
 const tokenLists = {};
@@ -20,12 +21,16 @@ const createInCategory = (category, name, pattern, props = {}) => {
     categories,
     longer_alt: Identifier,
   });
-  const categoryName = Array.isArray(category) ? category[0].name : category.name;
+  const categoryName = Array.isArray(category)
+    ? category[0].name
+    : category.name;
   if (tokenLists[categoryName] === undefined) {
     tokenLists[categoryName] = [];
   }
   tokenLists[categoryName].push(token);
-  const patternWord = pattern.toString().match(/^\/([a-zA-Z0-9]*)\/[a-zA-Z]*$/ui);
+  const patternWord = pattern.toString().match(
+    /^\/([a-zA-Z0-9]*)\/[a-zA-Z]*$/ui,
+  );
   if (patternWord && patternWord[1]) {
     token.$autocomplete = patternWord[1];
   }
@@ -115,21 +120,46 @@ const EqualSign = createToken({
 });
 EqualSign.$compare = (a, b) => Decimal.eq(a, b);
 
-createInCategory(AutomatorCurrency, "EP", /ep/i, { $getter: () => Currency.eternityPoints.value });
-createInCategory(AutomatorCurrency, "IP", /ip/i, { $getter: () => Currency.infinityPoints.value });
-createInCategory(AutomatorCurrency, "AM", /am/i, { $getter: () => Currency.antimatter.value });
-createInCategory(AutomatorCurrency, "DT", /dt/i, { $getter: () => Currency.dilatedTime.value });
-createInCategory(AutomatorCurrency, "TP", /tp/i, { $getter: () => Currency.tachyonParticles.value });
-createInCategory(AutomatorCurrency, "RG", /rg/i, { $getter: () => new Decimal(Replicanti.galaxies.total) });
-createInCategory(AutomatorCurrency, "RM", /rm/i, { $getter: () => Currency.realityMachines.value });
-
-createInCategory(AutomatorCurrency, "infinities", /infinities/i, { $getter: () => Currency.infinities.value });
-createInCategory(AutomatorCurrency, "bankedInfinities", /banked[ \t]+infinities/i, {
-  $autocomplete: "banked infinities",
-  $getter: () => Currency.infinitiesBanked.value,
+createInCategory(AutomatorCurrency, "EP", /ep/i, {
+  $getter: () => Currency.eternityPoints.value,
 });
-createInCategory(AutomatorCurrency, "eternities", /eternities/i, { $getter: () => Currency.eternities.value });
-createInCategory(AutomatorCurrency, "realities", /realities/i, { $getter: () => Currency.realities.value });
+createInCategory(AutomatorCurrency, "IP", /ip/i, {
+  $getter: () => Currency.infinityPoints.value,
+});
+createInCategory(AutomatorCurrency, "AM", /am/i, {
+  $getter: () => Currency.antimatter.value,
+});
+createInCategory(AutomatorCurrency, "DT", /dt/i, {
+  $getter: () => Currency.dilatedTime.value,
+});
+createInCategory(AutomatorCurrency, "TP", /tp/i, {
+  $getter: () => Currency.tachyonParticles.value,
+});
+createInCategory(AutomatorCurrency, "RG", /rg/i, {
+  $getter: () => new Decimal(Replicanti.galaxies.total),
+});
+createInCategory(AutomatorCurrency, "RM", /rm/i, {
+  $getter: () => Currency.realityMachines.value,
+});
+
+createInCategory(AutomatorCurrency, "infinities", /infinities/i, {
+  $getter: () => Currency.infinities.value,
+});
+createInCategory(
+  AutomatorCurrency,
+  "bankedInfinities",
+  /banked[ \t]+infinities/i,
+  {
+    $autocomplete: "banked infinities",
+    $getter: () => Currency.infinitiesBanked.value,
+  },
+);
+createInCategory(AutomatorCurrency, "eternities", /eternities/i, {
+  $getter: () => Currency.eternities.value,
+});
+createInCategory(AutomatorCurrency, "realities", /realities/i, {
+  $getter: () => Currency.realities.value,
+});
 
 createInCategory(AutomatorCurrency, "PendingIP", /pending[ \t]+ip/i, {
   $autocomplete: "pending IP",
@@ -145,12 +175,19 @@ createInCategory(AutomatorCurrency, "PendingTP", /pending[ \t]+tp/i, {
 });
 createInCategory(AutomatorCurrency, "PendingRM", /pending[ \t]+rm/i, {
   $autocomplete: "pending RM",
-  $getter: () => (isRealityAvailable() ? MachineHandler.gainedRealityMachines : DC.D0),
+  $getter:
+    () => (isRealityAvailable() ? MachineHandler.gainedRealityMachines : DC.D0),
 });
-createInCategory(AutomatorCurrency, "PendingGlyphLevel", /pending[ \t]+glyph[ \t]+level/i, {
-  $autocomplete: "pending Glyph level",
-  $getter: () => new Decimal(isRealityAvailable() ? gainedGlyphLevel().actualLevel : 0),
-});
+createInCategory(
+  AutomatorCurrency,
+  "PendingGlyphLevel",
+  /pending[ \t]+glyph[ \t]+level/i,
+  {
+    $autocomplete: "pending Glyph level",
+    $getter: () =>
+      new Decimal(isRealityAvailable() ? gainedGlyphLevel().actualLevel : 0),
+  },
+);
 
 createInCategory(AutomatorCurrency, "Rep", /rep(licanti)?/i, {
   $autocomplete: "rep",
@@ -162,25 +199,36 @@ createInCategory(AutomatorCurrency, "TT", /(tt|time theorems?)/i, {
 });
 createInCategory(AutomatorCurrency, "TotalTT", /total[ \t]+tt/i, {
   $autocomplete: "total TT",
-  $getter: () => player.timestudy.theorem.plus(TimeTheorems.calculateTimeStudiesCost()),
+  $getter: () =>
+    player.timestudy.theorem.plus(TimeTheorems.calculateTimeStudiesCost()),
 });
 
-createInCategory(AutomatorCurrency, "TotalCompletions", /total[ \t]+completions/i, {
-  $autocomplete: "total completions",
-  $getter: () => EternityChallenges.completions,
-});
-
-createInCategory(AutomatorCurrency, "PendingCompletions", /pending[ \t]+completions/i, {
-  $autocomplete: "pending completions",
-  $getter: () => {
-    // If we are not in an EC, pretend like we have a ton of completions so any check for sufficient
-    // completions returns true
-    if (!EternityChallenge.isRunning) {
-      return DC.NUMMAX;
-    }
-    return EternityChallenge.current.gainedCompletionStatus.totalCompletions;
+createInCategory(
+  AutomatorCurrency,
+  "TotalCompletions",
+  /total[ \t]+completions/i,
+  {
+    $autocomplete: "total completions",
+    $getter: () => EternityChallenges.completions,
   },
-});
+);
+
+createInCategory(
+  AutomatorCurrency,
+  "PendingCompletions",
+  /pending[ \t]+completions/i,
+  {
+    $autocomplete: "pending completions",
+    $getter: () => {
+      // If we are not in an EC, pretend like we have a ton of completions so any check for sufficient
+      // completions returns true
+      if (!EternityChallenge.isRunning) {
+        return DC.NUMMAX;
+      }
+      return EternityChallenge.current.gainedCompletionStatus.totalCompletions;
+    },
+  },
+);
 
 createInCategory(AutomatorCurrency, "FilterScore", /filter[ \t]+score/i, {
   $autocomplete: "filter score",
@@ -189,8 +237,11 @@ createInCategory(AutomatorCurrency, "FilterScore", /filter[ \t]+score/i, {
     if (!EffarigUnlock.glyphFilter.isUnlocked) {
       return -Number.MAX_VALUE;
     }
-    const choices = GlyphSelection.glyphList(GlyphSelection.choiceCount, gainedGlyphLevel(),
-      { isChoosingGlyph: false });
+    const choices = GlyphSelection.glyphList(
+      GlyphSelection.choiceCount,
+      gainedGlyphLevel(),
+      { isChoosingGlyph: false },
+    );
     const bestGlyph = AutoGlyphProcessor.pick(choices);
     return AutoGlyphProcessor.filterValue(bestGlyph);
   },
@@ -205,19 +256,29 @@ createInCategory(AutomatorCurrency, "ST", /space[ \t]+theorems/i, {
   $getter: () => V.availableST,
   $unlocked: () => V.spaceTheorems > 0,
 });
-createInCategory(AutomatorCurrency, "TotalST", /total[ \t]+space[ \t]+theorems/i, {
-  $autocomplete: "total space theorems",
-  $getter: () => V.spaceTheorems,
-  $unlocked: () => V.spaceTheorems > 0,
-});
+createInCategory(
+  AutomatorCurrency,
+  "TotalST",
+  /total[ \t]+space[ \t]+theorems/i,
+  {
+    $autocomplete: "total space theorems",
+    $getter: () => V.spaceTheorems,
+    $unlocked: () => V.spaceTheorems > 0,
+  },
+);
 
 for (let i = 1; i <= 12; ++i) {
   const id = i;
-  createInCategory(AutomatorCurrency, `EC${i}`, new RegExp(`ec${i} completions`, "i"), {
-    $autocomplete: `ec${i} completions`,
+  createInCategory(
+    AutomatorCurrency,
+    `EC${i}`,
+    new RegExp(`ec${i} completions`, "i"),
+    {
+      $autocomplete: `ec${i} completions`,
 
-    $getter: () => EternityChallenge(id).completions,
-  });
+      $getter: () => EternityChallenge(id).completions,
+    },
+  );
 }
 
 // $prestigeLevel is used by things that wait for a prestige event. Something waiting for
@@ -259,13 +320,27 @@ createInCategory(PrestigeEvent, "Reality", /reality/i, {
   },
 });
 
-createInCategory(StudyPath, "Idle", /idle/i, { $studyPath: TIME_STUDY_PATH.IDLE });
-createInCategory(StudyPath, "Passive", /passive/i, { $studyPath: TIME_STUDY_PATH.PASSIVE });
-createInCategory(StudyPath, "Active", /active/i, { $studyPath: TIME_STUDY_PATH.ACTIVE });
-createInCategory(StudyPath, "Antimatter", /antimatter/i, { $studyPath: TIME_STUDY_PATH.ANTIMATTER_DIM });
-createInCategory(StudyPath, "Time", /time/i, { $studyPath: TIME_STUDY_PATH.TIME_DIM });
-createInCategory(StudyPath, "Light", /light/i, { $studyPath: TIME_STUDY_PATH.LIGHT });
-createInCategory(StudyPath, "Dark", /dark/i, { $studyPath: TIME_STUDY_PATH.DARK });
+createInCategory(StudyPath, "Idle", /idle/i, {
+  $studyPath: TIME_STUDY_PATH.IDLE,
+});
+createInCategory(StudyPath, "Passive", /passive/i, {
+  $studyPath: TIME_STUDY_PATH.PASSIVE,
+});
+createInCategory(StudyPath, "Active", /active/i, {
+  $studyPath: TIME_STUDY_PATH.ACTIVE,
+});
+createInCategory(StudyPath, "Antimatter", /antimatter/i, {
+  $studyPath: TIME_STUDY_PATH.ANTIMATTER_DIM,
+});
+createInCategory(StudyPath, "Time", /time/i, {
+  $studyPath: TIME_STUDY_PATH.TIME_DIM,
+});
+createInCategory(StudyPath, "Light", /light/i, {
+  $studyPath: TIME_STUDY_PATH.LIGHT,
+});
+createInCategory(StudyPath, "Dark", /dark/i, {
+  $studyPath: TIME_STUDY_PATH.DARK,
+});
 
 createInCategory(TimeUnit, "Milliseconds", /ms/i, {
   $autocomplete: "ms",
@@ -365,20 +440,41 @@ const RCurly = createToken({ name: "RCurly", pattern: /[ \t]*}/ });
 const Comma = createToken({ name: "Comma", pattern: /,/ });
 const Pipe = createToken({ name: "Pipe", pattern: /\|/, label: "|" });
 const Dash = createToken({ name: "Dash", pattern: /-/, label: "-" });
-const Exclamation = createToken({ name: "Exclamation", pattern: /!/, label: "!" });
+const Exclamation = createToken({
+  name: "Exclamation",
+  pattern: /!/,
+  label: "!",
+});
 
 // The order here is the order the lexer looks for tokens in.
 export const automatorTokens = [
-  HSpace, StringLiteral, StringLiteralSingleQuote, Comment, EOL,
-  ComparisonOperator, ...tokenLists.ComparisonOperator,
-  LCurly, RCurly, Comma, EqualSign, Pipe, Dash, Exclamation,
-  BlackHoleStr, NumberLiteral,
-  AutomatorCurrency, ...tokenLists.AutomatorCurrency,
+  HSpace,
+  StringLiteral,
+  StringLiteralSingleQuote,
+  Comment,
+  EOL,
+  ComparisonOperator,
+  ...tokenLists.ComparisonOperator,
+  LCurly,
+  RCurly,
+  Comma,
+  EqualSign,
+  Pipe,
+  Dash,
+  Exclamation,
+  BlackHoleStr,
+  NumberLiteral,
+  AutomatorCurrency,
+  ...tokenLists.AutomatorCurrency,
   ECLiteral,
-  Keyword, ...keywordTokens,
-  PrestigeEvent, ...tokenLists.PrestigeEvent,
-  StudyPath, ...tokenLists.StudyPath,
-  TimeUnit, ...tokenLists.TimeUnit,
+  Keyword,
+  ...keywordTokens,
+  PrestigeEvent,
+  ...tokenLists.PrestigeEvent,
+  StudyPath,
+  ...tokenLists.StudyPath,
+  TimeUnit,
+  ...tokenLists.TimeUnit,
   Identifier,
 ];
 
@@ -400,9 +496,11 @@ for (const token of lexer.lexerDefinition) {
 }
 
 // We use this while building up the grammar
-export const tokenMap = automatorTokens.mapToObject(e => e.name, e => e);
+export const tokenMap = automatorTokens.mapToObject((e) => e.name, (e) => e);
 
-const automatorCurrencyNames = new Set(tokenLists.AutomatorCurrency.map(i => i.$autocomplete.toUpperCase()));
+const automatorCurrencyNames = new Set(
+  tokenLists.AutomatorCurrency.map((i) => i.$autocomplete.toUpperCase()),
+);
 
 export const standardizeAutomatorValues = function (x) {
   try {
@@ -430,6 +528,8 @@ export const standardizeAutomatorValues = function (x) {
 // final resulting array. Note that this technically duplicates words present in multiple phrases (eg. "pending")
 const ignoredPatterns = new Set(["Identifier", "LCurly", "RCurly"]);
 export const forbiddenConstantPatterns = lexer.lexerDefinition
-  .filter(p => !ignoredPatterns.has(p.name))
-  .map(p => p.PATTERN.source)
-  .flatMap(p => ((p.includes("(") || p.includes(")")) ? p : p.split("[ \\t]+")));
+  .filter((p) => !ignoredPatterns.has(p.name))
+  .map((p) => p.PATTERN.source)
+  .flatMap(
+    (p) => ((p.includes("(") || p.includes(")")) ? p : p.split("[ \\t]+")),
+  );

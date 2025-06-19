@@ -6,7 +6,8 @@ import { MultiplierTabIcons } from "./icons";
 export const replicanti = {
   total: {
     name: "Replicanti Speed",
-    multValue: () => totalReplicantiSpeedMult(Replicanti.amount.gt(replicantiCap())),
+    multValue: () =>
+      totalReplicantiSpeedMult(Replicanti.amount.gt(replicantiCap())),
     isActive: () => PlayerProgress.eternityUnlocked(),
     overlay: ["Ξ"],
   },
@@ -14,14 +15,18 @@ export const replicanti = {
     name: "Achievement 134",
     // This is explicitly 2 in the replicanti code as well, inside of a replicanti amount check
     multValue: 2,
-    isActive: () => Achievement(134).canBeApplied && Replicanti.amount.lte(replicantiCap()) && !Pelle.isDoomed,
+    isActive: () =>
+      Achievement(134).canBeApplied && Replicanti.amount.lte(replicantiCap()) &&
+      !Pelle.isDoomed,
     icon: MultiplierTabIcons.ACHIEVEMENT,
   },
   timeStudy: {
     name: "Time Studies",
     multValue: () => {
-      const preReality = Effects.product(TimeStudy(62), TimeStudy(213)) * (TimeStudy(132).isBought ? 1.5 : 1);
-      return preReality * (Perk.studyPassive.isBought && TimeStudy(132).isBought ? 2 : 1);
+      const preReality = Effects.product(TimeStudy(62), TimeStudy(213)) *
+        (TimeStudy(132).isBought ? 1.5 : 1);
+      return preReality *
+        (Perk.studyPassive.isBought && TimeStudy(132).isBought ? 2 : 1);
     },
     isActive: () => PlayerProgress.eternityUnlocked() && !Pelle.isDoomed,
     icon: MultiplierTabIcons.TIME_STUDY,
@@ -29,13 +34,21 @@ export const replicanti = {
   glyph: {
     name: "Glyph Effects",
     multValue: () => {
-      const baseEffect = (Pelle.isDoomed ? DC.D1 : getAdjustedGlyphEffect("replicationspeed"))
-        .times(Pelle.specialGlyphEffect.replication);
+      const baseEffect =
+        (Pelle.isDoomed ? DC.D1 : getAdjustedGlyphEffect("replicationspeed"))
+          .times(Pelle.specialGlyphEffect.replication);
       const alteredEffect = Math.clampMin(
-        Decimal.log10(Replicanti.amount) * getSecondaryGlyphEffect("replicationdtgain"), 1);
-      return GlyphAlteration.isAdded("replication") ? baseEffect.times(alteredEffect) : baseEffect;
+        Decimal.log10(Replicanti.amount) *
+          getSecondaryGlyphEffect("replicationdtgain"),
+        1,
+      );
+      return GlyphAlteration.isAdded("replication")
+        ? baseEffect.times(alteredEffect)
+        : baseEffect;
     },
-    isActive: () => PlayerProgress.realityUnlocked() && (!Pelle.isDoomed || Pelle.specialGlyphEffect.replication > 1),
+    isActive: () =>
+      PlayerProgress.realityUnlocked() &&
+      (!Pelle.isDoomed || Pelle.specialGlyphEffect.replication > 1),
     icon: MultiplierTabIcons.GENERIC_GLYPH,
   },
   amplifierRep: {
@@ -59,12 +72,14 @@ export const replicanti = {
   alchemy: {
     name: "Alchemy Resource - Replication",
     multValue: () => AlchemyResource.replication.effectOrDefault(1),
-    isActive: () => Ra.unlocks.unlockGlyphAlchemy.canBeApplied && !Pelle.isDoomed,
+    isActive: () =>
+      Ra.unlocks.unlockGlyphAlchemy.canBeApplied && !Pelle.isDoomed,
     icon: MultiplierTabIcons.ALCHEMY,
   },
   ra: {
     name: "Ra Upgrade - Multiplier based on TT",
-    multValue: () => Ra.unlocks.continuousTTBoost.effects.replicanti.effectOrDefault(1),
+    multValue: () =>
+      Ra.unlocks.continuousTTBoost.effects.replicanti.effectOrDefault(1),
     isActive: () => Ra.unlocks.continuousTTBoost.isUnlocked,
     icon: MultiplierTabIcons.GENERIC_RA,
   },

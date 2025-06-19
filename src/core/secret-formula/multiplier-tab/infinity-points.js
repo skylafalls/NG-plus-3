@@ -7,13 +7,17 @@ import { MultiplierTabIcons } from "./icons";
 export const IP = {
   total: {
     name: "Total IP Gained on Infinity",
-    displayOverride: () => (Player.canCrunch
-      ? format(gainedInfinityPoints(), 2, 2)
-      : "Cannot Crunch"),
+    displayOverride:
+      () => (Player.canCrunch
+        ? format(gainedInfinityPoints(), 2, 2)
+        : "Cannot Crunch"),
     // This effectively hides everything if the player can't actually gain any
     multValue: () => (Player.canCrunch ? gainedInfinityPoints() : 1),
     isActive: () => PlayerProgress.infinityUnlocked() || Player.canCrunch,
-    dilationEffect: () => (Laitela.isRunning ? 0.75 * Effects.product(DilationUpgrade.dilationPenalty) : 1),
+    dilationEffect:
+      () => (Laitela.isRunning
+        ? 0.75 * Effects.product(DilationUpgrade.dilationPenalty)
+        : 1),
     isDilated: true,
     overlay: ["∞", "<i class='fa-solid fa-layer-group' />"],
   },
@@ -23,14 +27,17 @@ export const IP = {
     fakeValue: DC.D5,
     multValue: () => {
       const div = Effects.min(308, Achievement(103), TimeStudy(111));
-      return Decimal.pow10(player.records.thisInfinity.maxAM.log10() / div - 0.75);
+      return Decimal.pow10(
+        player.records.thisInfinity.maxAM.log10() / div - 0.75,
+      );
     },
     isActive: () => player.break,
     icon: MultiplierTabIcons.CONVERT_FROM("AM"),
   },
   antimatter: {
     name: "Infinity Points from Antimatter",
-    displayOverride: () => `${format(player.records.thisInfinity.maxAM, 2, 2)} AM`,
+    displayOverride: () =>
+      `${format(player.records.thisInfinity.maxAM, 2, 2)} AM`,
     // Just needs to match the value in base and be larger than 1
     multValue: DC.D5,
     isActive: () => player.break,
@@ -54,25 +61,27 @@ export const IP = {
   },
   achievement: {
     name: "Achievements",
-    multValue: () => DC.D1.timesEffectsOf(
-      Achievement(85),
-      Achievement(93),
-      Achievement(116),
-      Achievement(125),
-      Achievement(141).effects.ipGain,
-    ),
+    multValue: () =>
+      DC.D1.timesEffectsOf(
+        Achievement(85),
+        Achievement(93),
+        Achievement(116),
+        Achievement(125),
+        Achievement(141).effects.ipGain,
+      ),
     isActive: () => player.break && !Pelle.isDoomed,
     icon: MultiplierTabIcons.ACHIEVEMENT,
   },
   timeStudy: {
     name: "Time Studies",
-    multValue: () => DC.D1.timesEffectsOf(
-      TimeStudy(41),
-      TimeStudy(51),
-      TimeStudy(141),
-      TimeStudy(142),
-      TimeStudy(143),
-    ),
+    multValue: () =>
+      DC.D1.timesEffectsOf(
+        TimeStudy(41),
+        TimeStudy(51),
+        TimeStudy(141),
+        TimeStudy(142),
+        TimeStudy(143),
+      ),
     isActive: () => player.break && !Pelle.isDoomed,
     icon: MultiplierTabIcons.TIME_STUDY,
   },
@@ -84,8 +93,14 @@ export const IP = {
   },
   glyph: {
     name: "Equipped Glyphs",
-    multValue: () => Pelle.specialGlyphEffect.infinity.times(Pelle.isDoomed ? 1 : getAdjustedGlyphEffect("infinityIP")),
-    powValue: () => (GlyphAlteration.isAdded("infinity") ? getSecondaryGlyphEffect("infinityIP") : 1),
+    multValue: () =>
+      Pelle.specialGlyphEffect.infinity.times(
+        Pelle.isDoomed ? 1 : getAdjustedGlyphEffect("infinityIP"),
+      ),
+    powValue:
+      () => (GlyphAlteration.isAdded("infinity")
+        ? getSecondaryGlyphEffect("infinityIP")
+        : 1),
     isActive: () => PlayerProgress.realityUnlocked(),
     icon: MultiplierTabIcons.GENERIC_GLYPH,
   },

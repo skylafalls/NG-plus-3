@@ -35,7 +35,8 @@ import { DC } from "../../constants";
 // To prevent issues, make sure there is always as many note().mp4 files (with the numbers 1-x) as there are glyph types, else you might get errors with music glyphs and audio
 // Its not perfect, you will likely still need to touch GlyphSetName.vue to implement new glyphs completely, but i tried my best :P
 
-const complexIncludes = (x, filterItem) => x.map(n => n().includes(filterItem)).includes(true);
+const complexIncludes = (x, filterItem) =>
+  x.map((n) => n().includes(filterItem)).includes(true);
 
 export const GlyphInfo = {
   glyphTypes: [
@@ -94,49 +95,56 @@ export const GlyphInfo = {
       lightColor: "#9696ff",
       darkHighContrast: "#ffff00",
       lightHighContrast: "#c0c000",
-    }, {
+    },
+    {
       minStrength: 3.25,
       name: "Transcendent",
       darkColor: "#03ffec",
       lightColor: "#00c3c3",
       darkHighContrast: "#00ffff",
       lightHighContrast: "#00c0c0",
-    }, {
+    },
+    {
       minStrength: 3,
       name: "Mythical",
       darkColor: "#d50000",
       lightColor: "#d50000",
       darkHighContrast: "#c00000",
       lightHighContrast: "#ff0000",
-    }, {
+    },
+    {
       minStrength: 2.75,
       name: "Legendary",
       darkColor: "#ff9800",
       lightColor: "#d68100",
       darkHighContrast: "#ff8000",
       lightHighContrast: "#ff8000",
-    }, {
+    },
+    {
       minStrength: 2.5,
       name: "Epic",
       darkColor: "#9c27b0",
       lightColor: "#9c27b0",
       darkHighContrast: "#ff00ff",
       lightHighContrast: "#ff00ff",
-    }, {
+    },
+    {
       minStrength: 2,
       name: "Rare",
       darkColor: "#5096f3",
       lightColor: "#0d40ff",
       darkHighContrast: "#6060ff",
       lightHighContrast: "#0000ff",
-    }, {
+    },
+    {
       minStrength: 1.5,
       name: "Uncommon",
       darkColor: "#43a047",
       lightColor: "#1e8622",
       darkHighContrast: "#00ff00",
       lightHighContrast: "#00b000",
-    }, {
+    },
+    {
       minStrength: 1,
       name: "Common",
       darkColor: "#ffffff",
@@ -148,8 +156,14 @@ export const GlyphInfo = {
 
   cursed: {
     id: "cursed",
-    effects: () => GlyphEffects.all.filter(e => complexIncludes(e.glyphTypes, "cursed")),
-    effectIDs: ["cursedgalaxies", "curseddimensions", "cursedtickspeed", "cursedEP"],
+    effects: () =>
+      GlyphEffects.all.filter((e) => complexIncludes(e.glyphTypes, "cursed")),
+    effectIDs: [
+      "cursedgalaxies",
+      "curseddimensions",
+      "cursedtickspeed",
+      "cursedEP",
+    ],
     adjective: { high: "Cursed", mid: "Hexed", low: "Jinxed" },
     noun: "Curse",
     isBasic: false,
@@ -167,8 +181,14 @@ export const GlyphInfo = {
 
   reality: {
     id: "reality",
-    effects: () => GlyphEffects.all.filter(e => complexIncludes(e.glyphTypes, "reality")),
-    effectIDs: ["realityglyphlevel", "realitygalaxies", "realityrow1pow", "realityDTglyph"],
+    effects: () =>
+      GlyphEffects.all.filter((e) => complexIncludes(e.glyphTypes, "reality")),
+    effectIDs: [
+      "realityglyphlevel",
+      "realitygalaxies",
+      "realityrow1pow",
+      "realityDTglyph",
+    ],
     adjective: "Real",
     noun: "Reality",
     isBasic: false,
@@ -185,7 +205,8 @@ export const GlyphInfo = {
         // This cap is only feasibly reached with the imaginary upgrade, but we still want to cap it at a nice number
         return Decimal.min(Decimal.sqrt(sac).div(15).add(1), 100);
       },
-      description: amount => `Multiply Memory Chunk gain by ${formatX(amount, 2, 3)}`,
+      description: (amount) =>
+        `Multiply Memory Chunk gain by ${formatX(amount, 2, 3)}`,
       cap: () => GlyphSacrificeHandler.maxSacrificeForEffects,
     },
     hasAlchemyResource: true,
@@ -200,10 +221,29 @@ export const GlyphInfo = {
 
   effarig: {
     id: "effarig",
-    effects: () => GlyphEffects.all.filter(e => complexIncludes(e.glyphTypes, "effarig")),
-    effectIDs: ["effarigrm", "effarigglyph", "effarigblackhole", "effarigachievement", "effarigforgotten", "effarigdimensions", "effarigantimatter"],
-    adjective: { both: "Meta", glyph: "Stable", rm: "Mechanical", none: "Fragmented" },
-    noun: { both: "Effarig", glyph: "Stability", rm: "Mechanism", none: "Fragmentation" },
+    effects: () =>
+      GlyphEffects.all.filter((e) => complexIncludes(e.glyphTypes, "effarig")),
+    effectIDs: [
+      "effarigrm",
+      "effarigglyph",
+      "effarigblackhole",
+      "effarigachievement",
+      "effarigforgotten",
+      "effarigdimensions",
+      "effarigantimatter",
+    ],
+    adjective: {
+      both: "Meta",
+      glyph: "Stable",
+      rm: "Mechanical",
+      none: "Fragmented",
+    },
+    noun: {
+      both: "Effarig",
+      glyph: "Stability",
+      rm: "Mechanism",
+      none: "Fragmentation",
+    },
     isBasic: false,
     regularGlyphSymbol: "Ϙ",
     cancerGlyphSymbol: "🦒",
@@ -218,7 +258,8 @@ export const GlyphInfo = {
         const capped = Decimal.min(sac, 1e70);
         return Decimal.log10(capped.div(1e20).add(1)).times(2);
       },
-      description: amount => `+${formatPercents(amount.div(100), 2)} additional Glyph rarity`,
+      description: (amount) =>
+        `+${formatPercents(amount.div(100), 2)} additional Glyph rarity`,
       cap: () => 1e70,
     },
     hasAlchemyResource: true,
@@ -235,7 +276,10 @@ export const GlyphInfo = {
 
   companion: {
     id: "companion",
-    effects: () => GlyphEffects.all.filter(e => complexIncludes(e.glyphTypes, "companion")),
+    effects: () =>
+      GlyphEffects.all.filter((e) =>
+        complexIncludes(e.glyphTypes, "companion")
+      ),
     effectIDs: ["companiondescription", "companionEP"],
     adjective: "Huggable",
     noun: "Companion",
@@ -254,7 +298,8 @@ export const GlyphInfo = {
 
   power: {
     id: "power",
-    effects: () => GlyphEffects.all.filter(e => complexIncludes(e.glyphTypes, "power")),
+    effects: () =>
+      GlyphEffects.all.filter((e) => complexIncludes(e.glyphTypes, "power")),
     adjective: { high: "Powerful", mid: "Mastered", low: "Potential" },
     effectIDs: ["powerpow", "powermult", "powerdimboost", "powerbuy10"],
     noun: "Power",
@@ -269,18 +314,27 @@ export const GlyphInfo = {
           return DC.D0;
         }
         const sac = player.reality.glyphs.sac.power.add(added ?? 0);
-        const capped = Decimal.min(sac, GlyphSacrificeHandler.maxSacrificeForEffects);
-        const base = Decimal.log10(capped.add(1)).div(Decimal.log10(GlyphSacrificeHandler.maxSacrificeForEffects));
+        const capped = Decimal.min(
+          sac,
+          GlyphSacrificeHandler.maxSacrificeForEffects,
+        );
+        const base = Decimal.log10(capped.add(1)).div(
+          Decimal.log10(GlyphSacrificeHandler.maxSacrificeForEffects),
+        );
         return Decimal.floor(Decimal.pow(base, 1.2).times(750));
       },
       description: (amount) => {
         const sacCap = GlyphSacrificeHandler.maxSacrificeForEffects;
-        const nextDistantGalaxy = Decimal.pow10(Decimal.root(amount.add(1).div(750), 1.2)
-          .times(Decimal.log10(sacCap))).sub(1);
+        const nextDistantGalaxy = Decimal.pow10(
+          Decimal.root(amount.add(1).div(750), 1.2)
+            .times(Decimal.log10(sacCap)),
+        ).sub(1);
         const nextGalaxyText = amount.lt(750)
           ? ` (next at ${format(nextDistantGalaxy, 2, 2)})`
           : "";
-        return `Distant Galaxy scaling starts ${formatInt(amount)} later${nextGalaxyText}`;
+        return `Distant Galaxy scaling starts ${
+          formatInt(amount)
+        } later${nextGalaxyText}`;
       },
       cap: () => GlyphSacrificeHandler.maxSacrificeForEffects,
     },
@@ -296,7 +350,8 @@ export const GlyphInfo = {
 
   infinity: {
     id: "infinity",
-    effects: () => GlyphEffects.all.filter(e => complexIncludes(e.glyphTypes, "infinity")),
+    effects: () =>
+      GlyphEffects.all.filter((e) => complexIncludes(e.glyphTypes, "infinity")),
     effectIDs: ["infinitypow", "infinityrate", "infinityIP", "infinityinfmult"],
     adjective: { high: "Infinite", mid: "Boundless", low: "Immense" },
     noun: "Infinity",
@@ -311,10 +366,16 @@ export const GlyphInfo = {
           return DC.D1;
         }
         const sac = player.reality.glyphs.sac.infinity.add(added ?? 0);
-        const capped = Decimal.min(sac, GlyphSacrificeHandler.maxSacrificeForEffects);
+        const capped = Decimal.min(
+          sac,
+          GlyphSacrificeHandler.maxSacrificeForEffects,
+        );
         return Decimal.log10(Decimal.pow(capped, 0.2).div(100).add(1)).add(1);
       },
-      description: amount => `${formatX(amount, 2, 2)} bigger multiplier when buying 8th Infinity Dimension`,
+      description: (amount) =>
+        `${
+          formatX(amount, 2, 2)
+        } bigger multiplier when buying 8th Infinity Dimension`,
       cap: () => GlyphSacrificeHandler.maxSacrificeForEffects,
     },
     hasAlchemyResource: true,
@@ -329,8 +390,16 @@ export const GlyphInfo = {
 
   replication: {
     id: "replication",
-    effects: () => GlyphEffects.all.filter(e => complexIncludes(e.glyphTypes, "replication")),
-    effectIDs: ["replicationspeed", "replicationpow", "replicationdtgain", "replicationglyphlevel"],
+    effects: () =>
+      GlyphEffects.all.filter((e) =>
+        complexIncludes(e.glyphTypes, "replication")
+      ),
+    effectIDs: [
+      "replicationspeed",
+      "replicationpow",
+      "replicationdtgain",
+      "replicationglyphlevel",
+    ],
     adjective: { high: "Replicated", mid: "Simulated", low: "Duplicated" },
     noun: "Replication",
     isBasic: true,
@@ -344,18 +413,27 @@ export const GlyphInfo = {
           return DC.D0;
         }
         const sac = player.reality.glyphs.sac.replication.add(added ?? 0);
-        const capped = Decimal.min(sac, GlyphSacrificeHandler.maxSacrificeForEffects);
-        const base = Decimal.log10(capped.add(1)).div(Decimal.log10(GlyphSacrificeHandler.maxSacrificeForEffects));
+        const capped = Decimal.min(
+          sac,
+          GlyphSacrificeHandler.maxSacrificeForEffects,
+        );
+        const base = Decimal.log10(capped.add(1)).div(
+          Decimal.log10(GlyphSacrificeHandler.maxSacrificeForEffects),
+        );
         return Decimal.floor(Decimal.pow(base, 1.2).times(1500));
       },
       description: (amount) => {
         const sacCap = GlyphSacrificeHandler.maxSacrificeForEffects;
-        const nextDistantGalaxy = Decimal.pow10(Decimal.root((amount.add(1)).div(1500), 1.2)
-          .times(Decimal.log10(sacCap))).sub(1);
+        const nextDistantGalaxy = Decimal.pow10(
+          Decimal.root((amount.add(1)).div(1500), 1.2)
+            .times(Decimal.log10(sacCap)),
+        ).sub(1);
         const nextGalaxyText = amount.lt(1.5e3)
           ? ` (next at ${format(nextDistantGalaxy, 2, 2)})`
           : "";
-        return `Replicanti Galaxy scaling starts ${formatInt(amount)} later${nextGalaxyText}`;
+        return `Replicanti Galaxy scaling starts ${
+          formatInt(amount)
+        } later${nextGalaxyText}`;
       },
       cap: () => GlyphSacrificeHandler.maxSacrificeForEffects,
     },
@@ -370,7 +448,8 @@ export const GlyphInfo = {
 
   time: {
     id: "time",
-    effects: () => GlyphEffects.all.filter(e => complexIncludes(e.glyphTypes, "time")),
+    effects: () =>
+      GlyphEffects.all.filter((e) => complexIncludes(e.glyphTypes, "time")),
     effectIDs: ["timepow", "timespeed", "timeetermult", "timeEP"],
     adjective: { high: "Temporal", mid: "Chronal", low: "Transient" },
     noun: "Time",
@@ -385,10 +464,16 @@ export const GlyphInfo = {
           return DC.D1;
         }
         const sac = player.reality.glyphs.sac.time.add(added ?? 0);
-        const capped = Decimal.min(sac, GlyphSacrificeHandler.maxSacrificeForEffects);
+        const capped = Decimal.min(
+          sac,
+          GlyphSacrificeHandler.maxSacrificeForEffects,
+        );
         return Decimal.pow(Decimal.pow(capped, 0.2).div(100).add(1), 2);
       },
-      description: amount => `${formatX(amount, 2, 2)} bigger multiplier when buying 8th Time Dimension`,
+      description: (amount) =>
+        `${
+          formatX(amount, 2, 2)
+        } bigger multiplier when buying 8th Time Dimension`,
       cap: () => GlyphSacrificeHandler.maxSacrificeForEffects,
     },
     hasAlchemyResource: true,
@@ -403,8 +488,14 @@ export const GlyphInfo = {
 
   dilation: {
     id: "dilation",
-    effects: () => GlyphEffects.all.filter(e => complexIncludes(e.glyphTypes, "dilation")),
-    effectIDs: ["dilationDT", "dilationgalaxyThreshold", "dilationTTgen", "dilationpow"],
+    effects: () =>
+      GlyphEffects.all.filter((e) => complexIncludes(e.glyphTypes, "dilation")),
+    effectIDs: [
+      "dilationDT",
+      "dilationgalaxyThreshold",
+      "dilationTTgen",
+      "dilationpow",
+    ],
     adjective: { high: "Dilated", mid: "Attenuated", low: "Diluted" },
     noun: "Dilation",
     isBasic: true,
@@ -417,12 +508,19 @@ export const GlyphInfo = {
           return DC.D1;
         }
         const sac = player.reality.glyphs.sac.dilation.add(added ?? 0);
-        const capped = Decimal.clampMax(sac, GlyphSacrificeHandler.maxSacrificeForEffects);
-        const exponent = Decimal.pow(Decimal.log10(capped.add(1))
-          .div(Decimal.log10(GlyphSacrificeHandler.maxSacrificeForEffects)), 0.1).mul(0.32);
+        const capped = Decimal.clampMax(
+          sac,
+          GlyphSacrificeHandler.maxSacrificeForEffects,
+        );
+        const exponent = Decimal.pow(
+          Decimal.log10(capped.add(1))
+            .div(Decimal.log10(GlyphSacrificeHandler.maxSacrificeForEffects)),
+          0.1,
+        ).mul(0.32);
         return Decimal.pow(Decimal.max(capped, 1), exponent);
       },
-      description: amount => `Multiply Tachyon Particle gain by ${formatX(amount, 2, 2)}`,
+      description: (amount) =>
+        `Multiply Tachyon Particle gain by ${formatX(amount, 2, 2)}`,
       cap: () => GlyphSacrificeHandler.maxSacrificeForEffects,
     },
     hasAlchemyResource: true,
@@ -448,7 +546,7 @@ export const cosmeticGlyphs = {
     symbol: "\uE010",
     color: "#E4B51A",
     preventBlur: true,
-    isUnlocked: () => Themes.available().map(t => t.name).includes("S11"),
+    isUnlocked: () => Themes.available().map((t) => t.name).includes("S11"),
     canCustomize: () => false,
   },
 };

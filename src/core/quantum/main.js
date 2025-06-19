@@ -8,6 +8,7 @@ export function resetPreQuantumResources() {
   // We reset in order of when the player sees the game mechanic (eg. we reset dilation, then time studies, then eternities)
   // I'm not really sure why, but it seems like a nice way to organize it.
   // Stage Zero: Meta Dimensions (I forgot)
+  player.meta.boosts = new Decimal(0);
   MetaDimensions.reset();
   Currency.metaAntimatter.reset();
 
@@ -116,9 +117,15 @@ export function resetPreQuantumResources() {
 }
 
 function updateQuantumRecords() {
-  player.records.bestQuantum.time = player.records.thisQuantum.time.clampMax(player.records.bestQuantum.time);
-  player.records.bestQuantum.realTime = player.records.thisQuantum.realTime.clampMax(player.records.bestQuantum.time);
-  player.records.bestQuantum.trueTime = Math.min(player.records.bestQuantum.trueTime, player.records.thisQuantum.trueTime);
+  player.records.bestQuantum.time = player.records.thisQuantum.time.clampMax(
+    player.records.bestQuantum.time,
+  );
+  player.records.bestQuantum.realTime = player.records.thisQuantum.realTime
+    .clampMax(player.records.bestQuantum.time);
+  player.records.bestQuantum.trueTime = Math.min(
+    player.records.bestQuantum.trueTime,
+    player.records.thisQuantum.trueTime,
+  );
 }
 
 function addQuantumTime(trueTime, time, realTime) {
@@ -150,7 +157,10 @@ export function restorePreQuantumResources(playerState) {
  */
 export function canPerformQuantumReset() {
   if (QuantumChallenge.isRunning) {
-    if (Currency.antimatter.lt(Player.infinityGoal) && Currency.metaAntimatter.lt(Player.quantumGoal)) {
+    if (
+      Currency.antimatter.lt(Player.infinityGoal) &&
+      Currency.metaAntimatter.lt(Player.quantumGoal)
+    ) {
       return false;
     }
   } else if (Currency.metaAntimatter.lt(Player.quantumGoal)) {

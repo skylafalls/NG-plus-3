@@ -1,4 +1,7 @@
-import { RebuyableMechanicState, SetPurchasableMechanicState } from "./game-mechanics";
+import {
+  RebuyableMechanicState,
+  SetPurchasableMechanicState,
+} from "./game-mechanics";
 import { DC } from "./constants";
 import FullScreenAnimationHandler from "./full-screen-animation-handler";
 import { SpeedrunMilestones } from "./speedrun";
@@ -24,10 +27,14 @@ export function animateAndUndilate(callback) {
 }
 
 export function startDilatedEternityRequest() {
-  if (!PlayerProgress.dilationUnlocked() || (Pelle.isDoomed && !Pelle.canDilateInPelle)) {
+  if (
+    !PlayerProgress.dilationUnlocked() ||
+    (Pelle.isDoomed && !Pelle.canDilateInPelle)
+  ) {
     return;
   }
-  const playAnimation = player.options.animations.dilation && !FullScreenAnimationHandler.isDisplaying;
+  const playAnimation = player.options.animations.dilation &&
+    !FullScreenAnimationHandler.isDisplaying;
   if (player.dilation.active) {
     if (player.options.confirmations.dilation) {
       Modal.exitDilation.show();
@@ -66,12 +73,29 @@ export function startDilatedEternity(auto) {
 }
 
 const DIL_UPG_NAMES = [
-  null, "dtGain", "galaxyThreshold", "tachyonGain", "tachyonExponent",
-  "doubleGalaxies", "tdMultReplicanti", "ndMultDT", "dilatedTimeToReplicanti",
-  "ipMultDT", "timeStudySplit", "dilationPenalty", "eternitiesDTSynergy",
-  "mdMultTickspeed", "mdBuffDT", "mdEffectBuff", "dtMultMA",
+  null,
+  "dtGain",
+  "galaxyThreshold",
+  "tachyonGain",
+  "tachyonExponent",
+  "doubleGalaxies",
+  "tdMultReplicanti",
+  "ndMultDT",
+  "dilatedTimeToReplicanti",
+  "ipMultDT",
+  "timeStudySplit",
+  "dilationPenalty",
+  "eternitiesDTSynergy",
+  "mdMultTickspeed",
+  "mdBuffDT",
+  "mdEffectBuff",
+  "dtMultMA",
   "ttGenerator",
-  "dtGainPelle", "galaxyMultiplier", "tickspeedPower", "galaxyThresholdPelle", "flatDilationMult",
+  "dtGainPelle",
+  "galaxyMultiplier",
+  "tickspeedPower",
+  "galaxyThresholdPelle",
+  "flatDilationMult",
 ];
 
 export function buyDilationUpgrade(id, bulk = 1) {
@@ -89,19 +113,35 @@ export function buyDilationUpgrade(id, bulk = 1) {
     }
     player.dilation.upgrades.add(id);
     if (id === 5) {
-      player.dilation.totalTachyonGalaxies = player.dilation.totalTachyonGalaxies.mul(2);
+      player.dilation.totalTachyonGalaxies = player.dilation
+        .totalTachyonGalaxies.mul(2);
     }
   } else {
     const upgAmount = player.dilation.rebuyables[id];
-    if (Currency.dilatedTime.lt(upgrade.cost) || upgAmount.gte(upgrade.config.purchaseCap)) {
+    if (
+      Currency.dilatedTime.lt(upgrade.cost) ||
+      upgAmount.gte(upgrade.config.purchaseCap)
+    ) {
       return false;
     }
 
-    let buying = Decimal.affordGeometricSeries(Currency.dilatedTime.value,
-      upgrade.config.initialCost, upgrade.config.increment, upgAmount);
+    let buying = Decimal.affordGeometricSeries(
+      Currency.dilatedTime.value,
+      upgrade.config.initialCost,
+      upgrade.config.increment,
+      upgAmount,
+    );
     buying = Decimal.clampMax(buying, bulk);
-    buying = Decimal.clampMax(buying, upgrade.config.purchaseCap.sub(upgAmount));
-    const cost = Decimal.sumGeometricSeries(buying, upgrade.config.initialCost, upgrade.config.increment, upgAmount);
+    buying = Decimal.clampMax(
+      buying,
+      upgrade.config.purchaseCap.sub(upgAmount),
+    );
+    const cost = Decimal.sumGeometricSeries(
+      buying,
+      upgrade.config.initialCost,
+      upgrade.config.increment,
+      upgAmount,
+    );
     Currency.dilatedTime.subtract(cost);
     player.dilation.rebuyables[id] = player.dilation.rebuyables[id].add(buying);
     if (id === 2) {
@@ -122,9 +162,14 @@ export function buyDilationUpgrade(id, bulk = 1) {
         Perk.retroactiveTP4,
       );
       if (Enslaved.isRunning) {
-        retroactiveTPFactor = Decimal.pow(retroactiveTPFactor, Enslaved.tachyonNerf);
+        retroactiveTPFactor = Decimal.pow(
+          retroactiveTPFactor,
+          Enslaved.tachyonNerf,
+        );
       }
-      Currency.tachyonParticles.multiply(Decimal.pow(retroactiveTPFactor, buying));
+      Currency.tachyonParticles.multiply(
+        Decimal.pow(retroactiveTPFactor, buying),
+      );
     }
   }
   return true;
@@ -142,7 +187,9 @@ export function maxPurchaseDilationUpgrades() {
 
 export function getTachyonGalaxyMult(thresholdUpgrade) {
   // This specifically needs to be an undefined check because sometimes thresholdUpgrade is zero
-  const upgrade = thresholdUpgrade === undefined ? DilationUpgrade.galaxyThreshold.effectValue : thresholdUpgrade;
+  const upgrade = thresholdUpgrade === undefined
+    ? DilationUpgrade.galaxyThreshold.effectValue
+    : thresholdUpgrade;
   const thresholdMult = upgrade.mul(3.65).add(0.35);
   const glyphEffect = getAdjustedGlyphEffect("dilationgalaxyThreshold");
   const glyphReduction = glyphEffect === 0 ? 1 : glyphEffect;
@@ -159,9 +206,15 @@ export function getTachyonGalaxyMult(thresholdUpgrade) {
 
 export function getDilationGainPerSecond() {
   if (Pelle.isDoomed) {
-    const tachyonEffect = Currency.tachyonParticles.value.pow(PelleRifts.paradox.milestones[1].effectOrDefault(1));
+    const tachyonEffect = Currency.tachyonParticles.value.pow(
+      PelleRifts.paradox.milestones[1].effectOrDefault(1),
+    );
     return new Decimal(tachyonEffect)
-      .timesEffectsOf(DilationUpgrade.dtGain, DilationUpgrade.dtGainPelle, DilationUpgrade.flatDilationMult)
+      .timesEffectsOf(
+        DilationUpgrade.dtGain,
+        DilationUpgrade.dtGainPelle,
+        DilationUpgrade.flatDilationMult,
+      )
       .times(Pelle.specialGlyphEffect.dilation).div(1e5);
   }
   let dtRate = new Decimal(Currency.tachyonParticles.value)
@@ -177,10 +230,20 @@ export function getDilationGainPerSecond() {
       Ra.unlocks.peakGamespeedDT,
       QuantumChallenge(1).reward,
     )
-    .times(DilationUpgrade.eternitiesDTSynergy.isBought ? Currency.eternities.value.clampMin(1).pow(0.15) : 1);
+    .times(
+      DilationUpgrade.eternitiesDTSynergy.isBought
+        ? Currency.eternities.value.clampMin(1).pow(0.15)
+        : 1,
+    );
   dtRate = dtRate.times(getAdjustedGlyphEffect("dilationDT"));
   dtRate = dtRate.times(
-    Decimal.clampMin(Decimal.log10(Replicanti.amount.add(1)).mul(getAdjustedGlyphEffect("replicationdtgain")), 1));
+    Decimal.clampMin(
+      Decimal.log10(Replicanti.amount.add(1)).mul(
+        getAdjustedGlyphEffect("replicationdtgain"),
+      ),
+      1,
+    ),
+  );
   if (Enslaved.isRunning && !dtRate.eq(0)) {
     dtRate = dtRate.plus(1).logPow(0.85);
   }
@@ -206,7 +269,9 @@ export function tachyonGainMultiplier() {
 }
 
 export function rewardTP() {
-  Currency.tachyonParticles.bumpTo(getTP(player.records.thisEternity.maxAM, true));
+  Currency.tachyonParticles.bumpTo(
+    getTP(player.records.thisEternity.maxAM, true),
+  );
   player.dilation.lastEP = Currency.eternityPoints.value;
 }
 
@@ -221,7 +286,9 @@ export function getBaseTP(antimatter, requireEternity) {
   const am = (isInCelestialReality() || Pelle.isDoomed)
     ? antimatter
     : Ra.unlocks.unlockDilationStartingTP.effectOrDefault(antimatter);
-  let baseTP = am.max(1).log10().div(400).pow(Decimal.add(1.5, DilationUpgrade.tachyonExponent.effectOrDefault(0)));
+  let baseTP = am.max(1).log10().div(400).pow(
+    Decimal.add(1.5, DilationUpgrade.tachyonExponent.effectOrDefault(0)),
+  );
   if (Enslaved.isRunning) {
     baseTP = baseTP.pow(Enslaved.tachyonNerf);
   }
@@ -236,16 +303,28 @@ export function getTP(antimatter, requireEternity) {
 // Returns the amount of TP gained, subtracting out current TP; used for displaying gained TP, text on the
 // "exit dilation" button (saying whether you need more antimatter), and in last 10 eternities
 export function getTachyonGain(requireEternity) {
-  return getTP(Currency.antimatter.value, requireEternity).minus(Currency.tachyonParticles.value).clampMin(0);
+  return getTP(Currency.antimatter.value, requireEternity).minus(
+    Currency.tachyonParticles.value,
+  ).clampMin(0);
 }
 
 // Returns the minimum antimatter needed in order to gain more TP; used only for display purposes
 export function getTachyonReq() {
-  let effectiveTP = Currency.tachyonParticles.value.dividedBy(tachyonGainMultiplier());
+  let effectiveTP = Currency.tachyonParticles.value.dividedBy(
+    tachyonGainMultiplier(),
+  );
   return Decimal.pow10(
     effectiveTP
-      .times(Decimal.pow(400, Decimal.add(1.5, DilationUpgrade.tachyonExponent.effectOrDefault(0))))
-      .pow(Decimal.add(1.5, DilationUpgrade.tachyonExponent.effectOrDefault(0)).recip()),
+      .times(
+        Decimal.pow(
+          400,
+          Decimal.add(1.5, DilationUpgrade.tachyonExponent.effectOrDefault(0)),
+        ),
+      )
+      .pow(
+        Decimal.add(1.5, DilationUpgrade.tachyonExponent.effectOrDefault(0))
+          .recip(),
+      ),
   );
 }
 
@@ -263,16 +342,22 @@ export function getDilationTimeEstimate(goal) {
     if (goalNetRate.lt(0)) {
       return "Never affordable due to Rift drain";
     }
-    return TimeSpan.fromSeconds(currNetRate.div(goalNetRate).ln().div(drain)).toTimeEstimate();
+    return TimeSpan.fromSeconds(currNetRate.div(goalNetRate).ln().div(drain))
+      .toTimeEstimate();
   }
-  return TimeSpan.fromSeconds(Decimal.sub(goal, currentDT)
-    .div(rawDTGain)).toTimeEstimate();
+  return TimeSpan.fromSeconds(
+    Decimal.sub(goal, currentDT)
+      .div(rawDTGain),
+  ).toTimeEstimate();
 }
 
 export function dilatedValueOf(value) {
   const log10 = value.eq(0) ? DC.D0 : value.log10();
-  const dilationPenalty = Effects.product(DilationUpgrade.dilationPenalty).times(0.75);
-  return Decimal.pow10(log10.abs().pow(dilationPenalty).times(Decimal.sign(log10)));
+  const dilationPenalty = Effects.product(DilationUpgrade.dilationPenalty)
+    .times(0.75);
+  return Decimal.pow10(
+    log10.abs().pow(dilationPenalty).times(Decimal.sign(log10)),
+  );
 }
 
 class DilationUpgradeState extends SetPurchasableMechanicState {
@@ -286,7 +371,8 @@ class DilationUpgradeState extends SetPurchasableMechanicState {
 
   onPurchased() {
     if (this.id === 4) {
-      player.dilation.totalTachyonGalaxies = player.dilation.totalTachyonGalaxies.mul(2);
+      player.dilation.totalTachyonGalaxies = player.dilation
+        .totalTachyonGalaxies.mul(2);
     }
     if (this.id === 10) {
       SpeedrunMilestones(15).tryComplete();
@@ -318,7 +404,9 @@ class RebuyableDilationUpgradeState extends RebuyableMechanicState {
 
 export const DilationUpgrade = mapGameDataToObject(
   GameDatabase.eternity.dilation,
-  config => (config.rebuyable
+  (
+    config,
+  ) => (config.rebuyable
     ? new RebuyableDilationUpgradeState(config)
     : new DilationUpgradeState(config)),
 );
@@ -329,5 +417,5 @@ export const DilationUpgrades = {
     DilationUpgrade.galaxyThreshold,
     DilationUpgrade.tachyonGain,
   ],
-  fromId: id => DilationUpgrade.all.find(x => x.id === Number(id)),
+  fromId: (id) => DilationUpgrade.all.find((x) => x.id === Number(id)),
 };

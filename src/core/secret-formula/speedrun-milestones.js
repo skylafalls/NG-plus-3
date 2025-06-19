@@ -36,7 +36,8 @@ export const speedrunMilestones = [
     key: "completeAllNC",
     name: "All Normal Challenges",
     description: "Complete all Normal Challenges",
-    checkRequirement: () => NormalChallenges.all.countWhere(c => !c.isCompleted) === 0,
+    checkRequirement: () =>
+      NormalChallenges.all.countWhere((c) => !c.isCompleted) === 0,
     checkEvent: GAME_EVENT.BIG_CRUNCH_AFTER,
   },
   {
@@ -53,7 +54,8 @@ export const speedrunMilestones = [
     get name() {
       return `${format(5e11)} IP Upgrade`;
     },
-    description: () => `Purchase the ${formatPercents(0.5)} stronger Galaxies upgrade`,
+    description: () =>
+      `Purchase the ${formatPercents(0.5)} stronger Galaxies upgrade`,
     checkRequirement: () => true,
     // This is checked within BreakInfinityUpgrade.onPurchased
   },
@@ -86,7 +88,7 @@ export const speedrunMilestones = [
     key: "allEternityMilestones",
     name: "All Eternity Milestones",
     description: "Unlock all Eternity Milestones",
-    checkRequirement: () => EternityMilestone.all.every(m => m.isReached),
+    checkRequirement: () => EternityMilestone.all.every((m) => m.isReached),
     checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER,
   },
   {

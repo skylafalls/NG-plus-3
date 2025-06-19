@@ -4,7 +4,8 @@ class ConfirmationState {
   constructor(config) {
     this.name = config.name;
     this._confirmationSetting = config.option;
-    this.isUnlocked = () => config.isUnlocked() || player.records.fullGameCompletions > 0;
+    this.isUnlocked = () =>
+      config.isUnlocked() || player.records.fullGameCompletions > 0;
   }
 
   get option() {
@@ -17,8 +18,8 @@ class ConfirmationState {
 }
 
 export const ConfirmationTypes = GameDatabase.confirmationTypes.mapToObject(
-  config => config.option,
-  config => new ConfirmationState(config),
+  (config) => config.option,
+  (config) => new ConfirmationState(config),
 );
 
 ConfirmationTypes.index = Object.values(ConfirmationTypes);

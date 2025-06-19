@@ -1,6 +1,7 @@
 import { IntervaledAutobuyerState } from "./autobuyer";
 
-export class DarkMatterDimensionAscensionAutobuyerState extends IntervaledAutobuyerState {
+export class DarkMatterDimensionAscensionAutobuyerState
+  extends IntervaledAutobuyerState {
   get data() {
     return player.auto.ascension;
   }
@@ -23,7 +24,11 @@ export class DarkMatterDimensionAscensionAutobuyerState extends IntervaledAutobu
 
   tick() {
     super.tick();
-    for (let i = 1; i <= SingularityMilestone.ascensionAutobuyers.effectValue; i++) {
+    for (
+      let i = 1;
+      i <= SingularityMilestone.ascensionAutobuyers.effectValue;
+      i++
+    ) {
       DarkMatterDimension(i).ascend();
     }
   }

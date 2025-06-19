@@ -10,7 +10,7 @@ const flashCelestial = [
   ["pelle", 0.8],
 ];
 /** @param {string} cel */
-const primaryBackground = cel => [["pelle", 1.5], [cel, 1.5]];
+const primaryBackground = (cel) => [["pelle", 1.5], [cel, 1.5]];
 
 const destroyer = ["False", "Deity", "Destroyer"];
 const eternal = ["Eternal", "Deity", "Monarch"];
@@ -57,7 +57,10 @@ export const pelleQuotes = {
       { text: "All to try and fulfill your $1?", 1: mandate },
       { text: "And how many times have you fallen before the $1?", 1: eternal },
       "Count them, if you remember.",
-      { text: "Not even the $1, the 6 named and the innumerable unnamed.", 1: deities },
+      {
+        text: "Not even the $1, the 6 named and the innumerable unnamed.",
+        1: deities,
+      },
       { text: "The complex, the irrational, those that go $1.", 1: unseen },
       { text: "Of course, the great $1 does not remember this.", 1: destroyer },
       { text: "All those $1 that you hide every time.", 1: battles },
@@ -70,8 +73,14 @@ export const pelleQuotes = {
       "The imaginary machines, your own creations.",
       "Things made of the remnants of your own thoughts, hinted at this.",
       "But, you never imagined that would be you, right?",
-      { text: "Incorrectly recollecting your exacting $1 of memories.", 1: unseen },
-      { text: "\"Fabrication\" of your own \"ideology\" just to fulfill your $1.", 1: mandate },
+      {
+        text: "Incorrectly recollecting your exacting $1 of memories.",
+        1: unseen,
+      },
+      {
+        text: '"Fabrication" of your own "ideology" just to fulfill your $1.',
+        1: mandate,
+      },
       { text: "$1.", 1: confusing },
       { text: "And keep in mind I have no reason to $1 you.", 1: misconstrue },
       "After all, I have already won.",
@@ -80,8 +89,14 @@ export const pelleQuotes = {
   strike1: {
     id: 2,
     lines: [
-      { text: "To fulfill your $1. Why don't we reminisce about that?", 1: mandate },
-      { text: "After all, you must love the stories of the $1's glory.", 1: destroyer },
+      {
+        text: "To fulfill your $1. Why don't we reminisce about that?",
+        1: mandate,
+      },
+      {
+        text: "After all, you must love the stories of the $1's glory.",
+        1: destroyer,
+      },
       "You are the same as it, right?",
       { text: "Anyway, the many $1 in the past.", 1: battles },
       "It has always been 2 stages.",
@@ -106,7 +121,10 @@ export const pelleQuotes = {
       "Experimentation across the untold realms.",
       "And harnessing the Annihilation of matter and antimatter.",
       "Here? You made yourself into an 8th-dimensional being.",
-      { text: "And then parked yourself there so long a $1 formed around you.", 1: single },
+      {
+        text: "And then parked yourself there so long a $1 formed around you.",
+        1: single,
+      },
     ],
   },
   strike3: {
@@ -128,16 +146,29 @@ export const pelleQuotes = {
   strike4: {
     id: 5,
     lines: [
-      { text: "I originally planned for something that imitated your $1.", 1: mandate },
+      {
+        text: "I originally planned for something that imitated your $1.",
+        1: mandate,
+      },
       { text: "A theoretical ideal called $1?", 1: assured },
       "But I realised that, well?",
-      { text: "That would make me an $1.", 1: ["Eternal", "Deity", "Destroyer"] },
+      {
+        text: "That would make me an $1.",
+        1: ["Eternal", "Deity", "Destroyer"],
+      },
       { text: "And from there, I am no better than the $1.", 1: destroyer },
-      { text: "Fortunately, while I did all of that, you were still $1 your own memories.", 1: unseen },
+      {
+        text:
+          "Fortunately, while I did all of that, you were still $1 your own memories.",
+        1: unseen,
+      },
       { text: "And so, the $1 machine I built will go unused.", 1: assured },
       "I decided to go more traditional this time.",
       { text: "After all, it has worked every other $1.", 1: battle },
-      { text: "Although the $1 are new.", 1: ["Inevitable", "Irreversible", "Undying"] },
+      {
+        text: "Although the $1 are new.",
+        1: ["Inevitable", "Irreversible", "Undying"],
+      },
       "But, utterly meaningless in the long run.",
       "I have already won.",
       { text: "And this $1 will only prove that to you once more.", 1: dance },
@@ -155,195 +186,250 @@ export const pelleQuotes = {
         text: "The first $1.",
         background: primaryBackground("teresa"),
         1: lesser,
-      }, {
+      },
+      {
         text: "The $1.",
         background: primaryBackground("teresa"),
         1: sycophant,
-      }, {
+      },
+      {
         text: "You always meet them first, and always destroy them.",
         background: primaryBackground("teresa"),
-      }, {
+      },
+      {
         text: "No matter the other $1 that you face.",
         background: primaryBackground("teresa"),
         1: lesser,
-      }, {
+      },
+      {
         text: "Or, if you fall before one of them.",
         background: primaryBackground("teresa"),
-      }, {
+      },
+      {
         text: "You always get past the $1.",
         background: primaryBackground("teresa"),
         1: sycophant,
-      }, {
+      },
+      {
         text: "Do you like destroying their pride?",
         background: primaryBackground("teresa"),
-      }, {
+      },
+      {
         text: "Fortunately, it also serves as a warning.",
         background: primaryBackground("teresa"),
-      }, {
+      },
+      {
         text: "That the $1 has arrived.",
         background: primaryBackground("teresa"),
         1: battle,
-      }, {
+      },
+      {
         text: "Which brings me to the second $1.",
         background: primaryBackground("effarig"),
         1: lesser,
-      }, {
+      },
+      {
         text: "The $1.",
         background: primaryBackground("effarig"),
         1: tired,
-      }, {
+      },
+      {
         text: "In contrast, you usually ignore them.",
         background: primaryBackground("effarig"),
-      }, {
+      },
+      {
         text: "They have power, but do not seem to irritate you.",
         background: primaryBackground("effarig"),
-      }, {
-        text: "Is it that you know that they will eventually destroy themselves?",
+      },
+      {
+        text:
+          "Is it that you know that they will eventually destroy themselves?",
         background: primaryBackground("effarig"),
-      }, {
+      },
+      {
         text: "And that you took so long this time, that they almost did?",
         background: primaryBackground("effarig"),
-      }, {
+      },
+      {
         text: "Every time you rushed to the $1, you lost.",
         background: primaryBackground("effarig"),
         1: tired,
-      }, {
+      },
+      {
         text: "Maybe this was your plan all along.",
         background: primaryBackground("effarig"),
-      }, {
+      },
+      {
         text: "Now, the $1.",
         background: primaryBackground("enslaved"),
         1: usurper,
-      }, {
+      },
+      {
         text: "One of the pleasures of the myriad $1...",
         background: primaryBackground("enslaved"),
         1: dance,
-      }, {
+      },
+      {
         text: "Is that the $1 trying every time.",
         background: primaryBackground("enslaved"),
         1: usurper,
-      }, {
+      },
+      {
         text: "Well, not exactly trying...",
         background: primaryBackground("enslaved"),
-      }, {
+      },
+      {
         text: "But $1 is punished for it all the same.",
         background: primaryBackground("enslaved"),
         1: usurper,
-      }, {
+      },
+      {
         text: "The other $1...",
         background: primaryBackground("enslaved"),
         1: deities,
-      }, {
+      },
+      {
         text: "Believe $1 is too easy.",
         background: primaryBackground("enslaved"),
         1: unseen,
-      }, {
+      },
+      {
         text: "And every time, despair forms.",
         background: primaryBackground("enslaved"),
-      }, {
+      },
+      {
         text: "You have seen despair before - 5 times.",
         background: primaryBackground("enslaved"),
-      }, {
+      },
+      {
         text: "We always get to the $1 before you.",
         background: primaryBackground("enslaved"),
         1: usurper,
-      }, {
+      },
+      {
         text: "All you ever see there is exasperation.",
         background: primaryBackground("enslaved"),
-      }, {
+      },
+      {
         text: "Was it worth destroying an already broken $1?",
         background: primaryBackground("enslaved"),
         1: lesser,
-      }, {
+      },
+      {
         text: "The 4th $1 seems similar to the first.",
         background: primaryBackground("v"),
         1: lesser,
-      }, {
+      },
+      {
         text: "The key is how their pride differs.",
         background: primaryBackground("v"),
-      }, {
+      },
+      {
         text: "The $1 focuses on their achievements.",
         background: primaryBackground("v"),
         1: pride,
-      }, {
+      },
+      {
         text: "Meaningless to you or I, but paramount to them.",
         background: primaryBackground("v"),
-      }, {
+      },
+      {
         text: "Is it fun to destroy their toys?",
         background: primaryBackground("v"),
-      }, {
+      },
+      {
         text: "Arguably the $1 worst moment...",
         background: primaryBackground("v"),
         1: destroyer,
-      }, {
+      },
+      {
         text: "Is when you lost to the $1.",
         background: primaryBackground("v"),
         1: pride,
-      }, {
+      },
+      {
         text: "When their achievements still had meaning.",
         background: primaryBackground("v"),
-      }, {
+      },
+      {
         text: "The $1 is an interesting case.",
         background: primaryBackground("ra"),
         1: forgotten,
-      }, {
+      },
+      {
         text: "They are forgotten, but not $1.",
         background: primaryBackground("ra"),
         1: unseen,
-      }, {
+      },
+      {
         text: "From this, they became influenceable and naive.",
         background: primaryBackground("ra"),
-      }, {
+      },
+      {
         text: "And unknowing of the consequences of their actions.",
         background: primaryBackground("ra"),
-      }, {
+      },
+      {
         text: "You manipulated their memories, so you know.",
         background: primaryBackground("ra"),
-      }, {
+      },
+      {
         text: "The $1 is the true usurper.",
         background: primaryBackground("ra"),
         1: forgotten,
-      }, {
+      },
+      {
         text: "And the $1 takes the blame.",
         background: primaryBackground("ra"),
         1: usurper,
-      }, {
+      },
+      {
         text: "Perhaps out of $1, something they always regret.",
         background: primaryBackground("ra"),
         1: shame,
-      }, {
+      },
+      {
         text: "Untold power over other $1, aimless in control.",
         background: primaryBackground("ra"),
         1: deities,
-      }, {
+      },
+      {
         text: "You usually pretend that they are $1.",
         background: primaryBackground("ra"),
         1: unseen,
-      }, {
+      },
+      {
         text: "Was it fun to manipulate the childlike?",
         background: primaryBackground("ra"),
-      }, {
+      },
+      {
         text: "Or were they too naive for you to enjoy it?",
         background: primaryBackground("ra"),
-      }, {
+      },
+      {
         text: "The 6th $1.",
         background: primaryBackground("laitela"),
         1: lesser,
-      }, {
+      },
+      {
         text: "I can only describe as the $1.",
         background: primaryBackground("laitela"),
         1: paramount,
-      }, {
+      },
+      {
         text: "Power over all, subservient to one.",
         background: primaryBackground("laitela"),
-      }, {
+      },
+      {
         text: "If you do not fall to me, you usually fall to them.",
         background: primaryBackground("laitela"),
-      }, {
+      },
+      {
         text: "I cannot grasp the ideals of the $1.",
         background: primaryBackground("laitela"),
         1: paramount,
-      }, {
+      },
+      {
         text: "But, perhaps that is their flaw?",
         background: primaryBackground("laitela"),
       },
@@ -351,7 +437,8 @@ export const pelleQuotes = {
       {
         text: "And those that will be $1.",
         1: unseen,
-      }, {
+      },
+      {
         text: "Back to watching the $1 flounder.",
         1: destroyer,
       },
@@ -410,24 +497,31 @@ export const pelleQuotes = {
         text: "The $1 struggle...",
         background: flashCelestial,
         1: forever,
-      }, {
+      },
+      {
         text: "The $1...",
         background: flashCelestial,
         1: battle,
-      }, {
+      },
+      {
         text: "Finally has the victor.",
         background: flashCelestial,
-      }, {
+      },
+      {
         text: "The irreversible... $1.",
         background: flashCelestial,
         1: mandate,
-      }, {
-        text: "Of the $1.", 1: destroyer,
+      },
+      {
+        text: "Of the $1.",
+        1: destroyer,
         background: flashCelestial,
-      }, {
+      },
+      {
         text: "I hope you are happy.",
         background: flashCelestial,
-      }, {
+      },
+      {
         text: "You have doomed us all.",
         background: flashCelestial,
       },

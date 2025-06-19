@@ -56,12 +56,14 @@ export class GalaxyAutobuyerState extends UpgradeableAutobuyerState {
 
   get interval() {
     return this.isBuyMaxUnlocked
-      ? TimeSpan.fromSeconds(new Decimal(this.buyMaxInterval)).totalMilliseconds.toNumber()
+      ? TimeSpan.fromSeconds(new Decimal(this.buyMaxInterval)).totalMilliseconds
+        .toNumber()
       : super.interval;
   }
 
   get canTick() {
-    return Galaxy.canBeBought && Galaxy.requirement.isSatisfied && super.canTick;
+    return Galaxy.canBeBought && Galaxy.requirement.isSatisfied &&
+      super.canTick;
   }
 
   get resetTickOn() {

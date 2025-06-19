@@ -3,8 +3,9 @@ import { compile } from "./compiler";
 import { parser } from "./parser";
 
 function walkSuggestion(suggestion, prefix, output) {
-  const hasAutocomplete = suggestion.$autocomplete
-    && suggestion.$autocomplete.startsWith(prefix) && suggestion.$autocomplete !== prefix;
+  const hasAutocomplete = suggestion.$autocomplete &&
+    suggestion.$autocomplete.startsWith(prefix) &&
+    suggestion.$autocomplete !== prefix;
   const isUnlocked = suggestion.$unlocked ? suggestion.$unlocked() : true;
   if (hasAutocomplete && isUnlocked) {
     output.add(suggestion.$autocomplete);
@@ -17,7 +18,7 @@ function walkSuggestion(suggestion, prefix, output) {
 CodeMirror.registerHelper("lint", "automato", (contents, _, editor) => {
   const doc = editor.getDoc();
   const errors = compile(contents, true).errors;
-  return errors.map(e => ({
+  return errors.map((e) => ({
     message: e.info,
     severity: "error",
     from: doc.posFromIndex(e.startOffset),
@@ -70,8 +71,8 @@ CodeMirror.defineSimpleMode("automato", {
     { regex: /studies\s+/ui, token: "keyword", next: "studiesArgs" },
     { regex: /blob\s\s/ui, token: "blob" },
     {
-
-      regex: /(auto|if|pause|studies|time[ \t]+theorems?|space[ \t]+theorems?|until|wait|while|black[ \t]+hole|stored?[ \t]+game[ \t]+time|notify)\s/ui,
+      regex:
+        /(auto|if|pause|studies|time[ \t]+theorems?|space[ \t]+theorems?|until|wait|while|black[ \t]+hole|stored?[ \t]+game[ \t]+time|notify)\s/ui,
       token: "keyword",
       next: "commandArgs",
     },
@@ -85,8 +86,16 @@ CodeMirror.defineSimpleMode("automato", {
       token: "keyword",
       next: "startUnlock",
     },
-    { regex: /infinity\S+|eternity\S+|reality\S+|pause\S+|restart\S+/ui, token: "error", next: "commandDone" },
-    { regex: /infinity|eternity|reality/ui, token: "keyword", next: "prestige" },
+    {
+      regex: /infinity\S+|eternity\S+|reality\S+|pause\S+|restart\S+/ui,
+      token: "error",
+      next: "commandDone",
+    },
+    {
+      regex: /infinity|eternity|reality/ui,
+      token: "keyword",
+      next: "prestige",
+    },
     { regex: /pause|restart/ui, token: "keyword", next: "commandDone" },
     { regex: /\}/ui, dedent: true },
     { regex: /\S+\s/ui, token: "error", next: "commandDone" },
@@ -106,7 +115,11 @@ CodeMirror.defineSimpleMode("automato", {
     { regex: /(active|passive|idle)(?=[\s,|]|$)/ui, token: "number" },
     { regex: /(light|dark)(?=[\s,|]|$)/ui, token: "number" },
     { regex: /([1-9][0-9]+)(?=[\s,!|-]|$)/ui, token: "number" },
-    { regex: /[a-zA-Z_][a-zA-Z_0-9]*/u, token: "variable", next: "commandDone" },
+    {
+      regex: /[a-zA-Z_][a-zA-Z_0-9]*/u,
+      token: "variable",
+      next: "commandDone",
+    },
     { regex: /!$/ui, token: "variable-2" },
     { regex: /([1-9]|1[0-2])(?=!|$)/ui, token: "number" },
   ],
@@ -157,23 +170,36 @@ CodeMirror.defineSimpleMode("automato", {
     { regex: /nowait(\s|$)/ui, token: "property" },
     { regex: /".*"/ui, token: "string", next: "commandDone" },
     { regex: /'.*'/ui, token: "string", next: "commandDone" },
-    { regex: /(on|off|bh1|bh2|dilation|load|respec)(\s|$)/ui, token: "variable-2" },
+    {
+      regex: /(on|off|bh1|bh2|dilation|load|respec)(\s|$)/ui,
+      token: "variable-2",
+    },
     { regex: /(eternity|reality|use)(\s|$)/ui, token: "variable-2" },
     { regex: /(antimatter|infinity|time)(\s|$|(?=,))/ui, token: "variable-2" },
     { regex: /(active|passive|idle)(\s|$|(?=,))/ui, token: "variable-2" },
     { regex: /(light|dark)(\s|$|(?=,))/ui, token: "variable-2" },
     { regex: /x[\t ]+highest(\s|$)/ui, token: "variable-2" },
-    { regex: /pending[\t ]+(completions|ip|ep|tp|rm|glyph[\t ]+level)(\s|$)/ui, token: "variable-2" },
-    { regex: /total[\t ]+(completions|tt|space theorems)(\s|$)/ui, token: "variable-2" },
+    {
+      regex: /pending[\t ]+(completions|ip|ep|tp|rm|glyph[\t ]+level)(\s|$)/ui,
+      token: "variable-2",
+    },
+    {
+      regex: /total[\t ]+(completions|tt|space theorems)(\s|$)/ui,
+      token: "variable-2",
+    },
     { regex: /filter[ \t]+score/ui, token: "variable-2" },
     { regex: /ec(1[0-2]|[1-9])[\t ]+completions(\s|$)/ui, token: "variable-2" },
     { regex: /(am|ip|ep|all)(\s|$)/ui, token: "variable-2" },
     {
-      regex: /(rm|rg|dt|tp|tt|space theorems|(banked )?infinities|eternities|realities|rep(licanti)?)(\s|$)/ui,
+      regex:
+        /(rm|rg|dt|tp|tt|space theorems|(banked )?infinities|eternities|realities|rep(licanti)?)(\s|$)/ui,
       token: "variable-2",
     },
     { regex: / sec(onds ?) ?| min(utes ?) ?| hours ?/ui, token: "variable-2" },
-    { regex: /([0-9]+:[0-5][0-9]:[0-5][0-9]|[0-5]?[0-9]:[0-5][0-9]|t[1-4])/ui, token: "number" },
+    {
+      regex: /([0-9]+:[0-5][0-9]:[0-5][0-9]|[0-5]?[0-9]:[0-5][0-9]|t[1-4])/ui,
+      token: "number",
+    },
     { regex: /-?(0|[1-9]\d*)(\.\d+)?([eE][+-]?\d+)?/ui, token: "number" },
     { regex: /[a-zA-Z_][a-zA-Z_0-9]*/u, token: "variable" },
     { regex: /\{/ui, indent: true, next: "commandDone" },

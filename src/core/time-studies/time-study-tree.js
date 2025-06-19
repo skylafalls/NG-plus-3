@@ -48,7 +48,9 @@ export class TimeStudyTree {
         break;
       }
       default: {
-        throw new Error("Unrecognized input parameter for TimeStudyTree constructor");
+        throw new Error(
+          "Unrecognized input parameter for TimeStudyTree constructor",
+        );
       }
     }
   }
@@ -61,15 +63,19 @@ export class TimeStudyTree {
       return false;
     }
     let test = input.replaceAll(/ +/gu, "");
-    TimeStudyTree.sets.forEach((_, x) => test = test.replaceAll(new RegExp(`${x},?`, "gu"), ""));
+    TimeStudyTree.sets.forEach((_, x) =>
+      test = test.replaceAll(new RegExp(`${x},?`, "gu"), "")
+    );
     return /^,?((\d{2,3}(-\d{2,3})?)\b,?)*(\|\d{1,2}!?)?$/iu.test(test);
   }
 
   // Getter for all the studies in the current game state
   static get currentStudies() {
-    const currentStudies = player.timestudy.studies.map(s => TimeStudy(s));
+    const currentStudies = player.timestudy.studies.map((s) => TimeStudy(s));
     if (player.challenge.eternity.unlocked !== 0) {
-      currentStudies.push(TimeStudy.eternityChallenge(player.challenge.eternity.unlocked));
+      currentStudies.push(
+        TimeStudy.eternityChallenge(player.challenge.eternity.unlocked),
+      );
     }
     return currentStudies;
   }
@@ -116,7 +122,13 @@ export class TimeStudyTree {
       ["light", [221, 223, 225, 227, 231, 233]],
       ["dark", [222, 224, 226, 228, 232, 234]],
       ...(Ra.unlocks.unlockHardV.canBeApplied
-        ? [["triad", [301, 302, 303, 304].slice(0, Ra.unlocks.unlockHardV.effectOrDefault(0))]]
+        ? [[
+          "triad",
+          [301, 302, 303, 304].slice(
+            0,
+            Ra.unlocks.unlockHardV.effectOrDefault(0),
+          ),
+        ]]
         : []),
     ]);
   }
@@ -124,7 +136,10 @@ export class TimeStudyTree {
   static truncateInput(input) {
     let internal = input.toLowerCase();
     // Convert every name into the ids it is a shorthand for
-    this.sets.forEach((ids, name) => (internal = internal.replace(name, ids.join(","))));
+    this.sets.forEach((
+      ids,
+      name,
+    ) => (internal = internal.replace(name, ids.join(","))));
     return internal
       .replace(/[|,]$/u, "")
       .replaceAll(" ", "")
@@ -141,7 +156,9 @@ export class TimeStudyTree {
   // This reads off all the studies in the import string and splits them into invalid and valid study IDs. We hold on
   // to invalid studies for additional information to present to the player
   parseStudyImport(input) {
-    const studyDB = new Set(GameDatabase.eternity.timeStudies.normal.map(s => s.id));
+    const studyDB = new Set(
+      GameDatabase.eternity.timeStudies.normal.map((s) => s.id),
+    );
     const output = [];
     const studiesString = TimeStudyTree.truncateInput(input).split("|")[0];
     if (studiesString.length > 0) {
@@ -174,7 +191,7 @@ export class TimeStudyTree {
     const ecID = parseInt(ecString, 10);
     const ecDB = GameDatabase.eternity.timeStudies.ec;
     // Specifically exclude 0 because saved presets will contain it by default
-    if (!ecDB.map(c => c.id).includes(ecID) && ecID !== 0) {
+    if (!ecDB.map((c) => c.id).includes(ecID) && ecID !== 0) {
       this.invalidStudies.push(`EC${ecID}`);
       return output;
     }
@@ -200,7 +217,9 @@ export class TimeStudyTree {
 
   checkTimeStudyNumber(token) {
     const tsNumber = parseFloat(token);
-    if (!TimeStudy(tsNumber) || (TimeStudy(tsNumber).isTriad && !Ra.canBuyTriad)) {
+    if (
+      !TimeStudy(tsNumber) || (TimeStudy(tsNumber).isTriad && !Ra.canBuyTriad)
+    ) {
       return 0;
     }
     return tsNumber;
@@ -229,22 +248,25 @@ export class TimeStudyTree {
 
     // Because the player data may not reflect the state of the TimeStudyTree object's purchasedStudies,
     // we have to do all the checks here with purchasedStudies. study.isBought and similar functions cannot be used.
-    const check = req => (typeof req === "number"
+    const check = (
+      req,
+    ) => (typeof req === "number"
       ? this.purchasedStudies.includes(TimeStudy(req))
       : req());
     const config = study.config;
     let reqSatisfied;
     switch (config.reqType) {
       case TS_REQUIREMENT_TYPE.AT_LEAST_ONE: {
-        reqSatisfied = config.requirement.some(r => check(r));
+        reqSatisfied = config.requirement.some((r) => check(r));
         break;
       }
       case TS_REQUIREMENT_TYPE.ALL: {
-        reqSatisfied = config.requirement.every(r => check(r));
+        reqSatisfied = config.requirement.every((r) => check(r));
         break;
       }
       case TS_REQUIREMENT_TYPE.DIMENSION_PATH: {
-        reqSatisfied = config.requirement.every(r => check(r)) && this.currDimPathCount < this.allowedDimPathCount;
+        reqSatisfied = config.requirement.every((r) => check(r)) &&
+          this.currDimPathCount < this.allowedDimPathCount;
         break;
       }
       default: {
@@ -252,19 +274,25 @@ export class TimeStudyTree {
       }
     }
     if (study instanceof ECTimeStudyState) {
-      if (this.purchasedStudies.some(s => s instanceof ECTimeStudyState)) {
+      if (this.purchasedStudies.some((s) => s instanceof ECTimeStudyState)) {
         return false;
       }
-      const hasForbiddenStudies = !Perk.studyECRequirement.isBought
-        && study.config.secondary.forbiddenStudies?.some(s => check(s));
+      const hasForbiddenStudies = !Perk.studyECRequirement.isBought &&
+        study.config.secondary.forbiddenStudies?.some((s) => check(s));
       // We want to only check the structure for script template error instructions
       if (checkOnlyStructure) {
         return reqSatisfied && !hasForbiddenStudies;
       }
-      const totalTT = player.timestudy.theorem.plus(TimeTheorems.calculateTimeStudiesCost());
-      const hasEnoughTT = totalTT.subtract(this.spentTheorems[0]).gte(study.cost);
-      const secondaryGoal = Perk.studyECRequirement.isBought || study.isEntryGoalMet;
-      return reqSatisfied && !hasForbiddenStudies && (study.isBought || (secondaryGoal && hasEnoughTT));
+      const totalTT = player.timestudy.theorem.plus(
+        TimeTheorems.calculateTimeStudiesCost(),
+      );
+      const hasEnoughTT = totalTT.subtract(this.spentTheorems[0]).gte(
+        study.cost,
+      );
+      const secondaryGoal = Perk.studyECRequirement.isBought ||
+        study.isEntryGoalMet;
+      return reqSatisfied && !hasForbiddenStudies &&
+        (study.isBought || (secondaryGoal && hasEnoughTT));
     }
     return reqSatisfied;
   }
@@ -273,14 +301,19 @@ export class TimeStudyTree {
   buySingleStudy(study, checkCosts) {
     const config = study.config;
     const stDiscount = VUnlocks.raUnlock.effectOrDefault(0);
-    const stNeeded = config.STCost && config.requiresST.some(s => this.purchasedStudies.includes(TimeStudy(s)))
+    const stNeeded = config.STCost &&
+        config.requiresST.some((s) =>
+          this.purchasedStudies.includes(TimeStudy(s))
+        )
       ? Math.clampMin(config.STCost - stDiscount, 0)
       : 0;
     // Took these out of the checkCosts check as these aren't available early game
     const maxST = Pelle.isDoomed ? 0 : V.spaceTheorems;
     const hasST = this.spentTheorems[1] + stNeeded <= maxST;
     if (checkCosts) {
-      const maxTT = Currency.timeTheorems.value.add(GameCache.currentStudyTree.value.spentTheorems[0]);
+      const maxTT = Currency.timeTheorems.value.add(
+        GameCache.currentStudyTree.value.spentTheorems[0],
+      );
       const hasTT = this.spentTheorems[0].add(config.cost.gte(maxTT));
       if (!hasTT || !hasST) {
         return;
@@ -298,7 +331,9 @@ export class TimeStudyTree {
   }
 
   get currDimPathCount() {
-    return [71, 72, 73].countWhere(x => this.purchasedStudies.includes(TimeStudy(x)));
+    return [71, 72, 73].countWhere((x) =>
+      this.purchasedStudies.includes(TimeStudy(x))
+    );
   }
 
   get allowedDimPathCount() {
@@ -313,9 +348,13 @@ export class TimeStudyTree {
 
   get dimensionPaths() {
     const pathSet = new Set();
-    const validPaths = [TIME_STUDY_PATH.ANTIMATTER_DIM, TIME_STUDY_PATH.INFINITY_DIM, TIME_STUDY_PATH.TIME_DIM];
+    const validPaths = [
+      TIME_STUDY_PATH.ANTIMATTER_DIM,
+      TIME_STUDY_PATH.INFINITY_DIM,
+      TIME_STUDY_PATH.TIME_DIM,
+    ];
     for (const path of validPaths) {
-      const pathEntry = NormalTimeStudies.pathList.find(p => p.path === path);
+      const pathEntry = NormalTimeStudies.pathList.find((p) => p.path === path);
       for (const study of this.purchasedStudies) {
         if (pathEntry.studies.includes(study.id)) {
           pathSet.add(pathEntry.name);
@@ -328,9 +367,13 @@ export class TimeStudyTree {
 
   get pacePaths() {
     const pathSet = new Set();
-    const validPaths = [TIME_STUDY_PATH.ACTIVE, TIME_STUDY_PATH.PASSIVE, TIME_STUDY_PATH.IDLE];
+    const validPaths = [
+      TIME_STUDY_PATH.ACTIVE,
+      TIME_STUDY_PATH.PASSIVE,
+      TIME_STUDY_PATH.IDLE,
+    ];
     for (const path of validPaths) {
-      const pathEntry = NormalTimeStudies.pathList.find(p => p.path === path);
+      const pathEntry = NormalTimeStudies.pathList.find((p) => p.path === path);
       for (const study of this.purchasedStudies) {
         if (pathEntry.studies.includes(study.id)) {
           pathSet.add(pathEntry.name);
@@ -343,15 +386,19 @@ export class TimeStudyTree {
 
   get ec() {
     // This technically takes the very first EC entry if there's more than one, but that shouldn't happen in practice
-    const ecStudies = this.purchasedStudies.find(s => s instanceof ECTimeStudyState);
+    const ecStudies = this.purchasedStudies.find((s) =>
+      s instanceof ECTimeStudyState
+    );
     return ecStudies ? ecStudies.id : 0;
   }
 
   // Creates an export string based on all currently purchased studies; gives an ! at the end if currently in an EC
   get exportString() {
-    return `${this.purchasedStudies
-      .filter(s => s instanceof NormalTimeStudyState)
-      .map(s => s.id)
-      .join(",")}|${this.ec}${player.challenge.eternity.current === 0 ? "" : "!"}`;
+    return `${
+      this.purchasedStudies
+        .filter((s) => s instanceof NormalTimeStudyState)
+        .map((s) => s.id)
+        .join(",")
+    }|${this.ec}${player.challenge.eternity.current === 0 ? "" : "!"}`;
   }
 }

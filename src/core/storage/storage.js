@@ -93,7 +93,9 @@ export const GameStorage = {
   },
 
   backupDataKey(saveSlot, backupSlot) {
-    return DEV ? `backupTestSave-${saveSlot}-${backupSlot}` : `backupSave-${saveSlot}-${backupSlot}`;
+    return DEV
+      ? `backupTestSave-${saveSlot}-${backupSlot}`
+      : `backupSave-${saveSlot}-${backupSlot}`;
   },
 
   backupTimeKey(saveSlot) {
@@ -144,7 +146,7 @@ export const GameStorage = {
     this.loadPlayerObject(this.saves[slot] ?? Player.defaultStart);
     this.loadBackupTimes();
     this.backupOfflineSlots();
-    Tabs.all.find(t => t.id === player.options.lastOpenTab).show(false);
+    Tabs.all.find((t) => t.id === player.options.lastOpenTab).show(false);
     Modal.hideAll();
     Cloud.resetTempState();
     GameUI.notify.info("Game loaded");
@@ -157,7 +159,9 @@ export const GameStorage = {
     }
     const newPlayer = GameSaveSerializer.deserialize(saveData);
     if (this.checkPlayerObject(newPlayer) !== "") {
-      Modal.message.show("Could not load the save (format unrecognized or invalid).");
+      Modal.message.show(
+        "Could not load the save (format unrecognized or invalid).",
+      );
       return;
     }
     this.oldBackupTimer = player.backupTimer;
@@ -234,14 +238,16 @@ export const GameStorage = {
           }
           case "number": {
             thisNaN = Number.isNaN(prop);
-            hasNaN = hasNaN || thisNaN; if (thisNaN) {
+            hasNaN = hasNaN || thisNaN;
+            if (thisNaN) {
               invalidProps.push(`${path}.${key}`);
             }
             break;
           }
           case "string": {
             thisNaN = prop === "NaN";
-            hasNaN = hasNaN || thisNaN; if (thisNaN) {
+            hasNaN = hasNaN || thisNaN;
+            if (thisNaN) {
               invalidProps.push(`${path}.${key}`);
             }
             break;
@@ -262,9 +268,11 @@ export const GameStorage = {
   // A few things in the current game state can prevent saving, which we want to do for all forms of saving
   canSave(ignoreSimulation = false) {
     const isSelectingGlyph = GlyphSelection.active;
-    const isSimulating = ui.$viewModel.modal.progressBar !== undefined && !ignoreSimulation;
-    const isEnd = (GameEnd.endState >= END_STATE_MARKERS.SAVE_DISABLED && !GameEnd.removeAdditionalEnd)
-      || GameEnd.endState >= END_STATE_MARKERS.INTERACTIVITY_DISABLED;
+    const isSimulating = ui.$viewModel.modal.progressBar !== undefined &&
+      !ignoreSimulation;
+    const isEnd = (GameEnd.endState >= END_STATE_MARKERS.SAVE_DISABLED &&
+      !GameEnd.removeAdditionalEnd) ||
+      GameEnd.endState >= END_STATE_MARKERS.INTERACTIVITY_DISABLED;
     return !isEnd && !(isSelectingGlyph || isSimulating);
   },
 
@@ -281,7 +289,10 @@ export const GameStorage = {
       current: this.currentSlot,
       saves: this.saves,
     };
-    localStorage.setItem(this.localStorageKey, GameSaveSerializer.serialize(root));
+    localStorage.setItem(
+      this.localStorageKey,
+      GameSaveSerializer.serialize(root),
+    );
     if (!silent) {
       GameUI.notify.info("Game saved");
     }
@@ -295,17 +306,25 @@ export const GameStorage = {
     if (!this.canSave(true)) {
       return;
     }
-    localStorage.setItem(this.backupDataKey(this.currentSlot, backupSlot), GameSaveSerializer.serialize(player));
+    localStorage.setItem(
+      this.backupDataKey(this.currentSlot, backupSlot),
+      GameSaveSerializer.serialize(player),
+    );
     this.lastBackupTimes[backupSlot] = {
       backupTimer,
       date: Date.now(),
     };
-    localStorage.setItem(this.backupTimeKey(this.currentSlot), GameSaveSerializer.serialize(this.lastBackupTimes));
+    localStorage.setItem(
+      this.backupTimeKey(this.currentSlot),
+      GameSaveSerializer.serialize(this.lastBackupTimes),
+    );
   },
 
   // Does not actually load, but returns an object which is meant to be passed on to loadPlayerObject()
   loadFromBackup(backupSlot) {
-    const data = localStorage.getItem(this.backupDataKey(this.currentSlot, backupSlot));
+    const data = localStorage.getItem(
+      this.backupDataKey(this.currentSlot, backupSlot),
+    );
     return GameSaveSerializer.deserialize(data);
   },
 
@@ -315,7 +334,7 @@ export const GameStorage = {
     const currentTime = Date.now();
     const offlineTimeMs = currentTime - this.lastUpdateOnLoad;
     const offlineSlots = AutoBackupSlots
-      .filter(slot => slot.type === BACKUP_SLOT_TYPE.OFFLINE)
+      .filter((slot) => slot.type === BACKUP_SLOT_TYPE.OFFLINE)
       .sort((a, b) => b.interval - a.interval);
     for (const backupInfo of offlineSlots) {
       if (offlineTimeMs > 1000 * backupInfo.interval) {
@@ -334,7 +353,9 @@ export const GameStorage = {
 
   // Loads in all the data from previous backup times in localStorage
   loadBackupTimes() {
-    this.lastBackupTimes = GameSaveSerializer.deserialize(localStorage.getItem(this.backupTimeKey(this.currentSlot)));
+    this.lastBackupTimes = GameSaveSerializer.deserialize(
+      localStorage.getItem(this.backupTimeKey(this.currentSlot)),
+    );
     if (!this.lastBackupTimes) {
       this.lastBackupTimes = {};
     }
@@ -354,9 +375,14 @@ export const GameStorage = {
   // every time it saves
   tryOnlineBackups() {
     const toBackup = [];
-    for (const backupInfo of AutoBackupSlots.filter(slot => slot.type === BACKUP_SLOT_TYPE.ONLINE)) {
+    for (
+      const backupInfo of AutoBackupSlots.filter((slot) =>
+        slot.type === BACKUP_SLOT_TYPE.ONLINE
+      )
+    ) {
       const id = backupInfo.id;
-      const timeSinceLast = player.backupTimer - (this.lastBackupTimes[id]?.backupTimer ?? 0);
+      const timeSinceLast = player.backupTimer -
+        (this.lastBackupTimes[id]?.backupTimer ?? 0);
       if (1000 * backupInfo.interval - timeSinceLast <= 800) {
         toBackup.push(id);
       }
@@ -367,13 +393,20 @@ export const GameStorage = {
   // Set the next backup time, but make sure to skip forward an appropriate amount if a load or import happened,
   // since these may cause the backup timer to be significantly behind
   resetBackupTimer() {
-    const latestBackupTime = Object.values(this.lastBackupTimes).map(t => t && t.backupTimer).max();
-    player.backupTimer = Math.max(this.oldBackupTimer, player.backupTimer, latestBackupTime.toNumber());
+    const latestBackupTime = Object.values(this.lastBackupTimes).map((t) =>
+      t && t.backupTimer
+    ).max();
+    player.backupTimer = Math.max(
+      this.oldBackupTimer,
+      player.backupTimer,
+      latestBackupTime.toNumber(),
+    );
   },
 
   // Saves the current game state to the first reserve slot it finds
   saveToReserveSlot() {
-    const targetSlot = AutoBackupSlots.find(slot => slot.type === BACKUP_SLOT_TYPE.RESERVE).id;
+    const targetSlot =
+      AutoBackupSlots.find((slot) => slot.type === BACKUP_SLOT_TYPE.RESERVE).id;
     this.saveToBackup(targetSlot, player.backupTimer);
   },
 
@@ -396,40 +429,62 @@ export const GameStorage = {
     }
     player.options.exportedFileCount++;
     this.save(true);
-    const saveFileName = player.options.saveFileName ? ` - ${player.options.saveFileName},` : "";
+    const saveFileName = player.options.saveFileName
+      ? ` - ${player.options.saveFileName},`
+      : "";
     const save = this.exportModifiedSave();
     download(
-      `AD Save, Slot ${GameStorage.currentSlot + 1}${saveFileName} #${player.options.exportedFileCount} \
-(${this.exportDateString}).txt`, save);
-    GameUI.notify.info("Successfully downloaded current save file to your computer");
+      `AD Save, Slot ${
+        GameStorage.currentSlot + 1
+      }${saveFileName} #${player.options.exportedFileCount} \
+(${this.exportDateString}).txt`,
+      save,
+    );
+    GameUI.notify.info(
+      "Successfully downloaded current save file to your computer",
+    );
   },
 
   exportBackupsAsFile() {
     player.options.exportedFileCount++;
     const backupData = {};
-    for (const id of AutoBackupSlots.map(slot => slot.id)) {
+    for (const id of AutoBackupSlots.map((slot) => slot.id)) {
       const backup = this.loadFromBackup(id);
       if (backup) {
         backupData[id] = backup;
       }
     }
-    backupData.time = GameSaveSerializer.deserialize(localStorage.getItem(this.backupTimeKey(this.currentSlot)));
+    backupData.time = GameSaveSerializer.deserialize(
+      localStorage.getItem(this.backupTimeKey(this.currentSlot)),
+    );
     download(
-      `AD Save Backups, Slot ${GameStorage.currentSlot + 1} #${player.options.exportedFileCount} \
-(${this.exportDateString}).txt`, GameSaveSerializer.serialize(backupData));
-    GameUI.notify.info("Successfully downloaded save file backups to your computer");
+      `AD Save Backups, Slot ${
+        GameStorage.currentSlot + 1
+      } #${player.options.exportedFileCount} \
+(${this.exportDateString}).txt`,
+      GameSaveSerializer.serialize(backupData),
+    );
+    GameUI.notify.info(
+      "Successfully downloaded save file backups to your computer",
+    );
   },
 
   importBackupsFromFile(importText) {
     const backupData = GameSaveSerializer.deserialize(importText);
-    localStorage.setItem(this.backupTimeKey(this.currentSlot), GameSaveSerializer.serialize(backupData.time));
+    localStorage.setItem(
+      this.backupTimeKey(this.currentSlot),
+      GameSaveSerializer.serialize(backupData.time),
+    );
     for (const backupKey of Object.keys(backupData)) {
       if (backupKey === "time") {
         continue;
       }
       const id = Number(backupKey);
       const storageKey = this.backupDataKey(this.currentSlot, id);
-      localStorage.setItem(storageKey, GameSaveSerializer.serialize(backupData[backupKey]));
+      localStorage.setItem(
+        storageKey,
+        GameSaveSerializer.serialize(backupData[backupKey]),
+      );
       this.backupTimeData[id] = {
         backupTimer: backupData.time[id].backupTimer,
         date: backupData.time[id].date,
@@ -480,7 +535,8 @@ export const GameStorage = {
 
       // For pre-Reality versions, we additionally need to fire off an event to ensure certain achievements and
       // notifications trigger properly. Missing props are filled in at this step via deepmerge
-      const isPreviousVersionSave = playerObject.version < migrations.firstRealityMigration;
+      const isPreviousVersionSave =
+        playerObject.version < migrations.firstRealityMigration;
       player = migrations.patchPreReality(playerObject);
       if (isPreviousVersionSave) {
         if (DEV) {
@@ -508,22 +564,38 @@ export const GameStorage = {
 
           return glyph;
         };
-        player.celestials.teresa.bestAMSet = player.celestials.teresa.bestAMSet.map(n => fixGlyph(n));
-        player.celestials.v.runGlyphs = player.celestials.v.runGlyphs.map(n => n.map(g => fixGlyph(g)));
-        player.reality.glyphs.active = player.reality.glyphs.active.map(n => fixGlyph(n));
-        player.reality.glyphs.inventory = player.reality.glyphs.inventory.map(n => fixGlyph(n));
+        player.celestials.teresa.bestAMSet = player.celestials.teresa.bestAMSet
+          .map((n) => fixGlyph(n));
+        player.celestials.v.runGlyphs = player.celestials.v.runGlyphs.map((n) =>
+          n.map((g) => fixGlyph(g))
+        );
+        player.reality.glyphs.active = player.reality.glyphs.active.map((n) =>
+          fixGlyph(n)
+        );
+        player.reality.glyphs.inventory = player.reality.glyphs.inventory.map(
+          (n) => fixGlyph(n),
+        );
         for (let i = 0; i < 7; i++) {
-          player.reality.glyphs.sets[i].glyphs = player.reality.glyphs.sets[i].glyphs.map(n => fixGlyph(n));
+          player.reality.glyphs.sets[i].glyphs = player.reality.glyphs.sets[i]
+            .glyphs.map((n) => fixGlyph(n));
         }
-        player.records.bestReality.RMSet = player.records.bestReality.RMSet?.map(n => fixGlyph(n));
-        player.records.bestReality.RMminSet = player.records.bestReality.RMminSet?.map(n => fixGlyph(n));
-        player.records.bestReality.glyphLevelSet = player.records.bestReality.glyphLevelSet?.map(n => fixGlyph(n));
-        player.records.bestReality.imCapSet = player.records.bestReality.imCapSet?.map(n => fixGlyph(n));
-        player.records.bestReality.laitelaSet = player.records.bestReality.laitelaSet?.map(n => fixGlyph(n));
-        player.records.bestReality.speedSet = player.records.bestReality.speedSet?.map(n => fixGlyph(n));
+        player.records.bestReality.RMSet = player.records.bestReality.RMSet
+          ?.map((n) => fixGlyph(n));
+        player.records.bestReality.RMminSet = player.records.bestReality
+          .RMminSet?.map((n) => fixGlyph(n));
+        player.records.bestReality.glyphLevelSet = player.records.bestReality
+          .glyphLevelSet?.map((n) => fixGlyph(n));
+        player.records.bestReality.imCapSet = player.records.bestReality
+          .imCapSet?.map((n) => fixGlyph(n));
+        player.records.bestReality.laitelaSet = player.records.bestReality
+          .laitelaSet?.map((n) => fixGlyph(n));
+        player.records.bestReality.speedSet = player.records.bestReality
+          .speedSet?.map((n) => fixGlyph(n));
       }
       for (const item in player.reality.glyphs.filter.types) {
-        player.reality.glyphs.filter.types[item].rarity = new Decimal(player.reality.glyphs.filter.types[item].rarity);
+        player.reality.glyphs.filter.types[item].rarity = new Decimal(
+          player.reality.glyphs.filter.types[item].rarity,
+        );
 
         // Eplayer.reality.glyphs.filter.types[item].score = new Decimal(player.reality.glyphs.filter.types[item].score);
       }
@@ -553,8 +625,10 @@ export const GameStorage = {
     Glyphs.unseen = [];
     Glyphs.unequipped = [];
     Notations.find(player.options.notation).setAsCurrent(true);
-    ADNotations.Settings.exponentCommas.min = 10 ** player.options.notationDigits.comma;
-    ADNotations.Settings.exponentCommas.max = 10 ** player.options.notationDigits.notation;
+    ADNotations.Settings.exponentCommas.min = 10 **
+      player.options.notationDigits.comma;
+    ADNotations.Settings.exponentCommas.max = 10 **
+      player.options.notationDigits.notation;
 
     EventHub.dispatch(GAME_EVENT.GAME_LOAD);
     AutomatorBackend.initializeFromSave();
@@ -562,7 +636,8 @@ export const GameStorage = {
 
     const rawDiff = Date.now() - player.lastUpdate;
     // We set offlineEnabled externally on importing or loading a backup; otherwise this is just a local load
-    const simulateOffline = this.offlineEnabled ?? player.options.offlineProgress;
+    const simulateOffline = this.offlineEnabled ??
+      player.options.offlineProgress;
     if (simulateOffline && !Speedrun.isPausedAtStart()) {
       let diff = rawDiff;
       player.speedrun.offlineTimeUsed += diff;
@@ -629,7 +704,10 @@ export const GameStorage = {
 
 function download(filename, text) {
   const pom = document.createElement("a");
-  pom.setAttribute("href", `data:text/plain;charset=utf-8,${encodeURIComponent(text)}`);
+  pom.setAttribute(
+    "href",
+    `data:text/plain;charset=utf-8,${encodeURIComponent(text)}`,
+  );
   pom.setAttribute("download", filename);
 
   if (document.createEvent) {

@@ -19,13 +19,13 @@ class GlyphEffectState {
 
 export const GlyphEffect = {
   dimBoostPower: new GlyphEffectState("powerdimboost", {
-    adjustApply: value => Decimal.max(1, value),
+    adjustApply: (value) => Decimal.max(1, value),
   }),
   ipMult: new GlyphEffectState("infinityIP", {
-    adjustApply: value => Decimal.max(1, value),
+    adjustApply: (value) => Decimal.max(1, value),
   }),
   epMult: new GlyphEffectState("timeEP", {
-    adjustApply: value => Decimal.max(1, value),
+    adjustApply: (value) => Decimal.max(1, value),
   }),
 };
 
@@ -69,8 +69,8 @@ export function getGlyphEffectValues(effectKey) {
     throw new Error(`Unknown Glyph effect requested "${effectKey}"'`);
   }
   const r = player.reality.glyphs.active
-    .filter(glyph => glyph.effects.includes(effectKey))
-    .map(glyph => getSingleGlyphEffectFromBitmask(effectKey, glyph));
+    .filter((glyph) => glyph.effects.includes(effectKey))
+    .map((glyph) => getSingleGlyphEffectFromBitmask(effectKey, glyph));
   return r;
 }
 
@@ -86,7 +86,10 @@ export function separateEffectKey(effectKey) {
   let type = "";
   let effect = "";
   for (let i = 0; i < GlyphInfo.glyphTypes.length; i++) {
-    if (effectKey.slice(0, GlyphInfo.glyphTypes[i].length) === GlyphInfo.glyphTypes[i]) {
+    if (
+      effectKey.slice(0, GlyphInfo.glyphTypes[i].length) ===
+        GlyphInfo.glyphTypes[i]
+    ) {
       type = GlyphInfo.glyphTypes[i];
       effect = effectKey.slice(GlyphInfo.glyphTypes[i].length);
       break;
@@ -98,21 +101,35 @@ export function separateEffectKey(effectKey) {
 // Turns a glyph effect bitmask into an effect list and corresponding values. This also picks up non-generated effects,
 // since there is some id overlap. Those should be filtered out as needed after calling this function.
 
-export function getGlyphEffectValuesFromBitmask(bitmask, level, baseStrength, type) {
+export function getGlyphEffectValuesFromBitmask(
+  bitmask,
+  level,
+  baseStrength,
+  type,
+) {
   // If we don't specifically exclude companion glyphs, the first-reality EP record is wrong within Doomed since its
   // value is encoded in the rarity field
-  const strength = (Pelle.isDoomed && type !== "companion") ? Pelle.glyphStrength : baseStrength;
+  const strength = (Pelle.isDoomed && type !== "companion")
+    ? Pelle.glyphStrength
+    : baseStrength;
   return getGlyphEffectsFromBitmask(bitmask)
-    .map(effect => ({
+    .map((effect) => ({
       id: effect.id,
       value: effect.effect(level, strength),
     }));
 }
 
-export function getGlyphEffectValuesFromArray(array, level, baseStrength, type) {
-  const strength = (Pelle.isDoomed && type !== "companion") ? Pelle.glyphStrength : baseStrength;
+export function getGlyphEffectValuesFromArray(
+  array,
+  level,
+  baseStrength,
+  type,
+) {
+  const strength = (Pelle.isDoomed && type !== "companion")
+    ? Pelle.glyphStrength
+    : baseStrength;
   return getGlyphEffectsFromArray(array)
-    .map(effect => ({
+    .map((effect) => ({
       id: effect.id,
       value: effect.effect(level, strength),
     }));
@@ -124,7 +141,10 @@ export function getSingleGlyphEffectFromBitmask(effectName, glyph) {
   if (!glyph.effects.includes(effectName)) {
     return;
   }
-  return glyphEffect.effect(getAdjustedGlyphLevel(glyph), Pelle.isDoomed ? Pelle.glyphStrength : glyph.strength);
+  return glyphEffect.effect(
+    getAdjustedGlyphLevel(glyph),
+    Pelle.isDoomed ? Pelle.glyphStrength : glyph.strength,
+  );
 }
 
 // Note this function is used for glyph bitmasks, news ticker bitmasks, and offline achievements
@@ -141,28 +161,41 @@ export function countValuesFromBitmask(bitmask) {
 // Returns both effect value and softcap status
 export function getActiveGlyphEffects() {
   let effectValues = orderedEffectList
-    .map(effect => ({ effect, values: getGlyphEffectValues(effect) }))
-    .filter(ev => ev.values.length > 0)
-    .map(ev => ({
+    .map((effect) => ({ effect, values: getGlyphEffectValues(effect) }))
+    .filter((ev) => ev.values.length > 0)
+    .map((ev) => ({
       id: ev.effect,
       value: GlyphEffects[ev.effect].combine(ev.values),
     }));
-  const effectNames = new Set(effectValues.map(e => e.id));
+  const effectNames = new Set(effectValues.map((e) => e.id));
 
   // Numerically combine cursed effects with other glyph effects which directly conflict with them
   const cursedEffects = ["cursedgalaxies", "curseddimensions", "cursedEP"];
   const conflictingEffects = ["realitygalaxies", "effarigdimensions", "timeEP"];
-  const combineFunction = [GlyphCombiner.multiply, GlyphCombiner.multiply, GlyphCombiner.multiplyDecimal];
+  const combineFunction = [
+    GlyphCombiner.multiply,
+    GlyphCombiner.multiply,
+    GlyphCombiner.multiplyDecimal,
+  ];
   for (let i = 0; i < cursedEffects.length; i++) {
-    if (effectNames.has(cursedEffects[i]) && effectNames.has(conflictingEffects[i])) {
-      const combined = combineFunction[i]([getAdjustedGlyphEffect(cursedEffects[i]),
-        getAdjustedGlyphEffect(conflictingEffects[i])]);
+    if (
+      effectNames.has(cursedEffects[i]) &&
+      effectNames.has(conflictingEffects[i])
+    ) {
+      const combined = combineFunction[i]([
+        getAdjustedGlyphEffect(cursedEffects[i]),
+        getAdjustedGlyphEffect(conflictingEffects[i]),
+      ]);
       if (Decimal.lt(combined, 1)) {
-        effectValues = effectValues.filter(e => e.id !== conflictingEffects[i]);
-        effectValues.filter(e => e.id === cursedEffects[i])[0].value.value = combined;
+        effectValues = effectValues.filter((e) =>
+          e.id !== conflictingEffects[i]
+        );
+        effectValues.filter((e) => e.id === cursedEffects[i])[0].value.value =
+          combined;
       } else {
-        effectValues = effectValues.filter(e => e.id !== cursedEffects[i]);
-        effectValues.filter(e => e.id === conflictingEffects[i])[0].value.value = combined;
+        effectValues = effectValues.filter((e) => e.id !== cursedEffects[i]);
+        effectValues.filter((e) => e.id === conflictingEffects[i])[0].value
+          .value = combined;
       }
     }
   }

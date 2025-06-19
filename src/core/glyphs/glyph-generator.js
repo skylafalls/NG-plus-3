@@ -135,7 +135,12 @@ export const GlyphGenerator = {
     const rng = rngIn || new GlyphGenerator.RealGlyphRNG();
     const strength = this.randomStrength(rng);
     const type = typeIn || this.randomType(rng);
-    let numEffects = this.randomNumberOfEffects(type, strength, level.actualLevel, rng);
+    let numEffects = this.randomNumberOfEffects(
+      type,
+      strength,
+      level.actualLevel,
+      rng,
+    );
     const maxEffects = GlyphInfo[type].effects().length;
     if (type !== "effarig" && numEffects > maxEffects) {
       numEffects = maxEffects;
@@ -172,7 +177,7 @@ export const GlyphGenerator = {
 
   cursedGlyph() {
     const str = rarityToStrength(100);
-    const effects = GlyphInfo.cursed.effects().map(n => n.id);
+    const effects = GlyphInfo.cursed.effects().map((n) => n.id);
     return {
       id: undefined,
       idx: null,
@@ -187,7 +192,7 @@ export const GlyphGenerator = {
   // These Glyphs are given on entering Doomed to prevent the player
   // from having none of each basic glyphs which are requied to beat pelle
   doomedGlyph(type) {
-    const effects = GlyphEffects.all.filter(e => e.id.startsWith(type));
+    const effects = GlyphEffects.all.filter((e) => e.id.startsWith(type));
     effects.push(GlyphEffects.timespeed);
     const glyphLevel = Decimal.max(player.records.bestReality.glyphLevel, 5000);
     return {
@@ -218,8 +223,10 @@ export const GlyphGenerator = {
 
   musicGlyph() {
     const rng = new GlyphGenerator.MusicGlyphRNG();
-    const glyph
-      = this.randomGlyph({ actualLevel: player.records.bestReality.glyphLevel.mul(0.8).floor(), rawLevel: DC.D1 }, rng);
+    const glyph = this.randomGlyph({
+      actualLevel: player.records.bestReality.glyphLevel.mul(0.8).floor(),
+      rawLevel: DC.D1,
+    }, rng);
     rng.finalize();
     glyph.cosmetic = "music";
     glyph.fixedCosmetic = "music";
@@ -247,12 +254,19 @@ export const GlyphGenerator = {
     if (Ra.unlocks.maxGlyphRarityAndShardSacrificeBoost.canBeApplied) {
       return rarityToStrength(100);
     }
-    let result = GlyphGenerator.strengthMultiplier.mul(GlyphGenerator.gaussianBellCurve(rng));
-    const relicShardFactor = Ra.unlocks.extraGlyphChoicesAndRelicShardRarityAlwaysMax.canBeApplied
-      ? new Decimal(1)
-      : rng.uniform();
+    let result = GlyphGenerator.strengthMultiplier.mul(
+      GlyphGenerator.gaussianBellCurve(rng),
+    );
+    const relicShardFactor =
+      Ra.unlocks.extraGlyphChoicesAndRelicShardRarityAlwaysMax.canBeApplied
+        ? new Decimal(1)
+        : rng.uniform();
     const increasedRarity = Effarig.maxRarityBoost.mul(relicShardFactor)
-      .add(Effects.sum(Achievement(146)).add(GlyphInfo.effarig.sacrificeInfo.effect()));
+      .add(
+        Effects.sum(Achievement(146)).add(
+          GlyphInfo.effarig.sacrificeInfo.effect(),
+        ),
+      );
     // Each rarity% is 0.025 strength.
     result = result.add(increasedRarity.div(40));
     // Raise the result to the next-highest 0.1% rarity.
@@ -266,21 +280,32 @@ export const GlyphGenerator = {
     // as preventing all of the glyphs changing drastically when RU17 is purchased.
     const random1 = rng.uniform();
     const random2 = rng.uniform();
-    if (GlyphInfo[type].effects().length <= 4 && Ra.unlocks.glyphEffectCount.canBeApplied) {
+    if (
+      GlyphInfo[type].effects().length <= 4 &&
+      Ra.unlocks.glyphEffectCount.canBeApplied
+    ) {
       return GlyphInfo[type].effects().length;
     }
-    const maxEffects = !Ra.unlocks.glyphEffectCount.canBeApplied && type === "effarig"
-      ? 4
-      : GlyphInfo[type].effects().length;
+    const maxEffects =
+      !Ra.unlocks.glyphEffectCount.canBeApplied && type === "effarig"
+        ? 4
+        : GlyphInfo[type].effects().length;
     let num = Decimal.min(
       maxEffects,
-
-      Decimal.floor(Decimal.pow(random1, DC.D1.sub((Decimal.pow(level.times(strength), 0.5)).div(100))).times(1.5).add(1)),
+      Decimal.floor(
+        Decimal.pow(
+          random1,
+          DC.D1.sub((Decimal.pow(level.times(strength), 0.5)).div(100)),
+        ).times(1.5).add(1),
+      ),
     ).min(250).toNumber();
     // Incase someone somehow forgets to put a limit, this .min(250) is a final protection
     // If we do decide to add anything else that boosts chance of an extra effect, keeping the code like this
     // makes it easier to do (add it to the Effects.max).
-    if (RealityUpgrade(17).isBought && random2 < Effects.max(0, RealityUpgrade(17)).toNumber()) {
+    if (
+      RealityUpgrade(17).isBought &&
+      random2 < Effects.max(0, RealityUpgrade(17)).toNumber()
+    ) {
       num = Math.min(num + 1, maxEffects);
     }
     return Ra.unlocks.glyphEffectCount.canBeApplied ? Math.max(num, 4) : num;
@@ -288,16 +313,20 @@ export const GlyphGenerator = {
 
   // Populate a list of reality glyph effects based on level
   generateRealityEffects(level) {
-    const numberOfEffects = realityGlyphEffectLevelThresholds.filter(lv => level.gte(lv)).length;
+    const numberOfEffects =
+      realityGlyphEffectLevelThresholds.filter((lv) => level.gte(lv)).length;
     const sortedRealityEffects = GlyphInfo.reality.effects()
       .sort((a, b) => a.intID - b.intID)
-      .map(eff => eff.id);
+      .map((eff) => eff.id);
     return sortedRealityEffects.slice(0, numberOfEffects);
   },
 
   generateEffects(type, count, rng, guarenteedEffects = []) {
     const glyphTypeEffects = GlyphInfo[type].effects();
-    const effectValues = glyphTypeEffects.mapToObject(x => x.intID, () => rng.uniform());
+    const effectValues = glyphTypeEffects.mapToObject(
+      (x) => x.intID,
+      () => rng.uniform(),
+    );
     // Get a bunch of random numbers so that we always use 250 here. Can be increased if you *really* need to
     Array.range(0, 250 - glyphTypeEffects.length).forEach(() => rng.uniform());
     if (type === "effarig") {
@@ -313,14 +342,20 @@ export const GlyphGenerator = {
     }
 
     for (let i = 0; i < guarenteedEffects.length; i++) {
-      effectValues[GlyphInfo[type].effects().filter(e => e.id === guarenteedEffects[i])[0].intID] = 2;
+      effectValues[
+        GlyphInfo[type].effects().filter((e) =>
+          e.id === guarenteedEffects[i]
+        )[0].intID
+      ] = 2;
     }
 
     if (GlyphInfo[type].primaryEffect !== undefined) {
       count = Math.max(count, guarenteedEffects.length + 1);
     }
     // Sort from highest to lowest value.
-    const effects = Object.keys(effectValues).sort((a, b) => effectValues[b] - effectValues[a]).slice(0, count);
+    const effects = Object.keys(effectValues).sort((a, b) =>
+      effectValues[b] - effectValues[a]
+    ).slice(0, count);
     // Revert intIds to the regular ids, which are strings
     for (let i = 0; i !== effects.length; i++) {
       effects[i] = GlyphEffects.all[effects[i]].id;
@@ -329,14 +364,23 @@ export const GlyphGenerator = {
   },
 
   randomType(rng, typesSoFar = []) {
-    const generatable = generatedTypes.filter(x => (GlyphInfo[x].isGenerated ?? false)
-      && (GlyphInfo[x].generationRequirement ? GlyphInfo[x].generationRequirement() : true));
-    const maxOfSameTypeSoFar = generatable.map(x => typesSoFar.countWhere(y => y === x)).max();
+    const generatable = generatedTypes.filter((x) =>
+      (GlyphInfo[x].isGenerated ?? false) &&
+      (GlyphInfo[x].generationRequirement
+        ? GlyphInfo[x].generationRequirement()
+        : true)
+    );
+    const maxOfSameTypeSoFar = generatable.map((x) =>
+      typesSoFar.countWhere((y) => y === x)
+    ).max();
     const blacklisted = typesSoFar.length === 0
       ? []
-      : generatable.filter(x => typesSoFar.countWhere(y => y === x) === maxOfSameTypeSoFar);
+      : generatable.filter((x) =>
+        typesSoFar.countWhere((y) => y === x) === maxOfSameTypeSoFar
+      );
     const types = generatedTypes.filter(
-      x => generatable.includes(x) && !blacklisted.includes(x));
+      (x) => generatable.includes(x) && !blacklisted.includes(x),
+    );
     return types[Math.floor(rng.uniform() * types.length)];
   },
 
@@ -351,7 +395,10 @@ export const GlyphGenerator = {
     }
 
     const initSeed = player.reality.initialSeed;
-    const typePerm = permutationIndex(basics, groupNum * (31 + initSeed % 7) + (initSeed % 1123));
+    const typePerm = permutationIndex(
+      basics,
+      groupNum * (31 + initSeed % 7) + (initSeed % 1123),
+    );
 
     let glyphsChosen = [...GlyphInfo.basicGlyphTypes];
     while (glyphsChosen.length < GlyphSelection.choiceCount) {
@@ -367,25 +414,36 @@ export const GlyphGenerator = {
 
     const effectsAsIds = [];
     for (let i = 0; i <= (GlyphSelection.choiceCount - 1); i++) {
-      const effectPerm = permutationIndex(GlyphInfo[glyphsChosen[i]].effects().length, (7 + initSeed % 5) * groupNum + initSeed % 11);
+      const effectPerm = permutationIndex(
+        GlyphInfo[glyphsChosen[i]].effects().length,
+        (7 + initSeed % 5) * groupNum + initSeed % 11,
+      );
       // Why add n - 1?
       // Well, +(n-1) = -1, since in modulo n arithmetic +n = +0. This way also prevents negatives, read above comments
 
-      groupIndex = effectPerm[realityCount.add(GlyphInfo[glyphsChosen[i]].effects().length - 1).mod(GlyphInfo[glyphsChosen[i]].effects().length).toNumber()];
+      groupIndex = effectPerm[
+        realityCount.add(GlyphInfo[glyphsChosen[i]].effects().length - 1).mod(
+          GlyphInfo[glyphsChosen[i]].effects().length,
+        ).toNumber()
+      ];
       effectsAsIds.push(GlyphInfo[glyphsChosen[i]].effects()[groupIndex].id);
     }
     // GlyphEffects.all.filter(e => e.intID % 4 == 0)
 
     const glyphs = [];
     for (let i = 0; i <= (GlyphSelection.choiceCount - 1); i++) {
-      glyphs.push(this.randomGlyph(level, rng, glyphsChosen[i], [effectsAsIds[i]]));
+      glyphs.push(
+        this.randomGlyph(level, rng, glyphsChosen[i], [effectsAsIds[i]]),
+      );
     }
 
     return glyphs;
   },
 
   getRNG(fake) {
-    return fake ? new GlyphGenerator.FakeGlyphRNG() : new GlyphGenerator.RealGlyphRNG();
+    return fake
+      ? new GlyphGenerator.FakeGlyphRNG()
+      : new GlyphGenerator.RealGlyphRNG();
   },
 
   /**
@@ -400,7 +458,9 @@ export const GlyphGenerator = {
     // The function here is an approximation of ^0.65, here is the old code:
     //     return Math.pow(Math.max(rng.normal() + 1, 1), 0.65);
     const x = Math.sqrt(Math.abs(rng.normal(), 0) + 1);
-    return -0.111749606737 + x * (0.900603878243551 + x * (0.229108274476697 + x * -0.017962545983249));
+    return -0.111749606737 +
+      x *
+        (0.900603878243551 + x * (0.229108274476697 + x * -0.017962545983249));
   },
 
   copy(glyph) {

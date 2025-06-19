@@ -6,18 +6,24 @@ export const dilationTimeStudies = [
     description: "Unlock Time Dilation",
     cost: new Decimal(5000),
     requirement: () => {
-      const ttRequirement = Currency.timeTheorems.max.gte(TimeStudy.dilation.totalTimeTheoremRequirement);
-      if (Ra.unlocks.autoUnlockDilation.canBeApplied
-        && ttRequirement
-        && !isInCelestialReality() && !Pelle.isDoomed
+      const ttRequirement = Currency.timeTheorems.max.gte(
+        TimeStudy.dilation.totalTimeTheoremRequirement,
+      );
+      if (
+        Ra.unlocks.autoUnlockDilation.canBeApplied &&
+        ttRequirement &&
+        !isInCelestialReality() && !Pelle.isDoomed
       ) {
         return true;
       }
-      const tsRequirement = [231, 232, 233, 234].some(id => TimeStudy(id).isBought);
+      const tsRequirement = [231, 232, 233, 234].some((id) =>
+        TimeStudy(id).isBought
+      );
       if (Perk.bypassECDilation.canBeApplied) {
         return tsRequirement;
       }
-      const ecRequirement = EternityChallenge(11).isFullyCompleted && EternityChallenge(12).isFullyCompleted;
+      const ecRequirement = EternityChallenge(11).isFullyCompleted &&
+        EternityChallenge(12).isFullyCompleted;
       return tsRequirement && ecRequirement && ttRequirement;
     },
   },
@@ -49,21 +55,26 @@ export const dilationTimeStudies = [
     id: 6,
     description: "Unlock Meta Dimensions",
     cost: DC.E24,
-    requirement: () => TimeStudy.timeDimension(8).isBought
-      && player.records.thisReality.maxEP.add(1).gte(DC.E4000),
+    requirement: () =>
+      TimeStudy.timeDimension(8).isBought &&
+      player.records.thisReality.maxEP.add(1).gte(DC.E4000),
   },
   {
     id: 7,
     description: "Unlock Mastery Studies",
     cost: DC.D1,
-    requirement: () => TimeStudy.metaDimensions.isBought
-      && DilationUpgrade.dtMultMA.isBought,
+    requirement: () =>
+      TimeStudy.metaDimensions.isBought &&
+      DilationUpgrade.dtMultMA.isBought,
   },
   {
     id: 8,
     description: "Unlock Pair Production",
     cost: new Decimal(1e175),
-    requirement: () => PlayerProgress.quantumUnlocked() && EternityChallenge(14).isFullyCompleted
-      && EternityChallenge(13).isFullyCompleted && player.records.bestQuantum.netQuarks.gte(50),
+    requirement: () =>
+      PlayerProgress.quantumUnlocked() &&
+      EternityChallenge(14).isFullyCompleted &&
+      EternityChallenge(13).isFullyCompleted &&
+      player.records.bestQuantum.netQuarks.gte(50),
   },
 ];

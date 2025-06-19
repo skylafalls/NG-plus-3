@@ -1,7 +1,10 @@
 import { DC } from "../../constants";
 
 function rebuyableCost(initialCost, increment, id) {
-  return Decimal.multiply(initialCost, Decimal.pow(increment, player.dilation.rebuyables[id]));
+  return Decimal.multiply(
+    initialCost,
+    Decimal.pow(increment, player.dilation.rebuyables[id]),
+  );
 }
 function rebuyable(config) {
   return {
@@ -14,7 +17,8 @@ function rebuyable(config) {
     formatEffect: config.formatEffect,
     formatCost: config.formatCost,
     purchaseCap: config.purchaseCap,
-    reachedCap: () => player.dilation.rebuyables[config.id].gte(config.purchaseCap),
+    reachedCap: () =>
+      player.dilation.rebuyables[config.id].gte(config.purchaseCap),
     pelleOnly: Boolean(config.pelleOnly),
     rebuyable: true,
   };
@@ -25,12 +29,19 @@ export const dilationUpgrades = {
     id: 1,
     initialCost: 1e4,
     increment: 10,
-    description: () =>
-      ((SingularityMilestone.dilatedTimeFromSingularities.canBeApplied || Achievement(187).canBeApplied)
-        ? `${formatX(Effects.product(
-          SingularityMilestone.dilatedTimeFromSingularities,
-          Achievement(187),
-        ).mul(2), 2, 2)} Dilated Time gain`
+    description:
+      () => ((SingularityMilestone.dilatedTimeFromSingularities.canBeApplied
+        || Achievement(187).canBeApplied)
+        ? `${
+          formatX(
+            Effects.product(
+              SingularityMilestone.dilatedTimeFromSingularities,
+              Achievement(187),
+            ).mul(2),
+            2,
+            2,
+          )
+        } Dilated Time gain`
         : "Double Dilated Time gain"),
     effect: (bought) => {
       const base = Effects.product(
@@ -40,8 +51,9 @@ export const dilationUpgrades = {
       return Decimal.pow(base, bought);
     },
     formatEffect: (value) => {
-      const nonInteger = SingularityMilestone.dilatedTimeFromSingularities.canBeApplied
-        || Achievement(187).canBeApplied;
+      const nonInteger
+        = SingularityMilestone.dilatedTimeFromSingularities.canBeApplied
+          || Achievement(187).canBeApplied;
       return formatX(value, 2, nonInteger ? 2 : 0);
     },
     formatCost: value => format(value, 2),
@@ -51,21 +63,23 @@ export const dilationUpgrades = {
     id: 2,
     initialCost: 1e6,
     increment: 100,
-    description: () =>
-      (Perk.bypassTGReset.isBought && !Pelle.isDoomed
-        ? "Reset Tachyon Galaxies, but lower their threshold"
-        : "Reset Dilated Time and Tachyon Galaxies, but lower their threshold"),
+    description: () => (Perk.bypassTGReset.isBought && !Pelle.isDoomed
+      ? "Reset Tachyon Galaxies, but lower their threshold"
+      : "Reset Dilated Time and Tachyon Galaxies, but lower their threshold"),
     // The 38th purchase is at 1e80, and is the last purchase.
     effect: bought => (bought.lt(38) ? Decimal.pow(0.8, bought) : new Decimal()),
     formatEffect: (effect) => {
       if (effect === 0) {
         return `${formatX(getTachyonGalaxyMult(effect), 4, 4)}`;
       }
-      const nextEffect = effect === Decimal.pow(0.8, 37) ? new Decimal() : effect.mul(0.8);
+      const nextEffect = effect === Decimal.pow(0.8, 37)
+        ? new Decimal()
+        : effect.mul(0.8);
       return `${formatX(getTachyonGalaxyMult(effect), 4, 4)} ➜
         Next: ${formatX(getTachyonGalaxyMult(nextEffect), 4, 4)}`;
     },
-    formatCost: value => format(value, 2),
+    formatCost: value =>
+      format(value, 2),
     purchaseCap: new Decimal(38),
   }),
   tachyonGain: rebuyable({
@@ -74,7 +88,9 @@ export const dilationUpgrades = {
     increment: 20,
     description: () => {
       if (Pelle.isDoomed) {
-        return `Multiply the amount of Tachyon Particles gained by ${formatInt(1)}`;
+        return `Multiply the amount of Tachyon Particles gained by ${
+          formatInt(1)
+        }`;
       }
       if (Enslaved.isRunning) {
         return `Multiply the amount of Tachyon Particles gained
@@ -123,25 +139,34 @@ export const dilationUpgrades = {
       const rep10 = replicantiMult().pLog10();
       let multiplier = "0.1";
       if (rep10.gt(9000)) {
-        const ratio = DilationUpgrade.tdMultReplicanti.effectValue.pLog10().div(rep10);
+        const ratio = DilationUpgrade.tdMultReplicanti.effectValue.pLog10().div(
+          rep10,
+        );
         if (ratio.lt(0.095)) {
           multiplier = ratio.toFixed(2);
         }
       }
-      return `Time Dimensions are affected by Replicanti multiplier ${formatPow(multiplier, 1, 3)}, reduced
+      return `Time Dimensions are affected by Replicanti multiplier ${
+        formatPow(multiplier, 1, 3)
+      }, reduced
         effect above ${formatX(DC.E9000)}`;
     },
     effect: () => {
       let rep10 = replicantiMult().pLog10().div(10);
-      rep10 = rep10.gt(9000) ? new Decimal(9000).add((rep10.sub(9e3)).div(2)) : rep10;
-      return EternityChallenge(14).isRunning ? new Decimal(1) : Decimal.pow10(rep10);
+      rep10 = rep10.gt(9000)
+        ? new Decimal(9000).add((rep10.sub(9e3)).div(2))
+        : rep10;
+      return EternityChallenge(14).isRunning
+        ? new Decimal(1)
+        : Decimal.pow10(rep10);
     },
     formatEffect: value => formatX(value, 2, 1),
   },
   ndMultDT: {
     id: 7,
     cost: 5e7,
-    description: "Antimatter Dimension multiplier based on Dilated Time, unaffected by Time Dilation",
+    description:
+      "Antimatter Dimension multiplier based on Dilated Time, unaffected by Time Dilation",
     effect: () => Currency.dilatedTime.value.pow(308).clampMin(1),
     formatEffect: value => formatX(value, 2, 1),
   },
@@ -162,12 +187,14 @@ export const dilationUpgrades = {
   timeStudySplit: {
     id: 10,
     cost: 1e10,
-    description: "You can buy all three Time Study paths from the Dimension Split",
+    description:
+      "You can buy all three Time Study paths from the Dimension Split",
   },
   dilationPenalty: {
     id: 11,
     cost: 1e11,
-    description: () => `Reduce the Dilation penalty (${formatPow(1.05, 2, 2)} after reduction)`,
+    description: () =>
+      `Reduce the Dilation penalty (${formatPow(1.05, 2, 2)} after reduction)`,
     effect: 1.05,
   },
   eternitiesDTSynergy: {
@@ -176,7 +203,10 @@ export const dilationUpgrades = {
     description: () => "Eternities and Dilated Time power up each other",
     // The actual effect is handled somewhere else.
     effect: () => Currency.dilatedTime.value,
-    formatEffect: _value => `${formatX(Currency.eternities.value.clampMin(1).pow(0.15), 2)} to DT, ${formatX(Currency.dilatedTime.value.clampMin(1).pow(0.1), 2)} to eternities`,
+    formatEffect: _value =>
+      `${formatX(Currency.eternities.value.clampMin(1).pow(0.15), 2)} to DT, ${
+        formatX(Currency.dilatedTime.value.clampMin(1).pow(0.1), 2)
+      } to eternities`,
   },
   mdMultTickspeed: {
     id: 13,
@@ -188,8 +218,9 @@ export const dilationUpgrades = {
   mdBuffDT: {
     id: 14,
     cost: 1e60,
-    description: "Meta-Dimensions Boosts and MD per-10 multiplier are boosted by Dilated Time",
-    effect: () => Currency.dilatedTime.value.plus(1).ln().plus(1).ln(),
+    description:
+      "Meta-Dimensions Boosts and MD per-10 multiplier are boosted by Dilated Time",
+    effect: () => Currency.dilatedTime.value.plus(1).log10().plus(1).log10(),
     formatEffect: value => `${formatX(value, 2, 1)}`,
   },
   mdEffectBuff: {
@@ -201,7 +232,8 @@ export const dilationUpgrades = {
   dtMultMA: {
     id: 16,
     cost: 1e100,
-    description: () => "Dilated Time production is boosted based on Meta-Antimatter",
+    description: () =>
+      "Dilated Time production is boosted based on Meta-Antimatter",
     effect: () => Currency.metaAntimatter.value.plus(1).log10().pow(0.5).max(1),
     formatEffect: value => formatX(value, 2),
   },
@@ -234,9 +266,11 @@ export const dilationUpgrades = {
     initialCost: 1e15,
     increment: 1000,
     pelleOnly: true,
-    description: "Multiply Tachyon Galaxies gained, applies after TG doubling upgrade",
+    description:
+      "Multiply Tachyon Galaxies gained, applies after TG doubling upgrade",
     effect: bought => bought.add(1),
-    formatEffect: value => `${formatX(value, 2)} ➜ ${formatX(value.add(1), 2)}`,
+    formatEffect: value =>
+      `${formatX(value, 2)} ➜ ${formatX(value.add(1), 2)}`,
     formatCost: value => format(value, 2),
     purchaseCap: DC.BEMAX,
   }),
@@ -247,7 +281,8 @@ export const dilationUpgrades = {
     pelleOnly: true,
     description: "Gain a power to Tickspeed",
     effect: bought => bought.mul(0.03).add(1),
-    formatEffect: value => `${formatPow(value, 2, 2)} ➜ ${formatPow(value.add(0.03), 2, 2)}`,
+    formatEffect: value =>
+      `${formatPow(value, 2, 2)} ➜ ${formatPow(value.add(0.03), 2, 2)}`,
     formatCost: value => format(value, 2),
     purchaseCap: DC.BEMAX,
   }),
@@ -263,7 +298,12 @@ export const dilationUpgrades = {
     cost: 1e55,
     pelleOnly: true,
     description: () => "Gain more Dilated Time based on current EP",
-    effect: () => DC.E9.pow((Decimal.max(player.eternityPoints.max(1).log10().sub(1500), 0).div(2500)).pow(1.2).clampMax(1)),
+    effect: () =>
+      DC.E9.pow(
+        (Decimal.max(player.eternityPoints.max(1).log10().sub(1500), 0).div(
+          2500,
+        )).pow(1.2).clampMax(1),
+      ),
     formatEffect: value => formatX(value, 2, 2),
   },
 };

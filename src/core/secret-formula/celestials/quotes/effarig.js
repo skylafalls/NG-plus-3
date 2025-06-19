@@ -39,7 +39,10 @@ export const effarigQuotes = {
   completeInfinity: {
     id: 5,
     lines: [
-      { text: "You have completed Effarig's Infinity.", showCelestialName: false },
+      {
+        text: "You have completed Effarig's Infinity.",
+        showCelestialName: false,
+      },
       "This is the first threshold. It only gets worse from here.",
       "None but me know enough about my domain to get further.",
     ],
@@ -47,7 +50,10 @@ export const effarigQuotes = {
   completeEternity: {
     id: 6,
     lines: [
-      { text: "You have completed Effarig's Eternity.", showCelestialName: false },
+      {
+        text: "You have completed Effarig's Eternity.",
+        showCelestialName: false,
+      },
       "This is the limit. I do not want you to proceed past this point.",
       "You will not finish this in your lifetime.",
       "I will just wait here until you give up.",
@@ -56,7 +62,10 @@ export const effarigQuotes = {
   completeReality: {
     id: 7,
     lines: [
-      { text: "You have completed Effarig's Reality.", showCelestialName: false },
+      {
+        text: "You have completed Effarig's Reality.",
+        showCelestialName: false,
+      },
       "So this is the diabolical power... what frightened the others...",
       "Do you think this was worth it? Trampling on what I have done?",
       "And for what purpose? You could have joined, we could have cooperated.",

@@ -149,14 +149,30 @@ export const glyphCosmeticSets = {
   blob: {
     id: "blob",
     name: "Blobs",
-    symbol: ["\uE011", "\uE012", "\uE013", "\uE014", "\uE016", "\uE01A", "\uE01C"],
+    symbol: [
+      "\uE011",
+      "\uE012",
+      "\uE013",
+      "\uE014",
+      "\uE016",
+      "\uE01A",
+      "\uE01C",
+    ],
     preventBlur: true,
     color: ["B#E4B51A"],
   },
   blob2: {
     id: "blob2",
     name: "More Blobs",
-    symbol: ["\uE01D", "\uE01E", "\uE021", "\uE024", "\uE025", "\uE026", "\uE027"],
+    symbol: [
+      "\uE01D",
+      "\uE01E",
+      "\uE021",
+      "\uE024",
+      "\uE025",
+      "\uE026",
+      "\uE027",
+    ],
     preventBlur: true,
   },
   star: {

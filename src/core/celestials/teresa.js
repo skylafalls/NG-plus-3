@@ -19,8 +19,14 @@ export const Teresa = {
     }
     this.timePoured += diff;
     const rm = Currency.realityMachines.value.max(1e100);
-    const rmPoured = Math.min((this.pouredAmount + 1e6) * 0.01 * Math.pow(this.timePoured, 2), rm.toNumber());
-    this.pouredAmount += Math.min(rmPoured, Teresa.pouredAmountCap - this.pouredAmount);
+    const rmPoured = Math.min(
+      (this.pouredAmount + 1e6) * 0.01 * Math.pow(this.timePoured, 2),
+      rm.toNumber(),
+    );
+    this.pouredAmount += Math.min(
+      rmPoured,
+      Teresa.pouredAmountCap - this.pouredAmount,
+    );
     Currency.realityMachines.subtract(rmPoured);
     this.checkForUnlocks();
   },
@@ -34,7 +40,10 @@ export const Teresa = {
     player.celestials.teresa.run = true;
   },
   rewardMultiplier(antimatter) {
-    return Decimal.max(Decimal.pow(antimatter.plus(1).log10().div(1.5e8), 12), 1);
+    return Decimal.max(
+      Decimal.pow(antimatter.plus(1).log10().div(1.5e8), 12),
+      1,
+    );
   },
   get pouredAmount() {
     return player.celestials.teresa.pouredAmount;
@@ -46,7 +55,12 @@ export const Teresa = {
     return Math.min(Math.log10(this.pouredAmount) / 24, 1);
   },
   get possibleFill() {
-    return Decimal.min(Currency.realityMachines.value.plus(this.pouredAmount).max(1).log10().div(24), 1).toNumber();
+    return Decimal.min(
+      Currency.realityMachines.value.plus(this.pouredAmount).max(1).log10().div(
+        24,
+      ),
+      1,
+    ).toNumber();
   },
   get rmMultiplier() {
     return Decimal.max(250 * Math.pow(this.pouredAmount / 1e24, 0.1), 1);
@@ -69,7 +83,14 @@ export const Teresa = {
     player.celestials.teresa.run = false;
     player.celestials.teresa.bestRunAM = DC.D1;
     player.celestials.teresa.bestAMSet = [];
-    player.celestials.teresa.perkShop = [DC.D0, DC.D0, DC.D0, DC.D0, DC.D0, DC.D0];
+    player.celestials.teresa.perkShop = [
+      DC.D0,
+      DC.D0,
+      DC.D0,
+      DC.D0,
+      DC.D0,
+      DC.D0,
+    ];
     player.celestials.teresa.lastRepeatedMachines = DC.D0;
     player.celestials.teresa.lastRepeatediM = DC.D0;
   },
@@ -157,7 +178,9 @@ class TeresaUnlockState extends BitUpgradeState {
   }
 
   get description() {
-    return typeof this.config.description === "function" ? this.config.description() : this.config.description;
+    return typeof this.config.description === "function"
+      ? this.config.description()
+      : this.config.description;
   }
 
   onUnlock() {
@@ -167,12 +190,12 @@ class TeresaUnlockState extends BitUpgradeState {
 
 export const TeresaUnlocks = mapGameDataToObject(
   GameDatabase.celestials.teresa.unlocks,
-  config => new TeresaUnlockState(config),
+  (config) => new TeresaUnlockState(config),
 );
 
 export const PerkShopUpgrade = mapGameDataToObject(
   GameDatabase.celestials.perkShop,
-  config => new PerkShopUpgradeState(config),
+  (config) => new PerkShopUpgradeState(config),
 );
 
 EventHub.logic.on(GAME_EVENT.TAB_CHANGED, () => {

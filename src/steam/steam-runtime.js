@@ -35,11 +35,14 @@ export const SteamRuntime = {
 
     achievementNames = Greenworks.getAchievementNames();
 
-    Greenworks.on("micro-txn-authorization-response", (data, ordered, orderState) => {
-      if (orderState === true) {
-        validatePurchases();
-      }
-    });
+    Greenworks.on(
+      "micro-txn-authorization-response",
+      (data, ordered, orderState) => {
+        if (orderState === true) {
+          validatePurchases();
+        }
+      },
+    );
 
     if (!MAC) {
       initializeDiscord();
@@ -136,7 +139,10 @@ function initializeDiscord() {
 }
 
 function setDiscordActivity() {
-  Greenworks.setDiscordActivity(RichPresenceInfo.state, RichPresenceInfo.details);
+  Greenworks.setDiscordActivity(
+    RichPresenceInfo.state,
+    RichPresenceInfo.details,
+  );
 }
 
 function createForceRefreshCanvas() {

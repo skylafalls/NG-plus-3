@@ -36,7 +36,9 @@ export const perks = {
     family: PERK_FAMILY.REALITY,
     get description() {
       return `Remove the achievement requirement from the Reality Study
-      and allow you to choose from ${formatInt(4)} different Glyphs on Reality.`;
+      and allow you to choose from ${
+        formatInt(4)
+      } different Glyphs on Reality.`;
     },
     effect: 4,
     layoutPosList: [76596, 80200, 80600, 80200, 80188, 67769],
@@ -57,7 +59,9 @@ export const perks = {
     label: "SIP1",
     family: PERK_FAMILY.INFINITY,
     get description() {
-      return `Start every Eternity and Reality with ${format(5e15)} Infinity Points.`;
+      return `Start every Eternity and Reality with ${
+        format(5e15)
+      } Infinity Points.`;
     },
     bumpCurrency: () => Currency.infinityPoints.bumpTo(5e15),
     effect: 5e15,
@@ -68,7 +72,9 @@ export const perks = {
     label: "SIP2",
     family: PERK_FAMILY.INFINITY,
     get description() {
-      return `Start every Eternity and Reality with ${format(5e130)} Infinity Points.`;
+      return `Start every Eternity and Reality with ${
+        format(5e130)
+      } Infinity Points.`;
     },
     bumpCurrency: () => Currency.infinityPoints.bumpTo(5e130),
     effect: 5e130,
@@ -116,7 +122,9 @@ export const perks = {
     label: "STP",
     family: PERK_FAMILY.DILATION,
     get description() {
-      return `After unlocking Dilation, gain ${formatInt(10)} Tachyon Particles.`;
+      return `After unlocking Dilation, gain ${
+        formatInt(10)
+      } Tachyon Particles.`;
     },
     effect: () => (Enslaved.isRunning ? 1 : 10),
     automatorPoints: 5,
@@ -138,7 +146,13 @@ export const perks = {
     get description() {
       return `Improve Time Study 122 to ${formatX(50)} Eternity Points and
         Time Study 142 to ${formatX(DC.E50)} Infinity Points.
-        ${Pelle.isDoomed ? "" : `In addition, Time Study 132 also makes Replicanti ${format(3)} times faster.`}`;
+        ${
+        Pelle.isDoomed
+          ? ""
+          : `In addition, Time Study 132 also makes Replicanti ${
+            format(3)
+          } times faster.`
+      }`;
     },
     layoutPosList: [67054, 79400, 80999, 80202, 78594, 52589],
   },
@@ -146,7 +160,8 @@ export const perks = {
     id: 40,
     label: "EU1",
     family: PERK_FAMILY.ETERNITY,
-    description: "Automatically unlock the first row of Eternity Upgrades for free once you have Eternities.",
+    description:
+      "Automatically unlock the first row of Eternity Upgrades for free once you have Eternities.",
     layoutPosList: [89407, 80601, 80201, 79800, 80591, 73007],
   },
   autounlockEU2: {
@@ -163,21 +178,24 @@ export const perks = {
     id: 42,
     label: "DU1",
     family: PERK_FAMILY.DILATION,
-    description: "After unlocking Dilation, automatically unlock the second row of Dilation Upgrades for free.",
+    description:
+      "After unlocking Dilation, automatically unlock the second row of Dilation Upgrades for free.",
     layoutPosList: [119833, 81801, 79403, 79398, 80200, 97510],
   },
   autounlockDilation2: {
     id: 43,
     label: "DU2",
     family: PERK_FAMILY.DILATION,
-    description: "After unlocking Dilation, automatically unlock the third row of Dilation Upgrades for free.",
+    description:
+      "After unlocking Dilation, automatically unlock the third row of Dilation Upgrades for free.",
     layoutPosList: [124260, 82201, 79003, 79397, 80203, 85513],
   },
   autounlockDilation3: {
     id: 44,
     label: "ATT",
     family: PERK_FAMILY.DILATION,
-    description: "Automatically purchase the passive Time Theorem generation Dilation Upgrade once you can afford it.",
+    description:
+      "Automatically purchase the passive Time Theorem generation Dilation Upgrade once you can afford it.",
     automatorPoints: 5,
     shortDescription: () => "Auto-purchase TT generation",
     layoutPosList: [124289, 82601, 79002, 79396, 80206, 72282],
@@ -196,7 +214,9 @@ export const perks = {
     label: "REAL",
     family: PERK_FAMILY.REALITY,
     get description() {
-      return `Auto-unlocks Reality once you have ${format(DC.E4000)} Eternity Points
+      return `Auto-unlocks Reality once you have ${
+        format(DC.E4000)
+      } Eternity Points
         and have unlocked Time Dimension 8.`;
     },
     automatorPoints: 10,
@@ -214,15 +234,17 @@ export const perks = {
     id: 52,
     label: "TGR",
     family: PERK_FAMILY.DILATION,
-    description: "The 2nd rebuyable Dilation Upgrade no longer resets your Dilated Time.",
+    description:
+      "The 2nd rebuyable Dilation Upgrade no longer resets your Dilated Time.",
     layoutPosList: [116568, 81800, 79801, 79798, 81400, 112677],
   },
   bypassECDilation: {
     id: 53,
     label: "DILR",
     family: PERK_FAMILY.DILATION,
-    description: "Remove the Eternity Challenge 11, Eternity Challenge 12, and total Time Theorem "
-      + "requirements from Time Dilation unlock.",
+    description:
+      "Remove the Eternity Challenge 11, Eternity Challenge 12, and total Time Theorem " +
+      "requirements from Time Dilation unlock.",
     automatorPoints: 5,
     shortDescription: () => "Unlocking Dilation only requires TT",
     layoutPosList: [129011, 81802, 80203, 80198, 80600, 109116],
@@ -231,28 +253,32 @@ export const perks = {
     id: 54,
     label: "EC1R",
     family: PERK_FAMILY.ETERNITY,
-    description: "Remove the Eternity Challenge 1 requirement from Time Study 181.",
+    description:
+      "Remove the Eternity Challenge 1 requirement from Time Study 181.",
     layoutPosList: [64284, 79000, 81399, 80603, 78597, 44167],
   },
   bypassEC2Lock: {
     id: 55,
     label: "EC2R",
     family: PERK_FAMILY.ETERNITY,
-    description: "Remove the Eternity Challenge 2 requirement from Time Study 181.",
+    description:
+      "Remove the Eternity Challenge 2 requirement from Time Study 181.",
     layoutPosList: [55463, 78999, 80998, 80602, 78197, 48944],
   },
   bypassEC3Lock: {
     id: 56,
     label: "EC3R",
     family: PERK_FAMILY.ETERNITY,
-    description: "Remove the Eternity Challenge 3 requirement from Time Study 181.",
+    description:
+      "Remove the Eternity Challenge 3 requirement from Time Study 181.",
     layoutPosList: [75475, 79001, 81400, 80203, 78997, 47822],
   },
   bypassEC5Lock: {
     id: 57,
     label: "EC5R",
     family: PERK_FAMILY.ETERNITY,
-    description: "Remove the Eternity Challenge 5 requirement from Time Study 62.",
+    description:
+      "Remove the Eternity Challenge 5 requirement from Time Study 62.",
     layoutPosList: [70626, 79800, 81000, 80201, 78591, 62607],
   },
   autocompleteEC1: {
@@ -260,7 +286,9 @@ export const perks = {
     label: "PEC1",
     family: PERK_FAMILY.AUTOMATION,
     get description() {
-      return `Auto-complete one Eternity Challenge every ${formatInt(60)} minutes (real-time).
+      return `Auto-complete one Eternity Challenge every ${
+        formatInt(60)
+      } minutes (real-time).
               ECs will be completed sequentially, requiring all previous
               ECs to be fully completed before progressing to the next EC.`;
     },
@@ -274,7 +302,9 @@ export const perks = {
     label: "PEC2",
     family: PERK_FAMILY.AUTOMATION,
     get description() {
-      return `Auto-complete one Eternity Challenge every ${formatInt(40)} minutes (real-time).
+      return `Auto-complete one Eternity Challenge every ${
+        formatInt(40)
+      } minutes (real-time).
         (${formatInt(20)} minute decrease)`;
     },
     effect: 40,
@@ -285,7 +315,9 @@ export const perks = {
     label: "PEC3",
     family: PERK_FAMILY.AUTOMATION,
     get description() {
-      return `Auto-complete one Eternity Challenge every ${formatInt(20)} minutes (real-time).
+      return `Auto-complete one Eternity Challenge every ${
+        formatInt(20)
+      } minutes (real-time).
         (${formatInt(20)} minute decrease)`;
     },
     effect: 20,
@@ -305,7 +337,9 @@ export const perks = {
     label: "IDL",
     family: PERK_FAMILY.ETERNITY,
     get description() {
-      return `Idle path multipliers start as if you have spent ${formatInt(15)} minutes in this Infinity/Eternity.`;
+      return `Idle path multipliers start as if you have spent ${
+        formatInt(15)
+      } minutes in this Infinity/Eternity.`;
     },
     effect: 15,
     layoutPosList: [80248, 79401, 81001, 79802, 78994, 56239],
@@ -314,7 +348,8 @@ export const perks = {
     id: 72,
     label: "ECR",
     family: PERK_FAMILY.ETERNITY,
-    description: "Remove non-Time Theorem requirements for unlocking Eternity Challenges.",
+    description:
+      "Remove non-Time Theorem requirements for unlocking Eternity Challenges.",
     automatorPoints: 10,
     shortDescription: () => "Remove EC secondary requirements",
     layoutPosList: [62714, 78600, 81398, 80604, 78600, 40599],
@@ -336,7 +371,9 @@ export const perks = {
     family: PERK_FAMILY.DILATION,
     get description() {
       return `When buying the 3rd rebuyable Dilation Upgrade,
-        multiply your current Tachyon Particle amount by ${formatFloat(1.5, 1)}.`;
+        multiply your current Tachyon Particle amount by ${
+        formatFloat(1.5, 1)
+      }.`;
     },
     effect: 1.5,
     layoutPosList: [111739, 81799, 79800, 79797, 81403, 115434],
@@ -358,7 +395,9 @@ export const perks = {
     family: PERK_FAMILY.DILATION,
     get description() {
       return `When buying the 3rd rebuyable Dilation Upgrade,
-        multiply your current Tachyon Particle amount by ${formatFloat(2.5, 1)}.`;
+        multiply your current Tachyon Particle amount by ${
+        formatFloat(2.5, 1)
+      }.`;
     },
     effect: 2.5,
     layoutPosList: [96175, 82599, 79400, 80195, 81409, 116540],
@@ -425,7 +464,8 @@ export const perks = {
     id: 104,
     label: "TTS",
     family: PERK_FAMILY.AUTOMATION,
-    description: "Unlock a Time Theorem Autobuyer which buys single Time Theorems every tick.",
+    description:
+      "Unlock a Time Theorem Autobuyer which buys single Time Theorems every tick.",
     automatorPoints: 5,
     shortDescription: () => "Single TT Autobuyer",
     layoutPosList: [44631, 79398, 80598, 81001, 77797, 57325],
@@ -472,7 +512,8 @@ export const perks = {
     },
     effect: 10,
     automatorPoints: 5,
-    shortDescription: () => `Faster Achievements: every ${formatInt(20)} minutes`,
+    shortDescription: () =>
+      `Faster Achievements: every ${formatInt(20)} minutes`,
     layoutPosList: [65386, 80201, 80601, 79801, 79791, 81371],
   },
   achievementGroup2: {
@@ -522,11 +563,17 @@ export const perks = {
   },
 };
 
-export const perkConnections = (function () {
+export const perkConnections = function () {
   const p = perks;
   // First item is the start, other items are the ends
   const groups = [
-    [p.firstPerk, p.achievementGroup1, p.startAM, p.autounlockEU1, p.bypassEC5Lock],
+    [
+      p.firstPerk,
+      p.achievementGroup1,
+      p.startAM,
+      p.autounlockEU1,
+      p.bypassEC5Lock,
+    ],
     [p.startAM, p.antimatterNoReset, p.startIP1],
     [p.antimatterNoReset, p.startEP1],
     [p.startIP1, p.startIP2, p.startEP1, p.autobuyerFasterID],
@@ -554,8 +601,14 @@ export const perkConnections = (function () {
     [p.retroactiveTP1, p.bypassTGReset, p.startTP, p.retroactiveTP2],
     [p.retroactiveTP2, p.retroactiveTP3],
     [p.retroactiveTP3, p.retroactiveTP4],
-    [p.autobuyerDilation, p.autounlockEU2, p.autounlockDilation1,
-      p.bypassECDilation, p.bypassTGReset, p.dilationAutobuyerBulk],
+    [
+      p.autobuyerDilation,
+      p.autounlockEU2,
+      p.autounlockDilation1,
+      p.bypassECDilation,
+      p.bypassTGReset,
+      p.dilationAutobuyerBulk,
+    ],
     [p.autobuyerFasterID],
     [p.ttBuySingle, p.ttFree],
     [p.ttFree, p.ttBuyMax],
@@ -567,15 +620,17 @@ export const perkConnections = (function () {
   const connections = {};
   for (const perk of Object.values(perks)) {
     const connectedPerks = [];
-    const directConnections = groups.find(g => g[0] === perk);
+    const directConnections = groups.find((g) => g[0] === perk);
     if (directConnections !== undefined) {
       connectedPerks.push(...directConnections.slice(1));
     }
     const indirectConnections = groups
-      .filter(g => g.slice(1).some(groupPerk => groupPerk === perk))
-      .map(g => g[0]);
+      .filter((g) => g.slice(1).some((groupPerk) => groupPerk === perk))
+      .map((g) => g[0]);
     connectedPerks.push(...indirectConnections);
-    connections[perk.id] = [...new Set(connectedPerks.map(connectedPerk => connectedPerk.id))];
+    connections[perk.id] = [
+      ...new Set(connectedPerks.map((connectedPerk) => connectedPerk.id)),
+    ];
   }
   return connections;
-}());
+}();

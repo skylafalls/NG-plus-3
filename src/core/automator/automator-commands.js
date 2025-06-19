@@ -17,9 +17,18 @@ function prestigeNotify(flag) {
   }
 }
 
-EventHub.logic.on(GAME_EVENT.BIG_CRUNCH_AFTER, () => prestigeNotify(T.Infinity.$prestigeLevel));
-EventHub.logic.on(GAME_EVENT.ETERNITY_RESET_AFTER, () => prestigeNotify(T.Eternity.$prestigeLevel));
-EventHub.logic.on(GAME_EVENT.REALITY_RESET_AFTER, () => prestigeNotify(T.Reality.$prestigeLevel));
+EventHub.logic.on(
+  GAME_EVENT.BIG_CRUNCH_AFTER,
+  () => prestigeNotify(T.Infinity.$prestigeLevel),
+);
+EventHub.logic.on(
+  GAME_EVENT.ETERNITY_RESET_AFTER,
+  () => prestigeNotify(T.Eternity.$prestigeLevel),
+);
+EventHub.logic.on(
+  GAME_EVENT.REALITY_RESET_AFTER,
+  () => prestigeNotify(T.Reality.$prestigeLevel),
+);
 
 // Used by while and until - in order to get the text corrext, we need to invert the boolean if it's an until
 
@@ -28,15 +37,26 @@ function compileConditionLoop(evalComparison, commands, ctx, isUntil) {
     run: () => {
       const loopStr = isUntil ? "UNTIL" : "WHILE";
       if (!evalComparison()) {
-        AutomatorData.logCommandEvent(`Checked ${parseConditionalIntoText(ctx)} (${isUntil}),
-          exiting loop at line ${AutomatorBackend.translateLineNumber(ctx.RCurly[0].startLine + 1) - 1}
-          (end of ${loopStr} loop)`, ctx.startLine);
+        AutomatorData.logCommandEvent(
+          `Checked ${parseConditionalIntoText(ctx)} (${isUntil}),
+          exiting loop at line ${
+            AutomatorBackend.translateLineNumber(ctx.RCurly[0].startLine + 1) -
+            1
+          }
+          (end of ${loopStr} loop)`,
+          ctx.startLine,
+        );
         return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_NEXT_INSTRUCTION;
       }
       AutomatorBackend.push(commands);
-      AutomatorData.logCommandEvent(`Checked ${parseConditionalIntoText(ctx)} (${!isUntil}),
-        moving to line ${AutomatorBackend.translateLineNumber(ctx.LCurly[0].startLine + 1) - 1}
-        (start of ${loopStr} loop)`, ctx.startLine);
+      AutomatorData.logCommandEvent(
+        `Checked ${parseConditionalIntoText(ctx)} (${!isUntil}),
+        moving to line ${
+          AutomatorBackend.translateLineNumber(ctx.LCurly[0].startLine + 1) - 1
+        }
+        (start of ${loopStr} loop)`,
+        ctx.startLine,
+      );
       return AUTOMATOR_COMMAND_STATUS.SAME_INSTRUCTION;
     },
     blockCommands: commands,
@@ -69,7 +89,8 @@ function findLastPrestigeRecord(layer) {
     }
     case "ETERNITY": {
       addedECs = AutomatorData.lastECCompletionCount;
-      gainedEP = `${format(player.records.recentEternities[0][1], 2)} EP`; return addedECs === 0
+      gainedEP = `${format(player.records.recentEternities[0][1], 2)} EP`;
+      return addedECs === 0
         ? `${gainedEP}`
         : `${gainedEP}, ${addedECs} completions`;
     }
@@ -85,17 +106,20 @@ function findLastPrestigeRecord(layer) {
 export const AutomatorCommands = [
   {
     id: "auto",
-    rule: $ => () => {
+    rule: ($) => () => {
       $.CONSUME(T.Auto);
       $.CONSUME(T.PrestigeEvent);
       $.OR([
         { ALT: () => $.CONSUME(T.On) },
         { ALT: () => $.CONSUME(T.Off) },
-        { ALT: () => $.OR1([
-          { ALT: () => $.SUBRULE($.duration) },
-          { ALT: () => $.SUBRULE($.xHighest) },
-          { ALT: () => $.SUBRULE($.currencyAmount) },
-        ]) },
+        {
+          ALT: () =>
+            $.OR1([
+              { ALT: () => $.SUBRULE($.duration) },
+              { ALT: () => $.SUBRULE($.xHighest) },
+              { ALT: () => $.SUBRULE($.currencyAmount) },
+            ]),
+        },
       ]);
     },
 
@@ -103,10 +127,14 @@ export const AutomatorCommands = [
       ctx.startLine = ctx.Auto[0].startLine;
       if (ctx.PrestigeEvent && ctx.currencyAmount) {
         const desired$ = ctx.PrestigeEvent[0].tokenType.$prestigeCurrency;
-        const specified$ = ctx.currencyAmount[0].children.AutomatorCurrency[0].tokenType.name;
+        const specified$ =
+          ctx.currencyAmount[0].children.AutomatorCurrency[0].tokenType.name;
         if (desired$ !== specified$) {
-          V.addError(ctx.currencyAmount, `AutomatorCurrency doesn't match prestige (${desired$} vs ${specified$})`,
-            `Use ${desired$} for the specified prestige resource`);
+          V.addError(
+            ctx.currencyAmount,
+            `AutomatorCurrency doesn't match prestige (${desired$} vs ${specified$})`,
+            `Use ${desired$} for the specified prestige resource`,
+          );
           return false;
         }
       }
@@ -118,42 +146,67 @@ export const AutomatorCommands = [
       // Do not change to switch statement; T.XXX are Objects, not primitive values
       if (ctx.PrestigeEvent[0].tokenType === T.Infinity) {
         if (!Autobuyer.bigCrunch.isUnlocked) {
-          V.addError(ctx.PrestigeEvent, "Infinity autobuyer is not unlocked",
-            "Complete the Big Crunch Autobuyer challenge to use this command");
+          V.addError(
+            ctx.PrestigeEvent,
+            "Infinity autobuyer is not unlocked",
+            "Complete the Big Crunch Autobuyer challenge to use this command",
+          );
           return false;
         }
         if (advSetting && !EternityMilestone.bigCrunchModes.isReached) {
-          V.addError((ctx.duration || ctx.xHighest)[0],
+          V.addError(
+            (ctx.duration || ctx.xHighest)[0],
             "Advanced Infinity autobuyer settings are not unlocked",
-            `Reach ${quantifyInt("Eternity", EternityMilestone.bigCrunchModes.config.eternities)}
-            to use this command`);
+            `Reach ${
+              quantifyInt(
+                "Eternity",
+                EternityMilestone.bigCrunchModes.config.eternities,
+              )
+            }
+            to use this command`,
+          );
           return false;
         }
       }
       if (ctx.PrestigeEvent[0].tokenType === T.Eternity) {
         if (!EternityMilestone.autobuyerEternity.isReached) {
-          V.addError(ctx.PrestigeEvent, "Eternity autobuyer is not unlocked",
-            `Reach ${quantifyInt("Eternity", EternityMilestone.autobuyerEternity.config.eternities)}
-            to use this command`);
+          V.addError(
+            ctx.PrestigeEvent,
+            "Eternity autobuyer is not unlocked",
+            `Reach ${
+              quantifyInt(
+                "Eternity",
+                EternityMilestone.autobuyerEternity.config.eternities,
+              )
+            }
+            to use this command`,
+          );
           return false;
         }
         if (advSetting && !RealityUpgrade(13).isBought) {
-          V.addError((ctx.duration || ctx.xHighest)[0],
+          V.addError(
+            (ctx.duration || ctx.xHighest)[0],
             "Advanced Eternity autobuyer settings are not unlocked",
-            "Purchase the Reality Upgrade which unlocks advanced Eternity autobuyer settings");
+            "Purchase the Reality Upgrade which unlocks advanced Eternity autobuyer settings",
+          );
           return false;
         }
       }
       if (ctx.PrestigeEvent[0].tokenType === T.Reality) {
         if (!RealityUpgrade(25).isBought) {
-          V.addError(ctx.PrestigeEvent, "Reality autobuyer is not unlocked",
-            "Purchase the Reality Upgrade which unlocks the Reality autobuyer");
+          V.addError(
+            ctx.PrestigeEvent,
+            "Reality autobuyer is not unlocked",
+            "Purchase the Reality Upgrade which unlocks the Reality autobuyer",
+          );
           return false;
         }
         if (advSetting) {
-          V.addError((ctx.duration || ctx.xHighest)[0],
+          V.addError(
+            (ctx.duration || ctx.xHighest)[0],
             "Auto Reality cannot be set to a duration or x highest",
-            "Use RM for Auto Reality");
+            "Use RM for Auto Reality",
+          );
           return false;
         }
       }
@@ -162,12 +215,22 @@ export const AutomatorCommands = [
     },
     compile: (ctx) => {
       const isReality = ctx.PrestigeEvent[0].tokenType === T.Reality;
-      const on = Boolean(ctx.On || ctx.duration || ctx.xHighest || ctx.currencyAmount);
-      const duration = ctx.duration ? ctx.duration[0].children.$value : undefined;
-      const xHighest = ctx.xHighest ? ctx.xHighest[0].children.$value : undefined;
-      const fixedAmount = ctx.currencyAmount ? ctx.currencyAmount[0].children.$value : undefined;
-      const durationMode = ctx.PrestigeEvent[0].tokenType.$autobuyerDurationMode;
-      const xHighestMode = ctx.PrestigeEvent[0].tokenType.$autobuyerXHighestMode;
+      const on = Boolean(
+        ctx.On || ctx.duration || ctx.xHighest || ctx.currencyAmount,
+      );
+      const duration = ctx.duration
+        ? ctx.duration[0].children.$value
+        : undefined;
+      const xHighest = ctx.xHighest
+        ? ctx.xHighest[0].children.$value
+        : undefined;
+      const fixedAmount = ctx.currencyAmount
+        ? ctx.currencyAmount[0].children.$value
+        : undefined;
+      const durationMode =
+        ctx.PrestigeEvent[0].tokenType.$autobuyerDurationMode;
+      const xHighestMode =
+        ctx.PrestigeEvent[0].tokenType.$autobuyerXHighestMode;
       const fixedMode = ctx.PrestigeEvent[0].tokenType.$autobuyerCurrencyMode;
       const autobuyer = ctx.PrestigeEvent[0].tokenType.$autobuyer();
       return () => {
@@ -177,7 +240,11 @@ export const AutomatorCommands = [
           autobuyer.mode = durationMode;
           autobuyer.time = duration / 1000;
           // Can't do the units provided in the script because it's been parsed away like 4 layers up the call stack
-          currSetting = `${autobuyer.time > 1000 ? formatInt(autobuyer.time) : quantify("second", autobuyer.time)}`;
+          currSetting = `${
+            autobuyer.time > 1000
+              ? formatInt(autobuyer.time)
+              : quantify("second", autobuyer.time)
+          }`;
         } else if (xHighest !== undefined) {
           autobuyer.mode = xHighestMode;
           autobuyer.xHighest = new Decimal(xHighest);
@@ -189,25 +256,39 @@ export const AutomatorCommands = [
             currSetting = `${format(autobuyer.rm, 2)} RM`;
           } else {
             autobuyer.amount = new Decimal(fixedAmount);
-            currSetting = `${fixedAmount} ${ctx.PrestigeEvent[0].image === "infinity" ? "IP" : "EP"}`;
+            currSetting = `${fixedAmount} ${
+              ctx.PrestigeEvent[0].image === "infinity" ? "IP" : "EP"
+            }`;
           }
         }
         // Settings are drawn from the actual automator text; it's not feasible to parse out all the settings
         // for every combination of autobuyers when they get turned off
-        const settingString = (autobuyer.isActive && currSetting !== "") ? `(Setting: ${currSetting})` : "";
-        AutomatorData.logCommandEvent(`Automatic ${ctx.PrestigeEvent[0].image}
-          turned ${autobuyer.isActive ? "ON" : "OFF"} ${settingString}`, ctx.startLine);
+        const settingString = (autobuyer.isActive && currSetting !== "")
+          ? `(Setting: ${currSetting})`
+          : "";
+        AutomatorData.logCommandEvent(
+          `Automatic ${ctx.PrestigeEvent[0].image}
+          turned ${autobuyer.isActive ? "ON" : "OFF"} ${settingString}`,
+          ctx.startLine,
+        );
         return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
       };
     },
     blockify: (ctx) => {
       const duration = ctx.duration
-        ? `${ctx.duration[0].children.NumberLiteral[0].image} ${ctx.duration[0].children.TimeUnit[0].image}`
+        ? `${ctx.duration[0].children.NumberLiteral[0].image} ${
+          ctx.duration[0].children.TimeUnit[0].image
+        }`
         : undefined;
-      const xHighest = ctx.xHighest ? ctx.xHighest[0].children.$value : undefined;
+      const xHighest = ctx.xHighest
+        ? ctx.xHighest[0].children.$value
+        : undefined;
       const fixedAmount = ctx.currencyAmount
-        ? `${ctx.currencyAmount[0].children.NumberLiteral[0].image}`
-        + ` ${ctx.currencyAmount[0].children.AutomatorCurrency[0].image.toUpperCase()}`
+        ? `${ctx.currencyAmount[0].children.NumberLiteral[0].image}` +
+          ` ${
+            ctx.currencyAmount[0].children.AutomatorCurrency[0].image
+              .toUpperCase()
+          }`
         : undefined;
       const on = Boolean(ctx.On);
       let input = "";
@@ -219,7 +300,7 @@ export const AutomatorCommands = [
       } else if (fixedAmount) {
         input = `${fixedAmount}`;
       } else {
-        input = (on ? "ON" : "OFF");
+        input = on ? "ON" : "OFF";
       }
 
       return {
@@ -231,7 +312,7 @@ export const AutomatorCommands = [
   },
   {
     id: "blackHole",
-    rule: $ => () => {
+    rule: ($) => () => {
       $.CONSUME(T.BlackHole);
       $.OR([
         { ALT: () => $.CONSUME(T.On) },
@@ -252,22 +333,24 @@ export const AutomatorCommands = [
         if (BlackHole(1).isUnlocked) {
           blackHoleEvent = `Black Holes toggled ${ctx.On ? "ON" : "OFF"}`;
         } else if (Enslaved.isRunning || Pelle.isDisabled("blackhole")) {
-          blackHoleEvent = "Black Hole command ignored because BH is disabled in your current Reality";
+          blackHoleEvent =
+            "Black Hole command ignored because BH is disabled in your current Reality";
         } else {
-          blackHoleEvent = "Black Hole command ignored because BH is not unlocked";
+          blackHoleEvent =
+            "Black Hole command ignored because BH is not unlocked";
         }
         AutomatorData.logCommandEvent(blackHoleEvent, ctx.startLine);
         return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
       };
     },
-    blockify: ctx => ({
+    blockify: (ctx) => ({
       singleSelectionInput: ctx.On ? "ON" : "OFF",
       ...automatorBlocksMap["BLACK HOLE"],
     }),
   },
   {
     id: "blob",
-    rule: $ => () => {
+    rule: ($) => () => {
       $.CONSUME(T.Blob);
     },
     validate: (ctx) => {
@@ -282,7 +365,7 @@ export const AutomatorCommands = [
   },
   {
     id: "comment",
-    rule: $ => () => {
+    rule: ($) => () => {
       $.CONSUME(T.Comment);
     },
     validate: (ctx) => {
@@ -291,14 +374,14 @@ export const AutomatorCommands = [
     },
     // Comments should be no-ops
     compile: () => () => AUTOMATOR_COMMAND_STATUS.SKIP_INSTRUCTION,
-    blockify: ctx => ({
+    blockify: (ctx) => ({
       ...automatorBlocksMap.COMMENT,
       singleTextInput: ctx.Comment[0].image.replace(/(#|\/\/)\s?/u, ""),
     }),
   },
   {
     id: "ifBlock",
-    rule: $ => () => {
+    rule: ($) => () => {
       $.CONSUME(T.If);
       $.SUBRULE($.comparison);
       $.CONSUME(T.LCurly);
@@ -325,13 +408,23 @@ export const AutomatorCommands = [
             ifEndLine: ctx.RCurly[0].startLine,
           };
           if (!evalComparison()) {
-            AutomatorData.logCommandEvent(`Checked ${parseConditionalIntoText(ctx)} (false),
-              skipping to line ${AutomatorBackend.translateLineNumber(ctx.RCurly[0].startLine + 1)}`, ctx.startLine);
+            AutomatorData.logCommandEvent(
+              `Checked ${parseConditionalIntoText(ctx)} (false),
+              skipping to line ${
+                AutomatorBackend.translateLineNumber(
+                  ctx.RCurly[0].startLine + 1,
+                )
+              }`,
+              ctx.startLine,
+            );
             return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
           }
           AutomatorBackend.push(commands);
-          AutomatorData.logCommandEvent(`Checked ${parseConditionalIntoText(ctx)} (true),
-            entering IF block`, ctx.startLine);
+          AutomatorData.logCommandEvent(
+            `Checked ${parseConditionalIntoText(ctx)} (true),
+            entering IF block`,
+            ctx.startLine,
+          );
           return AUTOMATOR_COMMAND_STATUS.SAME_INSTRUCTION;
         },
         blockCommands: commands,
@@ -352,7 +445,7 @@ export const AutomatorCommands = [
   },
   {
     id: "notify",
-    rule: $ => () => {
+    rule: ($) => () => {
       $.CONSUME(T.Notify);
       $.OR([
         { ALT: () => $.CONSUME(T.StringLiteral) },
@@ -367,19 +460,23 @@ export const AutomatorCommands = [
       const notifyText = ctx.StringLiteral || ctx.StringLiteralSingleQuote;
       return () => {
         GameUI.notify.automator(`Automator: ${notifyText[0].image}`);
-        AutomatorData.logCommandEvent(`NOTIFY call: ${notifyText[0].image}`, ctx.startLine);
+        AutomatorData.logCommandEvent(
+          `NOTIFY call: ${notifyText[0].image}`,
+          ctx.startLine,
+        );
         return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
       };
     },
-    blockify: ctx => ({
+    blockify: (ctx) => ({
       ...automatorBlocksMap.NOTIFY,
-      singleTextInput: (ctx.StringLiteral || ctx.StringLiteralSingleQuote)[0].image,
+      singleTextInput:
+        (ctx.StringLiteral || ctx.StringLiteralSingleQuote)[0].image,
     }),
   },
   {
     // Note: this has to appear before pause
     id: "pauseTime",
-    rule: $ => () => {
+    rule: ($) => () => {
       $.CONSUME(T.Pause);
       $.OR([
         { ALT: () => $.SUBRULE($.duration) },
@@ -390,13 +487,25 @@ export const AutomatorCommands = [
       ctx.startLine = ctx.Pause[0].startLine;
       let duration;
       if (ctx.Identifier) {
-        if (!V.isValidVarFormat(ctx.Identifier[0], AUTOMATOR_VAR_TYPES.DURATION)) {
-          V.addError(ctx, `Constant ${ctx.Identifier[0].image} is not a valid time duration constant`,
-            `Ensure that ${ctx.Identifier[0].image} is a number of seconds less than
-            ${format(Number.MAX_VALUE / 1000)}`);
+        if (
+          !V.isValidVarFormat(ctx.Identifier[0], AUTOMATOR_VAR_TYPES.DURATION)
+        ) {
+          V.addError(
+            ctx,
+            `Constant ${
+              ctx.Identifier[0].image
+            } is not a valid time duration constant`,
+            `Ensure that ${
+              ctx.Identifier[0].image
+            } is a number of seconds less than
+            ${format(Number.MAX_VALUE / 1000)}`,
+          );
           return false;
         }
-        const lookup = V.lookupVar(ctx.Identifier[0], AUTOMATOR_VAR_TYPES.DURATION);
+        const lookup = V.lookupVar(
+          ctx.Identifier[0],
+          AUTOMATOR_VAR_TYPES.DURATION,
+        );
         duration = lookup ? lookup.value : lookup;
       } else {
         duration = V.visit(ctx.duration);
@@ -417,13 +526,22 @@ export const AutomatorCommands = [
         }
         if (S.commandState === null) {
           S.commandState = { timeMs: 0 };
-          AutomatorData.logCommandEvent(`Pause started (waiting ${timeString})`, ctx.startLine);
+          AutomatorData.logCommandEvent(
+            `Pause started (waiting ${timeString})`,
+            ctx.startLine,
+          );
         } else {
-          S.commandState.timeMs += Decimal.max(Time.trueDeltaTime.totalMilliseconds, AutomatorBackend.currentInterval).toNumber();
+          S.commandState.timeMs += Decimal.max(
+            Time.trueDeltaTime.totalMilliseconds,
+            AutomatorBackend.currentInterval,
+          ).toNumber();
         }
         const finishPause = S.commandState.timeMs >= duration;
         if (finishPause) {
-          AutomatorData.logCommandEvent(`Pause finished (waited ${timeString})`, ctx.startLine);
+          AutomatorData.logCommandEvent(
+            `Pause finished (waited ${timeString})`,
+            ctx.startLine,
+          );
           return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
         }
         return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION;
@@ -445,7 +563,7 @@ export const AutomatorCommands = [
   },
   {
     id: "prestige",
-    rule: $ => () => {
+    rule: ($) => () => {
       $.CONSUME(T.PrestigeEvent);
       $.OPTION(() => $.CONSUME(T.Nowait));
       $.OPTION1(() => $.CONSUME(T.Respec));
@@ -453,23 +571,45 @@ export const AutomatorCommands = [
     validate: (ctx, V) => {
       ctx.startLine = ctx.PrestigeEvent[0].startLine;
 
-      if (ctx.PrestigeEvent && ctx.PrestigeEvent[0].tokenType === T.Eternity
-        && !EternityMilestone.autobuyerEternity.isReached) {
-        V.addError(ctx.PrestigeEvent, "Eternity autobuyer is not unlocked",
-          `Reach ${quantifyInt("Eternity", EternityMilestone.autobuyerEternity.config.eternities)}
-          to use this command`);
+      if (
+        ctx.PrestigeEvent && ctx.PrestigeEvent[0].tokenType === T.Eternity &&
+        !EternityMilestone.autobuyerEternity.isReached
+      ) {
+        V.addError(
+          ctx.PrestigeEvent,
+          "Eternity autobuyer is not unlocked",
+          `Reach ${
+            quantifyInt(
+              "Eternity",
+              EternityMilestone.autobuyerEternity.config.eternities,
+            )
+          }
+          to use this command`,
+        );
         return false;
       }
 
-      if (ctx.PrestigeEvent && ctx.PrestigeEvent[0].tokenType === T.Reality && !RealityUpgrade(25).isBought) {
-        V.addError(ctx.PrestigeEvent, "Reality autobuyer is not unlocked",
-          "Purchase the Reality Upgrade which unlocks the Reality autobuyer");
+      if (
+        ctx.PrestigeEvent && ctx.PrestigeEvent[0].tokenType === T.Reality &&
+        !RealityUpgrade(25).isBought
+      ) {
+        V.addError(
+          ctx.PrestigeEvent,
+          "Reality autobuyer is not unlocked",
+          "Purchase the Reality Upgrade which unlocks the Reality autobuyer",
+        );
         return false;
       }
 
-      if (ctx.PrestigeEvent && ctx.PrestigeEvent[0].tokenType === T.Infinity && ctx.Respec) {
-        V.addError(ctx.Respec, "There's no 'respec' for infinity",
-          "Remove 'respec' from the command");
+      if (
+        ctx.PrestigeEvent && ctx.PrestigeEvent[0].tokenType === T.Infinity &&
+        ctx.Respec
+      ) {
+        V.addError(
+          ctx.Respec,
+          "There's no 'respec' for infinity",
+          "Remove 'respec' from the command",
+        );
       }
       return true;
     },
@@ -483,8 +623,10 @@ export const AutomatorCommands = [
           if (!nowait) {
             return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION;
           }
-          AutomatorData.logCommandEvent(`${ctx.PrestigeEvent.image} attempted, but skipped due to NOWAIT`,
-            ctx.startLine);
+          AutomatorData.logCommandEvent(
+            `${ctx.PrestigeEvent.image} attempted, but skipped due to NOWAIT`,
+            ctx.startLine,
+          );
           return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
         }
         if (respec) {
@@ -492,17 +634,20 @@ export const AutomatorCommands = [
         }
         prestigeToken.$prestige();
         const prestigeName = ctx.PrestigeEvent[0].image.toUpperCase();
-        AutomatorData.logCommandEvent(`${prestigeName} triggered (${findLastPrestigeRecord(prestigeName)})`,
-          ctx.startLine);
+        AutomatorData.logCommandEvent(
+          `${prestigeName} triggered (${findLastPrestigeRecord(prestigeName)})`,
+          ctx.startLine,
+        );
         // In the prestigeToken.$prestige() line above, performing a reality reset has code internal to the call
         // which makes the automator restart. However, in that case we also need to update the execution state here,
         // or else the restarted automator will immediately advance lines and always skip the first command
-        return (prestigeName === "REALITY" && AutomatorBackend.state.forceRestart)
+        return (prestigeName === "REALITY" &&
+            AutomatorBackend.state.forceRestart)
           ? AUTOMATOR_COMMAND_STATUS.RESTART
           : AUTOMATOR_COMMAND_STATUS.NEXT_TICK_NEXT_INSTRUCTION;
       };
     },
-    blockify: ctx => ({
+    blockify: (ctx) => ({
       ...automatorBlocksMap[
         ctx.PrestigeEvent[0].tokenType.name.toUpperCase()
       ],
@@ -512,7 +657,7 @@ export const AutomatorCommands = [
   },
   {
     id: "startDilation",
-    rule: $ => () => {
+    rule: ($) => () => {
       $.CONSUME(T.Start);
       $.CONSUME(T.Dilation);
     },
@@ -520,10 +665,12 @@ export const AutomatorCommands = [
       ctx.startLine = ctx.Start[0].startLine;
       return true;
     },
-    compile: ctx => () => {
+    compile: (ctx) => () => {
       if (player.dilation.active) {
-        AutomatorData.logCommandEvent("Start Dilation encountered but ignored due to already being dilated",
-          ctx.startLine);
+        AutomatorData.logCommandEvent(
+          "Start Dilation encountered but ignored due to already being dilated",
+          ctx.startLine,
+        );
         return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
       }
       if (startDilatedEternity(true)) {
@@ -532,11 +679,14 @@ export const AutomatorCommands = [
       }
       return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION;
     },
-    blockify: () => ({ singleSelectionInput: "DILATION", ...automatorBlocksMap.START }),
+    blockify: () => ({
+      singleSelectionInput: "DILATION",
+      ...automatorBlocksMap.START,
+    }),
   },
   {
     id: "startEC",
-    rule: $ => () => {
+    rule: ($) => () => {
       $.CONSUME(T.Start);
       $.SUBRULE($.eternityChallenge);
     },
@@ -549,8 +699,10 @@ export const AutomatorCommands = [
       return () => {
         const ec = EternityChallenge(ecNumber);
         if (ec.isRunning) {
-          AutomatorData.logCommandEvent("Start EC encountered but ignored due to already being in the specified EC",
-            ctx.startLine);
+          AutomatorData.logCommandEvent(
+            "Start EC encountered but ignored due to already being in the specified EC",
+            ctx.startLine,
+          );
           return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
         }
         if (!EternityChallenge(ecNumber).isUnlocked) {
@@ -559,13 +711,16 @@ export const AutomatorCommands = [
           }
         }
         if (ec.start(true)) {
-          AutomatorData.logCommandEvent(`Eternity Challenge ${ecNumber} started`, ctx.startLine);
+          AutomatorData.logCommandEvent(
+            `Eternity Challenge ${ecNumber} started`,
+            ctx.startLine,
+          );
           return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_NEXT_INSTRUCTION;
         }
         return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION;
       };
     },
-    blockify: ctx => ({
+    blockify: (ctx) => ({
       singleSelectionInput: "EC",
       singleTextInput: ctx.eternityChallenge[0].children.$ecNumber,
       ...automatorBlocksMap.START,
@@ -573,7 +728,7 @@ export const AutomatorCommands = [
   },
   {
     id: "storeGameTime",
-    rule: $ => () => {
+    rule: ($) => () => {
       $.CONSUME(T.StoreGameTime);
       $.OR([
         { ALT: () => $.CONSUME(T.On) },
@@ -584,8 +739,11 @@ export const AutomatorCommands = [
     validate: (ctx, V) => {
       ctx.startLine = ctx.StoreGameTime[0].startLine;
       if (!Enslaved.isUnlocked) {
-        V.addError(ctx.StoreGameTime[0], "You do not yet know how to store game time",
-          "Unlock the ability to store game time");
+        V.addError(
+          ctx.StoreGameTime[0],
+          "You do not yet know how to store game time",
+          "Unlock the ability to store game time",
+        );
         return false;
       }
       return true;
@@ -595,10 +753,15 @@ export const AutomatorCommands = [
         return () => {
           if (Enslaved.isUnlocked) {
             Enslaved.useStoredTime(false);
-            AutomatorData.logCommandEvent("Stored game time used", ctx.startLine);
+            AutomatorData.logCommandEvent(
+              "Stored game time used",
+              ctx.startLine,
+            );
           } else {
-            AutomatorData.logCommandEvent("Attempted to use stored game time, but failed (not unlocked yet)",
-              ctx.startLine);
+            AutomatorData.logCommandEvent(
+              "Attempted to use stored game time, but failed (not unlocked yet)",
+              ctx.startLine,
+            );
           }
           return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
         };
@@ -608,19 +771,21 @@ export const AutomatorCommands = [
         if (on !== player.celestials.enslaved.isStoring) {
           Enslaved.toggleStoreBlackHole();
         }
-        AutomatorData.logCommandEvent(`Storing game time toggled ${ctx.On ? "ON" : "OFF"}`, ctx.startLine);
+        AutomatorData.logCommandEvent(
+          `Storing game time toggled ${ctx.On ? "ON" : "OFF"}`,
+          ctx.startLine,
+        );
         return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
       };
     },
-    blockify: ctx => ({
-
+    blockify: (ctx) => ({
       singleSelectionInput: ctx.Use ? "USE" : (ctx.On ? "ON" : "OFF"),
       ...automatorBlocksMap["STORE GAME TIME"],
     }),
   },
   {
     id: "studiesBuy",
-    rule: $ => () => {
+    rule: ($) => () => {
       $.CONSUME(T.Studies);
       $.OPTION(() => $.CONSUME(T.Nowait));
       $.CONSUME(T.Purchase);
@@ -632,12 +797,24 @@ export const AutomatorCommands = [
     validate: (ctx, V) => {
       ctx.startLine = ctx.Studies[0].startLine;
       if (ctx.Identifier) {
-        if (!V.isValidVarFormat(ctx.Identifier[0], AUTOMATOR_VAR_TYPES.STUDIES)) {
-          V.addError(ctx, `Constant ${ctx.Identifier[0].image} is not a valid Time Study constant`,
-            `Ensure that ${ctx.Identifier[0].image} is a properly-formatted Time Study string`);
+        if (
+          !V.isValidVarFormat(ctx.Identifier[0], AUTOMATOR_VAR_TYPES.STUDIES)
+        ) {
+          V.addError(
+            ctx,
+            `Constant ${
+              ctx.Identifier[0].image
+            } is not a valid Time Study constant`,
+            `Ensure that ${
+              ctx.Identifier[0].image
+            } is a properly-formatted Time Study string`,
+          );
           return false;
         }
-        const varInfo = V.lookupVar(ctx.Identifier[0], AUTOMATOR_VAR_TYPES.STUDIES);
+        const varInfo = V.lookupVar(
+          ctx.Identifier[0],
+          AUTOMATOR_VAR_TYPES.STUDIES,
+        );
         ctx.$studies = varInfo.value;
         ctx.$studies.image = ctx.Identifier[0].image;
       } else if (ctx.studyList) {
@@ -663,33 +840,57 @@ export const AutomatorCommands = [
           }
           if (prePurchasedStudies + purchasedStudies < studies.normal.length) {
             if (prePurchasedStudies + purchasedStudies === 0) {
-              AutomatorData.logCommandEvent("Could not purchase any of the specified Time Studies", ctx.startLine);
+              AutomatorData.logCommandEvent(
+                "Could not purchase any of the specified Time Studies",
+                ctx.startLine,
+              );
             }
             if (purchasedStudies > 0 && finalPurchasedTS) {
-              AutomatorData.logCommandEvent(`Purchased ${quantifyInt("Time Study", purchasedStudies)} and stopped at
-            Time Study ${finalPurchasedTS}, waiting to attempt to purchase more Time Studies`, ctx.startLine);
+              AutomatorData.logCommandEvent(
+                `Purchased ${
+                  quantifyInt("Time Study", purchasedStudies)
+                } and stopped at
+            Time Study ${finalPurchasedTS}, waiting to attempt to purchase more Time Studies`,
+                ctx.startLine,
+              );
             }
             return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION;
           }
-          const hasEC = studies.ec ? TimeStudy.eternityChallenge(studies.ec).isBought : false;
+          const hasEC = studies.ec
+            ? TimeStudy.eternityChallenge(studies.ec).isBought
+            : false;
           if (!studies.ec || (hasEC && !studies.startEC)) {
-            AutomatorData.logCommandEvent("Purchased all specified Time Studies", ctx.startLine);
+            AutomatorData.logCommandEvent(
+              "Purchased all specified Time Studies",
+              ctx.startLine,
+            );
             return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
           }
-          const unlockedEC = TimeStudy.eternityChallenge(studies.ec).purchase(true);
+          const unlockedEC = TimeStudy.eternityChallenge(studies.ec).purchase(
+            true,
+          );
           if (hasEC || unlockedEC) {
             if (studies.startEC) {
               EternityChallenge(studies.ec).start(true);
               if (EternityChallenge(studies.ec).isRunning) {
-                AutomatorData.logCommandEvent(`Purchased all specified Time Studies, then unlocked and started running
-                Eternity Challenge ${studies.ec}`, ctx.startLine);
+                AutomatorData.logCommandEvent(
+                  `Purchased all specified Time Studies, then unlocked and started running
+                Eternity Challenge ${studies.ec}`,
+                  ctx.startLine,
+                );
               } else {
-                AutomatorData.logCommandEvent(`Purchased all specified Time Studies and unlocked Eternity Challenge
-                ${studies.ec}, but failed to start it`, ctx.startLine);
+                AutomatorData.logCommandEvent(
+                  `Purchased all specified Time Studies and unlocked Eternity Challenge
+                ${studies.ec}, but failed to start it`,
+                  ctx.startLine,
+                );
               }
             } else {
-              AutomatorData.logCommandEvent(`Purchased all specified Time Studies and unlocked Eternity Challenge
-              ${studies.ec}`, ctx.startLine);
+              AutomatorData.logCommandEvent(
+                `Purchased all specified Time Studies and unlocked Eternity Challenge
+              ${studies.ec}`,
+                ctx.startLine,
+              );
             }
             return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
           }
@@ -707,7 +908,7 @@ export const AutomatorCommands = [
         return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
       };
     },
-    blockify: ctx => ({
+    blockify: (ctx) => ({
       singleTextInput: ctx.$studies.image,
       nowait: ctx.Nowait !== undefined,
       ...automatorBlocksMap["STUDIES PURCHASE"],
@@ -715,7 +916,7 @@ export const AutomatorCommands = [
   },
   {
     id: "studiesLoad",
-    rule: $ => () => {
+    rule: ($) => () => {
       $.CONSUME(T.Studies);
       $.OPTION(() => $.CONSUME(T.Nowait));
       $.CONSUME(T.Load);
@@ -731,15 +932,21 @@ export const AutomatorCommands = [
         const split = idSplitter.exec(ctx.Id[0].image);
 
         if (!split || ctx.Id[0].isInsertedInRecovery) {
-          V.addError(ctx, "Missing preset id",
-            "Provide the id of a saved study preset slot from the Time Studies page");
+          V.addError(
+            ctx,
+            "Missing preset id",
+            "Provide the id of a saved study preset slot from the Time Studies page",
+          );
           return false;
         }
 
         const id = parseInt(split[1], 10);
         if (id < 1 || id > 6) {
-          V.addError(ctx.Id[0], `Could not find a preset with an id of ${id}`,
-            "Type in a valid id (1 - 6) for your study preset");
+          V.addError(
+            ctx.Id[0],
+            `Could not find a preset with an id of ${id}`,
+            "Type in a valid id (1 - 6) for your study preset",
+          );
           return false;
         }
         ctx.$presetIndex = id;
@@ -750,16 +957,26 @@ export const AutomatorCommands = [
         const split = presetSplitter.exec(ctx.Name[0].image);
 
         if (!split || ctx.Name[0].isInsertedInRecovery) {
-          V.addError(ctx, "Missing preset name",
-            "Provide the name of a saved study preset from the Time Studies page");
+          V.addError(
+            ctx,
+            "Missing preset name",
+            "Provide the name of a saved study preset from the Time Studies page",
+          );
           return false;
         }
 
         // If it's a name, we check to make sure it exists:
-        const presetIndex = player.timestudy.presets.findIndex(e => e.name === split[1]) + 1;
+        const presetIndex = player.timestudy.presets.findIndex((e) =>
+          e.name === split[1]
+        ) + 1;
         if (presetIndex === 0) {
-          V.addError(ctx.Name[0], `Could not find preset named ${split[1]} (Note: Names are case-sensitive)`,
-            "Check to make sure you typed in the correct name for your study preset");
+          V.addError(
+            ctx.Name[0],
+            `Could not find preset named ${
+              split[1]
+            } (Note: Names are case-sensitive)`,
+            "Check to make sure you typed in the correct name for your study preset",
+          );
           return false;
         }
         ctx.$presetIndex = presetIndex;
@@ -770,38 +987,58 @@ export const AutomatorCommands = [
     compile: (ctx) => {
       const presetIndex = ctx.$presetIndex;
       return () => {
-        const imported = new TimeStudyTree(player.timestudy.presets[presetIndex - 1].studies);
-        const beforeCount = GameCache.currentStudyTree.value.purchasedStudies.length;
-        TimeStudyTree.commitToGameState(imported.purchasedStudies, true, imported.startEC);
-        const afterCount = GameCache.currentStudyTree.value.purchasedStudies.length;
+        const imported = new TimeStudyTree(
+          player.timestudy.presets[presetIndex - 1].studies,
+        );
+        const beforeCount =
+          GameCache.currentStudyTree.value.purchasedStudies.length;
+        TimeStudyTree.commitToGameState(
+          imported.purchasedStudies,
+          true,
+          imported.startEC,
+        );
+        const afterCount =
+          GameCache.currentStudyTree.value.purchasedStudies.length;
         // Check if there are still any unbought studies from the preset after attempting to commit it all;
         // if there are then we keep trying on this line until there aren't, unless we are given nowait
         const missingStudyCount = imported.purchasedStudies
-          .filter(s => !GameCache.currentStudyTree.value.purchasedStudies.includes(s)).length;
+          .filter((s) =>
+            !GameCache.currentStudyTree.value.purchasedStudies.includes(s)
+          ).length;
 
-        const presetRepresentation = ctx.Name ? ctx.Name[0].image : ctx.Id[0].image;
+        const presetRepresentation = ctx.Name
+          ? ctx.Name[0].image
+          : ctx.Id[0].image;
 
         if (missingStudyCount === 0) {
-          AutomatorData.logCommandEvent(`Fully loaded study preset ${presetRepresentation}`, ctx.startLine);
+          AutomatorData.logCommandEvent(
+            `Fully loaded study preset ${presetRepresentation}`,
+            ctx.startLine,
+          );
         } else if (afterCount > beforeCount) {
-          AutomatorData.logCommandEvent(`Partially loaded study preset ${presetRepresentation}
-            (missing ${quantifyInt("study", missingStudyCount)})`, ctx.startLine);
+          AutomatorData.logCommandEvent(
+            `Partially loaded study preset ${presetRepresentation}
+            (missing ${quantifyInt("study", missingStudyCount)})`,
+            ctx.startLine,
+          );
         }
         return ctx.Nowait !== undefined || missingStudyCount === 0
           ? AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION
           : AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION;
       };
     },
-    blockify: ctx => ({
+    blockify: (ctx) => ({
       singleSelectionInput: ctx.Name ? "NAME" : "ID",
-      singleTextInput: ctx.Name ? player.timestudy.presets[ctx.$presetIndex - 1].name : ctx.$presetIndex,
+      singleTextInput: ctx.Name
+        ? player.timestudy.presets[ctx.$presetIndex - 1].name
+        : ctx.$presetIndex,
       nowait: ctx.Nowait !== undefined,
       ...automatorBlocksMap["STUDIES LOAD"],
     }),
   },
   {
     id: "studiesRespec",
-    rule: $ => () => {
+    rule: ($) => () => {
       $.CONSUME(T.Studies);
       $.CONSUME(T.Respec);
     },
@@ -809,7 +1046,7 @@ export const AutomatorCommands = [
       ctx.startLine = ctx.Studies[0].startLine;
       return true;
     },
-    compile: ctx => () => {
+    compile: (ctx) => () => {
       player.respec = true;
       AutomatorData.logCommandEvent("Turned study respec ON", ctx.startLine);
       return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
@@ -818,7 +1055,7 @@ export const AutomatorCommands = [
   },
   {
     id: "unlockDilation",
-    rule: $ => () => {
+    rule: ($) => () => {
       $.CONSUME(T.Unlock);
       $.OPTION(() => $.CONSUME(T.Nowait));
       $.CONSUME(T.Dilation);
@@ -831,7 +1068,10 @@ export const AutomatorCommands = [
       const nowait = ctx.Nowait !== undefined;
       return () => {
         if (PlayerProgress.dilationUnlocked()) {
-          AutomatorData.logCommandEvent("Skipped dilation unlock due to being already unlocked", ctx.startLine);
+          AutomatorData.logCommandEvent(
+            "Skipped dilation unlock due to being already unlocked",
+            ctx.startLine,
+          );
           return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
         }
         const unlockedThisTick = TimeStudy.dilation.purchase(true);
@@ -840,14 +1080,16 @@ export const AutomatorCommands = [
           return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
         }
         if (nowait) {
-          AutomatorData.logCommandEvent("Skipped dilation unlock due to lack of requirements (NOWAIT)",
-            ctx.startLine);
+          AutomatorData.logCommandEvent(
+            "Skipped dilation unlock due to lack of requirements (NOWAIT)",
+            ctx.startLine,
+          );
           return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
         }
         return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION;
       };
     },
-    blockify: ctx => ({
+    blockify: (ctx) => ({
       singleSelectionInput: "DILATION",
       nowait: ctx.Nowait !== undefined,
       ...automatorBlocksMap.UNLOCK,
@@ -855,7 +1097,7 @@ export const AutomatorCommands = [
   },
   {
     id: "unlockEC",
-    rule: $ => () => {
+    rule: ($) => () => {
       $.CONSUME(T.Unlock);
       $.OPTION(() => $.CONSUME(T.Nowait));
       $.SUBRULE($.eternityChallenge);
@@ -869,22 +1111,31 @@ export const AutomatorCommands = [
       const ecNumber = ctx.eternityChallenge[0].children.$ecNumber;
       return () => {
         if (EternityChallenge(ecNumber).isUnlocked) {
-          AutomatorData.logCommandEvent(`Skipped EC ${ecNumber} unlock due to being already unlocked`, ctx.startLine);
+          AutomatorData.logCommandEvent(
+            `Skipped EC ${ecNumber} unlock due to being already unlocked`,
+            ctx.startLine,
+          );
           return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
         }
         if (nowait) {
-          AutomatorData.logCommandEvent(`EC ${ecNumber} unlock failed and skipped (NOWAIT)`, ctx.startLine);
+          AutomatorData.logCommandEvent(
+            `EC ${ecNumber} unlock failed and skipped (NOWAIT)`,
+            ctx.startLine,
+          );
           return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
         }
         const purchased = TimeStudy.eternityChallenge(ecNumber).purchase(true);
         if (purchased) {
-          AutomatorData.logCommandEvent(`EC ${ecNumber} unlocked`, ctx.startLine);
+          AutomatorData.logCommandEvent(
+            `EC ${ecNumber} unlocked`,
+            ctx.startLine,
+          );
           return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
         }
         return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION;
       };
     },
-    blockify: ctx => ({
+    blockify: (ctx) => ({
       singleSelectionInput: "EC",
       singleTextInput: ctx.eternityChallenge[0].children.$ecNumber,
       nowait: ctx.Nowait !== undefined,
@@ -893,7 +1144,7 @@ export const AutomatorCommands = [
   },
   {
     id: "untilLoop",
-    rule: $ => () => {
+    rule: ($) => () => {
       $.CONSUME(T.Until);
       $.OR([
         { ALT: () => $.SUBRULE($.comparison) },
@@ -912,7 +1163,12 @@ export const AutomatorCommands = [
       const commands = C.visit(ctx.block);
       if (ctx.comparison) {
         const evalComparison = C.visit(ctx.comparison);
-        return compileConditionLoop(() => !evalComparison(), commands, ctx, true);
+        return compileConditionLoop(
+          () => !evalComparison(),
+          commands,
+          ctx,
+          true,
+        );
       }
       const prestigeLevel = ctx.PrestigeEvent[0].tokenType.$prestigeLevel;
       let prestigeName;
@@ -939,14 +1195,20 @@ export const AutomatorCommands = [
             S.commandState = { prestigeLevel: 0 };
           }
           if (S.commandState.prestigeLevel >= prestigeLevel) {
-            AutomatorData.logCommandEvent(`${prestigeName} prestige has occurred, exiting until loop`,
-              ctx.startLine);
+            AutomatorData.logCommandEvent(
+              `${prestigeName} prestige has occurred, exiting until loop`,
+              ctx.startLine,
+            );
             return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
           }
           AutomatorBackend.push(commands);
-          AutomatorData.logCommandEvent(`${prestigeName} prestige has not occurred yet, moving to line
-            ${AutomatorBackend.translateLineNumber(ctx.LCurly[0].startLine + 1)} (start of until loop)`,
-          ctx.startLine);
+          AutomatorData.logCommandEvent(
+            `${prestigeName} prestige has not occurred yet, moving to line
+            ${
+              AutomatorBackend.translateLineNumber(ctx.LCurly[0].startLine + 1)
+            } (start of until loop)`,
+            ctx.startLine,
+          );
           return AUTOMATOR_COMMAND_STATUS.SAME_INSTRUCTION;
         },
         blockCommands: commands,
@@ -974,7 +1236,7 @@ export const AutomatorCommands = [
   },
   {
     id: "waitCondition",
-    rule: $ => () => {
+    rule: ($) => () => {
       $.CONSUME(T.Wait);
       $.SUBRULE($.comparison);
     },
@@ -986,19 +1248,29 @@ export const AutomatorCommands = [
       const evalComparison = C.visit(ctx.comparison);
       const doneWaiting = evalComparison();
       if (doneWaiting) {
-        const timeWaited = TimeSpan.fromMilliseconds(new Decimal(Date.now() - AutomatorData.waitStart)).toStringShort();
+        const timeWaited = TimeSpan.fromMilliseconds(
+          new Decimal(Date.now() - AutomatorData.waitStart),
+        ).toStringShort();
         if (AutomatorData.isWaiting) {
-          AutomatorData.logCommandEvent(`Continuing after WAIT
-            (${parseConditionalIntoText(ctx)} is true, after ${timeWaited})`, ctx.startLine);
+          AutomatorData.logCommandEvent(
+            `Continuing after WAIT
+            (${parseConditionalIntoText(ctx)} is true, after ${timeWaited})`,
+            ctx.startLine,
+          );
         } else {
-          AutomatorData.logCommandEvent(`WAIT skipped (${parseConditionalIntoText(ctx)} is already true)`,
-            ctx.startLine);
+          AutomatorData.logCommandEvent(
+            `WAIT skipped (${parseConditionalIntoText(ctx)} is already true)`,
+            ctx.startLine,
+          );
         }
         AutomatorData.isWaiting = false;
         return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
       }
       if (!AutomatorData.isWaiting) {
-        AutomatorData.logCommandEvent(`Started WAIT for ${parseConditionalIntoText(ctx)}`, ctx.startLine);
+        AutomatorData.logCommandEvent(
+          `Started WAIT for ${parseConditionalIntoText(ctx)}`,
+          ctx.startLine,
+        );
         AutomatorData.waitStart = Date.now();
       }
       AutomatorData.isWaiting = true;
@@ -1019,7 +1291,7 @@ export const AutomatorCommands = [
   },
   {
     id: "waitEvent",
-    rule: $ => () => {
+    rule: ($) => () => {
       $.CONSUME(T.Wait);
       $.CONSUME(T.PrestigeEvent);
     },
@@ -1037,28 +1309,35 @@ export const AutomatorCommands = [
         const prestigeName = ctx.PrestigeEvent[0].image.toUpperCase();
         if (prestigeOccurred) {
           const timeWaited = TimeSpan.fromMilliseconds(
-            new Decimal(Date.now() - AutomatorData.waitStart)).toStringShort();
-          AutomatorData.logCommandEvent(`Continuing after WAIT (${prestigeName} occurred for
-            ${findLastPrestigeRecord(prestigeName)}, after ${timeWaited})`, ctx.startLine);
+            new Decimal(Date.now() - AutomatorData.waitStart),
+          ).toStringShort();
+          AutomatorData.logCommandEvent(
+            `Continuing after WAIT (${prestigeName} occurred for
+            ${findLastPrestigeRecord(prestigeName)}, after ${timeWaited})`,
+            ctx.startLine,
+          );
           AutomatorData.isWaiting = false;
           return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
         }
         if (!AutomatorData.isWaiting) {
-          AutomatorData.logCommandEvent(`Started WAIT for ${prestigeName}`, ctx.startLine);
+          AutomatorData.logCommandEvent(
+            `Started WAIT for ${prestigeName}`,
+            ctx.startLine,
+          );
           AutomatorData.waitStart = Date.now();
         }
         AutomatorData.isWaiting = true;
         return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION;
       };
     },
-    blockify: ctx => ({
+    blockify: (ctx) => ({
       genericInput1: ctx.PrestigeEvent[0].tokenType.name.toUpperCase(),
       ...automatorBlocksMap.WAIT,
     }),
   },
   {
     id: "waitBlackHole",
-    rule: $ => () => {
+    rule: ($) => () => {
       $.CONSUME(T.Wait);
       $.CONSUME(T.BlackHole);
       $.OR([
@@ -1070,37 +1349,50 @@ export const AutomatorCommands = [
       ctx.startLine = ctx.Wait[0].startLine;
       return true;
     },
-    compile: ctx => () => {
+    compile: (ctx) => () => {
       const off = Boolean(ctx.Off);
       // This input has the format "bh#"
-      const holeID = ctx.BlackHoleStr ? Number(ctx.BlackHoleStr[0].image.charAt(2)) : 0;
+      const holeID = ctx.BlackHoleStr
+        ? Number(ctx.BlackHoleStr[0].image.charAt(2))
+        : 0;
       const bhCond = off ? !BlackHole(1).isActive : BlackHole(holeID).isActive;
-      const bhStr = off ? "inactive Black Holes" : `active Black Hole ${holeID}`;
+      const bhStr = off
+        ? "inactive Black Holes"
+        : `active Black Hole ${holeID}`;
       if (bhCond) {
-        const timeWaited = TimeSpan.fromMilliseconds(new Decimal(Date.now() - AutomatorData.waitStart)).toStringShort();
-        AutomatorData.logCommandEvent(`Continuing after WAIT (waited ${timeWaited} for ${bhStr})`,
-          ctx.startLine);
+        const timeWaited = TimeSpan.fromMilliseconds(
+          new Decimal(Date.now() - AutomatorData.waitStart),
+        ).toStringShort();
+        AutomatorData.logCommandEvent(
+          `Continuing after WAIT (waited ${timeWaited} for ${bhStr})`,
+          ctx.startLine,
+        );
         AutomatorData.isWaiting = false;
         return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
       }
       if (!AutomatorData.isWaiting) {
-        AutomatorData.logCommandEvent(`Started WAIT for ${bhStr}`, ctx.startLine);
+        AutomatorData.logCommandEvent(
+          `Started WAIT for ${bhStr}`,
+          ctx.startLine,
+        );
         AutomatorData.waitStart = Date.now();
       }
       AutomatorData.isWaiting = true;
       return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION;
     },
-    blockify: ctx => ({
+    blockify: (ctx) => ({
       genericInput1: "BLACK HOLE",
       // Note: In this particular case we aren't actually storing a comparison operator. This is still okay
       // because internally this is just the variable for the second slot and has no special treatment beyond that
-      compOperator: ctx.BlackHoleStr ? ctx.BlackHoleStr[0].image.toUpperCase() : "OFF",
+      compOperator: ctx.BlackHoleStr
+        ? ctx.BlackHoleStr[0].image.toUpperCase()
+        : "OFF",
       ...automatorBlocksMap.WAIT,
     }),
   },
   {
     id: "whileLoop",
-    rule: $ => () => {
+    rule: ($) => () => {
       $.CONSUME(T.While);
       $.SUBRULE($.comparison);
       $.CONSUME(T.LCurly);
@@ -1112,7 +1404,13 @@ export const AutomatorCommands = [
       ctx.startLine = ctx.While[0].startLine;
       return V.checkBlock(ctx, ctx.While);
     },
-    compile: (ctx, C) => compileConditionLoop(C.visit(ctx.comparison), C.visit(ctx.block), ctx, false),
+    compile: (ctx, C) =>
+      compileConditionLoop(
+        C.visit(ctx.comparison),
+        C.visit(ctx.block),
+        ctx,
+        false,
+      ),
     blockify: (ctx, B) => {
       const commands = [];
       B.visit(ctx.block, commands);
@@ -1128,15 +1426,18 @@ export const AutomatorCommands = [
   },
   {
     id: "stop",
-    rule: $ => () => {
+    rule: ($) => () => {
       $.CONSUME(T.Stop);
     },
     validate: (ctx) => {
       ctx.startLine = ctx.Stop[0].startLine;
       return true;
     },
-    compile: ctx => () => {
-      AutomatorData.logCommandEvent("Automator execution stopped with STOP command", ctx.startLine);
+    compile: (ctx) => () => {
+      AutomatorData.logCommandEvent(
+        "Automator execution stopped with STOP command",
+        ctx.startLine,
+      );
       return AUTOMATOR_COMMAND_STATUS.HALT;
     },
     blockify: () => ({

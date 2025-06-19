@@ -10,11 +10,16 @@ export class DilationUpgradeAutobuyerState extends IntervaledAutobuyerState {
   }
 
   get name() {
-    return ["Dilated Time Multiplier", "Tachyon Galaxy Threshold", "Tachyon Particle Multiplier"][this.id - 1];
+    return [
+      "Dilated Time Multiplier",
+      "Tachyon Galaxy Threshold",
+      "Tachyon Particle Multiplier",
+    ][this.id - 1];
   }
 
   get interval() {
-    return 1000 * Perk.autobuyerFasterDilation.effectOrDefault(1) / PerkShopUpgrade.autoSpeed.effectOrDefault(1);
+    return 1000 * Perk.autobuyerFasterDilation.effectOrDefault(1) /
+      PerkShopUpgrade.autoSpeed.effectOrDefault(1);
   }
 
   get isUnlocked() {
@@ -26,7 +31,10 @@ export class DilationUpgradeAutobuyerState extends IntervaledAutobuyerState {
   }
 
   get bulk() {
-    return Effects.product(PerkShopUpgrade.bulkDilation, Perk.dilationAutobuyerBulk);
+    return Effects.product(
+      PerkShopUpgrade.bulkDilation,
+      Perk.dilationAutobuyerBulk,
+    );
   }
 
   tick() {

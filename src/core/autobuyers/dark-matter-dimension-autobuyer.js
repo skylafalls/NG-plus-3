@@ -1,6 +1,7 @@
 import { IntervaledAutobuyerState } from "./autobuyer";
 
-export class DarkMatterDimensionAutobuyerState extends IntervaledAutobuyerState {
+export class DarkMatterDimensionAutobuyerState
+  extends IntervaledAutobuyerState {
   get data() {
     return player.auto.darkMatterDims;
   }
@@ -23,6 +24,8 @@ export class DarkMatterDimensionAutobuyerState extends IntervaledAutobuyerState 
 
   tick() {
     super.tick();
-    Laitela.maxAllDMDimensions(SingularityMilestone.darkDimensionAutobuyers.effectValue);
+    Laitela.maxAllDMDimensions(
+      SingularityMilestone.darkDimensionAutobuyers.effectValue,
+    );
   }
 }

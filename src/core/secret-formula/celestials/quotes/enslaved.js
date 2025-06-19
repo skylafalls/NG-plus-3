@@ -30,7 +30,10 @@ export const enslavedQuotes = {
     lines: [
       "... you need... to look harder...",
       "We think... we can help...",
-      { text: "You have unlocked help from The Nameless Ones.", showCelestialName: false },
+      {
+        text: "You have unlocked help from The Nameless Ones.",
+        showCelestialName: false,
+      },
     ],
   },
   ec6C10: {

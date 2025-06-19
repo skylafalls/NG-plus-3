@@ -42,7 +42,7 @@ async function validatePurchase(orderId) {
 
   await PlayFab.ConsumeItem(purchaseInstance, 1);
   const stdsBought = Number(purchaseName.replace("STD", ""));
-  pendingValidations = pendingValidations.filter(item => item !== orderId);
+  pendingValidations = pendingValidations.filter((item) => item !== orderId);
   await PlayFab.AddUserVirtualCurrency(stdsBought, "ST");
   GameUI.notify.info(`${stdsBought} STDs Obtained!`);
 }

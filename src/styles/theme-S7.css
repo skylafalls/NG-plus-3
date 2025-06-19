@@ -15,7 +15,11 @@
 button {
   color: black !important;
   text-decoration: none !important;
-  background-image: linear-gradient(to top, rgb(222, 222, 222) 0%, rgb(246, 246, 246) 100%) !important;
+  background-image: linear-gradient(
+    to top,
+    rgb(222, 222, 222) 0%,
+    rgb(246, 246, 246) 100%
+  ) !important;
   border: 0.1rem solid #9b9b9b !important;
   border-radius: 0 !important;
   padding: 3px !important;
@@ -24,7 +28,11 @@ button {
 .o-primary-btn {
   color: black !important;
   text-decoration: none !important;
-  background-image: linear-gradient(to top, rgb(222, 222, 222) 0%, rgb(246, 246, 246) 100%) !important;
+  background-image: linear-gradient(
+    to top,
+    rgb(222, 222, 222) 0%,
+    rgb(246, 246, 246) 100%
+  ) !important;
   border: 0.1rem solid #9b9b9b !important;
   border-radius: 0 !important;
   padding: 3px !important;

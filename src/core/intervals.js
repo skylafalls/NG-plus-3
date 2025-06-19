@@ -1,4 +1,4 @@
-export const GameIntervals = (function () {
+export const GameIntervals = function () {
   const interval = (handler, timeout) => {
     let id = -1;
     return {
@@ -6,9 +6,14 @@ export const GameIntervals = (function () {
         // This starts the interval if it isn't already started,
         // and throws an error if it is.
         if (this.isStarted) {
-          throw new Error("An already started interval cannot be started again.");
+          throw new Error(
+            "An already started interval cannot be started again.",
+          );
         } else {
-          id = setInterval(handler, typeof timeout === "function" ? timeout() : timeout);
+          id = setInterval(
+            handler,
+            typeof timeout === "function" ? timeout() : timeout,
+          );
         }
       },
       get isStarted() {
@@ -30,9 +35,9 @@ export const GameIntervals = (function () {
     // Not a getter because getter will cause stack overflow
     all() {
       return Object.values(GameIntervals)
-        .filter(i =>
-          Object.prototype.hasOwnProperty.call(i, "start")
-          && Object.prototype.hasOwnProperty.call(i, "stop"),
+        .filter((i) =>
+          Object.prototype.hasOwnProperty.call(i, "start") &&
+          Object.prototype.hasOwnProperty.call(i, "stop")
         );
     },
     start() {
@@ -51,8 +56,11 @@ export const GameIntervals = (function () {
       }
     },
     gameLoop: interval(() => gameLoop(), () => player.options.updateRate),
-    save: interval(() => GameStorage.save(), () =>
-      player.options.autosaveInterval - Math.clampMin(0, Date.now() - GameStorage.lastSaveTime),
+    save: interval(
+      () => GameStorage.save(),
+      () =>
+        player.options.autosaveInterval -
+        Math.clampMin(0, Date.now() - GameStorage.lastSaveTime),
     ),
     checkCloudSave: interval(() => {
       if (player.options.cloudEnabled && Cloud.loggedIn) {
@@ -72,7 +80,7 @@ export const GameIntervals = (function () {
         return;
       }
       fetch("version.txt")
-        .then(response => response.json())
+        .then((response) => response.json())
         .then((json) => {
           if (json.version > player.version) {
             Modal.message.show(json.message, { callback: updateRefresh }, 3);
@@ -80,4 +88,4 @@ export const GameIntervals = (function () {
         });
     }, 60000),
   };
-}());
+}();

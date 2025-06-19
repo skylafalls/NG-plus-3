@@ -1,4 +1,7 @@
-import { BitPurchasableMechanicState, RebuyableMechanicState } from "./game-mechanics";
+import {
+  BitPurchasableMechanicState,
+  RebuyableMechanicState,
+} from "./game-mechanics";
 import { isRealityAvailable } from "./reality";
 
 class RealityUpgradeState extends BitPurchasableMechanicState {
@@ -20,11 +23,15 @@ class RealityUpgradeState extends BitPurchasableMechanicState {
   }
 
   get requirement() {
-    return typeof this.config.requirement === "function" ? this.config.requirement() : this.config.requirement;
+    return typeof this.config.requirement === "function"
+      ? this.config.requirement()
+      : this.config.requirement;
   }
 
   get lockEvent() {
-    return typeof this.config.lockEvent === "function" ? this.config.lockEvent() : this.config.lockEvent;
+    return typeof this.config.lockEvent === "function"
+      ? this.config.lockEvent()
+      : this.config.lockEvent;
   }
 
   get currency() {
@@ -57,7 +64,8 @@ class RealityUpgradeState extends BitPurchasableMechanicState {
 
   get isLockingMechanics() {
     const shouldBypass = this.config.bypassLock?.() ?? false;
-    return this.hasPlayerLock && this.isPossible && !shouldBypass && !this.isAvailableForPurchase;
+    return this.hasPlayerLock && this.isPossible && !shouldBypass &&
+      !this.isAvailableForPurchase;
   }
 
   // Required to be changed this way to avoid direct prop mutation in Vue components
@@ -72,7 +80,11 @@ class RealityUpgradeState extends BitPurchasableMechanicState {
   // Note we don't actually show the modal if we already failed or unlocked it
   tryShowWarningModal(specialLockText) {
     if (this.isPossible && !this.isAvailableForPurchase) {
-      Modal.upgradeLock.show({ upgrade: this, isImaginary: false, specialLockText });
+      Modal.upgradeLock.show({
+        upgrade: this,
+        isImaginary: false,
+        specialLockText,
+      });
     }
   }
 
@@ -86,11 +98,16 @@ class RealityUpgradeState extends BitPurchasableMechanicState {
 
   tryUnlock() {
     const realityReached = isRealityAvailable();
-    if (!realityReached || this.isAvailableForPurchase || !this.config.checkRequirement()) {
+    if (
+      !realityReached || this.isAvailableForPurchase ||
+      !this.config.checkRequirement()
+    ) {
       return;
     }
-    player.reality.upgReqs |= (1 << this.id);
-    GameUI.notify.reality(`You've unlocked a Reality Upgrade: ${this.config.name}`);
+    player.reality.upgReqs |= 1 << this.id;
+    GameUI.notify.reality(
+      `You've unlocked a Reality Upgrade: ${this.config.name}`,
+    );
     this.hasPlayerLock = false;
   }
 
@@ -128,7 +145,9 @@ class RebuyableRealityUpgradeState extends RebuyableMechanicState {
 
 RealityUpgradeState.index = mapGameData(
   GameDatabase.reality.upgrades,
-  config => (config.id < 6
+  (
+    config,
+  ) => (config.id < 6
     ? new RebuyableRealityUpgradeState(config)
     : new RealityUpgradeState(config)),
 );
@@ -137,7 +156,7 @@ RealityUpgradeState.index = mapGameData(
  * @param {number} id
  * @return {RealityUpgradeState|RebuyableRealityUpgradeState}
  */
-export const RealityUpgrade = id => RealityUpgradeState.index[id];
+export const RealityUpgrade = (id) => RealityUpgradeState.index[id];
 
 export const RealityUpgrades = {
   /**
@@ -145,6 +164,7 @@ export const RealityUpgrades = {
    */
   all: RealityUpgradeState.index.compact(),
   get allBought() {
-    return (player.reality.upgradeBits >> 6) + 1 === 1 << (GameDatabase.reality.upgrades.length - 5);
+    return (player.reality.upgradeBits >> 6) + 1 ===
+      1 << (GameDatabase.reality.upgrades.length - 5);
   },
 };

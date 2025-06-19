@@ -58,11 +58,12 @@ export class EternityAutobuyerState extends AutobuyerState {
   }
 
   autoEternitiesAvailable(considerMilestoneReached) {
-    return (considerMilestoneReached || EternityMilestone.autoEternities.isReached)
-      && !Player.isInAnyChallenge && !player.dilation.active
-      && player.auto.autobuyersOn && this.data.isActive
-      && this.mode === AUTO_ETERNITY_MODE.AMOUNT
-      && this.amount.equals(0);
+    return (considerMilestoneReached ||
+      EternityMilestone.autoEternities.isReached) &&
+      !Player.isInAnyChallenge && !player.dilation.active &&
+      player.auto.autobuyersOn && this.data.isActive &&
+      this.mode === AUTO_ETERNITY_MODE.AMOUNT &&
+      this.amount.equals(0);
   }
 
   bumpAmount(mult) {
@@ -76,7 +77,10 @@ export class EternityAutobuyerState extends AutobuyerState {
   }
 
   get timeToNextTick() {
-    return Math.clampMin(this.time - Time.thisEternityTrueTime.totalSeconds.toNumber(), 0);
+    return Math.clampMin(
+      this.time - Time.thisEternityTrueTime.totalSeconds.toNumber(),
+      0,
+    );
   }
 
   get willEternity() {
@@ -84,7 +88,8 @@ export class EternityAutobuyerState extends AutobuyerState {
       // We Eternity asap if we're in an Eternity Challenge and can't reach more completions.
       // Code elsewhere ensures this hasMoreCompletions evaluates to false when ready to complete the EC at all
       // without the ECB perk or when capped at max completions with it (and true otherwise)
-      return !EternityChallenge.current?.gainedCompletionStatus.hasMoreCompletions;
+      return !EternityChallenge.current?.gainedCompletionStatus
+        .hasMoreCompletions;
     }
 
     switch (this.mode) {
@@ -96,7 +101,9 @@ export class EternityAutobuyerState extends AutobuyerState {
       }
       case AUTO_ETERNITY_MODE.X_HIGHEST:
       default: {
-        return gainedEternityPoints().gte(this.highestPrevPrestige.times(this.xHighest));
+        return gainedEternityPoints().gte(
+          this.highestPrevPrestige.times(this.xHighest),
+        );
       }
     }
   }

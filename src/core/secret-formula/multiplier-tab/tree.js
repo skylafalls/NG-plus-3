@@ -1,18 +1,97 @@
 import { MultiplierTabHelper } from "./helper-functions";
 import { multiplierTabValues } from "./values";
 
-const dynamicGenProps = ["TP", "DT", "infinities", "eternities", "gamespeed", "replicanti"];
+const dynamicGenProps = [
+  "TP",
+  "DT",
+  "infinities",
+  "eternities",
+  "gamespeed",
+  "replicanti",
+];
 const propList = {
-  AD: ["purchase", "dimboost", "sacrifice", "achievementMult", "achievement", "infinityUpgrade",
-    "breakInfinityUpgrade", "infinityPower", "infinityChallenge", "timeStudy", "eternityChallenge", "glyph", "v",
-    "alchemy", "pelle", "iap", "effectNC", "nerfIC", "nerfV", "nerfCursed", "nerfPelle"],
-  ID: ["purchase", "achievementMult", "achievement", "replicanti", "infinityChallenge", "timeStudy", "eternityUpgrade",
-    "eternityChallenge", "glyph", "alchemy", "imaginaryUpgrade", "pelle", "iap", "nerfV", "nerfCursed", "nerfPelle"],
-  TD: ["purchase", "achievementMult", "achievement", "timeStudy", "eternityUpgrade", "eternityChallenge",
-    "dilationUpgrade", "realityUpgrade", "glyph", "alchemy", "imaginaryUpgrade", "pelle", "iap", "nerfV", "nerfCursed"],
-  IP: ["base", "infinityUpgrade", "achievement", "timeStudy", "dilationUpgrade", "glyph", "alchemy", "pelle", "iap",
-    "nerfTeresa", "nerfV"],
-  EP: ["base", "eternityUpgrade", "timeStudy", "glyph", "realityUpgrade", "pelle", "iap", "nerfTeresa", "nerfV"],
+  AD: [
+    "purchase",
+    "dimboost",
+    "sacrifice",
+    "achievementMult",
+    "achievement",
+    "infinityUpgrade",
+    "breakInfinityUpgrade",
+    "infinityPower",
+    "infinityChallenge",
+    "timeStudy",
+    "eternityChallenge",
+    "glyph",
+    "v",
+    "alchemy",
+    "pelle",
+    "iap",
+    "effectNC",
+    "nerfIC",
+    "nerfV",
+    "nerfCursed",
+    "nerfPelle",
+  ],
+  ID: [
+    "purchase",
+    "achievementMult",
+    "achievement",
+    "replicanti",
+    "infinityChallenge",
+    "timeStudy",
+    "eternityUpgrade",
+    "eternityChallenge",
+    "glyph",
+    "alchemy",
+    "imaginaryUpgrade",
+    "pelle",
+    "iap",
+    "nerfV",
+    "nerfCursed",
+    "nerfPelle",
+  ],
+  TD: [
+    "purchase",
+    "achievementMult",
+    "achievement",
+    "timeStudy",
+    "eternityUpgrade",
+    "eternityChallenge",
+    "dilationUpgrade",
+    "realityUpgrade",
+    "glyph",
+    "alchemy",
+    "imaginaryUpgrade",
+    "pelle",
+    "iap",
+    "nerfV",
+    "nerfCursed",
+  ],
+  IP: [
+    "base",
+    "infinityUpgrade",
+    "achievement",
+    "timeStudy",
+    "dilationUpgrade",
+    "glyph",
+    "alchemy",
+    "pelle",
+    "iap",
+    "nerfTeresa",
+    "nerfV",
+  ],
+  EP: [
+    "base",
+    "eternityUpgrade",
+    "timeStudy",
+    "glyph",
+    "realityUpgrade",
+    "pelle",
+    "iap",
+    "nerfTeresa",
+    "nerfV",
+  ],
 };
 
 // Some of the props above would contain every entry except "total" in their respective value GameDB entry, so we
@@ -38,7 +117,7 @@ function append8(key) {
 
 // Helper method to create very long lists of entries in the tree; format is "RESOURCE_SOURCE_DIMENSION"
 function getProps(resource, tier) {
-  const props = propList[resource].map(s => `${resource}_${s}`);
+  const props = propList[resource].map((s) => `${resource}_${s}`);
   if (!tier) {
     return props;
   }
@@ -87,13 +166,23 @@ export const multiplierTabTree = {
     getProps("DT"),
   ],
   tickspeed_total: [
-    ["tickspeed_base", "tickspeed_upgrades", "tickspeed_galaxies", "tickspeed_pelleTickspeedPow"],
+    [
+      "tickspeed_base",
+      "tickspeed_upgrades",
+      "tickspeed_galaxies",
+      "tickspeed_pelleTickspeedPow",
+    ],
   ],
   tickspeed_upgrades: [
     ["tickspeedUpgrades_purchased", "tickspeedUpgrades_free"],
   ],
   tickspeed_galaxies: [
-    ["galaxies_antimatter", "galaxies_replicanti", "galaxies_tachyon", "galaxies_nerfPelle"],
+    [
+      "galaxies_antimatter",
+      "galaxies_replicanti",
+      "galaxies_tachyon",
+      "galaxies_nerfPelle",
+    ],
   ],
   infinities_total: [
     getProps("infinities"),
@@ -112,8 +201,12 @@ export const multiplierTabTree = {
 // Gamespeed's two alternate displays are current and average gamespeed, distinguished by which of two
 // mutually-exclusive entries appear in the list. We explicity modify props here as needed
 const allGamespeed = multiplierTabTree.gamespeed_total[0];
-multiplierTabTree.gamespeed_total[0] = [...allGamespeed].filter(key => key !== "gamespeed_blackHoleAvg");
-multiplierTabTree.gamespeed_total[1] = [...allGamespeed].filter(key => key !== "gamespeed_blackHoleCurr");
+multiplierTabTree.gamespeed_total[0] = [...allGamespeed].filter((key) =>
+  key !== "gamespeed_blackHoleAvg"
+);
+multiplierTabTree.gamespeed_total[1] = [...allGamespeed].filter((key) =>
+  key !== "gamespeed_blackHoleCurr"
+);
 
 // DT doesn't explicitly have an entry to TP, due to it being its own total entry, so we link them together
 multiplierTabTree.DT_total[0].unshift("TP_total");
@@ -124,7 +217,27 @@ const singleRes = ["IP", "EP", "DT", "infinities", "replicanti"];
 const targetedEffects = {
   achievement: {
     checkFn: MultiplierTabHelper.achievementDimCheck,
-    AD: [23, 28, 31, 34, 43, 48, 56, 64, 65, 68, 71, 72, 73, 74, 76, 84, 91, 92, 183],
+    AD: [
+      23,
+      28,
+      31,
+      34,
+      43,
+      48,
+      56,
+      64,
+      65,
+      68,
+      71,
+      72,
+      73,
+      74,
+      76,
+      84,
+      91,
+      92,
+      183,
+    ],
     TD: [105, 128],
     IP: [85, 93, 116, 125, 141],
     DT: [132, 137],
@@ -175,14 +288,31 @@ for (const res of dimTypes) {
 
 // A few dynamically-generated props are largely useless in terms of what they connect to, in that they have very few
 // entries or have 8 identical entries, so we explicitly remove those lists for a cleaner appearance on the UI
-const removedRegexes = ["AD_sacrifice", "AD_breakInfinityUpgrade", "AD_nerfIC", "AD_infinityUpgrade", "AD_v",
-  "ID_replicanti", "ID_infinityChallenge", "ID_eternityUpgrades",
-  "TD_achievement", "TD_eternityUpgrade", "TD_dilationUpgrade", "TD_realityUpgrade",
-  ".._achievementMult", ".._glyph", ".._alchemy", ".._imaginaryUpgrade", ".._iap",
-  ".._nerfV", ".._nerfCursed", ".._nerfPelle", ".._pelle",
+const removedRegexes = [
+  "AD_sacrifice",
+  "AD_breakInfinityUpgrade",
+  "AD_nerfIC",
+  "AD_infinityUpgrade",
+  "AD_v",
+  "ID_replicanti",
+  "ID_infinityChallenge",
+  "ID_eternityUpgrades",
+  "TD_achievement",
+  "TD_eternityUpgrade",
+  "TD_dilationUpgrade",
+  "TD_realityUpgrade",
+  ".._achievementMult",
+  ".._glyph",
+  ".._alchemy",
+  ".._imaginaryUpgrade",
+  ".._iap",
+  ".._nerfV",
+  ".._nerfCursed",
+  ".._nerfPelle",
+  ".._pelle",
 ];
 const removedProps = Object.keys(multiplierTabTree)
-  .filter(key => removedRegexes.some(regex => key.match(regex)));
+  .filter((key) => removedRegexes.some((regex) => key.match(regex)));
 for (const prop of removedProps) {
   multiplierTabTree[prop] = undefined;
 }
@@ -191,24 +321,49 @@ for (const prop of removedProps) {
 // 8 identical AD multipliers, but we want to replace it with ID mults and the conversion rate
 multiplierTabTree.AD_infinityPower = [["ID_total", "ID_powerConversion"]];
 for (let dim = 1; dim <= 8; dim++) {
-  multiplierTabTree[`AD_infinityPower_${dim}`] = [["ID_total", "ID_powerConversion"]];
+  multiplierTabTree[`AD_infinityPower_${dim}`] = [[
+    "ID_total",
+    "ID_powerConversion",
+  ]];
 }
 
 // Tesseracts are added one layer deep, but we don't want to override the existing ID_purchase entry
-multiplierTabTree.ID_purchase.unshift(["ID_basePurchase", "ID_tesseractPurchase",
-  "ID_infinityGlyphSacrifice", "ID_powPurchase"]);
+multiplierTabTree.ID_purchase.unshift([
+  "ID_basePurchase",
+  "ID_tesseractPurchase",
+  "ID_infinityGlyphSacrifice",
+  "ID_powPurchase",
+]);
 for (let dim = 1; dim <= 7; dim++) {
-  multiplierTabTree[`ID_purchase_${dim}`] = [[`ID_basePurchase_${dim}`, `ID_tesseractPurchase_${dim}`,
-    "ID_powPurchase"]];
+  multiplierTabTree[`ID_purchase_${dim}`] = [[
+    `ID_basePurchase_${dim}`,
+    `ID_tesseractPurchase_${dim}`,
+    "ID_powPurchase",
+  ]];
 }
-multiplierTabTree.ID_purchase_8 = [["ID_basePurchase_8", "ID_infinityGlyphSacrifice", "ID_powPurchase"]];
+multiplierTabTree.ID_purchase_8 = [[
+  "ID_basePurchase_8",
+  "ID_infinityGlyphSacrifice",
+  "ID_powPurchase",
+]];
 
 // These are also added one layer deep
 for (let dim = 1; dim <= 7; dim++) {
-  multiplierTabTree[`TD_purchase_${dim}`] = [[`TD_basePurchase_${dim}`, `TD_powPurchase_${dim}`]];
+  multiplierTabTree[`TD_purchase_${dim}`] = [[
+    `TD_basePurchase_${dim}`,
+    `TD_powPurchase_${dim}`,
+  ]];
 }
-multiplierTabTree.TD_purchase.push(["TD_basePurchase", "TD_timeGlyphSacrifice", "TD_powPurchase"]);
-multiplierTabTree.TD_purchase_8 = [["TD_basePurchase_8", "TD_timeGlyphSacrifice", "TD_powPurchase"]];
+multiplierTabTree.TD_purchase.push([
+  "TD_basePurchase",
+  "TD_timeGlyphSacrifice",
+  "TD_powPurchase",
+]);
+multiplierTabTree.TD_purchase_8 = [[
+  "TD_basePurchase_8",
+  "TD_timeGlyphSacrifice",
+  "TD_powPurchase",
+]];
 
 // Dynamically fill effects which only affect certain dimensions, as noted in targetedEffects
 for (const res of dimTypes) {
@@ -250,6 +405,13 @@ for (const res of singleRes) {
 multiplierTabTree.ID_eternityUpgrade = [["ID_eu1", "ID_eu2", "ID_eu3"]];
 multiplierTabTree.TD_eternityUpgrade = [["TD_eu1", "TD_eu2"]];
 for (let dim = 1; dim <= 8; dim++) {
-  multiplierTabTree[`ID_eternityUpgrade_${dim}`] = [[`ID_eu1_${dim}`, `ID_eu2_${dim}`, `ID_eu3_${dim}`]];
-  multiplierTabTree[`TD_eternityUpgrade_${dim}`] = [[`TD_eu1_${dim}`, `TD_eu2_${dim}`]];
+  multiplierTabTree[`ID_eternityUpgrade_${dim}`] = [[
+    `ID_eu1_${dim}`,
+    `ID_eu2_${dim}`,
+    `ID_eu3_${dim}`,
+  ]];
+  multiplierTabTree[`TD_eternityUpgrade_${dim}`] = [[
+    `TD_eu1_${dim}`,
+    `TD_eu2_${dim}`,
+  ]];
 }

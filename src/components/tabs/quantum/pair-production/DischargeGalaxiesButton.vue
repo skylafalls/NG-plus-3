@@ -90,7 +90,7 @@ export default defineComponent({
 .o-discharge-galaxy-btn--unavailable {
   color: white;
   background: #525252;
-  border: 0.1rem solid var(--color-accent);
+  border: 0.1rem solid rgb(131, 234, 255);
   cursor: default;
   transition: 200ms;
 }

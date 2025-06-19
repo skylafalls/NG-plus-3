@@ -1,7 +1,10 @@
 import { DC } from "@/core/constants";
 
 function roundAndStr(decimal, amnt = 4) {
-  return decimal.toString().slice(0, amnt + Math.ceil(decimal.log10().toNumber()));
+  return decimal.toString().slice(
+    0,
+    amnt + Math.ceil(decimal.log10().toNumber()),
+  );
 }
 export const MatterScale = {
   proton: new Decimal("2.82e-45"),
@@ -25,7 +28,9 @@ export const MatterScale = {
       return [
         `If you wrote ${formatInt(3)} numbers a second, it would take you`,
 
-        `${roundAndStr(matter.log10().div(2437102080 * 3))} average American lifespans to write down your antimatter amount.`,
+        `${
+          roundAndStr(matter.log10().div(2437102080 * 3))
+        } average American lifespans to write down your antimatter amount.`,
       ];
     }
     if (matter.gt(DC.E1E7)) {
@@ -50,8 +55,12 @@ export const MatterScale = {
         enough to ${scale.verb} ${amount} ${scale.name}`];
     }
     const scale = this.microScale(matter);
-    return [`If every antimatter were ${format(this.proton.div(scale.amount).div(matter), 2, 1)} ${scale.name},
-      you would have enough to make a proton.`];
+    return [
+      `If every antimatter were ${
+        format(this.proton.div(scale.amount).div(matter), 2, 1)
+      } ${scale.name},
+      you would have enough to make a proton.`,
+    ];
   },
 
   microScale(matter) {
@@ -102,9 +111,21 @@ export const MatterScale = {
     { amount: new Decimal("3.555e-6"), name: "teaspoons", verb: "fill" },
     { amount: new Decimal("7.5e-4"), name: "wine bottles", verb: "fill" },
     { amount: DC.D1, name: "fridge-freezers", verb: "fill" },
-    { amount: new Decimal("2.5e3"), name: "Olympic-sized swimming pools", verb: "fill" },
-    { amount: new Decimal("2.6006e6"), name: "Great Pyramids of Giza", verb: "make" },
-    { amount: new Decimal("3.3e8"), name: "Great Walls of China", verb: "make" },
+    {
+      amount: new Decimal("2.5e3"),
+      name: "Olympic-sized swimming pools",
+      verb: "fill",
+    },
+    {
+      amount: new Decimal("2.6006e6"),
+      name: "Great Pyramids of Giza",
+      verb: "make",
+    },
+    {
+      amount: new Decimal("3.3e8"),
+      name: "Great Walls of China",
+      verb: "make",
+    },
     { amount: new Decimal("5e12"), name: "large asteroids", verb: "make" },
     { amount: new Decimal("4.5e17"), name: "dwarf planets", verb: "make" },
     { amount: new Decimal("1.08e21"), name: "Earths", verb: "make" },
@@ -118,7 +139,11 @@ export const MatterScale = {
     { amount: new Decimal("3.3e61"), name: "galaxies", verb: "make" },
     { amount: new Decimal("5e68"), name: "Local Groups", verb: "make" },
     { amount: new Decimal("1e73"), name: "Sculptor Voids", verb: "make" },
-    { amount: new Decimal("3.4e80"), name: "observable universes", verb: "make" },
+    {
+      amount: new Decimal("3.4e80"),
+      name: "observable universes",
+      verb: "make",
+    },
     { amount: new Decimal("1e113"), name: "Dimensions", verb: "make" },
     { amount: DC.C2P1024, name: "Infinity Dimensions", verb: "make" },
   ],

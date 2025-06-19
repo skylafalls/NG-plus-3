@@ -3,21 +3,20 @@ body.t-s12 {
   --s12-border-color: #27221e;
   --s12-background-gradient:
     repeating-linear-gradient(
-      50deg,
-      rgba(170, 170, 170, 10%),
-      rgba(170, 170, 170, 10%) 2rem,
-      rgba(255, 255, 255, 10%) 4rem,
-      rgba(255, 255, 255, 10%) 5rem,
-      rgba(170, 170, 170, 10%) 6rem,
-      rgba(170, 170, 170, 10%) 8rem
-    ),
-    linear-gradient(
-      -50deg,
-      rgba(60, 60, 60, 30%),
-      transparent 20%,
-      transparent 80%,
-      rgba(60, 60, 60, 30%)
-    );
+    50deg,
+    rgba(170, 170, 170, 10%),
+    rgba(170, 170, 170, 10%) 2rem,
+    rgba(255, 255, 255, 10%) 4rem,
+    rgba(255, 255, 255, 10%) 5rem,
+    rgba(170, 170, 170, 10%) 6rem,
+    rgba(170, 170, 170, 10%) 8rem
+  ), linear-gradient(
+    -50deg,
+    rgba(60, 60, 60, 30%),
+    transparent 20%,
+    transparent 80%,
+    rgba(60, 60, 60, 30%)
+  );
 
   height: 100%;
   background: url("../images/s12-bg.jpg") no-repeat;
@@ -189,14 +188,20 @@ body.t-s12 {
   background: linear-gradient(-45deg, #ffffffff, #aeb2b5);
   border: 0.2rem solid white;
   border-radius: 0;
-  box-shadow: 0 0 0.1rem 0.1rem var(--s12-border-color), inset 0 0 0.1rem 0.1rem #a0a0a0;
+  box-shadow:
+    0 0 0.1rem 0.1rem var(--s12-border-color),
+    inset 0 0 0.1rem 0.1rem #a0a0a0;
 }
 
-.t-s12 .c-modal__confirmation-toggle:hover .c-modal__confirmation-toggle__checkbox {
+.t-s12
+  .c-modal__confirmation-toggle:hover
+  .c-modal__confirmation-toggle__checkbox {
   transform: none;
 }
 
-.t-s12 .c-modal .o-primary-btn:not(.c-modal__close-btn, .c-autobuyer-box__mode-select),
+.t-s12
+  .c-modal
+  .o-primary-btn:not(.c-modal__close-btn, .c-autobuyer-box__mode-select),
 .t-s12 .c-new-game-button {
   position: relative;
   z-index: 0;
@@ -255,7 +260,9 @@ body.t-s12 {
   opacity: 0.5;
 }
 
-.t-s12 .c-modal .o-primary-btn:not(.c-modal__close-btn, .c-autobuyer-box__mode-select)::after,
+.t-s12
+  .c-modal
+  .o-primary-btn:not(.c-modal__close-btn, .c-autobuyer-box__mode-select)::after,
 .t-s12 .c-new-game-button::after {
   content: "";
   width: 100%;
@@ -313,11 +320,20 @@ body.t-s12 {
   height: 100%;
   position: absolute;
   inset: 0;
-  background-image: linear-gradient(rgba(255, 255, 255, 70%) 30%, transparent 40%);
+  background-image: linear-gradient(
+    rgba(255, 255, 255, 70%) 30%,
+    transparent 40%
+  );
 }
 
 .t-s12 .modal-progress-bar__fg {
-  background: linear-gradient(to right, #0cb826, #20da3e 20%, #20da3e 80%, #0cb826);
+  background: linear-gradient(
+    to right,
+    #0cb826,
+    #20da3e 20%,
+    #20da3e 80%,
+    #0cb826
+  );
 }
 
 .t-s12 .c-modal .c-autobuyer-box-row {

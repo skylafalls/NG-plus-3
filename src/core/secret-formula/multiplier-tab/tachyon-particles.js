@@ -8,9 +8,15 @@ export const TP = {
   total: {
     name: "Total Tachyon Particles",
     displayOverride: () => {
-      const baseTPStr = format(new Decimal(Currency.tachyonParticles.value), 2, 2);
+      const baseTPStr = format(
+        new Decimal(Currency.tachyonParticles.value),
+        2,
+        2,
+      );
       return PelleRifts.paradox.milestones[1].canBeApplied
-        ? `${baseTPStr}${formatPow(PelleRifts.paradox.milestones[1].effectValue, 1, 1)}`
+        ? `${baseTPStr}${
+          formatPow(PelleRifts.paradox.milestones[1].effectValue, 1, 1)
+        }`
         : baseTPStr;
     },
     // This is treated as a multiplier and not a prestige currency, with an overridden display;
@@ -20,13 +26,15 @@ export const TP = {
         .pow(PelleRifts.paradox.milestones[1].effectOrDefault(1));
       return TimeStudy.dilation.isBought ? baseTP : 1;
     },
-    isActive: () => PlayerProgress.realityUnlocked() || PlayerProgress.dilationUnlocked(),
+    isActive: () =>
+      PlayerProgress.realityUnlocked() || PlayerProgress.dilationUnlocked(),
     icon: MultiplierTabIcons.TACHYON_PARTICLES,
   },
   base: {
     name: "Base Tachyon Particle Count",
     isBase: true,
-    multValue: () => new Decimal(Currency.tachyonParticles.value).div(tachyonGainMultiplier()),
+    multValue: () =>
+      new Decimal(Currency.tachyonParticles.value).div(tachyonGainMultiplier()),
     isActive: () => new Decimal(Currency.tachyonParticles.value).gt(0),
     icon: MultiplierTabIcons.TACHYON_PARTICLES,
   },

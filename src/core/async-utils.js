@@ -26,7 +26,7 @@ window.Async = {
     }
     return 0;
   },
-  sleepPromise: ms => new Promise(resolve => setTimeout(resolve, ms)),
+  sleepPromise: (ms) => new Promise((resolve) => setTimeout(resolve, ms)),
   /**
    * Asynchronously run the specified function maxIter times, letting the event
    * loop run periodically. The function is run in chunks of config.batchSize;
@@ -56,9 +56,9 @@ window.Async = {
       const runResult = this._run(fun, maxIter, config);
       return config.then
         ? runResult.then(() => {
-            config.then();
-            this.enabled = true;
-          })
+          config.then();
+          this.enabled = true;
+        })
         : runResult;
     }
     for (let i = 0; i < maxIter; ++i) {
@@ -79,7 +79,11 @@ window.Async = {
     // We need to use config.progress variables because something else could change them
     // (e.g. someone speeding up offline progress)
     config.progress.maxIter = maxIter;
-    config.progress.remaining = this.runForTime(fun, config.progress.maxIter, config);
+    config.progress.remaining = this.runForTime(
+      fun,
+      config.progress.maxIter,
+      config,
+    );
     const sleepTime = config.sleepTime || 1;
     if (!config.progress.remaining) {
       return;
@@ -89,9 +93,15 @@ window.Async = {
     }
     do {
       await this.sleepPromise(sleepTime);
-      config.progress.remaining = this.runForTime(fun, config.progress.remaining, config);
+      config.progress.remaining = this.runForTime(
+        fun,
+        config.progress.remaining,
+        config,
+      );
       if (config.asyncProgress) {
-        config.asyncProgress(config.progress.maxIter - config.progress.remaining);
+        config.asyncProgress(
+          config.progress.maxIter - config.progress.remaining,
+        );
       }
     } while (config.progress.remaining > 0);
     if (config.asyncExit) {

@@ -1,4 +1,7 @@
-import { EPMultAutobuyerState, IPMultAutobuyerState } from "./prestige-currency-multiplier-autobuyer";
+import {
+  EPMultAutobuyerState,
+  IPMultAutobuyerState,
+} from "./prestige-currency-multiplier-autobuyer";
 
 import { AnnihilationAutobuyerState } from "./annihilation-autobuyer";
 import { AntimatterDimensionAutobuyerState } from "./antimatter-dimension-autobuyer";
@@ -48,7 +51,7 @@ export const Autobuyer = {
   timeTheorem: new TimeTheoremAutobuyerState(),
 };
 
-export const Autobuyers = (function () {
+export const Autobuyers = function () {
   const antimatterDimensions = Autobuyer.antimatterDimension.zeroIndexed;
   const infinityDimensions = Autobuyer.infinityDimension.zeroIndexed;
   const timeDimensions = Autobuyer.timeDimension.zeroIndexed;
@@ -109,15 +112,17 @@ export const Autobuyers = (function () {
     ),
 
     get unlocked() {
-      return Autobuyers.all.filter(a => a.isUnlocked || a.isBought);
+      return Autobuyers.all.filter((a) => a.isUnlocked || a.isBought);
     },
 
     get hasAutobuyersForEditModal() {
-      return [Autobuyer.dimboost,
+      return [
+        Autobuyer.dimboost,
         Autobuyer.galaxy,
         Autobuyer.bigCrunch,
         Autobuyer.eternity,
-        Autobuyer.reality].some(autobuyer => autobuyer.isUnlocked);
+        Autobuyer.reality,
+      ].some((autobuyer) => autobuyer.isUnlocked);
     },
 
     toggle() {
@@ -142,7 +147,9 @@ export const Autobuyers = (function () {
     },
 
     resetTick(prestigeEvent) {
-      const autobuyers = Autobuyers.all.filter(n => n.resetTick !== undefined);
+      const autobuyers = Autobuyers.all.filter((n) =>
+        n.resetTick !== undefined
+      );
       for (const autobuyer of autobuyers) {
         autobuyer.resetTick(prestigeEvent);
       }
@@ -154,13 +161,28 @@ export const Autobuyers = (function () {
       }
     },
   };
-}());
+}();
 
 EventHub.logic.on(GAME_EVENT.ETERNITY_RESET_AFTER, () => Autobuyers.reset());
 EventHub.logic.on(GAME_EVENT.REALITY_RESET_AFTER, () => Autobuyers.reset());
 
-EventHub.logic.on(GAME_EVENT.DIMBOOST_AFTER, () => Autobuyers.resetTick(PRESTIGE_EVENT.DIMENSION_BOOST));
-EventHub.logic.on(GAME_EVENT.GALAXY_RESET_AFTER, () => Autobuyers.resetTick(PRESTIGE_EVENT.ANTIMATTER_GALAXY));
-EventHub.logic.on(GAME_EVENT.BIG_CRUNCH_AFTER, () => Autobuyers.resetTick(PRESTIGE_EVENT.INFINITY));
-EventHub.logic.on(GAME_EVENT.ETERNITY_RESET_AFTER, () => Autobuyers.resetTick(PRESTIGE_EVENT.ETERNITY));
-EventHub.logic.on(GAME_EVENT.REALITY_RESET_AFTER, () => Autobuyers.resetTick(PRESTIGE_EVENT.REALITY));
+EventHub.logic.on(
+  GAME_EVENT.DIMBOOST_AFTER,
+  () => Autobuyers.resetTick(PRESTIGE_EVENT.DIMENSION_BOOST),
+);
+EventHub.logic.on(
+  GAME_EVENT.GALAXY_RESET_AFTER,
+  () => Autobuyers.resetTick(PRESTIGE_EVENT.ANTIMATTER_GALAXY),
+);
+EventHub.logic.on(
+  GAME_EVENT.BIG_CRUNCH_AFTER,
+  () => Autobuyers.resetTick(PRESTIGE_EVENT.INFINITY),
+);
+EventHub.logic.on(
+  GAME_EVENT.ETERNITY_RESET_AFTER,
+  () => Autobuyers.resetTick(PRESTIGE_EVENT.ETERNITY),
+);
+EventHub.logic.on(
+  GAME_EVENT.REALITY_RESET_AFTER,
+  () => Autobuyers.resetTick(PRESTIGE_EVENT.REALITY),
+);

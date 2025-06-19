@@ -15,42 +15,84 @@ GlobalErrorHandler.cleanStart = true;
 
 export function playerInfinityUpgradesOnReset() {
   const infinityUpgrades = new Set(
-    ["timeMult", "dimMult", "timeMult2",
-      "skipReset1", "skipReset2", "unspentBonus",
-      "27Mult", "18Mult", "36Mult", "resetMult",
-      "skipReset3", "passiveGen", "45Mult",
-      "resetBoost", "galaxyBoost", "skipResetGalaxy",
-      "ipOffline"],
+    [
+      "timeMult",
+      "dimMult",
+      "timeMult2",
+      "skipReset1",
+      "skipReset2",
+      "unspentBonus",
+      "27Mult",
+      "18Mult",
+      "36Mult",
+      "resetMult",
+      "skipReset3",
+      "passiveGen",
+      "45Mult",
+      "resetBoost",
+      "galaxyBoost",
+      "skipResetGalaxy",
+      "ipOffline",
+    ],
   );
 
   const breakInfinityUpgrades = new Set(
-    ["timeMult", "dimMult", "timeMult2",
-      "skipReset1", "skipReset2", "unspentBonus",
-      "27Mult", "18Mult", "36Mult", "resetMult",
-      "skipReset3", "passiveGen", "45Mult",
-      "resetBoost", "galaxyBoost", "skipResetGalaxy",
-      "totalMult", "currentMult", "postGalaxy",
-      "challengeMult", "achievementMult", "infinitiedMult",
-      "infinitiedGeneration", "autoBuyerUpgrade", "autobuyMaxDimboosts",
-      "ipOffline"],
+    [
+      "timeMult",
+      "dimMult",
+      "timeMult2",
+      "skipReset1",
+      "skipReset2",
+      "unspentBonus",
+      "27Mult",
+      "18Mult",
+      "36Mult",
+      "resetMult",
+      "skipReset3",
+      "passiveGen",
+      "45Mult",
+      "resetBoost",
+      "galaxyBoost",
+      "skipResetGalaxy",
+      "totalMult",
+      "currentMult",
+      "postGalaxy",
+      "challengeMult",
+      "achievementMult",
+      "infinitiedMult",
+      "infinitiedGeneration",
+      "autoBuyerUpgrade",
+      "autobuyMaxDimboosts",
+      "ipOffline",
+    ],
   );
 
   if (PelleUpgrade.keepBreakInfinityUpgrades.canBeApplied) {
-    player.infinityUpgrades = new Set([...player.infinityUpgrades].filter(u => breakInfinityUpgrades.has(u)));
+    player.infinityUpgrades = new Set(
+      [...player.infinityUpgrades].filter((u) => breakInfinityUpgrades.has(u)),
+    );
     return;
   }
 
   if (PelleUpgrade.keepInfinityUpgrades.canBeApplied) {
-    player.infinityUpgrades = new Set([...player.infinityUpgrades].filter(u => infinityUpgrades.has(u)));
+    player.infinityUpgrades = new Set(
+      [...player.infinityUpgrades].filter((u) => infinityUpgrades.has(u)),
+    );
     player.infinityRebuyables = [0, 0, 0];
     GameCache.tickSpeedMultDecrease.invalidate();
     GameCache.dimensionMultDecrease.invalidate();
     return;
   }
 
-  if (RealityUpgrade(10).isBought || EternityMilestone.keepBreakUpgrades.isReached) {
+  if (
+    RealityUpgrade(10).isBought || EternityMilestone.keepBreakUpgrades.isReached
+  ) {
     player.infinityUpgrades = breakInfinityUpgrades;
-    player.infinityRebuyables = [new Decimal(8), new Decimal(7), new Decimal(10)];
+    player.infinityRebuyables = [
+      new Decimal(8),
+      new Decimal(7),
+      new Decimal(10),
+    ];
   } else if (EternityMilestone.keepInfinityUpgrades.isReached) {
     player.infinityUpgrades = infinityUpgrades;
     player.infinityRebuyables = [new Decimal(), new Decimal(), new Decimal()];
@@ -84,7 +126,9 @@ export function breakInfinity() {
   Achievement(61).tryUnlock();
   player.break = !player.break;
   TabNotification.ICUnlock.tryTrigger();
-  EventHub.dispatch(player.break ? GAME_EVENT.BREAK_INFINITY : GAME_EVENT.FIX_INFINITY);
+  EventHub.dispatch(
+    player.break ? GAME_EVENT.BREAK_INFINITY : GAME_EVENT.FIX_INFINITY,
+  );
   GameUI.update();
 }
 
@@ -95,13 +139,17 @@ export function gainedInfinityPoints() {
     TimeStudy(111),
   )).toNumber();
   if (Pelle.isDisabled("IPMults")) {
-    return Decimal.pow10(player.records.thisInfinity.maxAM.max(1).log10().div(div).sub(0.75))
+    return Decimal.pow10(
+      player.records.thisInfinity.maxAM.max(1).log10().div(div).sub(0.75),
+    )
       .timesEffectsOf(PelleRifts.vacuum)
       .times(Pelle.specialGlyphEffect.infinity)
       .floor();
   }
   let ip = player.break
-    ? Decimal.pow10(player.records.thisInfinity.maxAM.max(1).log10().div(div).sub(0.75))
+    ? Decimal.pow10(
+      player.records.thisInfinity.maxAM.max(1).log10().div(div).sub(0.75),
+    )
     : new Decimal(308 / div);
   if (Effarig.isRunning && Effarig.currentStage === EFFARIG_STAGES.ETERNITY) {
     ip = ip.min(DC.E200);
@@ -123,22 +171,28 @@ export function gainedInfinityPoints() {
 
 function totalEPMult() {
   return Pelle.isDisabled("EPMults")
-    ? Pelle.specialGlyphEffect.time.timesEffectOf(PelleRifts.vacuum.milestones[2])
+    ? Pelle.specialGlyphEffect.time.timesEffectOf(
+      PelleRifts.vacuum.milestones[2],
+    )
     : getAdjustedGlyphEffect("cursedEP")
-        .timesEffectsOf(
-          EternityUpgrade.epMult,
-          TimeStudy(61),
-          TimeStudy(122),
-          TimeStudy(121),
-          TimeStudy(123),
-          RealityUpgrade(12),
-          GlyphEffect.epMult,
-        );
+      .timesEffectsOf(
+        EternityUpgrade.epMult,
+        TimeStudy(61),
+        TimeStudy(122),
+        TimeStudy(121),
+        TimeStudy(123),
+        RealityUpgrade(12),
+        GlyphEffect.epMult,
+      );
 }
 
 export function gainedEternityPoints() {
-  let ep = DC.D5.pow(player.records.thisEternity.maxIP.plus(
-    gainedInfinityPoints()).max(1).log10().div(new Decimal(308).sub(PelleRifts.recursion.effectValue)).sub(0.7))
+  let ep = DC.D5.pow(
+    player.records.thisEternity.maxIP.plus(
+      gainedInfinityPoints(),
+    ).max(1).log10().div(new Decimal(308).sub(PelleRifts.recursion.effectValue))
+      .sub(0.7),
+  )
     .times(totalEPMult());
 
   if (Teresa.isRunning) {
@@ -156,7 +210,11 @@ export function gainedEternityPoints() {
 }
 
 export function requiredIPForEP(epAmount) {
-  return Decimal.pow10((Decimal.log10(Decimal.divide(epAmount, totalEPMult()), 5).times(308).plus(0.7)))
+  return Decimal.pow10(
+    Decimal.log10(Decimal.divide(epAmount, totalEPMult()), 5).times(308).plus(
+      0.7,
+    ),
+  )
     .clampMin(Number.MAX_VALUE);
 }
 
@@ -191,7 +249,14 @@ export function addInfinityTime(trueTime, time, realTime, ip, infinities) {
     challenge = `Infinity Challenge ${player.challenge.infinity.current}`;
   }
   player.records.recentInfinities.pop();
-  player.records.recentInfinities.unshift([trueTime, time, realTime, ip, infinities, challenge]);
+  player.records.recentInfinities.unshift([
+    trueTime,
+    time,
+    realTime,
+    ip,
+    infinities,
+    challenge,
+  ]);
   GameCache.bestRunIPPM.invalidate();
 }
 
@@ -207,7 +272,9 @@ export function resetInfinityRuns() {
 // milestone and turned on infinity autobuyer with 1 minute or less per crunch
 export function getInfinitiedMilestoneReward(ms, considerMilestoneReached) {
   return Autobuyer.bigCrunch.autoInfinitiesAvailable(considerMilestoneReached)
-    ? Decimal.floor(player.records.thisEternity.bestInfinitiesPerMs.times(ms).dividedBy(2))
+    ? Decimal.floor(
+      player.records.thisEternity.bestInfinitiesPerMs.times(ms).dividedBy(2),
+    )
     : DC.D0;
 }
 
@@ -216,15 +283,27 @@ export function addEternityTime(trueTime, time, realTime, ep, eternities) {
   if (player.challenge.eternity.current) {
     const currEC = player.challenge.eternity.current;
     const ec = EternityChallenge(currEC);
-    const challText = player.dilation.active ? "Dilated EC" : "Eternity Challenge";
-    challenge = `${challText} ${currEC} (${formatInt(ec.completions)}/${formatInt(ec.maxCompletions)})`;
+    const challText = player.dilation.active
+      ? "Dilated EC"
+      : "Eternity Challenge";
+    challenge = `${challText} ${currEC} (${formatInt(ec.completions)}/${
+      formatInt(ec.maxCompletions)
+    })`;
   } else if (player.dilation.active) {
     challenge = "Time Dilation";
   }
   // If we call this function outside of dilation, it uses the existing AM and produces an erroneous number
   const gainedTP = player.dilation.active ? getTachyonGain() : DC.D0;
   player.records.recentEternities.pop();
-  player.records.recentEternities.unshift([trueTime, time, realTime, ep, eternities, challenge, gainedTP]);
+  player.records.recentEternities.unshift([
+    trueTime,
+    time,
+    realTime,
+    ep,
+    eternities,
+    challenge,
+    gainedTP,
+  ]);
   GameCache.averageRealTimePerEternity.invalidate();
 }
 
@@ -240,13 +319,16 @@ export function resetEternityRuns() {
 // have the auto-eternity milestone and turned on eternity autobuyer with 0 EP
 export function getEternitiedMilestoneReward(ms, considerMilestoneReached) {
   return Autobuyer.eternity.autoEternitiesAvailable(considerMilestoneReached)
-    ? Decimal.floor(player.records.thisReality.bestEternitiesPerMs.times(ms).dividedBy(2))
+    ? Decimal.floor(
+      player.records.thisReality.bestEternitiesPerMs.times(ms).dividedBy(2),
+    )
     : DC.D0;
 }
 
 function isOfflineEPGainEnabled() {
-  return player.options.offlineProgress && !Autobuyer.bigCrunch.autoInfinitiesAvailable()
-    && !Autobuyer.eternity.autoEternitiesAvailable();
+  return player.options.offlineProgress &&
+    !Autobuyer.bigCrunch.autoInfinitiesAvailable() &&
+    !Autobuyer.eternity.autoEternitiesAvailable();
 }
 
 export function getOfflineEPGain(ms) {
@@ -254,13 +336,23 @@ export function getOfflineEPGain(ms) {
     return DC.D0;
   }
   return player.records.bestEternity.bestEPminReality.times(
-    TimeSpan.fromMilliseconds(new Decimal(ms)).totalMinutes.div(4));
+    TimeSpan.fromMilliseconds(new Decimal(ms)).totalMinutes.div(4),
+  );
 }
 
 // Note: realities and ampFactor must be distinct because there are a few things farther up which only multiply
 // reality count and none of the other things
 
-export function addRealityTime(trueTime, time, realTime, rm, level, realities, ampFactor, projIM) {
+export function addRealityTime(
+  trueTime,
+  time,
+  realTime,
+  rm,
+  level,
+  realities,
+  ampFactor,
+  projIM,
+) {
   let reality = "";
   const celestials = [Teresa, Effarig, Enslaved, V, Ra, Laitela];
   for (const cel of celestials) {
@@ -270,8 +362,17 @@ export function addRealityTime(trueTime, time, realTime, rm, level, realities, a
   }
   const shards = Effarig.shardsGained;
   player.records.recentRealities.pop();
-  player.records.recentRealities.unshift([trueTime, time, realTime, rm.times(ampFactor),
-    realities, reality, level, shards.mul(ampFactor), projIM]);
+  player.records.recentRealities.unshift([
+    trueTime,
+    time,
+    realTime,
+    rm.times(ampFactor),
+    realities,
+    reality,
+    level,
+    shards.mul(ampFactor),
+    projIM,
+  ]);
 }
 
 export function gainedInfinities() {
@@ -308,16 +409,25 @@ export const GAME_SPEED_EFFECT = {
 };
 
 /**
-  * @param {number[]?} effectsToConsider A list of various game speed changing effects to apply when calculating
-  *   the game speed.  If left undefined, all effects will be applied.
-  * @param {number?} blackHolesActiveOverride A numerical value which forces all black holes up to its specified index
-  *   to be active for the purposes of game speed calculation. This is only used during offline black hole stuff.
-  */
-export function getGameSpeedupFactor(effectsToConsider, blackHolesActiveOverride) {
+ * @param {number[]?} effectsToConsider A list of various game speed changing effects to apply when calculating
+ *   the game speed.  If left undefined, all effects will be applied.
+ * @param {number?} blackHolesActiveOverride A numerical value which forces all black holes up to its specified index
+ *   to be active for the purposes of game speed calculation. This is only used during offline black hole stuff.
+ */
+export function getGameSpeedupFactor(
+  effectsToConsider,
+  blackHolesActiveOverride,
+) {
   let effects;
   if (effectsToConsider === undefined) {
-    effects = [GAME_SPEED_EFFECT.FIXED_SPEED, GAME_SPEED_EFFECT.TIME_GLYPH, GAME_SPEED_EFFECT.BLACK_HOLE,
-      GAME_SPEED_EFFECT.TIME_STORAGE, GAME_SPEED_EFFECT.SINGULARITY_MILESTONE, GAME_SPEED_EFFECT.NERFS];
+    effects = [
+      GAME_SPEED_EFFECT.FIXED_SPEED,
+      GAME_SPEED_EFFECT.TIME_GLYPH,
+      GAME_SPEED_EFFECT.BLACK_HOLE,
+      GAME_SPEED_EFFECT.TIME_STORAGE,
+      GAME_SPEED_EFFECT.SINGULARITY_MILESTONE,
+      GAME_SPEED_EFFECT.NERFS,
+    ];
   } else {
     effects = effectsToConsider;
   }
@@ -343,14 +453,18 @@ export function getGameSpeedupFactor(effectsToConsider, blackHolesActiveOverride
         if (!isActive) {
           break;
         }
-        factor = factor.mul(blackHole.power.pow(BlackHoles.unpauseAccelerationFactor));
+        factor = factor.mul(
+          blackHole.power.pow(BlackHoles.unpauseAccelerationFactor),
+        );
         factor = factor.mul(VUnlocks.achievementBH.effectOrDefault(1));
       }
     }
   }
 
   if (effects.includes(GAME_SPEED_EFFECT.SINGULARITY_MILESTONE)) {
-    factor = factor.mul(SingularityMilestone.gamespeedFromSingularities.effectOrDefault(1));
+    factor = factor.mul(
+      SingularityMilestone.gamespeedFromSingularities.effectOrDefault(1),
+    );
   }
 
   if (effects.includes(GAME_SPEED_EFFECT.TIME_GLYPH)) {
@@ -358,7 +472,10 @@ export function getGameSpeedupFactor(effectsToConsider, blackHolesActiveOverride
     factor = factor.pow(getAdjustedGlyphEffect("effarigblackhole"));
   }
 
-  if (Enslaved.isStoringGameTime && effects.includes(GAME_SPEED_EFFECT.TIME_STORAGE)) {
+  if (
+    Enslaved.isStoringGameTime &&
+    effects.includes(GAME_SPEED_EFFECT.TIME_STORAGE)
+  ) {
     const storedTimeWeight = Ra.unlocks.autoPulseTime.canBeApplied ? 0.99 : 1;
     factor = factor.mul(1 - storedTimeWeight).add(storedTimeWeight);
   }
@@ -369,7 +486,8 @@ export function getGameSpeedupFactor(effectsToConsider, blackHolesActiveOverride
     if (Effarig.isRunning) {
       factor = Effarig.multiplier(factor);
     } else if (Laitela.isRunning) {
-      const nerfModifier = Time.thisRealityRealTime.totalMinutes.div(10).clampMax(1);
+      const nerfModifier = Time.thisRealityRealTime.totalMinutes.div(10)
+        .clampMax(1);
       factor = factor.pow(nerfModifier);
     }
   }
@@ -384,10 +502,10 @@ export function getGameSpeedupFactor(effectsToConsider, blackHolesActiveOverride
 export function getGameSpeedupForDisplay() {
   const speedFactor = getGameSpeedupFactor();
   if (
-    Enslaved.isAutoReleasing
-    && Enslaved.canRelease(true)
-    && !BlackHoles.areNegative
-    && !Pelle.isDisabled("blackhole")
+    Enslaved.isAutoReleasing &&
+    Enslaved.canRelease(true) &&
+    !BlackHoles.areNegative &&
+    !Pelle.isDisabled("blackhole")
   ) {
     return Decimal.max(Enslaved.autoReleaseSpeed, speedFactor);
   }
@@ -411,7 +529,10 @@ export function trueTimeMechanics(trueDiff) {
   Autobuyers.tick();
   Tutorial.tutorialLoop();
 
-  if (Achievement(165).isUnlocked && player.celestials.effarig.autoAdjustGlyphWeights) {
+  if (
+    Achievement(165).isUnlocked &&
+    player.celestials.effarig.autoAdjustGlyphWeights
+  ) {
     autoAdjustGlyphWeights();
   }
 }
@@ -424,7 +545,8 @@ export function realTimeMechanics(realDiff) {
   Ra.memoryTick(realDiff, !Enslaved.isStoringRealTime);
   if (AlchemyResource.momentum.isUnlocked) {
     player.celestials.ra.momentumTime = player.celestials.ra.momentumTime.add(
-      realDiff.times(Achievement(175).effectOrDefault(1)));
+      realDiff.times(Achievement(175).effectOrDefault(1)),
+    );
   }
 
   DarkMatterDimensions.tick(realDiff);
@@ -432,9 +554,12 @@ export function realTimeMechanics(realDiff) {
   // When storing real time, skip everything else having to do with production once stats are updated
   if (Enslaved.isStoringRealTime) {
     player.records.realTimePlayed = player.records.realTimePlayed.add(realDiff);
-    player.records.thisInfinity.realTime = player.records.thisInfinity.realTime.add(realDiff);
-    player.records.thisEternity.realTime = player.records.thisEternity.realTime.add(realDiff);
-    player.records.thisReality.realTime = player.records.thisReality.realTime.add(realDiff);
+    player.records.thisInfinity.realTime = player.records.thisInfinity.realTime
+      .add(realDiff);
+    player.records.thisEternity.realTime = player.records.thisEternity.realTime
+      .add(realDiff);
+    player.records.thisReality.realTime = player.records.thisReality.realTime
+      .add(realDiff);
     Enslaved.storeRealTime(realDiff);
     // Most autobuyers will only tick usefully on the very first tick, but this needs to be here in order to allow
     // the autobuyers unaffected by time storage to tick as well
@@ -468,7 +593,7 @@ export function gameLoop(passedDiff, options = {}) {
   const passDiff = passedDiff === undefined
     ? Math.clamp(thisUpdate - player.lastUpdate, 1, 8.64e7)
     : passedDiff;
-    // This is really, really bad but we dont want 0 getting passed into every function on the fucking earth
+  // This is really, really bad but we dont want 0 getting passed into every function on the fucking earth
   let diff = new Decimal(passDiff);
   const trueDiff = passDiff === undefined
     ? Math.clamp(thisUpdate - player.lastUpdate, 1, 8.64e7)
@@ -485,7 +610,10 @@ export function gameLoop(passedDiff, options = {}) {
   // result in a ~1 second tick rate for browsers.
   // Note that we have to explicitly call all the real-time mechanics with the existing value of realDiff, because
   // simply letting it run through simulateTime seems to result in it using zero
-  if (player.options.hibernationCatchup && passDiff === undefined && trueDiff > 6e4) {
+  if (
+    player.options.hibernationCatchup && passDiff === undefined &&
+    trueDiff > 6e4
+  ) {
     GameIntervals.gameLoop.stop();
     simulateTime(trueDiff / 1000, true);
     trueTimeMechanics(trueDiff);
@@ -509,6 +637,7 @@ export function gameLoop(passedDiff, options = {}) {
   GameCache.antimatterDimensionFinalMultipliers.invalidate();
   GameCache.infinityDimensionCommonMultiplier.invalidate();
   GameCache.timeDimensionCommonMultiplier.invalidate();
+  GameCache.metaDimensionCommonMultiplier.invalidate();
   GameCache.totalIPMult.invalidate();
 
   const fixedSpeedActive = EternityChallenge(12).isRunning;
@@ -525,13 +654,26 @@ export function gameLoop(passedDiff, options = {}) {
     if (Enslaved.isStoringGameTime && !fixedSpeedActive) {
       // These variables are the actual game speed used and the game speed unaffected by time storage, respectively
       const reducedTimeFactor = getGameSpeedupFactor();
-      const totalTimeFactor = getGameSpeedupFactor([GAME_SPEED_EFFECT.FIXED_SPEED, GAME_SPEED_EFFECT.TIME_GLYPH,
-        GAME_SPEED_EFFECT.BLACK_HOLE, GAME_SPEED_EFFECT.SINGULARITY_MILESTONE]);
-      const amplification = Ra.unlocks.improvedStoredTime.effects.gameTimeAmplification.effectOrDefault(1);
+      const totalTimeFactor = getGameSpeedupFactor([
+        GAME_SPEED_EFFECT.FIXED_SPEED,
+        GAME_SPEED_EFFECT.TIME_GLYPH,
+        GAME_SPEED_EFFECT.BLACK_HOLE,
+        GAME_SPEED_EFFECT.SINGULARITY_MILESTONE,
+      ]);
+      const amplification = Ra.unlocks.improvedStoredTime.effects
+        .gameTimeAmplification.effectOrDefault(1);
       const beforeStore = player.celestials.enslaved.stored;
-      player.celestials.enslaved.stored = Decimal.clampMax(player.celestials.enslaved.stored
-        .add(diff.times(totalTimeFactor.sub(reducedTimeFactor)).times(amplification)), Enslaved.timeCap);
-      Enslaved.currentBlackHoleStoreAmountPerMs = (player.celestials.enslaved.stored.sub(beforeStore)).div(diff);
+      player.celestials.enslaved.stored = Decimal.clampMax(
+        player.celestials.enslaved.stored
+          .add(
+            diff.times(totalTimeFactor.sub(reducedTimeFactor)).times(
+              amplification,
+            ),
+          ),
+        Enslaved.timeCap,
+      );
+      Enslaved.currentBlackHoleStoreAmountPerMs =
+        (player.celestials.enslaved.stored.sub(beforeStore)).div(diff);
       speedFactor = reducedTimeFactor;
     }
     diff = diff.times(speedFactor);
@@ -539,7 +681,8 @@ export function gameLoop(passedDiff, options = {}) {
     diff = diff.times(getGameSpeedupFactor());
     Enslaved.currentBlackHoleStoreAmountPerMs = DC.D0;
   }
-  player.celestials.ra.peakGamespeed = player.celestials.ra.peakGamespeed.clampMin(getGameSpeedupFactor());
+  player.celestials.ra.peakGamespeed = player.celestials.ra.peakGamespeed
+    .clampMin(getGameSpeedupFactor());
   Enslaved.isReleaseTick = false;
 
   // These need to all be done consecutively in order to minimize the chance of a reset occurring between real time
@@ -550,16 +693,27 @@ export function gameLoop(passedDiff, options = {}) {
     player.records.realTimeDoomed = player.records.realTimeDoomed.add(realDiff);
     player.records.realTimePlayed = player.records.realTimePlayed.add(realDiff);
     player.records.totalTimePlayed = player.records.totalTimePlayed.add(diff);
-    player.records.thisInfinity.realTime = player.records.thisInfinity.realTime.add(realDiff);
-    player.records.thisInfinity.time = player.records.thisInfinity.time.add(diff);
-    player.records.thisEternity.realTime = player.records.thisEternity.realTime.add(realDiff);
-    if (Enslaved.isRunning && Enslaved.feltEternity && !EternityChallenge(12).isRunning) {
+    player.records.thisInfinity.realTime = player.records.thisInfinity.realTime
+      .add(realDiff);
+    player.records.thisInfinity.time = player.records.thisInfinity.time.add(
+      diff,
+    );
+    player.records.thisEternity.realTime = player.records.thisEternity.realTime
+      .add(realDiff);
+    if (
+      Enslaved.isRunning && Enslaved.feltEternity &&
+      !EternityChallenge(12).isRunning
+    ) {
       player.records.thisEternity.time = player.records.thisEternity.time.add(
-        diff.times(1 + Currency.eternities.value.min(1e66).toNumber()));
+        diff.times(1 + Currency.eternities.value.min(1e66).toNumber()),
+      );
     } else {
-      player.records.thisEternity.time = player.records.thisEternity.time.add(diff);
+      player.records.thisEternity.time = player.records.thisEternity.time.add(
+        diff,
+      );
     }
-    player.records.thisReality.realTime = player.records.thisReality.realTime.add(realDiff);
+    player.records.thisReality.realTime = player.records.thisReality.realTime
+      .add(realDiff);
     player.records.thisReality.time = player.records.thisReality.time.add(diff);
 
     player.records.trueTimePlayed += trueDiff;
@@ -583,7 +737,9 @@ export function gameLoop(passedDiff, options = {}) {
   applyAutoprestige(realDiff);
   updateImaginaryMachines(realDiff);
 
-  const uncountabilityGain = new Decimal(AlchemyResource.uncountability.effectValue)
+  const uncountabilityGain = new Decimal(
+    AlchemyResource.uncountability.effectValue,
+  )
     .times(Time.realDeltaTime.totalSeconds);
   Currency.realities.add(uncountabilityGain);
   Currency.perkPoints.add(uncountabilityGain);
@@ -600,8 +756,11 @@ export function gameLoop(passedDiff, options = {}) {
   InfinityDimensions.tick(diff);
   AntimatterDimensions.tick(diff);
 
-  const gain = Decimal.clampMin(FreeTickspeed.fromShards(Currency.timeShards.value).newAmount
-    .sub(player.totalTickGained), 0);
+  const gain = Decimal.clampMin(
+    FreeTickspeed.fromShards(Currency.timeShards.value).newAmount
+      .sub(player.totalTickGained),
+    0,
+  );
   player.totalTickGained = player.totalTickGained.add(gain);
 
   updatePrestigeRates();
@@ -622,10 +781,14 @@ export function gameLoop(passedDiff, options = {}) {
   // Unlocks dilation at a certain total TT count for free, but we add the cost first in order to make
   // sure that TT count doesn't go negative and that we can actually buy it. This technically bumps the max theorem
   // amount up as well, but at this point of the game 5k TT is insignificant to basically all other sources of TT.
-  if (Ra.unlocks.autoUnlockDilation.canBeApplied
-    && Currency.timeTheorems.max.gte(TimeStudy.dilation.totalTimeTheoremRequirement)
-    && !isInCelestialReality()
-    && !Pelle.isDoomed) {
+  if (
+    Ra.unlocks.autoUnlockDilation.canBeApplied &&
+    Currency.timeTheorems.max.gte(
+      TimeStudy.dilation.totalTimeTheoremRequirement,
+    ) &&
+    !isInCelestialReality() &&
+    !Pelle.isDoomed
+  ) {
     Currency.timeTheorems.add(TimeStudy.dilation.cost);
     TimeStudy.dilation.purchase(true);
   }
@@ -638,7 +801,8 @@ export function gameLoop(passedDiff, options = {}) {
   // There are some external checks which prevent excessive resource gain with Teresa-25; it may give TP outside of
   // dilation, but the TP gain function is also coded to behave differently if it's active
   const teresa1 = player.dilation.active && Ra.unlocks.autoTP.canBeApplied;
-  const teresa25 = !isInCelestialReality() && Ra.unlocks.unlockDilationStartingTP.canBeApplied;
+  const teresa25 = !isInCelestialReality() &&
+    Ra.unlocks.unlockDilationStartingTP.canBeApplied;
   if ((teresa1 || teresa25) && !Pelle.isDoomed) {
     rewardTP();
   }
@@ -647,7 +811,10 @@ export function gameLoop(passedDiff, options = {}) {
     player.celestials.enslaved.hintUnlockProgress += Enslaved.isRunning
       ? realDiff.clampMax(1e10).toNumber()
       : realDiff.mul(0.4).clampMax(1e10).toNumber();
-    if (player.celestials.enslaved.hintUnlockProgress > (TimeSpan.fromHours(5).totalMilliseconds.toNumber())) {
+    if (
+      player.celestials.enslaved.hintUnlockProgress >
+        (TimeSpan.fromHours(5).totalMilliseconds.toNumber())
+    ) {
       EnslavedProgress.hintsUnlocked.giveProgress();
       Enslaved.quotes.hintUnlock.show();
     }
@@ -668,16 +835,21 @@ export function gameLoop(passedDiff, options = {}) {
   // Stopping these checks after CREDITS_START reduces lag and allows for the glyph customization modal to appear
   if (GameEnd.endState < END_STATE_MARKERS.CREDITS_START) {
     if (Tabs.current.isPermanentlyHidden) {
-      const tab = Tabs.all.reverse().find(t => !t.isPermanentlyHidden && t.id !== 10);
+      const tab = Tabs.all.reverse().find((t) =>
+        !t.isPermanentlyHidden && t.id !== 10
+      );
       if (tab) {
         tab.show(true);
       } else {
-        [...Tab.dimensions.subtabs].reverse().find(t => !t.isPermanentlyHidden).show(true);
+        [...Tab.dimensions.subtabs].reverse().find((t) =>
+          !t.isPermanentlyHidden
+        ).show(true);
       }
     }
 
-    if (Tabs.current.subtabs.find(t => t.isOpen).isPermanentlyHidden) {
-      [...Tab.dimensions.subtabs].reverse().find(t => !t.isPermanentlyHidden).show(true);
+    if (Tabs.current.subtabs.find((t) => t.isOpen).isPermanentlyHidden) {
+      [...Tab.dimensions.subtabs].reverse().find((t) => !t.isPermanentlyHidden)
+        .show(true);
     }
   }
 
@@ -688,20 +860,34 @@ export function gameLoop(passedDiff, options = {}) {
 }
 
 function updatePrestigeRates() {
-  const currentIPmin = gainedInfinityPoints().div(Decimal.max(0.0005, Time.thisInfinityRealTime.totalMinutes));
-  if (currentIPmin.gt(player.records.thisInfinity.bestIPmin) && Player.canCrunch) {
+  const currentIPmin = gainedInfinityPoints().div(
+    Decimal.max(0.0005, Time.thisInfinityRealTime.totalMinutes),
+  );
+  if (
+    currentIPmin.gt(player.records.thisInfinity.bestIPmin) && Player.canCrunch
+  ) {
     player.records.thisInfinity.bestIPmin = currentIPmin;
     player.records.thisInfinity.bestIPminVal = gainedInfinityPoints();
   }
 
-  const currentEPmin = gainedEternityPoints().dividedBy(Decimal.max(0.0005, Time.thisEternityRealTime.totalMinutes));
-  if (currentEPmin.gt(player.records.thisEternity.bestEPmin) && Player.canEternity) {
+  const currentEPmin = gainedEternityPoints().dividedBy(
+    Decimal.max(0.0005, Time.thisEternityRealTime.totalMinutes),
+  );
+  if (
+    currentEPmin.gt(player.records.thisEternity.bestEPmin) && Player.canEternity
+  ) {
     player.records.thisEternity.bestEPmin = currentEPmin;
     player.records.thisEternity.bestEPminVal = gainedEternityPoints();
   }
 
-  const currentRSmin = Effarig.shardsGained.div(Decimal.max(0.0005, Time.thisRealityRealTime.totalMinutes));
-  if (currentRSmin.gt(player.records.thisReality.bestRSmin && isRealityAvailable())) {
+  const currentRSmin = Effarig.shardsGained.div(
+    Decimal.max(0.0005, Time.thisRealityRealTime.totalMinutes),
+  );
+  if (
+    currentRSmin.gt(
+      player.records.thisReality.bestRSmin && isRealityAvailable(),
+    )
+  ) {
     player.records.thisReality.bestRSmin = currentRSmin;
     player.records.thisReality.bestRSminVal = Effarig.shardsGained;
   }
@@ -715,19 +901,31 @@ function passivePrestigeGen() {
       RealityUpgrade(3),
       RealityUpgrade(14),
     );
-    eternitiedGain = Decimal.times(eternitiedGain, getAdjustedGlyphEffect("timeetermult"));
+    eternitiedGain = Decimal.times(
+      eternitiedGain,
+      getAdjustedGlyphEffect("timeetermult"),
+    );
     eternitiedGain = new Decimal(Time.deltaTime).times(
-      Decimal.pow(eternitiedGain, AlchemyResource.eternity.effectValue));
-    player.reality.partEternitied = player.reality.partEternitied.plus(eternitiedGain);
+      Decimal.pow(eternitiedGain, AlchemyResource.eternity.effectValue),
+    );
+    player.reality.partEternitied = player.reality.partEternitied.plus(
+      eternitiedGain,
+    );
     Currency.eternities.add(player.reality.partEternitied.floor());
-    player.reality.partEternitied = player.reality.partEternitied.sub(player.reality.partEternitied.floor());
+    player.reality.partEternitied = player.reality.partEternitied.sub(
+      player.reality.partEternitied.floor(),
+    );
   }
 
   if (!EternityChallenge(4).isRunning) {
     let infGen = DC.D0;
     if (BreakInfinityUpgrade.infinitiedGen.isBought) {
       // Multipliers are done this way to explicitly exclude ach87 and TS32
-      infGen = infGen.plus(Time.deltaTimeMs.div(2).div(Decimal.clampMin(50, player.records.bestInfinity.time)));
+      infGen = infGen.plus(
+        Time.deltaTimeMs.div(2).div(
+          Decimal.clampMin(50, player.records.bestInfinity.time),
+        ),
+      );
       infGen = infGen.timesEffectsOf(
         RealityUpgrade(5),
         RealityUpgrade(7),
@@ -736,7 +934,9 @@ function passivePrestigeGen() {
       infGen = infGen.times(getAdjustedGlyphEffect("infinityinfmult"));
     }
     if (RealityUpgrade(11).isBought) {
-      infGen = infGen.plus(RealityUpgrade(11).effectValue.times(Time.deltaTime));
+      infGen = infGen.plus(
+        RealityUpgrade(11).effectValue.times(Time.deltaTime),
+      );
     }
     if (EffarigUnlock.eternity.isUnlocked) {
       // We consider half of the eternities we gained above this tick
@@ -744,8 +944,11 @@ function passivePrestigeGen() {
       // count here. This gives us the desirable behavior that
       // infinities and eternities gained overall will be the same
       // for two ticks as for one tick of twice the length.
-      infGen = infGen.plus(gainedInfinities().times(
-        Currency.eternities.value.minus(eternitiedGain.div(2).floor())).times(Time.deltaTime));
+      infGen = infGen.plus(
+        gainedInfinities().times(
+          Currency.eternities.value.minus(eternitiedGain.div(2).floor()),
+        ).times(Time.deltaTime),
+      );
     }
     infGen = infGen.plus(player.partInfinitied);
     Currency.infinities.add(infGen.floor());
@@ -775,12 +978,15 @@ function laitelaRealityTick(realDiff) {
     return;
   }
   if (laitelaInfo.entropy.gte(0)) {
-    laitelaInfo.entropy = laitelaInfo.entropy.add(realDiff.div(1e3).mul(Laitela.entropyGainPerSecond));
+    laitelaInfo.entropy = laitelaInfo.entropy.add(
+      realDiff.div(1e3).mul(Laitela.entropyGainPerSecond),
+    );
   }
 
   // Setting entropy to -1 on completion prevents the modal from showing up repeatedly
   if (laitelaInfo.entropy.gte(1)) {
-    let completionText = `Lai'tela's Reality has been destabilized after ${Time.thisRealityRealTime.toStringShort()}.`;
+    let completionText =
+      `Lai'tela's Reality has been destabilized after ${Time.thisRealityRealTime.toStringShort()}.`;
     laitelaInfo.entropy = DC.DM1;
     const oldInfo = {
       fastestCompletion: laitelaInfo.fastestCompletion,
@@ -788,7 +994,9 @@ function laitelaRealityTick(realDiff) {
       realityReward: Laitela.realityReward,
     };
     laitelaInfo.thisCompletion = Time.thisRealityRealTime.totalSeconds;
-    laitelaInfo.fastestCompletion = laitelaInfo.thisCompletion.clampMax(laitelaInfo.fastestCompletion);
+    laitelaInfo.fastestCompletion = laitelaInfo.thisCompletion.clampMax(
+      laitelaInfo.fastestCompletion,
+    );
     clearCelestialRuns();
     const destabilising = Time.thisRealityRealTime.totalSeconds.lte(30);
     if (destabilising) {
@@ -802,18 +1010,34 @@ function laitelaRealityTick(realDiff) {
       }
     }
     if (Laitela.realityReward.gt(oldInfo.realityReward)) {
-      completionText += `<br><br>Dark Matter Multiplier: ${formatX(oldInfo.realityReward, 2, 2)}
+      completionText += `<br><br>Dark Matter Multiplier: ${
+        formatX(oldInfo.realityReward, 2, 2)
+      }
       ➜ ${formatX(Laitela.realityReward, 2, 2)}<br>Best Completion Time: `;
-      const firstAttempt
-        = oldInfo.fastestCompletion.eq(3600) || oldInfo.fastestCompletion.eq(300) && oldInfo.difficultyTier > 0;
-      completionText += `${firstAttempt ? "None" : TimeSpan.fromSeconds(oldInfo.fastestCompletion).toStringShort()} ➜
-        ${destabilising ? "Destabilized" : TimeSpan.fromSeconds(laitelaInfo.fastestCompletion).toStringShort()}
-        <br>Highest Active Dimension: ${destabilising ? `${formatInt(8 - oldInfo.difficultyTier)} ➜` : ""}
+      const firstAttempt = oldInfo.fastestCompletion.eq(3600) ||
+        oldInfo.fastestCompletion.eq(300) && oldInfo.difficultyTier > 0;
+      completionText += `${
+        firstAttempt
+          ? "None"
+          : TimeSpan.fromSeconds(oldInfo.fastestCompletion).toStringShort()
+      } ➜
+        ${
+        destabilising
+          ? "Destabilized"
+          : TimeSpan.fromSeconds(laitelaInfo.fastestCompletion).toStringShort()
+      }
+        <br>Highest Active Dimension: ${
+        destabilising ? `${formatInt(8 - oldInfo.difficultyTier)} ➜` : ""
+      }
         ${formatInt(8 - laitelaInfo.difficultyTier)}`;
-      player.records.bestReality.laitelaSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
+      player.records.bestReality.laitelaSet = Glyphs.copyForRecords(
+        Glyphs.active.filter((g) => g !== null),
+      );
     } else {
       completionText += ` You need to destabilize in faster than
-        ${TimeSpan.fromSeconds(laitelaInfo.fastestCompletion).toStringShort()} to improve your multiplier.`;
+        ${
+        TimeSpan.fromSeconds(laitelaInfo.fastestCompletion).toStringShort()
+      } to improve your multiplier.`;
     }
     if (Laitela.isFullyDestabilized) {
       SpeedrunMilestones(24).tryComplete();
@@ -827,21 +1051,33 @@ function laitelaBeatText(disabledDim) {
     case 1: {
       return `<br><br>Lai'tela's Reality will now completely disable production from all Dimensions.
         The Reality can still be entered, but further destabilization is no longer possible.
-        For completely destabilizing the Reality, you also get an additional ${formatX(8)} to Dark Energy gain.`;
+        For completely destabilizing the Reality, you also get an additional ${
+        formatX(8)
+      } to Dark Energy gain.`;
     }
     case 2: {
       return `<br><br>Lai'tela's Reality will now disable production from all 2nd Dimensions during
-      future runs, but the reward will be ${formatInt(100)} times stronger than before. Completely destabilizing
-      the Reality for the final Dimension will give you an additional ${formatX(8)} to Dark Energy gain.`;
+      future runs, but the reward will be ${
+        formatInt(100)
+      } times stronger than before. Completely destabilizing
+      the Reality for the final Dimension will give you an additional ${
+        formatX(8)
+      } to Dark Energy gain.`;
     }
     case 3: {
       return `<br><br>Lai'tela's Reality will now disable production from all 3rd Dimensions during
-        future runs, but the reward will be ${formatInt(100)} times stronger than before.`;
+        future runs, but the reward will be ${
+        formatInt(100)
+      } times stronger than before.`;
     }
     case 8: {
       return `<br><br>Lai'tela's Reality will now disable production from all 8th Dimensions during
-        future runs, but the reward will be ${formatInt(100)} times stronger than before. This boost can be
-        repeated for each remaining Dimension by reaching destabilization within ${formatInt(30)} seconds again.`;
+        future runs, but the reward will be ${
+        formatInt(100)
+      } times stronger than before. This boost can be
+        repeated for each remaining Dimension by reaching destabilization within ${
+        formatInt(30)
+      } seconds again.`;
     }
     default: {
       return `<br><br>Lai'tela's Reality will now disable production from all
@@ -856,9 +1092,11 @@ function applyAutoprestige(diff) {
   Currency.infinityPoints.add(TimeStudy(181).effectOrDefault(0));
 
   if (TeresaUnlocks.epGen.canBeApplied) {
-    Currency.eternityPoints.add(player.records.thisEternity.bestEPmin.times(DC.D0_01)
-      .times(getGameSpeedupFactor().times(diff.div(1000)))
-      .timesEffectOf(Ra.unlocks.continuousTTBoost.effects.autoPrestige));
+    Currency.eternityPoints.add(
+      player.records.thisEternity.bestEPmin.times(DC.D0_01)
+        .times(getGameSpeedupFactor().times(diff.div(1000)))
+        .timesEffectOf(Ra.unlocks.continuousTTBoost.effects.autoPrestige),
+    );
   }
 
   if (InfinityUpgrade.ipGen.isCharged) {
@@ -869,7 +1107,9 @@ function applyAutoprestige(diff) {
   }
 
   if (PelleRifts.chaos.milestones[2].canBeApplied) {
-    Currency.eternityPoints.add(gainedEternityPoints().times(DC.D0_1).times(diff.div(1000)));
+    Currency.eternityPoints.add(
+      gainedEternityPoints().times(DC.D0_1).times(diff.div(1000)),
+    );
   }
 }
 
@@ -885,14 +1125,25 @@ function updateTachyonGalaxies() {
   );
 
   const thresholdMult = getTachyonGalaxyMult();
-  player.dilation.baseTachyonGalaxies = Decimal.max(player.dilation.baseTachyonGalaxies,
-    DC.D1.plus(Decimal.floor(Decimal.log(Currency.dilatedTime.value.dividedBy(1000), thresholdMult))));
+  player.dilation.baseTachyonGalaxies = Decimal.max(
+    player.dilation.baseTachyonGalaxies,
+    DC.D1.plus(
+      Decimal.floor(
+        Decimal.log(Currency.dilatedTime.value.dividedBy(1000), thresholdMult),
+      ),
+    ),
+  );
   player.dilation.nextThreshold = DC.E3.times(thresholdMult
     .pow(player.dilation.baseTachyonGalaxies));
-  player.dilation.totalTachyonGalaxies
-    = player.dilation.baseTachyonGalaxies.times(tachyonGalaxyMult)
-      .add(Decimal.max(player.dilation.baseTachyonGalaxies.times(tachyonGalaxyMult), 0)
-        .div(tachyonGalaxyMult));
+  player.dilation.totalTachyonGalaxies = player.dilation.baseTachyonGalaxies
+    .times(tachyonGalaxyMult)
+    .add(
+      Decimal.max(
+        player.dilation.baseTachyonGalaxies.times(tachyonGalaxyMult),
+        0,
+      )
+        .div(tachyonGalaxyMult),
+    );
 
   player.dilation.totalTachyonGalaxies = player.dilation.totalTachyonGalaxies
     .times(DilationUpgrade.galaxyMultiplier.effectValue);
@@ -923,7 +1174,9 @@ export function getTTPerSecond() {
   // Lai'tela TT power
   let finalTT = dilationTT.add(glyphTT);
   if (finalTT.gt(1)) {
-    finalTT = finalTT.pow(SingularityMilestone.theoremPowerFromSingularities.effectOrDefault(1));
+    finalTT = finalTT.pow(
+      SingularityMilestone.theoremPowerFromSingularities.effectOrDefault(1),
+    );
   }
 
   return finalTT;
@@ -961,7 +1214,10 @@ export function simulateTime(seconds, real, fast) {
   GameUI.notify.showBlackHoles = false;
 
   // Limit the tick count (this also applies if the black hole is unlocked)
-  const maxTicks = GameStorage.maxOfflineTicks(1000 * seconds, GameStorage.offlineTicks ?? player.options.offlineTicks);
+  const maxTicks = GameStorage.maxOfflineTicks(
+    1000 * seconds,
+    GameStorage.offlineTicks ?? player.options.offlineTicks,
+  );
   if (ticks > maxTicks && !fast) {
     ticks = maxTicks;
   } else if (ticks > 50 && !real && fast) {
@@ -973,13 +1229,20 @@ export function simulateTime(seconds, real, fast) {
   let totalGameTime;
 
   if (BlackHoles.areUnlocked && !BlackHoles.arePaused) {
-    totalGameTime = BlackHoles.calculateGameTimeFromRealTime(seconds, BlackHoles.calculateSpeedups());
+    totalGameTime = BlackHoles.calculateGameTimeFromRealTime(
+      seconds,
+      BlackHoles.calculateSpeedups(),
+    );
   } else {
     totalGameTime = getGameSpeedupFactor().mul(seconds);
   }
 
-  const infinitiedMilestone = getInfinitiedMilestoneReward(totalGameTime.mul(1000));
-  const eternitiedMilestone = getEternitiedMilestoneReward(totalGameTime.mul(1000));
+  const infinitiedMilestone = getInfinitiedMilestoneReward(
+    totalGameTime.mul(1000),
+  );
+  const eternitiedMilestone = getEternitiedMilestoneReward(
+    totalGameTime.mul(1000),
+  );
 
   if (eternitiedMilestone.gt(0)) {
     Currency.eternities.add(eternitiedMilestone);
@@ -990,7 +1253,11 @@ export function simulateTime(seconds, real, fast) {
   }
 
   if (InfinityUpgrade.ipOffline.isBought && player.options.offlineProgress) {
-    Currency.infinityPoints.add(player.records.thisEternity.bestIPMsWithoutMaxAll.times(seconds * 1000 / 2));
+    Currency.infinityPoints.add(
+      player.records.thisEternity.bestIPMsWithoutMaxAll.times(
+        seconds * 1000 / 2,
+      ),
+    );
   }
 
   EventHub.dispatch(GAME_EVENT.OFFLINE_CURRENCY_GAINED);
@@ -1018,8 +1285,11 @@ export function simulateTime(seconds, real, fast) {
   // and calculateOfflineTick (for time calculation).
   if (BlackHoles.areUnlocked && !BlackHoles.arePaused) {
     loopFn = (i) => {
-      const [realTickTime, blackHoleSpeedup] = BlackHoles.calculateOfflineTick(remainingRealSeconds,
-        i, 0.0001);
+      const [realTickTime, blackHoleSpeedup] = BlackHoles.calculateOfflineTick(
+        remainingRealSeconds,
+        i,
+        0.0001,
+      );
       remainingRealSeconds -= realTickTime;
       gameLoop(1000 * realTickTime, { blackHoleSpeedup });
     };
@@ -1042,65 +1312,70 @@ export function simulateTime(seconds, real, fast) {
   } else {
     const progress = {};
     ui.view.modal.progressBar = {};
-    Async.run(loopFn,
-      ticks,
-      {
-        batchSize: 1,
-        maxTime: 60,
-        sleepTime: 1,
-        asyncEntry: (doneSoFar) => {
-          GameIntervals.stop();
-          ui.$viewModel.modal.progressBar = {
-            label: "Offline Progress Simulation",
-            info: `The game is being run at a lower accuracy in order to quickly calculate the resources you
+    Async.run(loopFn, ticks, {
+      batchSize: 1,
+      maxTime: 60,
+      sleepTime: 1,
+      asyncEntry: (doneSoFar) => {
+        GameIntervals.stop();
+        ui.$viewModel.modal.progressBar = {
+          label: "Offline Progress Simulation",
+          info:
+            `The game is being run at a lower accuracy in order to quickly calculate the resources you
               gained while you were away. See the How To Play entry on "Offline Progress" for technical details. If
               you are impatient and want to get back to the game sooner, you can click the "Speed up" button to
-              simulate the rest of the time with half as many ticks (down to a minimum of ${formatInt(500)} ticks
-              remaining). The "SKIP" button will instead use all the remaining offline time in ${formatInt(10)}
+              simulate the rest of the time with half as many ticks (down to a minimum of ${
+              formatInt(500)
+            } ticks
+              remaining). The "SKIP" button will instead use all the remaining offline time in ${
+              formatInt(10)
+            }
               ticks.`,
-            progressName: "Ticks",
-            current: doneSoFar,
-            max: ticks,
-            startTime: Date.now(),
-            buttons: [{
-              text: "Speed up",
-              condition: (current, max) => max - current > 500,
-              click: () => {
-                const newRemaining = Math.clampMin(Math.floor(progress.remaining / 2), 500);
-                // We subtract the number of ticks we skipped, which is progress.remaining - newRemaining.
-                // This, and the below similar code in "SKIP", are needed or the progress bar to be accurate
-                // (both with respect to the number of ticks it shows and with respect to how full it is).
-                progress.maxIter -= progress.remaining - newRemaining;
-                progress.remaining = newRemaining;
-                // We update the progress bar max data (remaining will update automatically).
-                ui.$viewModel.modal.progressBar.max = progress.maxIter;
-              },
+          progressName: "Ticks",
+          current: doneSoFar,
+          max: ticks,
+          startTime: Date.now(),
+          buttons: [{
+            text: "Speed up",
+            condition: (current, max) => max - current > 500,
+            click: () => {
+              const newRemaining = Math.clampMin(
+                Math.floor(progress.remaining / 2),
+                500,
+              );
+              // We subtract the number of ticks we skipped, which is progress.remaining - newRemaining.
+              // This, and the below similar code in "SKIP", are needed or the progress bar to be accurate
+              // (both with respect to the number of ticks it shows and with respect to how full it is).
+              progress.maxIter -= progress.remaining - newRemaining;
+              progress.remaining = newRemaining;
+              // We update the progress bar max data (remaining will update automatically).
+              ui.$viewModel.modal.progressBar.max = progress.maxIter;
             },
-            {
-              text: "SKIP",
-              condition: (current, max) => max - current > 10,
-              click: () => {
-                // We jump to 10 from the end (condition guarantees there are at least 10 left).
-                // We subtract the number of ticks we skipped, which is progress.remaining - 10.
-                progress.maxIter -= progress.remaining - 10;
-                progress.remaining = 10;
-              },
-            }],
-          };
-        },
-        asyncProgress: (doneSoFar) => {
-          ui.$viewModel.modal.progressBar.current = doneSoFar;
-        },
-        asyncExit: () => {
-          ui.$viewModel.modal.progressBar = undefined;
-          // .postLoadStuff will restart GameIntervals
-          GameStorage.postLoadStuff();
-        },
-        then: () => {
-          afterSimulation(seconds, playerStart);
-        },
-        progress,
-      });
+          }, {
+            text: "SKIP",
+            condition: (current, max) => max - current > 10,
+            click: () => {
+              // We jump to 10 from the end (condition guarantees there are at least 10 left).
+              // We subtract the number of ticks we skipped, which is progress.remaining - 10.
+              progress.maxIter -= progress.remaining - 10;
+              progress.remaining = 10;
+            },
+          }],
+        };
+      },
+      asyncProgress: (doneSoFar) => {
+        ui.$viewModel.modal.progressBar.current = doneSoFar;
+      },
+      asyncExit: () => {
+        ui.$viewModel.modal.progressBar = undefined;
+        // .postLoadStuff will restart GameIntervals
+        GameStorage.postLoadStuff();
+      },
+      then: () => {
+        afterSimulation(seconds, playerStart);
+      },
+      progress,
+    });
   }
 }
 
@@ -1148,7 +1423,7 @@ export function init() {
   SteamRuntime.initialize();
   Cloud.init();
   GameStorage.load();
-  Tabs.all.find(t => t.config.id === player.options.lastOpenTab).show(true);
+  Tabs.all.find((t) => t.config.id === player.options.lastOpenTab).show(true);
 }
 
 window.tweenTime = 0;

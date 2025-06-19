@@ -34,7 +34,6 @@ export const ScalingTypes = {
  */
 
 /**
- *
  * @typedef ScaleParameters
  * @property {Decimal} BaseResource
  * @property {Decimal | number | string} ScaleStart
@@ -64,7 +63,9 @@ export function softcap(parameters) {
     }
 
     case SoftcapModes.Dilation: {
-      return Decimal.pow10(parameters.BaseResource.div(start).log10().pow(power)).mul(start);
+      return Decimal.pow10(
+        parameters.BaseResource.div(start).log10().pow(power),
+      ).mul(start);
     }
 
     case SoftcapModes.Logarithmic: {
@@ -72,15 +73,22 @@ export function softcap(parameters) {
     }
 
     case SoftcapModes.DilationTier2: {
-      return Decimal.pow10(parameters.BaseResource.div(start).log10().log10().pow(power).pow10()).mul(start);
+      return Decimal.pow10(
+        parameters.BaseResource.div(start).log10().log10().pow(power).pow10(),
+      ).mul(start);
     }
 
     case SoftcapModes.RepeatedLogarithm: {
-      return Decimal.iteratedlog(parameters.BaseResource.div(start), 10, power.toNumber()).plus(1).mul(start);
+      return Decimal.iteratedlog(
+        parameters.BaseResource.div(start),
+        10,
+        power.toNumber(),
+      ).plus(1).mul(start);
     }
 
     case SoftcapModes.SuperLogarithmic: {
-      return Decimal.slog(parameters.BaseResource.div(start), power).plus(1).mul(start);
+      return Decimal.slog(parameters.BaseResource.div(start), power).plus(1)
+        .mul(start);
     }
 
     default: {
@@ -116,33 +124,50 @@ export function scale(parameters) {
     case ScalingTypes.Exponential: {
       return parameters.IsInverted
         ? parameters.BaseResource.div(start).log(power).mul(start)
-        : Decimal.pow(power, parameters.BaseResource.div(start).sub(1)).mul(start);
+        : Decimal.pow(power, parameters.BaseResource.div(start).sub(1)).mul(
+          start,
+        );
     }
 
     case ScalingTypes.Dilation: {
       const s10 = Decimal.log10(start);
       return parameters.IsInverted
-        ? Decimal.pow10(parameters.BaseResource.log10().div(s10).root(power).mul(s10))
-        : Decimal.pow10(parameters.BaseResource.log10().div(s10).pow(power).mul(s10));
+        ? Decimal.pow10(
+          parameters.BaseResource.log10().div(s10).root(power).mul(s10),
+        )
+        : Decimal.pow10(
+          parameters.BaseResource.log10().div(s10).pow(power).mul(s10),
+        );
     }
 
     case ScalingTypes.DilationTier2: {
       const s10 = Decimal.log10(start).plus(1).log10();
       return parameters.IsInverted
-        ? parameters.BaseResource.log10().plus(1).log10().div(s10).root(power).mul(s10).pow10().pow10()
-        : parameters.BaseResource.log10().plus(1).log10().div(s10).pow(power).mul(s10).pow10().pow10();
+        ? parameters.BaseResource.log10().plus(1).log10().div(s10).root(power)
+          .mul(s10).pow10().pow10()
+        : parameters.BaseResource.log10().plus(1).log10().div(s10).pow(power)
+          .mul(s10).pow10().pow10();
     }
 
     case ScalingTypes.RepeatedExponentiation: {
       return parameters.IsInverted
-        ? Decimal.iteratedlog(parameters.BaseResource.div(start).max(1), 10, power.toNumber()).mul(start)
-        : Decimal.iteratedexp(parameters.BaseResource.div(start), power.toNumber()).mul(start);
+        ? Decimal.iteratedlog(
+          parameters.BaseResource.div(start).max(1),
+          10,
+          power.toNumber(),
+        ).mul(start)
+        : Decimal.iteratedexp(
+          parameters.BaseResource.div(start),
+          power.toNumber(),
+        ).mul(start);
     }
 
     case ScalingTypes.Tetration: {
       return parameters.IsInverted
         ? parameters.BaseResource.div(start).slog(power).plus(1).mul(start)
-        : parameters.BaseResource.div(start).tetrate(power.toNumber()).mul(start);
+        : parameters.BaseResource.div(start).tetrate(power.toNumber()).mul(
+          start,
+        );
     }
 
     default: {
@@ -151,7 +176,21 @@ export function scale(parameters) {
   }
 }
 
-const ScaleNames = ["super", "hyper", "ultra", "meta", "exotic", "supercritical", "instant", "mega", "extreme", "absolute", "intense", "collapsed", "maximal"];
+const ScaleNames = [
+  "super",
+  "hyper",
+  "ultra",
+  "meta",
+  "exotic",
+  "supercritical",
+  "instant",
+  "mega",
+  "extreme",
+  "absolute",
+  "intense",
+  "collapsed",
+  "maximal",
+];
 const ScaleNamestoScaleTypes = new Map([
   ["super", ScalingTypes.Multiplicative],
   ["hyper", ScalingTypes.Polynomial],
@@ -168,7 +207,6 @@ const ScaleNamestoScaleTypes = new Map([
   ["maximal", ScalingTypes.Tetration],
 ]);
 /**
- *
  * @typedef scaleLevelsParameters
  * @property {Decimal} baseResource
  * @property {Decimal[]} scaleStart
@@ -177,14 +215,16 @@ const ScaleNamestoScaleTypes = new Map([
  */
 
 /**
- *
  * @param {scaleLevelsParameters} parameters
  * @returns {Decimal}
  */
 export function scaleAllLevels(parameters) {
   let resource = parameters.baseResource;
   for (let index = ScaleNames.length + 1; index--; index > 0) {
-    if (parameters.scaleStart[index] === undefined || parameters.scaleStart[index] === null) {
+    if (
+      parameters.scaleStart[index] === undefined ||
+      parameters.scaleStart[index] === null
+    ) {
       continue;
     }
     resource = scale({

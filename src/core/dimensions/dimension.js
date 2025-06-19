@@ -2,9 +2,29 @@ export class DimensionState {
   constructor(getData, tier) {
     this._tier = tier;
     this._getData = getData;
-    const DISPLAY_NAMES = [null, "First", "Second", "Third", "Fourth", "Fifth", "Sixth", "Seventh", "Eighth"];
+    const DISPLAY_NAMES = [
+      null,
+      "First",
+      "Second",
+      "Third",
+      "Fourth",
+      "Fifth",
+      "Sixth",
+      "Seventh",
+      "Eighth",
+    ];
     this._displayName = DISPLAY_NAMES[tier];
-    const SHORT_DISPLAY_NAMES = [null, "1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th"];
+    const SHORT_DISPLAY_NAMES = [
+      null,
+      "1st",
+      "2nd",
+      "3rd",
+      "4th",
+      "5th",
+      "6th",
+      "7th",
+      "8th",
+    ];
     this._shortDisplayName = SHORT_DISPLAY_NAMES[tier];
   }
 
@@ -70,9 +90,11 @@ export class DimensionState {
   }
 
   static createAccessor() {
-    const index = Array.range(1, this.dimensionCount).map(tier => new this(tier));
+    const index = Array.range(1, this.dimensionCount).map((tier) =>
+      new this(tier)
+    );
     index.unshift(null);
-    const accessor = tier => index[tier];
+    const accessor = (tier) => index[tier];
     accessor.index = index;
     return accessor;
   }

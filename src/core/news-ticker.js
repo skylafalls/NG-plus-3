@@ -7,7 +7,7 @@ export const NewsHandler = {
 
   addSeenNews(id) {
     // From very old save versions; we ignore any IDs which belong to tickers which no longer exist.
-    if (!GameDatabase.news.map(e => e.id).includes(id)) {
+    if (!GameDatabase.news.map((e) => e.id).includes(id)) {
       return;
     }
 
@@ -28,7 +28,8 @@ export const NewsHandler = {
     while (this.BITS_PER_MASK * player.news.seen[type].length <= number) {
       player.news.seen[type].push(0);
     }
-    player.news.seen[type][Math.floor(number / this.BITS_PER_MASK)] |= 1 << (number % this.BITS_PER_MASK);
+    player.news.seen[type][Math.floor(number / this.BITS_PER_MASK)] |= 1 <<
+      (number % this.BITS_PER_MASK);
     player.news.totalSeen++;
   },
 
@@ -41,7 +42,8 @@ export const NewsHandler = {
     if (!bitArray || this.BITS_PER_MASK * bitArray.length < number) {
       return false;
     }
-    return (bitArray[Math.floor(number / this.BITS_PER_MASK)] |= 1 << (number % this.BITS_PER_MASK)) !== 0;
+    return (bitArray[Math.floor(number / this.BITS_PER_MASK)] |= 1 <<
+      (number % this.BITS_PER_MASK)) !== 0;
   },
 
   get uniqueTickersSeen() {

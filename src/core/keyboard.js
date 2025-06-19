@@ -15,7 +15,7 @@ function getKeys(combination) {
 // Returns undefined for mod-only combos, like "shift+alt"
 const modifierKeys = new Set(["ctrl", "shift", "alt", "mod"]);
 function getMainKey(keys) {
-  return keys.find(key => !modifierKeys.has(key));
+  return keys.find((key) => !modifierKeys.has(key));
 }
 
 class KeySpin {
@@ -98,7 +98,7 @@ export class GameKeyboard {
   static _bindSpin(combination, action) {
     const keys = getKeys(combination);
     const mainKey = getMainKey(keys);
-    let spin = spins.find(s => s.key === mainKey);
+    let spin = spins.find((s) => s.key === mainKey);
     if (spin === undefined) {
       spin = new KeySpin(mainKey);
       spins.push(spin);
@@ -123,16 +123,21 @@ export class GameKeyboard {
 const spins = [];
 
 function executeKey(action) {
-  if (ui.$viewModel.modal.progressBar !== undefined || GameEnd.endState >= END_STATE_MARKERS.INTERACTIVITY_DISABLED) {
+  if (
+    ui.$viewModel.modal.progressBar !== undefined ||
+    GameEnd.endState >= END_STATE_MARKERS.INTERACTIVITY_DISABLED
+  ) {
     return;
   }
   return action();
 }
 
 function executeHotkey(action) {
-  if (!player.options.hotkeys
-    || document.activeElement.type === "text"
-    || document.activeElement.type === "textarea") {
+  if (
+    !player.options.hotkeys ||
+    document.activeElement.type === "text" ||
+    document.activeElement.type === "textarea"
+  ) {
     return;
   }
   return executeKey(action);

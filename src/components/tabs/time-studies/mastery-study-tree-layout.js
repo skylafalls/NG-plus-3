@@ -49,8 +49,8 @@ export class MasteryStudyTreeLayout {
     const normalRow = (...items) => new TimeStudyRow(normalRowLayout, items);
     const wideRow = (...items) => new TimeStudyRow(wideRowLayout, items, true);
 
-    const MS = id => (MasteryStudy(id).isUnlocked ? MasteryStudy(id) : null);
-    const EC = id => TimeStudy.eternityChallenge(id);
+    const MS = (id) => (MasteryStudy(id).isUnlocked ? MasteryStudy(id) : null);
+    const EC = (id) => TimeStudy.eternityChallenge(id);
 
     /**
      * @type {TimeStudyRow[]}
@@ -60,7 +60,7 @@ export class MasteryStudyTreeLayout {
     this.rows.push(
       normalRow(MS(11)),
       normalRow(MS(21), MS(22), MS(23)),
-      wideRow (MS(31), MS(32), MS(33), MS(34), MS(35), MS(36)),
+      wideRow(MS(31), MS(32), MS(33), MS(34), MS(35), MS(36)),
       normalRow(EC(13), EC(14)),
       normalRow(TimeStudy.pairProduction),
     );
@@ -92,10 +92,10 @@ export class MasteryStudyTreeLayout {
      * @type {TimeStudyConnectionSetup[]}
      */
     this.connections = MasteryStudy.allConnections
-      .map(c => new TimeStudyConnectionSetup(c));
+      .map((c) => new TimeStudyConnectionSetup(c));
 
-    this.width = this.rows.map(row => row.width).nMax();
-    const heightNoSpacing = this.rows.map(r => r.layout.itemHeight).nSum();
+    this.width = this.rows.map((row) => row.width).nMax();
+    const heightNoSpacing = this.rows.map((r) => r.layout.itemHeight).nSum();
     this.height = heightNoSpacing + (this.rows.length - 1) * this.spacing;
 
     for (const study of this.studies) {
@@ -109,7 +109,7 @@ export class MasteryStudyTreeLayout {
 
   itemPosition(row) {
     const rows = this.rows.slice(0, row);
-    const heightNoSpacing = rows.map(r => r.layout.itemHeight).nSum();
+    const heightNoSpacing = rows.map((r) => r.layout.itemHeight).nSum();
     return heightNoSpacing + rows.length * this.spacing;
   }
 

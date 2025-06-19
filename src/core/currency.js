@@ -139,7 +139,8 @@ MathOperations.number = new class NumberMathOperations extends MathOperations {
   }
 }();
 
-MathOperations.decimal = new class DecimalMathOperations extends MathOperations {
+MathOperations.decimal = new class DecimalMathOperations
+  extends MathOperations {
   add(left, right) {
     return Decimal.add(left, right);
   }
@@ -216,7 +217,10 @@ export class Currency {
   }
 
   subtract(amount) {
-    this.value = this.operations.max(this.operations.subtract(this.value, amount), 0);
+    this.value = this.operations.max(
+      this.operations.subtract(this.value, amount),
+      0,
+    );
   }
 
   multiply(amount) {
@@ -321,33 +325,47 @@ Currency.antimatter = new class extends DecimalCurrency {
     if (InfinityChallenges.nextIC) {
       InfinityChallenges.notifyICUnlock(value);
     }
-    if (GameCache.cheapestAntimatterAutobuyer.value && value.gte(GameCache.cheapestAntimatterAutobuyer.value)) {
+    if (
+      GameCache.cheapestAntimatterAutobuyer.value &&
+      value.gte(GameCache.cheapestAntimatterAutobuyer.value)
+    ) {
       // Clicking into the automation tab clears the trigger and prevents it from retriggering as long as the player
       // stays on the tab; leaving the tab with an available autobuyer will immediately force it to trigger again
       TabNotification.newAutobuyer.clearTrigger();
       TabNotification.newAutobuyer.tryTrigger();
     }
     player.antimatter = value;
-    player.records.thisInfinity.maxAM = player.records.thisInfinity.maxAM.max(value);
-    player.records.thisEternity.maxAM = player.records.thisEternity.maxAM.max(value);
-    player.records.thisReality.maxAM = player.records.thisReality.maxAM.max(value);
+    player.records.thisInfinity.maxAM = player.records.thisInfinity.maxAM.max(
+      value,
+    );
+    player.records.thisEternity.maxAM = player.records.thisEternity.maxAM.max(
+      value,
+    );
+    player.records.thisReality.maxAM = player.records.thisReality.maxAM.max(
+      value,
+    );
 
     if (Pelle.isDoomed) {
-      player.celestials.pelle.records.totalAntimatter = player.celestials.pelle.records.totalAntimatter.max(value);
+      player.celestials.pelle.records.totalAntimatter = player.celestials.pelle
+        .records.totalAntimatter.max(value);
     }
   }
 
   add(amount) {
     super.add(amount);
     if (amount.gt(0)) {
-      player.records.totalAntimatter = player.records.totalAntimatter.add(amount);
+      player.records.totalAntimatter = player.records.totalAntimatter.add(
+        amount,
+      );
       player.requirementChecks.reality.noAM = false;
     }
   }
 
   get productionPerSecond() {
     return NormalChallenge(12).isRunning
-      ? AntimatterDimension(1).productionPerRealSecond.plus(AntimatterDimension(2).productionPerRealSecond)
+      ? AntimatterDimension(1).productionPerRealSecond.plus(
+        AntimatterDimension(2).productionPerRealSecond,
+      )
       : AntimatterDimension(1).productionPerRealSecond;
   }
 
@@ -414,12 +432,16 @@ Currency.infinityPoints = new class extends DecimalCurrency {
 
   set value(value) {
     player.infinityPoints = value;
-    player.records.thisEternity.maxIP = player.records.thisEternity.maxIP.max(value);
-    player.records.thisReality.maxIP = player.records.thisReality.maxIP.max(value);
+    player.records.thisEternity.maxIP = player.records.thisEternity.maxIP.max(
+      value,
+    );
+    player.records.thisReality.maxIP = player.records.thisReality.maxIP.max(
+      value,
+    );
 
     if (Pelle.isDoomed) {
-      player.celestials.pelle.records.totalInfinityPoints
-        = player.celestials.pelle.records.totalInfinityPoints.max(value);
+      player.celestials.pelle.records.totalInfinityPoints = player.celestials
+        .pelle.records.totalInfinityPoints.max(value);
     }
   }
 
@@ -478,15 +500,19 @@ Currency.eternityPoints = new class extends DecimalCurrency {
 
   set value(value) {
     player.eternityPoints = value;
-    player.records.thisReality.maxEP = player.records.thisReality.maxEP.max(value);
+    player.records.thisReality.maxEP = player.records.thisReality.maxEP.max(
+      value,
+    );
     if (player.records.bestReality.bestEP.lt(value)) {
       player.records.bestReality.bestEP = value;
-      player.records.bestReality.bestEPSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
+      player.records.bestReality.bestEPSet = Glyphs.copyForRecords(
+        Glyphs.active.filter((g) => g !== null),
+      );
     }
 
     if (Pelle.isDoomed) {
-      player.celestials.pelle.records.totalEternityPoints
-        = player.celestials.pelle.records.totalEternityPoints.max(value);
+      player.celestials.pelle.records.totalEternityPoints = player.celestials
+        .pelle.records.totalEternityPoints.max(value);
     }
   }
 
@@ -525,7 +551,9 @@ Currency.timeTheorems = new class extends DecimalCurrency {
 
   set value(value) {
     player.timestudy.theorem = value;
-    player.timestudy.maxTheorem = value.plus(TimeTheorems.calculateTimeStudiesCost());
+    player.timestudy.maxTheorem = value.plus(
+      TimeTheorems.calculateTimeStudiesCost(),
+    );
   }
 
   get max() {
@@ -564,7 +592,9 @@ Currency.dilatedTime = new class extends DecimalCurrency {
 
   set value(value) {
     player.dilation.dilatedTime = value;
-    player.records.thisReality.maxDT = player.records.thisReality.maxDT.max(value);
+    player.records.thisReality.maxDT = player.records.thisReality.maxDT.max(
+      value,
+    );
   }
 }();
 
@@ -590,7 +620,9 @@ Currency.realityMachines = new class extends DecimalCurrency {
     player.reality.maxRM = Decimal.max(player.reality.maxRM, newValue);
     if (player.records.bestReality.RM.lt(addedThisReality)) {
       player.records.bestReality.RM = addedThisReality;
-      player.records.bestReality.RMSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
+      player.records.bestReality.RMSet = Glyphs.copyForRecords(
+        Glyphs.active.filter((g) => g !== null),
+      );
     }
   }
 }();
@@ -621,7 +653,10 @@ Currency.imaginaryMachines = new class extends DecimalCurrency {
   }
 
   set value(value) {
-    player.reality.imaginaryMachines = Decimal.clampMax(value, MachineHandler.currentIMCap);
+    player.reality.imaginaryMachines = Decimal.clampMax(
+      value,
+      MachineHandler.currentIMCap,
+    );
   }
 }();
 
@@ -633,7 +668,8 @@ Currency.darkMatter = new class extends DecimalCurrency {
   set value(value) {
     const capped = Decimal.min(value, Number.MAX_VALUE);
     player.celestials.laitela.darkMatter = capped;
-    player.celestials.laitela.maxDarkMatter = player.celestials.laitela.maxDarkMatter.max(capped);
+    player.celestials.laitela.maxDarkMatter = player.celestials.laitela
+      .maxDarkMatter.max(capped);
   }
 
   get max() {
@@ -656,7 +692,7 @@ Currency.darkEnergy = new class extends DecimalCurrency {
 
   get productionPerSecond() {
     return DarkMatterDimensions.all
-      .map(d => d.productionPerSecond)
+      .map((d) => d.productionPerSecond)
       .sum();
   }
 }();
@@ -708,8 +744,8 @@ Currency.galaxyGeneratorGalaxies = new class extends DecimalCurrency {
 
   set value(value) {
     const spent = player.galaxies.add(GalaxyGenerator.galaxies).sub(value);
-    player.celestials.pelle.galaxyGenerator.spentGalaxies
-      = player.celestials.pelle.galaxyGenerator.spentGalaxies.add(spent);
+    player.celestials.pelle.galaxyGenerator.spentGalaxies = player.celestials
+      .pelle.galaxyGenerator.spentGalaxies.add(spent);
   }
 }();
 
@@ -720,7 +756,9 @@ Currency.metaAntimatter = new class extends DecimalCurrency {
 
   set value(value) {
     player.meta.antimatter = value;
-    player.records.thisQuantum.bestMA = player.records.thisQuantum.bestMA.max(value);
+    player.records.thisQuantum.bestMA = player.records.thisQuantum.bestMA.max(
+      value,
+    );
   }
 
   get productionPerSecond() {

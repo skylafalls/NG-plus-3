@@ -98,16 +98,19 @@ class InfinityDimensionState extends DimensionState {
   }
 
   get ipRequirementReached() {
-    return !this.hasIPUnlock || Currency.infinityPoints.value.gte(this.ipRequirement);
+    return !this.hasIPUnlock ||
+      Currency.infinityPoints.value.gte(this.ipRequirement);
   }
 
   get canUnlock() {
-    return (Perk.bypassIDAntimatter.canBeApplied || this.antimatterRequirementReached)
-      && this.ipRequirementReached;
+    return (Perk.bypassIDAntimatter.canBeApplied ||
+      this.antimatterRequirementReached) &&
+      this.ipRequirementReached;
   }
 
   get isAvailableForPurchase() {
-    return InfinityDimensions.canBuy() && this.isUnlocked && this.isAffordable && !this.isCapped;
+    return InfinityDimensions.canBuy() && this.isUnlocked &&
+      this.isAffordable && !this.isCapped;
   }
 
   get isAffordable() {
@@ -123,9 +126,9 @@ class InfinityDimensionState extends DimensionState {
     if (tier === 8) {
       // We need a extra 10x here (since ID8 production is per-second and
       // other ID production is per-10-seconds).
-      EternityChallenge(7).reward.applyEffect(v => toGain = v.times(10));
+      EternityChallenge(7).reward.applyEffect((v) => toGain = v.times(10));
       if (EternityChallenge(7).isRunning) {
-        EternityChallenge(7).applyEffect(v => toGain = v.times(10));
+        EternityChallenge(7).applyEffect((v) => toGain = v.times(10));
       }
     } else if (QuantumChallenge(4).isRunning) {
       toGain = InfinityDimension(tier + 2).productionPerSecond;
@@ -136,9 +139,12 @@ class InfinityDimensionState extends DimensionState {
   }
 
   get productionPerSecond() {
-    if (EternityChallenge(2).isRunning || EternityChallenge(10).isRunning || EternityChallenge(13).isRunning
-      || QuantumChallenge(8).isRunning
-      || (Laitela.isRunning && this.tier > Laitela.maxAllowedDimension)) {
+    if (
+      EternityChallenge(2).isRunning || EternityChallenge(10).isRunning ||
+      EternityChallenge(13).isRunning ||
+      QuantumChallenge(8).isRunning ||
+      (Laitela.isRunning && this.tier > Laitela.maxAllowedDimension)
+    ) {
       return DC.D0;
     }
     let production = this.amount;
@@ -167,7 +173,12 @@ class InfinityDimensionState extends DimensionState {
         tier === 4 ? TimeStudy(72) : null,
         tier === 1 ? EternityChallenge(2).reward : null,
       );
-    mult = mult.times(Decimal.pow(this.powerMultiplier, Decimal.floor(this.baseAmount.div(DC.E1))));
+    mult = mult.times(
+      Decimal.pow(
+        this.powerMultiplier,
+        Decimal.floor(this.baseAmount.div(DC.E1)),
+      ),
+    );
 
     if (tier === 1) {
       mult = mult.times(PelleRifts.decay.milestones[0].effectOrDefault(1));
@@ -199,9 +210,11 @@ class InfinityDimensionState extends DimensionState {
 
   get isProducing() {
     const tier = this.tier;
-    if (EternityChallenge(2).isRunning
-      || EternityChallenge(10).isRunning
-      || (Laitela.isRunning && tier > Laitela.maxAllowedDimension)) {
+    if (
+      EternityChallenge(2).isRunning ||
+      EternityChallenge(10).isRunning ||
+      (Laitela.isRunning && tier > Laitela.maxAllowedDimension)
+    ) {
       return false;
     }
     return this.amount.gt(0);
@@ -213,13 +226,19 @@ class InfinityDimensionState extends DimensionState {
 
   get costMultiplier() {
     let costMult = new Decimal(this._costMultiplier);
-    EternityChallenge(12).reward.applyEffect(v => costMult = Decimal.pow(costMult, v));
+    EternityChallenge(12).reward.applyEffect((v) =>
+      costMult = Decimal.pow(costMult, v)
+    );
     return costMult;
   }
 
   get powerMultiplier() {
     return new Decimal(this._powerMultiplier)
-      .times(this._tier === 8 ? GlyphInfo.infinity.sacrificeInfo.effect() : new Decimal(1))
+      .times(
+        this._tier === 8
+          ? GlyphInfo.infinity.sacrificeInfo.effect()
+          : new Decimal(1),
+      )
       .pow(ImaginaryUpgrade(14).effectOrDefault(1));
   }
 
@@ -232,9 +251,9 @@ class InfinityDimensionState extends DimensionState {
     if (Enslaved.isRunning) {
       return DC.D1;
     }
-    return InfinityDimensions.capIncrease.add(this.tier === 8
-      ? DC.BEMAX
-      : InfinityDimensions.HARDCAP_PURCHASES);
+    return InfinityDimensions.capIncrease.add(
+      this.tier === 8 ? DC.BEMAX : InfinityDimensions.HARDCAP_PURCHASES,
+    );
   }
 
   get isCapped() {
@@ -242,7 +261,9 @@ class InfinityDimensionState extends DimensionState {
   }
 
   get hardcapIPAmount() {
-    return this._baseCost.times(Decimal.pow(this.costMultiplier, this.purchaseCap));
+    return this._baseCost.times(
+      Decimal.pow(this.costMultiplier, this.purchaseCap),
+    );
   }
 
   resetAmount() {
@@ -317,7 +338,10 @@ class InfinityDimensionState extends DimensionState {
 
     let purchasesUntilHardcap = this.purchaseCap.sub(this.purchases);
     if (EternityChallenge(8).isRunning) {
-      purchasesUntilHardcap = Decimal.clampMax(purchasesUntilHardcap, player.eterc8ids);
+      purchasesUntilHardcap = Decimal.clampMax(
+        purchasesUntilHardcap,
+        player.eterc8ids,
+      );
     }
 
     const costScaling = new LinearCostScaling(
@@ -364,7 +388,9 @@ export const InfinityDimensions = {
   },
 
   get convSoftcapEffect() {
-    const equation = Currency.infinityPower.value.plus(1).log10().sub(this.convSoftcapStart.log10()).max(1).log10();
+    const equation = Currency.infinityPower.value.plus(1).log10().sub(
+      this.convSoftcapStart.log10(),
+    ).max(1).log10();
     let formula = equation.times(1.25).plus(equation.times(0.45));
     if (formula.gte(10)) {
       formula = formula.times(equation.times(4));
@@ -390,7 +416,7 @@ export const InfinityDimensions = {
     if (InfinityDimension(8).isUnlocked) {
       throw new RangeError("All Infinity Dimensions are unlocked");
     }
-    return this.all.first(dim => !dim.isUnlocked);
+    return this.all.first((dim) => !dim.isUnlocked);
   },
 
   resetAmount() {
@@ -415,9 +441,9 @@ export const InfinityDimensions = {
   },
 
   canBuy() {
-    return !EternityChallenge(2).isRunning
-      && !EternityChallenge(10).isRunning
-      && (!EternityChallenge(8).isRunning || player.eterc8ids > 0);
+    return !EternityChallenge(2).isRunning &&
+      !EternityChallenge(10).isRunning &&
+      (!EternityChallenge(8).isRunning || player.eterc8ids > 0);
   },
 
   canAutobuy() {
@@ -432,7 +458,10 @@ export const InfinityDimensions = {
       nextTierOffset++;
     }
     for (let tier = maxTierProduced; tier >= 1; --tier) {
-      InfinityDimension(tier + nextTierOffset).produceDimensions(InfinityDimension(tier), diff.div(10));
+      InfinityDimension(tier + nextTierOffset).produceDimensions(
+        InfinityDimension(tier),
+        diff.div(10),
+      );
     }
 
     if (EternityChallenge(7).isRunning) {
@@ -443,12 +472,16 @@ export const InfinityDimensions = {
       InfinityDimension(1).produceCurrency(Currency.infinityPower, diff);
     }
 
-    player.requirementChecks.reality.maxID1 = player.requirementChecks.reality.maxID1
+    player.requirementChecks.reality.maxID1 = player.requirementChecks.reality
+      .maxID1
       .clampMin(InfinityDimension(1).amount);
   },
 
   tryAutoUnlock() {
-    if (!EternityMilestone.autoUnlockID.isReached || InfinityDimension(8).isUnlocked) {
+    if (
+      !EternityMilestone.autoUnlockID.isReached ||
+      InfinityDimension(8).isUnlocked
+    ) {
       return;
     }
     for (const dimension of this.all) {
@@ -462,7 +495,9 @@ export const InfinityDimensions = {
   // Called from "Max All" UI buttons and nowhere else
   buyMax() {
     // Try to unlock dimensions
-    const unlockedDimensions = this.all.filter(dimension => dimension.unlock());
+    const unlockedDimensions = this.all.filter((dimension) =>
+      dimension.unlock()
+    );
 
     // Try to buy single from the highest affordable new dimensions
     [...unlockedDimensions].reverse().forEach((dimension) => {
@@ -472,6 +507,6 @@ export const InfinityDimensions = {
     });
 
     // Try to buy max from the lowest dimension (since lower dimensions have bigger multiplier per purchase)
-    unlockedDimensions.forEach(dimension => dimension.buyMax(false));
+    unlockedDimensions.forEach((dimension) => dimension.buyMax(false));
   },
 };

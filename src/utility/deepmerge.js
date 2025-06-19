@@ -18,7 +18,9 @@ function cloneUnlessOtherwiseSpecified(value, options) {
 }
 
 function defaultArrayMerge(target, source, options) {
-  return target.concat(source).map(element => cloneUnlessOtherwiseSpecified(element, options));
+  return target.concat(source).map((element) =>
+    cloneUnlessOtherwiseSpecified(element, options)
+  );
 }
 
 function mergeObject(target, source, options) {
@@ -75,20 +77,23 @@ export function deepmergeAll(array, options) {
   }
 
   if (!options) {
-    const deepCloneMerge = (destinationArray, sourceArray, options) => sourceArray.map((element, index) => {
-      if (destinationArray[index] && destinationArray[index] instanceof Decimal) {
-        return new Decimal(element);
-      }
+    const deepCloneMerge = (destinationArray, sourceArray, options) =>
+      sourceArray.map((element, index) => {
+        if (
+          destinationArray[index] && destinationArray[index] instanceof Decimal
+        ) {
+          return new Decimal(element);
+        }
 
-      if (destinationArray[index] && destinationArray[index] instanceof Set) {
-        return new Set(element);
-      }
+        if (destinationArray[index] && destinationArray[index] instanceof Set) {
+          return new Set(element);
+        }
 
-      if (!options.isMergeableObject(element) || !destinationArray[index]) {
-        return cloneUnlessOtherwiseSpecified(element, options);
-      }
-      return deepmerge(destinationArray[index], element, options);
-    });
+        if (!options.isMergeableObject(element) || !destinationArray[index]) {
+          return cloneUnlessOtherwiseSpecified(element, options);
+        }
+        return deepmerge(destinationArray[index], element, options);
+      });
 
     options = {
       arrayMerge: deepCloneMerge,

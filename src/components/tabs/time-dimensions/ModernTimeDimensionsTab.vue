@@ -77,7 +77,7 @@ export default {
         Tickspeed upgrade gained.
       </p>
     </div>
-    <div v-if="false">
+    <div>
       The amount each additional upgrade requires will start
       increasing above {{ formatInt(tickspeedSoftcap) }} Tickspeed upgrades.
     </div>

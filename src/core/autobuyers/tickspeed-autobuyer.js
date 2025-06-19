@@ -67,7 +67,8 @@ export class TickspeedAutobuyerState extends UpgradeableAutobuyerState {
   }
 
   get canTick() {
-    return Tickspeed.isAvailableForPurchase && Tickspeed.isAffordable && super.canTick;
+    return Tickspeed.isAvailableForPurchase && Tickspeed.isAffordable &&
+      super.canTick;
   }
 
   tick() {
@@ -92,12 +93,17 @@ export class TickspeedAutobuyerState extends UpgradeableAutobuyerState {
   }
 
   get resetTickOn() {
-    return Perk.antimatterNoReset.canBeApplied ? PRESTIGE_EVENT.ANTIMATTER_GALAXY : PRESTIGE_EVENT.DIMENSION_BOOST;
+    return Perk.antimatterNoReset.canBeApplied
+      ? PRESTIGE_EVENT.ANTIMATTER_GALAXY
+      : PRESTIGE_EVENT.DIMENSION_BOOST;
   }
 
   reset() {
     super.reset();
-    if (EternityMilestone.keepAutobuyers.isReached || PelleUpgrade.keepAutobuyers.canBeApplied) {
+    if (
+      EternityMilestone.keepAutobuyers.isReached ||
+      PelleUpgrade.keepAutobuyers.canBeApplied
+    ) {
       return;
     }
     this.data.mode = AUTOBUYER_MODE.BUY_SINGLE;

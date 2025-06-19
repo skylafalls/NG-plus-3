@@ -8,9 +8,11 @@ export class Sacrifice {
   }
 
   static get canSacrifice() {
-    return DimBoost.purchasedBoosts.gt(4) && !EternityChallenge(3).isRunning && this.nextBoost.gt(1)
-      && AntimatterDimension(8).totalAmount.gt(0) && Currency.antimatter.lt(Player.infinityLimit)
-      && !Enslaved.isRunning;
+    return DimBoost.purchasedBoosts.gt(4) && !EternityChallenge(3).isRunning &&
+      this.nextBoost.gt(1) &&
+      AntimatterDimension(8).totalAmount.gt(0) &&
+      Currency.antimatter.lt(Player.infinityLimit) &&
+      !Enslaved.isRunning;
   }
 
   static get disabledCondition() {
@@ -36,26 +38,39 @@ export class Sacrifice {
   }
 
   static getSacrificeDescription(changes) {
-    const f = (name, condition) => (name in changes ? changes[name] : condition);
+    const f = (
+      name,
+      condition,
+    ) => (name in changes ? changes[name] : condition);
     let factor = 2;
     let places = 1;
     let base = `(log₁₀(AD1)/${formatInt(10)})`;
     if (f("Challenge8isRunning", NormalChallenge(8).isRunning)) {
       factor = 1;
       base = "x";
-    } else if (f("InfinityChallenge2isCompleted", InfinityChallenge(2).isCompleted)) {
+    } else if (
+      f("InfinityChallenge2isCompleted", InfinityChallenge(2).isCompleted)
+    ) {
       factor = 1 / 120;
       places = 3;
       base = "AD1";
     }
 
-    const exponent = (1
-      + (f("Achievement32", Achievement(32).isEffectActive) ? Achievement(32).config.effect : 0)
-      + (f("Achievement57", Achievement(57).isEffectActive) ? Achievement(57).config.effect : 0)
-    ) * (1
-      + (f("Achievement88", Achievement(88).isEffectActive) ? Achievement(88).config.effect : 0)
-      + (f("TimeStudy228", TimeStudy(228).isEffectActive) ? TimeStudy(228).config.effect : 0)
-    ) * factor;
+    const exponent = (1 +
+      (f("Achievement32", Achievement(32).isEffectActive)
+        ? Achievement(32).config.effect
+        : 0) +
+      (f("Achievement57", Achievement(57).isEffectActive)
+        ? Achievement(57).config.effect
+        : 0)) *
+      (1 +
+        (f("Achievement88", Achievement(88).isEffectActive)
+          ? Achievement(88).config.effect
+          : 0) +
+        (f("TimeStudy228", TimeStudy(228).isEffectActive)
+          ? TimeStudy(228).config.effect
+          : 0)) *
+      factor;
     return base + (exponent === 1 ? "" : formatPow(exponent, places, places));
   }
 
@@ -70,8 +85,7 @@ export class Sacrifice {
     // C8 seems weaker, but it actually follows its own formula which ends up being stronger based on how it stacks
     if (NormalChallenge(8).isRunning) {
       base = DC.D1;
-    }
-    // Pre-Reality this was 100; having ach32/57 results in 1.2x, which is brought back in line by changing to 120
+    } // Pre-Reality this was 100; having ach32/57 results in 1.2x, which is brought back in line by changing to 120
     else if (InfinityChallenge(2).isCompleted) {
       base = DC.D1.div(120);
     } else {
@@ -98,12 +112,20 @@ export class Sacrifice {
     // different variable that is only applied during C8. However since sacrifice only depends on sacrificed ND1, this
     // can actually be done in a single calculation in order to handle C8 in a less hacky way.
     if (NormalChallenge(8).isRunning) {
-      prePowerSacrificeMult = nd1Amount.pow(0.05).dividedBy(sacrificed.pow(0.04)).clampMin(1)
-        .times(nd1Amount.pow(0.05).dividedBy(sacrificed.plus(nd1Amount).pow(0.04)));
+      prePowerSacrificeMult = nd1Amount.pow(0.05).dividedBy(
+        sacrificed.pow(0.04),
+      ).clampMin(1)
+        .times(
+          nd1Amount.pow(0.05).dividedBy(sacrificed.plus(nd1Amount).pow(0.04)),
+        );
     } else if (InfinityChallenge(2).isCompleted) {
       prePowerSacrificeMult = nd1Amount.dividedBy(sacrificed);
     } else {
-      prePowerSacrificeMult = new Decimal((nd1Amount.max(1).log10().div(10)).div(Decimal.max(sacrificed.max(1).log10().div(10), 1)));
+      prePowerSacrificeMult = new Decimal(
+        (nd1Amount.max(1).log10().div(10)).div(
+          Decimal.max(sacrificed.max(1).log10().div(10), 1),
+        ),
+      );
     }
 
     return prePowerSacrificeMult.clampMin(1).pow(this.sacrificeExponent);
@@ -135,13 +157,16 @@ export function sacrificeReset() {
   if (!Sacrifice.canSacrifice) {
     return false;
   }
-  if ((!player.break || (!InfinityChallenge.isRunning && NormalChallenge.isRunning))
-    && Currency.antimatter.gt(DC.NUMMAX)) {
+  if (
+    (!player.break ||
+      (!InfinityChallenge.isRunning && NormalChallenge.isRunning)) &&
+    Currency.antimatter.gt(DC.NUMMAX)
+  ) {
     return false;
   }
   if (
-    NormalChallenge(8).isRunning
-    && (Sacrifice.totalBoost.gte(DC.NUMMAX))
+    NormalChallenge(8).isRunning &&
+    (Sacrifice.totalBoost.gte(DC.NUMMAX))
   ) {
     return false;
   }
@@ -156,7 +181,9 @@ export function sacrificeReset() {
     }
     Currency.antimatter.reset();
   } else if (!isAch118Unlocked) {
-    AntimatterDimensions.resetAmountUpToTier(NormalChallenge(12).isRunning ? 6 : 7);
+    AntimatterDimensions.resetAmountUpToTier(
+      NormalChallenge(12).isRunning ? 6 : 7,
+    );
   }
   player.requirementChecks.infinity.noSacrifice = false;
   EventHub.dispatch(GAME_EVENT.SACRIFICE_RESET_AFTER);

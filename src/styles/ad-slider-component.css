@@ -1,8 +1,8 @@
 /*
-* This is based on vue-slider-component
-* downloaded from https://github.com/NightCatSama/vue-slider-component
-* It's modified to support showing the slider value in the slider.
-*/
+ * This is based on vue-slider-component
+ * downloaded from https://github.com/NightCatSama/vue-slider-component
+ * It's modified to support showing the slider value in the slider.
+ */
 
 /*
 The MIT License (MIT)
@@ -239,8 +239,13 @@ SOFTWARE.
   transform: translate(100%, -50%);
 }
 
-.l-ad-slider__wrap .ad-slider-tooltip-wrap.ad-slider-tooltip-top .ad-slider-tooltip::before,
-.l-ad-slider__wrap .ad-slider-tooltip-top .vue-merged-tooltip .ad-slider-tooltip::before {
+.l-ad-slider__wrap
+  .ad-slider-tooltip-wrap.ad-slider-tooltip-top
+  .ad-slider-tooltip::before,
+.l-ad-slider__wrap
+  .ad-slider-tooltip-top
+  .vue-merged-tooltip
+  .ad-slider-tooltip::before {
   content: "";
   width: 0;
   height: 0;
@@ -258,8 +263,13 @@ SOFTWARE.
   visibility: hidden;
 }
 
-.l-ad-slider__wrap .ad-slider-tooltip-wrap.ad-slider-tooltip-bottom .ad-slider-tooltip::before,
-.l-ad-slider__wrap .ad-slider-tooltip-bottom .vue-merged-tooltip .ad-slider-tooltip::before {
+.l-ad-slider__wrap
+  .ad-slider-tooltip-wrap.ad-slider-tooltip-bottom
+  .ad-slider-tooltip::before,
+.l-ad-slider__wrap
+  .ad-slider-tooltip-bottom
+  .vue-merged-tooltip
+  .ad-slider-tooltip::before {
   content: "";
   width: 0;
   height: 0;
@@ -272,8 +282,13 @@ SOFTWARE.
   transform: translate(-50%, 0);
 }
 
-.l-ad-slider__wrap .ad-slider-tooltip-wrap.ad-slider-tooltip-left .ad-slider-tooltip::before,
-.l-ad-slider__wrap .ad-slider-tooltip-left .vue-merged-tooltip .ad-slider-tooltip::before {
+.l-ad-slider__wrap
+  .ad-slider-tooltip-wrap.ad-slider-tooltip-left
+  .ad-slider-tooltip::before,
+.l-ad-slider__wrap
+  .ad-slider-tooltip-left
+  .vue-merged-tooltip
+  .ad-slider-tooltip::before {
   content: "";
   width: 0;
   height: 0;
@@ -286,8 +301,13 @@ SOFTWARE.
   transform: translate(0, -50%);
 }
 
-.l-ad-slider__wrap .ad-slider-tooltip-wrap.ad-slider-tooltip-right .ad-slider-tooltip::before,
-.l-ad-slider__wrap .ad-slider-tooltip-right .vue-merged-tooltip .ad-slider-tooltip::before {
+.l-ad-slider__wrap
+  .ad-slider-tooltip-wrap.ad-slider-tooltip-right
+  .ad-slider-tooltip::before,
+.l-ad-slider__wrap
+  .ad-slider-tooltip-right
+  .vue-merged-tooltip
+  .ad-slider-tooltip::before {
   content: "";
   width: 0;
   height: 0;
@@ -300,7 +320,9 @@ SOFTWARE.
   transform: translate(0, -50%);
 }
 
-.l-ad-slider__wrap .l-ad-slider__dot.ad-slider-hover:hover .ad-slider-tooltip-wrap {
+.l-ad-slider__wrap
+  .l-ad-slider__dot.ad-slider-hover:hover
+  .ad-slider-tooltip-wrap {
   display: block;
 }
 
@@ -339,8 +361,12 @@ SOFTWARE.
   transition: all 0.3s;
 }
 
-.l-ad-slider__wrap .ad-slider-piecewise-item:first-child .ad-slider-piecewise-dot,
-.l-ad-slider__wrap .ad-slider-piecewise-item:last-child .ad-slider-piecewise-dot {
+.l-ad-slider__wrap
+  .ad-slider-piecewise-item:first-child
+  .ad-slider-piecewise-dot,
+.l-ad-slider__wrap
+  .ad-slider-piecewise-item:last-child
+  .ad-slider-piecewise-dot {
   visibility: hidden;
 }
 

@@ -14,12 +14,18 @@ export const MachineHandler = {
   },
 
   get realityMachineMultiplier() {
-    return Teresa.rmMultiplier.times(PerkShopUpgrade.rmMult.effectOrDefault(DC.D1))
-      .times(getAdjustedGlyphEffect("effarigrm")).times(Achievement(167).effectOrDefault(1));
+    return Teresa.rmMultiplier.times(
+      PerkShopUpgrade.rmMult.effectOrDefault(DC.D1),
+    )
+      .times(getAdjustedGlyphEffect("effarigrm")).times(
+        Achievement(167).effectOrDefault(1),
+      );
   },
 
   get uncappedRM() {
-    let log10FinalEP = player.records.thisReality.maxEP.plus(gainedEternityPoints()).max(1).log10();
+    let log10FinalEP = player.records.thisReality.maxEP.plus(
+      gainedEternityPoints(),
+    ).max(1).log10();
     if (!PlayerProgress.realityUnlocked()) {
       if (log10FinalEP.gt(8000)) {
         log10FinalEP = new Decimal(8000);
@@ -31,7 +37,7 @@ export const MachineHandler = {
     let rmGain = DC.E3.pow(log10FinalEP.div(4000).sub(1));
     // Increase base RM gain if <10 RM
     if (rmGain.gte(1) && rmGain.lt(10)) {
-      rmGain = (log10FinalEP).minus(26).mul(27).div(4000);
+      rmGain = log10FinalEP.minus(26).mul(27).div(4000);
     }
     rmGain = rmGain.times(this.realityMachineMultiplier);
     return rmGain.floor();
@@ -42,12 +48,21 @@ export const MachineHandler = {
   },
 
   get isIMUnlocked() {
-    return Currency.realityMachines.value.gte(this.hardcapRM) || Currency.imaginaryMachines.gt(0);
+    return Currency.realityMachines.value.gte(this.hardcapRM) ||
+      Currency.imaginaryMachines.gt(0);
   },
 
   get baseIMCap() {
-    return (Decimal.pow(Decimal.clampMin(this.uncappedRM.max(1).log10().sub(1000), 0), 2))
-      .times((Decimal.pow(Decimal.clampMin(this.uncappedRM.max(1).log10().sub(100000), 1), 0.2)));
+    return (Decimal.pow(
+      Decimal.clampMin(this.uncappedRM.max(1).log10().sub(1000), 0),
+      2,
+    ))
+      .times(
+        Decimal.pow(
+          Decimal.clampMin(this.uncappedRM.max(1).log10().sub(100000), 1),
+          0.2,
+        ),
+      );
   },
 
   get currentIMCap() {
@@ -63,7 +78,9 @@ export const MachineHandler = {
   updateIMCap() {
     if (this.uncappedRM.gte(this.baseRMCap)) {
       if (this.baseIMCap.gt(player.reality.iMCap)) {
-        player.records.bestReality.iMCapSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
+        player.records.bestReality.iMCapSet = Glyphs.copyForRecords(
+          Glyphs.active.filter((g) => g !== null),
+        );
         player.reality.iMCap = this.baseIMCap;
       }
     }
@@ -76,7 +93,12 @@ export const MachineHandler = {
 
   gainedImaginaryMachines(diff) {
     return (this.currentIMCap.sub(Currency.imaginaryMachines.value)).times(DC.D1
-      .sub(Decimal.pow(2, (new Decimal(0).sub(diff).div(1000).div(this.scaleTimeForIM)))));
+      .sub(
+        Decimal.pow(
+          2,
+          new Decimal(0).sub(diff).div(1000).div(this.scaleTimeForIM),
+        ),
+      ));
   },
 
   estimateIMTimer(cost) {
@@ -88,7 +110,12 @@ export const MachineHandler = {
     // This is doing log(a, 1/2) - log(b, 1/2) where a is % left to imCap of cost and b is % left to imCap of current
     // iM. log(1 - x, 1/2) should be able to estimate the time taken for iM to increase from 0 to imCap * x since every
     // fixed interval the difference between current iM to max iM should decrease by a factor of 1/2.
-    return Decimal.max(0, Decimal.log(imCap.div(imCap.sub(cost)), 2).sub(Decimal.log(
-      imCap.div(imCap.sub(currentIM)), 2))).times(this.scaleTimeForIM);
+    return Decimal.max(
+      0,
+      Decimal.log(imCap.div(imCap.sub(cost)), 2).sub(Decimal.log(
+        imCap.div(imCap.sub(currentIM)),
+        2,
+      )),
+    ).times(this.scaleTimeForIM);
   },
 };

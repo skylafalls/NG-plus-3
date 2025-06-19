@@ -13,7 +13,9 @@ export class NodeModule {
      * @type {TModule}
      * @private
      */
-    this.__module__ = STEAM && window.require !== undefined ? window.require(name) : undefined;
+    this.__module__ = STEAM && window.require !== undefined
+      ? window.require(name)
+      : undefined;
   }
 
   get isLoaded() {

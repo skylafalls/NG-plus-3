@@ -18,7 +18,11 @@ export class SingularityAutobuyerState extends AutobuyerState {
   }
 
   tick() {
-    if (Currency.darkEnergy.value.gte(Singularity.cap.mul(SingularityMilestone.autoCondense.effectValue))) {
+    if (
+      Currency.darkEnergy.value.gte(
+        Singularity.cap.mul(SingularityMilestone.autoCondense.effectValue),
+      )
+    ) {
       Singularity.perform();
     }
   }

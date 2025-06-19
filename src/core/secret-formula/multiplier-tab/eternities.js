@@ -6,7 +6,9 @@ export const eternities = {
     name: "Eternities gained per Eternity",
     isBase: true,
     multValue: () => gainedEternities(),
-    isActive: () => (PlayerProgress.realityUnlocked() || Achievement(113).isUnlocked) && !Pelle.isDoomed,
+    isActive: () =>
+      (PlayerProgress.realityUnlocked() || Achievement(113).isUnlocked) &&
+      !Pelle.isDoomed,
     overlay: ["Δ", "<i class='fa-solid fa-arrows-rotate' />"],
   },
   achievement: {
@@ -29,7 +31,8 @@ export const eternities = {
   },
   ra: {
     name: "Ra Upgrade - Multiplier based on TT",
-    multValue: () => Ra.unlocks.continuousTTBoost.effects.eternity.effectOrDefault(1),
+    multValue: () =>
+      Ra.unlocks.continuousTTBoost.effects.eternity.effectOrDefault(1),
     isActive: () => Ra.unlocks.continuousTTBoost.isUnlocked,
     icon: MultiplierTabIcons.GENERIC_RA,
   },

@@ -19,7 +19,9 @@ class RiftMilestoneState extends GameMechanicState {
   }
 
   get isUnlocked() {
-    if (this.resource === "decay" && PelleRifts.chaos.milestones[0].isEffectActive) {
+    if (
+      this.resource === "decay" && PelleRifts.chaos.milestones[0].isEffectActive
+    ) {
       return true;
     }
     return this.requirement <= PelleRifts[this.resource].percentage;
@@ -45,7 +47,9 @@ class RiftMilestoneState extends GameMechanicState {
 class RiftState extends GameMechanicState {
   constructor(config) {
     super(config);
-    this._milestones = this.config.milestones.map(x => new RiftMilestoneState(x));
+    this._milestones = this.config.milestones.map((x) =>
+      new RiftMilestoneState(x)
+    );
   }
 
   get fillCurrency() {
@@ -103,7 +107,10 @@ class RiftState extends GameMechanicState {
     if (!this.config.spendable) {
       return Math.min(this.realPercentage, this.reducedTo);
     }
-    return Math.min(this.config.percentage(this.totalFill) - this.spentPercentage, this.reducedTo);
+    return Math.min(
+      this.config.percentage(this.totalFill) - this.spentPercentage,
+      this.reducedTo,
+    );
   }
 
   get milestones() {
@@ -120,7 +127,8 @@ class RiftState extends GameMechanicState {
 
   get effects() {
     const base = this.config.baseEffect(this.effectValue);
-    const additional = this.config.additionalEffects?.().map(x => x.formattedEffect) ?? [];
+    const additional =
+      this.config.additionalEffects?.().map((x) => x.formattedEffect) ?? [];
     return [base, ...additional];
   }
 
@@ -145,7 +153,7 @@ class RiftState extends GameMechanicState {
   }
 
   toggle() {
-    const active = PelleRifts.all.filter(r => r.isActive).length;
+    const active = PelleRifts.all.filter((r) => r.isActive).length;
     if (!this.isActive && active === 2) {
       GameUI.notify.error("You can only have 2 rifts active at the same time!");
     } else {
@@ -154,7 +162,7 @@ class RiftState extends GameMechanicState {
   }
 
   checkMilestoneStates() {
-    this.milestones.forEach(x => x.checkMilestoneState());
+    this.milestones.forEach((x) => x.checkMilestoneState());
   }
 
   fill(diff) {
@@ -173,14 +181,17 @@ class RiftState extends GameMechanicState {
       if (this.fillCurrency.value.lte(1)) {
         return;
       }
-      const afterTickAmount = this.fillCurrency.value.times(Decimal.pow(1 - Pelle.riftDrainPercent, diff.div(1e3)));
+      const afterTickAmount = this.fillCurrency.value.times(
+        Decimal.pow(1 - Pelle.riftDrainPercent, diff.div(1e3)),
+      );
       const spent = this.fillCurrency.value.minus(afterTickAmount);
       // We limit this to 1 instead of 0 specifically for the case of replicanti; certain interactions with offline
       // time can cause it to drain to 0, where it gets stuck unless you reset it with some prestige
       this.fillCurrency.value = this.fillCurrency.value.minus(spent).max(1);
       this.totalFill = this.totalFill.plus(spent).min(this.maxValue);
     } else {
-      const afterTickAmount = this.fillCurrency.value * (Decimal.pow(1 - Pelle.riftDrainPercent, diff.div(1e3))).toNumber();
+      const afterTickAmount = this.fillCurrency.value *
+        (Decimal.pow(1 - Pelle.riftDrainPercent, diff.div(1e3))).toNumber();
       const spent = this.fillCurrency.value - afterTickAmount;
       this.fillCurrency.value = Math.max(this.fillCurrency.value - spent, 0);
       this.totalFill = Math.clampMax(this.totalFill + spent, this.maxValue);
@@ -194,7 +205,8 @@ class RiftState extends GameMechanicState {
 
 export const PelleRifts = mapGameDataToObject(
   GameDatabase.celestials.pelle.rifts,
-  config => new RiftState(config),
+  (config) => new RiftState(config),
 );
 
-PelleRifts.totalMilestones = () => PelleRifts.all.flatMap(x => x.milestones).countWhere(x => x.canBeApplied);
+PelleRifts.totalMilestones = () =>
+  PelleRifts.all.flatMap((x) => x.milestones).countWhere((x) => x.canBeApplied);

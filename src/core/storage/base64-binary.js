@@ -32,7 +32,8 @@
  * https://developer.mozilla.org/en/JavaScript_typed_arrays/Uint8Array
  */
 
-const keyStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+const keyStr =
+  "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
 
 /* Will return a Uint8Array type */
 export function decodeArrayBuffer(input) {

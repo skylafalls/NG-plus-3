@@ -1,9 +1,12 @@
 import { DC } from "./constants";
 
+/** @enum */
 export const GALAXY_TYPE = {
   NORMAL: 0,
   DISTANT: 1,
   REMOTE: 2,
+  OBSCURE: 3,
+  INVISIBLE: 4,
 };
 
 class GalaxyRequirement {
@@ -35,11 +38,14 @@ export const Galaxy = {
 
   /**
    * Figure out what galaxy number we can buy up to
-   * @param {number} currency Either dim 8 or dim 6, depends on current challenge
+   * @param {Decimal} currency Either dim 8 or dim 6, depends on current challenge
+   * @param {Decimal} minVal Minimum amount of galaxies we should be able to buy
    * @returns {Decimal} Max number of galaxies (total)
    */
   buyableGalaxies(currency, minVal = player.galaxies) {
-    const alter = GlyphAlteration.isAdded("power") ? getSecondaryGlyphEffect("powerpow") : DC.D1;
+    const alter = GlyphAlteration.isAdded("power")
+      ? getSecondaryGlyphEffect("powerpow")
+      : DC.D1;
     const dis = Galaxy.costScalingStart;
     const scale = Galaxy.costMult;
     let base = Galaxy.baseCost.sub(Effects.sum(InfinityUpgrade.resetBoost));
@@ -48,12 +54,19 @@ export const Galaxy = {
     }
 
     if (QuantumChallenge(5).isRunning) {
-      return Decimal.log(currency.div(Galaxy.requirementAt(new Decimal(0)).amount), 1.05).floor().max(minVal);
+      return Decimal.log(
+        currency.div(Galaxy.requirementAt(new Decimal(0)).amount),
+        1.05,
+      ).floor().max(minVal);
     }
 
     // Plz no ask how exponential math work i dont know i just code, see https://discord.com/channels/351476683016241162/439241762603663370/1210707188964659230m
     const minV = Galaxy.costScalingStart.min(Galaxy.remoteStart); // Take the smallest of the two values
-    if (currency.lt(Galaxy.requirementAt(minV).amount /* Pre exponential/quadratic? */)) {
+    if (
+      currency.lt(
+        Galaxy.requirementAt(minV).amount, /* Pre exponential/quadratic? */
+      )
+    ) {
       return Decimal.max(currency.sub(base).div(scale).floor().add(1), minVal);
     }
 
@@ -67,7 +80,7 @@ export const Galaxy = {
     }
 
     let remoteStart = Decimal.max(1e6, Galaxy.remoteStart);
-    let power = 1.002;
+    let power = new Decimal(1.002).powEffectsOf(GluonUpgrade.redGreen(1), GluonUpgrade.redGreen(7));
 
     if (Galaxy.requirementAt(remoteStart).amount.lt(currency)) {
       return Decimal.log(currency.div(Galaxy.requirementAt(remoteStart)), power)
@@ -76,19 +89,29 @@ export const Galaxy = {
     // Ignore BBBS' warning, even though its theoretically quite dangerous
     // We can do this because at most, 1e6 galaxies of dimension would be put into this
     // So at most the output is 1e6, less than its 1e15 max, and for higher we use the above equation
-    return new Decimal(bulkBuyBinarySearch(new Decimal(currency), {
-      costFunction: x => this.requirementAt(new Decimal(x)).amount,
-      cumulative: false,
-    }, 0, true).quantity).floor().add(1).max(minVal);
+    return new Decimal(
+      bulkBuyBinarySearch(
+        new Decimal(currency),
+        {
+          costFunction: x => this.requirementAt(new Decimal(x)).amount,
+          cumulative: false,
+        },
+        0,
+        true,
+      ).quantity,
+    ).floor().add(1).max(minVal);
   },
 
   requirementAt(galaxies) {
     // Beyond 1e6 (or further if remote is beyond that) the other effects are so small in changes that it doesn't matter
     // This does technically make it slightly weaker than vanilla, but its so minor you would rarely ever notice, and it
     // allows the inverse to be correct beyond 1e6 without using any really annoying math methods that i dont understand
-    const equivGal = Decimal.min(Decimal.max(1e6, Galaxy.remoteStart), galaxies);
-    let amount = Galaxy.baseCost.add((equivGal.times(Galaxy.costMult)));
+    let equivGal = Decimal.min(
+      Decimal.max(1e6, Galaxy.remoteStart),
+      galaxies,
+    );
     const type = Galaxy.typeAt(galaxies);
+    let amount = Galaxy.baseCost.add(equivGal.times(Galaxy.costMult));
 
     if (type === GALAXY_TYPE.DISTANT || type === GALAXY_TYPE.REMOTE) {
       const galaxyCostScalingStart = this.costScalingStart;
@@ -97,8 +120,10 @@ export const Galaxy = {
     }
 
     if (type === GALAXY_TYPE.REMOTE || QuantumChallenge(5).isRunning) {
-      let power = QuantumChallenge(5).isRunning ? 1.05 : 1.002;
-      const galaxiesAmount = QuantumChallenge(5).isRunning ? galaxies : galaxies.sub(Galaxy.remoteStart.sub(1));
+      let power = new Decimal(1.002).powEffectsOf(GluonUpgrade.redGreen(1), GluonUpgrade.redGreen(7));
+      const galaxiesAmount = QuantumChallenge(5).isRunning
+        ? galaxies
+        : galaxies.sub(Galaxy.remoteStart.sub(1));
       amount = amount.times(Decimal.pow(power, galaxiesAmount));
     }
 
@@ -117,7 +142,9 @@ export const Galaxy = {
   },
 
   get costMult() {
-    return new Decimal(Effects.min(NormalChallenge(10).isRunning ? 90 : 60, TimeStudy(42)));
+    return new Decimal(
+      Effects.min(NormalChallenge(10).isRunning ? 90 : 60, TimeStudy(42)),
+    );
   },
 
   get baseCost() {
@@ -135,8 +162,10 @@ export const Galaxy = {
     if (NormalChallenge(8).isRunning || InfinityChallenge(7).isRunning) {
       return false;
     }
-    if (player.records.thisInfinity.maxAM.gt(Player.infinityGoal)
-      && (!player.break || Player.isInAntimatterChallenge)) {
+    if (
+      player.records.thisInfinity.maxAM.gt(Player.infinityGoal)
+      && (!player.break || Player.isInAntimatterChallenge)
+    ) {
       return false;
     }
     return true;
@@ -191,14 +220,17 @@ export const Galaxy = {
 export function galaxyReset() {
   EventHub.dispatch(GAME_EVENT.GALAXY_RESET_BEFORE);
   player.galaxies = player.galaxies.add(1);
-  if (!Achievement(143).isUnlocked || (Pelle.isDoomed && !PelleUpgrade.galaxyNoResetDimboost.canBeApplied)
-    || EternityMilestone.noADReset.canBeApplied) {
+  if (
+    !Achievement(143).isUnlocked
+    || (Pelle.isDoomed && !PelleUpgrade.galaxyNoResetDimboost.canBeApplied)
+    || EternityMilestone.noADReset.canBeApplied
+  ) {
     player.dimensionBoosts = DC.D0;
   }
   softReset(0);
   if (Notations.current === Notation.emoji) {
-    player.requirementChecks.permanent.emojiGalaxies
-  = player.requirementChecks.permanent.emojiGalaxies.add(1);
+    player.requirementChecks.permanent.emojiGalaxies = player.requirementChecks
+      .permanent.emojiGalaxies.add(1);
   }
   // This is specifically reset here because the check is actually per-galaxy and not per-infinity
   player.requirementChecks.infinity.noSacrifice = true;
@@ -217,7 +249,9 @@ export function manualRequestGalaxyReset(bulk) {
     return;
   }
   if (player.options.confirmations.antimatterGalaxy) {
-    Modal.antimatterGalaxy.show({ bulk: bulk && EternityMilestone.autobuyMaxGalaxies.isReached });
+    Modal.antimatterGalaxy.show({
+      bulk: bulk && EternityMilestone.autobuyMaxGalaxies.isReached,
+    });
     return;
   }
   requestGalaxyReset(bulk);
@@ -230,7 +264,10 @@ export function requestGalaxyReset(bulk, limit = Number.MAX_VALUE) {
   if (EternityMilestone.autobuyMaxGalaxies.isReached && bulk) {
     return maxBuyGalaxies(restrictedLimit);
   }
-  if (player.galaxies.gte(restrictedLimit) || !Galaxy.canBeBought || !Galaxy.requirement.isSatisfied) {
+  if (
+    player.galaxies.gte(restrictedLimit) || !Galaxy.canBeBought
+    || !Galaxy.requirement.isSatisfied
+  ) {
     return false;
   }
   Tutorial.turnOffEffect(TUTORIAL_STATE.GALAXY);
@@ -239,7 +276,10 @@ export function requestGalaxyReset(bulk, limit = Number.MAX_VALUE) {
 }
 
 function maxBuyGalaxies(limit = DC.BEMAX) {
-  if (player.galaxies.gte(limit) || !Galaxy.canBeBought || !Galaxy.requirement.isSatisfied) {
+  if (
+    player.galaxies.gte(limit) || !Galaxy.canBeBought
+    || !Galaxy.requirement.isSatisfied
+  ) {
     return false;
   }
   // Check for ability to buy one galaxy (which is pretty efficient)
@@ -248,13 +288,18 @@ function maxBuyGalaxies(limit = DC.BEMAX) {
     return false;
   }
   const dim = AntimatterDimension(req.tier);
-  if (Galaxy.buyableGalaxies(Decimal.round(dim.totalAmount)).lte(player.galaxies)) {
+  if (
+    Galaxy.buyableGalaxies(Decimal.round(dim.totalAmount)).lte(player.galaxies)
+  ) {
     return false;
   }
   const newGalaxies = Decimal.min(
-    Galaxy.buyableGalaxies(Decimal.round(dim.totalAmount)), limit);
+    Galaxy.buyableGalaxies(Decimal.round(dim.totalAmount)),
+    limit,
+  );
   if (Notations.current === Notation.emoji) {
-    player.requirementChecks.permanent.emojiGalaxies = player.requirementChecks.permanent.emojiGalaxies
+    player.requirementChecks.permanent.emojiGalaxies = player.requirementChecks
+      .permanent.emojiGalaxies
       .add(newGalaxies.sub(player.galaxies));
   }
   // Galaxy count is incremented by galaxyReset(), so add one less than we should:

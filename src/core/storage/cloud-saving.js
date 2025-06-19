@@ -57,7 +57,7 @@ export const Cloud = {
 
     await signInWithEmailAndPassword(this.auth, email, pass)
       .catch(() => createUserWithEmailAndPassword(this.auth, email, pass))
-      .catch(x => error = x);
+      .catch((x) => error = x);
 
     if (error !== undefined) {
       console.log(`Firebase Login Error: ${error}`);
@@ -79,7 +79,8 @@ export const Cloud = {
       return {
         farther: ProgressChecker.compareSaveProgress(cloud, local),
         older: ProgressChecker.compareSaveTimes(cloud, local),
-        differentName: cloud?.options.saveFileName !== local?.options.saveFileName,
+        differentName:
+          cloud?.options.saveFileName !== local?.options.saveFileName,
         hashMismatch: this.lastCloudHash && this.lastCloudHash !== hash,
       };
     } catch {
@@ -102,12 +103,22 @@ export const Cloud = {
         this.lastCloudHash = thisCloudHash;
       }
       const localSave = GameStorage.saves[saveId];
-      const saveComparison = this.compareSaves(cloudSave, localSave, thisCloudHash);
+      const saveComparison = this.compareSaves(
+        cloudSave,
+        localSave,
+        thisCloudHash,
+      );
       const overwriteAndSendCloudSave = () => this.save();
 
       // If the comparison fails, we assume the cloud data is corrupted and show the relevant modal
       if (!saveComparison) {
-        Modal.addCloudConflict(saveId, saveComparison, cloudSave, localSave, overwriteAndSendCloudSave);
+        Modal.addCloudConflict(
+          saveId,
+          saveComparison,
+          cloudSave,
+          localSave,
+          overwriteAndSendCloudSave,
+        );
         Modal.cloudInvalidData.show({ isSaving: true });
         return;
       }
@@ -115,10 +126,17 @@ export const Cloud = {
       // Bring up the modal if cloud saving will overwrite a cloud save which is older or possibly farther
       const hasBoth = cloudSave && localSave;
       // NOTE THIS CHECK IS INTENTIONALLY DIFFERENT FROM THE LOAD CHECK
-      const hasConflict = hasBoth && saveComparison && (saveComparison.older === -1 || saveComparison.farther === -1
-        || saveComparison.differentName || saveComparison.hashMismatch);
+      const hasConflict = hasBoth && saveComparison &&
+        (saveComparison.older === -1 || saveComparison.farther === -1 ||
+          saveComparison.differentName || saveComparison.hashMismatch);
       if (forceModal || (hasConflict && player.options.showCloudModal)) {
-        Modal.addCloudConflict(saveId, saveComparison, cloudSave, localSave, overwriteAndSendCloudSave);
+        Modal.addCloudConflict(
+          saveId,
+          saveComparison,
+          cloudSave,
+          localSave,
+          overwriteAndSendCloudSave,
+        );
         Modal.cloudSaveConflict.show();
       } else if (!hasConflict || player.options.forceCloudOverwrite) {
         overwriteAndSendCloudSave();
@@ -130,13 +148,17 @@ export const Cloud = {
     if (!this.user) {
       return;
     }
-    if (GlyphSelection.active || ui.$viewModel.modal.progressBar !== undefined) {
+    if (
+      GlyphSelection.active || ui.$viewModel.modal.progressBar !== undefined
+    ) {
       return;
     }
     if (player.options.syncSaveIntervals) {
       GameStorage.save();
     }
-    const serializedSave = GameSaveSerializer.serialize(GameStorage.saves[GameStorage.currentSlot]);
+    const serializedSave = GameSaveSerializer.serialize(
+      GameStorage.saves[GameStorage.currentSlot],
+    );
 
     this.lastCloudHash = sha512_256(serializedSave);
     GameStorage.lastCloudSave = Date.now();
@@ -149,14 +171,22 @@ export const Cloud = {
     // since the hiding motivation was identifying info, and Steam usernames are generally more publicly
     // visible than Google info. Also affects the visibility of the button in the Options/Saving subtab
     if (STEAM) {
-      GameUI.notify.info(`Game saved (slot ${slot + 1}) to cloud as user ${this.user.displayName}`);
+      GameUI.notify.info(
+        `Game saved (slot ${
+          slot + 1
+        }) to cloud as user ${this.user.displayName}`,
+      );
       return;
     }
 
     if (player.options.hideGoogleName) {
       GameUI.notify.info(`Game saved (slot ${slot + 1}) to cloud`);
     } else {
-      GameUI.notify.info(`Game saved (slot ${slot + 1}) to cloud as user ${this.user.displayName}`);
+      GameUI.notify.info(
+        `Game saved (slot ${
+          slot + 1
+        }) to cloud as user ${this.user.displayName}`,
+      );
     }
   },
 
@@ -189,23 +219,40 @@ export const Cloud = {
         if (player.options.hideGoogleName) {
           GameUI.notify.info(`Cloud save (slot ${saveId + 1}) loaded`);
         } else {
-          GameUI.notify.info(`Cloud save (slot ${saveId + 1}) loaded for user ${this.user.displayName}`);
+          GameUI.notify.info(
+            `Cloud save (slot ${
+              saveId + 1
+            }) loaded for user ${this.user.displayName}`,
+          );
         }
       };
 
       // If the comparison fails, we assume the cloud data is corrupted and show the relevant modal
       if (!saveComparison) {
-        Modal.addCloudConflict(saveId, saveComparison, cloudSave, localSave, overwriteLocalSave);
+        Modal.addCloudConflict(
+          saveId,
+          saveComparison,
+          cloudSave,
+          localSave,
+          overwriteLocalSave,
+        );
         Modal.cloudInvalidData.show({ isSaving: false });
         return;
       }
 
       // Bring up the modal if cloud loading will overwrite a local save which is older or possibly farther
       const hasBoth = cloudSave && localSave;
-      const hasConflict = hasBoth && (saveComparison.older === 1 || saveComparison.farther !== -1
-        || saveComparison.differentName);
+      const hasConflict = hasBoth &&
+        (saveComparison.older === 1 || saveComparison.farther !== -1 ||
+          saveComparison.differentName);
       if (hasConflict) {
-        Modal.addCloudConflict(saveId, saveComparison, cloudSave, localSave, overwriteLocalSave);
+        Modal.addCloudConflict(
+          saveId,
+          saveComparison,
+          cloudSave,
+          localSave,
+          overwriteLocalSave,
+        );
         Modal.cloudLoadConflict.show();
       } else {
         overwriteLocalSave();
@@ -279,9 +326,7 @@ export const Cloud = {
       if (user) {
         this.user = {
           id: user.uid,
-          displayName: STEAM
-            ? SteamRuntime.screenName
-            : user.displayName,
+          displayName: STEAM ? SteamRuntime.screenName : user.displayName,
           email: user.email,
         };
       } else {

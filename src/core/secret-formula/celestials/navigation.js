@@ -12,16 +12,22 @@ export function vUnlockProgress(index) {
   if (VUnlocks.vAchievementUnlock.isUnlocked) {
     return 1;
   }
-  const db = Object.values(GameDatabase.celestials.v.mainUnlock).find(e => e.id === index);
+  const db = Object.values(GameDatabase.celestials.v.mainUnlock).find((e) =>
+    e.id === index
+  );
   return db.progress();
 }
 
 export function vUnlockLegendLabel(complete, index) {
-  const db = Object.values(GameDatabase.celestials.v.mainUnlock).find(e => e.id === index);
+  const db = Object.values(GameDatabase.celestials.v.mainUnlock).find((e) =>
+    e.id === index
+  );
   if (complete >= 1) {
     return `${db.name} condition for V`;
   }
-  return `Reach ${db.format(db.resource())} / ${db.format(db.requirement)} ${db.name}.`;
+  return `Reach ${db.format(db.resource())} / ${
+    db.format(db.requirement)
+  } ${db.name}.`;
 }
 
 // Angle is defined/rescaled so that 0 is the first rift, 4 is the last one, and all 5 are equally spaced around
@@ -30,7 +36,9 @@ export function vUnlockLegendLabel(complete, index) {
 export function pelleStarPosition(angle, scale) {
   const pelleCenter = new Vector(750, 550);
   const theta = (0.7 - 0.4 * angle) * Math.PI;
-  return new Vector(scale * Math.cos(theta), -scale * Math.sin(theta)).plus(pelleCenter);
+  return new Vector(scale * Math.cos(theta), -scale * Math.sin(theta)).plus(
+    pelleCenter,
+  );
 }
 
 // Makes curved spokes connecting the center of Pelle to all the outer nodes corresponding to rifts
@@ -43,8 +51,13 @@ function pelleStarConnector(index, fillColor, isOverfill) {
     // Technically 2 should be about 1.929 and 4/3 should be about 1.328; exact values for both of these leave a small
     // gap between the path and the node, so we round up a bit to make those go away
     const pathEnd = pathStart + 2;
-    const path = LogarithmicSpiral.fromPolarEndpoints(pelleStarPosition(index + 0.5, pelleSize),
-      pathStart, pelleSize, pathEnd, 4 / 3 * pelleSize);
+    const path = LogarithmicSpiral.fromPolarEndpoints(
+      pelleStarPosition(index + 0.5, pelleSize),
+      pathStart,
+      pelleSize,
+      pathEnd,
+      4 / 3 * pelleSize,
+    );
     // The +0.01 prevents curve decomposition errors from happening
     const pathPadStart = path.angleFromRadius(pelleSize + 0.01) - pathStart;
     const pathPadEnd = pathEnd - path.angleFromRadius(4 / 3 * pelleSize);
@@ -55,7 +68,9 @@ function pelleStarConnector(index, fillColor, isOverfill) {
       pathPadStart,
       pathPadEnd,
       fill: fillColor,
-      drawOrder: isOverfill ? CELESTIAL_NAV_DRAW_ORDER.NODE_OVERLAYS : undefined,
+      drawOrder: isOverfill
+        ? CELESTIAL_NAV_DRAW_ORDER.NODE_OVERLAYS
+        : undefined,
       noBG: isOverfill,
     };
   }());
@@ -101,8 +116,14 @@ const Positions = Object.freeze({
   effarigNode: new Vector(550, 25),
 
   enslavedReality: new Vector(650, 250),
-  enslavedGlyphLevel: new Vector(650 + 75 * Math.cos(Math.PI / 180 * -60), 250 + 75 * Math.sin(Math.PI / 180 * -60)),
-  enslavedGlyphRarity: new Vector(650 + 75 * Math.cos(Math.PI / 180 * 120), 250 + 75 * Math.sin(Math.PI / 180 * 120)),
+  enslavedGlyphLevel: new Vector(
+    650 + 75 * Math.cos(Math.PI / 180 * -60),
+    250 + 75 * Math.sin(Math.PI / 180 * -60),
+  ),
+  enslavedGlyphRarity: new Vector(
+    650 + 75 * Math.cos(Math.PI / 180 * 120),
+    250 + 75 * Math.sin(Math.PI / 180 * 120),
+  ),
 
   vUnlockAchievement: new Vector(400, 350 + 50 * Math.sqrt(3)),
   vAchievement0: new Vector(350, 350),
@@ -113,10 +134,22 @@ const Positions = Object.freeze({
   vAchievement5: new Vector(300, 350 + 50 * Math.sqrt(3)),
 
   raReality: new Vector(400, 200),
-  raPetTeresa: new Vector(400 + 85 * Math.sin(Math.PI / 180 * 252), 200 + 85 * Math.cos(Math.PI / 180 * 252)),
-  raPetEffarig: new Vector(400 + 85 * Math.sin(Math.PI / 180 * 140), 200 + 85 * Math.cos(Math.PI / 180 * 140)),
-  raPetEnslaved: new Vector(400 + 85 * Math.sin(Math.PI / 180 * 78), 200 + 85 * Math.cos(Math.PI / 180 * 78)),
-  raPetV: new Vector(400 + 85 * Math.sin(Math.PI / 180 * 0), 200 + 85 * Math.cos(Math.PI / 180 * 0)),
+  raPetTeresa: new Vector(
+    400 + 85 * Math.sin(Math.PI / 180 * 252),
+    200 + 85 * Math.cos(Math.PI / 180 * 252),
+  ),
+  raPetEffarig: new Vector(
+    400 + 85 * Math.sin(Math.PI / 180 * 140),
+    200 + 85 * Math.cos(Math.PI / 180 * 140),
+  ),
+  raPetEnslaved: new Vector(
+    400 + 85 * Math.sin(Math.PI / 180 * 78),
+    200 + 85 * Math.cos(Math.PI / 180 * 78),
+  ),
+  raPetV: new Vector(
+    400 + 85 * Math.sin(Math.PI / 180 * 0),
+    200 + 85 * Math.cos(Math.PI / 180 * 0),
+  ),
 
   laitelaFirstCenter: new Vector(150, 450),
   laitelaFirstLeft: new Vector(100, 500),
@@ -141,11 +174,22 @@ const Positions = Object.freeze({
 // elements that render for filling - the initial fill, the drain, and then the overfill
 
 function pelleRiftFill(name, index, textAngle, fillType) {
-  let visibleCheck, progressFn, legendFn, percentFn, incompleteClass, nodeFill, connectorFill;
+  let visibleCheck,
+    progressFn,
+    legendFn,
+    percentFn,
+    incompleteClass,
+    nodeFill,
+    connectorFill;
   switch (fillType) {
     case FILL_STATE.FILL: {
       visibleCheck = () => riftFillStage(name) === FILL_STATE.FILL;
-      progressFn = () => Math.clamp(0.1 + PelleRifts[name.toLowerCase()].realPercentage / 0.9, 1e-6, 1);
+      progressFn = () =>
+        Math.clamp(
+          0.1 + PelleRifts[name.toLowerCase()].realPercentage / 0.9,
+          1e-6,
+          1,
+        );
       legendFn = () => false;
       percentFn = () => PelleRifts[name.toLowerCase()].realPercentage;
       incompleteClass = "c-celestial-nav__test-incomplete";
@@ -155,8 +199,15 @@ function pelleRiftFill(name, index, textAngle, fillType) {
     }
     case FILL_STATE.DRAIN: {
       visibleCheck = () => riftFillStage(name) >= FILL_STATE.DRAIN;
-      progressFn = () => Math.clamp(Math.sqrt(PelleRifts[name.toLowerCase()].reducedTo), 1e-6, 1);
-      legendFn = () => riftFillStage(name) === FILL_STATE.DRAIN && PelleRifts[name.toLowerCase()].reducedTo < 1;
+      progressFn = () =>
+        Math.clamp(
+          Math.sqrt(PelleRifts[name.toLowerCase()].reducedTo),
+          1e-6,
+          1,
+        );
+      legendFn = () =>
+        riftFillStage(name) === FILL_STATE.DRAIN &&
+        PelleRifts[name.toLowerCase()].reducedTo < 1;
       percentFn = () => PelleRifts[name.toLowerCase()].reducedTo;
       incompleteClass = "c-celestial-nav__drained-rift";
       nodeFill = "crimson";
@@ -165,7 +216,8 @@ function pelleRiftFill(name, index, textAngle, fillType) {
     }
     case FILL_STATE.OVERFILL: {
       visibleCheck = () => riftFillStage(name) === FILL_STATE.OVERFILL;
-      progressFn = () => Math.clamp(PelleRifts[name.toLowerCase()].percentage - 1, 1e-6, 1);
+      progressFn = () =>
+        Math.clamp(PelleRifts[name.toLowerCase()].percentage - 1, 1e-6, 1);
       percentFn = () => PelleRifts[name.toLowerCase()].percentage;
       legendFn = () => true;
       incompleteClass = undefined;
@@ -189,14 +241,20 @@ function pelleRiftFill(name, index, textAngle, fillType) {
       forceLegend: () => legendFn(),
       legend: {
         text: () => [
-          `${formatPercents(percentFn(), 1)} ${wordShift.wordCycle(PelleRifts[name.toLowerCase()].name)}`,
+          `${formatPercents(percentFn(), 1)} ${
+            wordShift.wordCycle(PelleRifts[name.toLowerCase()].name)
+          }`,
         ],
         angle: textAngle,
         diagonal: 30,
         horizontal: 16,
       },
     },
-    connector: pelleStarConnector(index, connectorFill, fillType === FILL_STATE.OVERFILL),
+    connector: pelleStarConnector(
+      index,
+      connectorFill,
+      fillType === FILL_STATE.OVERFILL,
+    ),
   };
 }
 
@@ -208,8 +266,12 @@ const riftFillElements = {};
 for (const fill of fillStates) {
   for (let index = 0; index < riftNames.length; index++) {
     const name = riftNames[index];
-    riftFillElements[`pelle-${name}-${fill}`] = pelleRiftFill(name, index, angles[index],
-      FILL_STATE[fill.toUpperCase()]);
+    riftFillElements[`pelle-${name}-${fill}`] = pelleRiftFill(
+      name,
+      index,
+      angles[index],
+      FILL_STATE[fill.toUpperCase()],
+    );
   }
 }
 
@@ -236,9 +298,11 @@ export const celestialNavigation = {
   },
   "teresa-reality-unlock": {
     visible: () => true,
-    complete: () => (TeresaUnlocks.run.canBeApplied
-      ? 1
-      : Decimal.log10(Teresa.pouredAmount + 1).toNumber() / Math.log10(TeresaUnlocks.run.price)),
+    complete:
+      () => (TeresaUnlocks.run.canBeApplied
+        ? 1
+        : Decimal.log10(Teresa.pouredAmount + 1).toNumber() /
+          Math.log10(TeresaUnlocks.run.price)),
     node: {
       completeClass: "c-celestial-nav__test-complete",
       incompleteClass: "c-celestial-nav__test-incomplete",
@@ -262,7 +326,13 @@ export const celestialNavigation = {
     connector: (function () {
       const pathStart = -Math.PI;
       const pathEnd = Math.PI;
-      const path = LogarithmicSpiral.fromPolarEndpoints(Positions.teresa, -Math.PI, 69, Math.PI, 26);
+      const path = LogarithmicSpiral.fromPolarEndpoints(
+        Positions.teresa,
+        -Math.PI,
+        69,
+        Math.PI,
+        26,
+      );
       const pathPadStart = path.angleFromRadius(64 - 3) - pathStart;
       const pathPadEnd = pathEnd - path.angleFromRadius(34);
       return {
@@ -297,9 +367,11 @@ export const celestialNavigation = {
   },
   "teresa-pp-shop": {
     visible: () => true,
-    complete: () => (TeresaUnlocks.shop.canBeApplied
-      ? 1
-      : Decimal.log10(Teresa.pouredAmount + 1).toNumber() / Math.log10(TeresaUnlocks.shop.price)),
+    complete:
+      () => (TeresaUnlocks.shop.canBeApplied
+        ? 1
+        : Decimal.log10(Teresa.pouredAmount + 1).toNumber() /
+          Math.log10(TeresaUnlocks.shop.price)),
     node: {
       clickAction: () => Tab.celestials.teresa.show(true),
       completeClass: "c-celestial-nav__test-complete",
@@ -329,16 +401,23 @@ export const celestialNavigation = {
     connector: {
       pathStart: 0,
       pathEnd: 1,
-      path: LinearPath.connectCircles(Positions.teresa, 78 - 1, Positions.teresaPerkPointShop, 16 - 1),
+      path: LinearPath.connectCircles(
+        Positions.teresa,
+        78 - 1,
+        Positions.teresaPerkPointShop,
+        16 - 1,
+      ),
       completeWidth: 6,
       incompleteWidth: 4,
     },
   },
   "effarig-shop": {
     visible: () => true,
-    complete: () => (TeresaUnlocks.effarig.canBeApplied
-      ? 1
-      : Decimal.log10(Teresa.pouredAmount + 1).toNumber() / Math.log10(TeresaUnlocks.effarig.price)),
+    complete:
+      () => (TeresaUnlocks.effarig.canBeApplied
+        ? 1
+        : Decimal.log10(Teresa.pouredAmount + 1).toNumber() /
+          Math.log10(TeresaUnlocks.effarig.price)),
     node: {
       clickAction: () => Tab.celestials.effarig.show(true),
       completeClass: "c-celestial-nav__effarig",
@@ -367,7 +446,12 @@ export const celestialNavigation = {
     connector: {
       pathStart: 0,
       pathEnd: 1,
-      path: LinearPath.connectCircles(Positions.teresa, 78 - 1, Positions.effarigShop, 24 - 1),
+      path: LinearPath.connectCircles(
+        Positions.teresa,
+        78 - 1,
+        Positions.effarigShop,
+        24 - 1,
+      ),
       fill: "url(#gradTeresaEffarig)",
     },
   },
@@ -375,9 +459,10 @@ export const celestialNavigation = {
     visible: () => TeresaUnlocks.effarig.canBeApplied,
     // If the upgrade to unlock the reality isn't yet bought, clamp the progress at 99.9%,
     // even if the player has enough relic shards to buy it.
-    complete: () => (EffarigUnlock.run.isUnlocked
-      ? 1
-      : Decimal.pLog10(Currency.relicShards.value)
+    complete:
+      () => (EffarigUnlock.run.isUnlocked
+        ? 1
+        : Decimal.pLog10(Currency.relicShards.value)
           .div(Decimal.log10(EffarigUnlock.run.cost)).clampMax(1).toNumber()),
     node: {
       clickAction: () => Tab.celestials.effarig.show(true),
@@ -407,7 +492,12 @@ export const celestialNavigation = {
     connector: {
       pathStart: 0,
       pathEnd: 1,
-      path: LinearPath.connectCircles(Positions.effarigShop, 24 - 1, Positions.effarigRealityUnlock, 16 - 1),
+      path: LinearPath.connectCircles(
+        Positions.effarigShop,
+        24 - 1,
+        Positions.effarigRealityUnlock,
+        16 - 1,
+      ),
       fill: "#d13737",
     },
   },
@@ -421,7 +511,8 @@ export const celestialNavigation = {
         return 0;
       }
 
-      return Currency.antimatter.value.add(1).log10().div(DC.NUMMAX.log10()).max(1).toNumber();
+      return Currency.antimatter.value.add(1).log10().div(DC.NUMMAX.log10())
+        .max(1).toNumber();
     },
     node: {
       clickAction: () => Tab.celestials.effarig.show(true),
@@ -456,7 +547,12 @@ export const celestialNavigation = {
     connector: {
       pathStart: 0,
       pathEnd: 1,
-      path: LinearPath.connectCircles(Positions.effarigRealityUnlock, 16 - 1, Positions.effarigNode, 60 - 1),
+      path: LinearPath.connectCircles(
+        Positions.effarigRealityUnlock,
+        16 - 1,
+        Positions.effarigNode,
+        60 - 1,
+      ),
       fill: "#d13737",
     },
   },
@@ -470,7 +566,8 @@ export const celestialNavigation = {
         return 0;
       }
 
-      return Currency.infinityPoints.value.add(1).log10().div(DC.NUMMAX.log10()).max(1).toNumber();
+      return Currency.infinityPoints.value.add(1).log10().div(DC.NUMMAX.log10())
+        .max(1).toNumber();
     },
     node: {
       clickAction: () => Tab.celestials.effarig.show(true),
@@ -502,7 +599,13 @@ export const celestialNavigation = {
     connector: (function () {
       const pathStart = -Math.PI;
       const pathEnd = 0;
-      const path = LogarithmicSpiral.fromPolarEndpoints(new Vector(560, 25), pathStart, 66, pathEnd, 26);
+      const path = LogarithmicSpiral.fromPolarEndpoints(
+        new Vector(560, 25),
+        pathStart,
+        66,
+        pathEnd,
+        26,
+      );
       const pathPadStart = 0;
       const pathPadEnd = pathEnd - path.angleFromRadius(30);
       return {
@@ -560,7 +663,13 @@ export const celestialNavigation = {
     connector: (function () {
       const pathStart = 0;
       const pathEnd = Math.PI;
-      const path = LogarithmicSpiral.fromPolarEndpoints(new Vector(558, 25), pathStart, 26, pathEnd, 24);
+      const path = LogarithmicSpiral.fromPolarEndpoints(
+        new Vector(558, 25),
+        pathStart,
+        26,
+        pathEnd,
+        24,
+      );
       const pathPadStart = 0;
       const pathPadEnd = 0;
       return {
@@ -600,13 +709,19 @@ export const celestialNavigation = {
       pathStart: 0,
       pathEnd: 1,
       drawOrder: CELESTIAL_NAV_DRAW_ORDER.NODE_BG + 500,
-      path: LinearPath.connectCircles(Positions.effarigNode, 40 - 1, Positions.enslavedReality, 80 - 1),
+      path: LinearPath.connectCircles(
+        Positions.effarigNode,
+        40 - 1,
+        Positions.enslavedReality,
+        80 - 1,
+      ),
       fill: "url(#gradEffarigEnslaved)",
     },
   },
   "enslaved-unlock-glyph-level": {
     visible: () => EffarigUnlock.eternity.isUnlocked,
-    complete: () => player.records.bestReality.glyphLevel.div(5000).clampMax(1).toNumber(),
+    complete: () =>
+      player.records.bestReality.glyphLevel.div(5000).clampMax(1).toNumber(),
     drawOrder: -1,
     node: {
       clickAction: () => Tab.celestials.enslaved.show(true),
@@ -628,7 +743,9 @@ export const celestialNavigation = {
           const goal = 5000;
           return [
             "Break a chain",
-            `Reach Glyph level ${formatInt(player.records.bestReality.glyphLevel.clampMax(goal))}
+            `Reach Glyph level ${
+              formatInt(player.records.bestReality.glyphLevel.clampMax(goal))
+            }
             / ${formatInt(goal)}`,
           ];
         },
@@ -642,7 +759,8 @@ export const celestialNavigation = {
       pathEnd: 1,
       path: new LinearPath(
         new Vector(650 - 74 * Math.sqrt(0.75), 250 - 74 * 0.5),
-        Positions.enslavedGlyphLevel)
+        Positions.enslavedGlyphLevel,
+      )
         .trimEnd(23),
       fill: "#ffa337",
       completeWidth: 6,
@@ -652,7 +770,9 @@ export const celestialNavigation = {
   "enslaved-unlock-glyph-rarity": {
     visible: () => EffarigUnlock.eternity.isUnlocked,
     complete: () => {
-      const bestRarity = strengthToRarity(player.records.bestReality.glyphStrength);
+      const bestRarity = strengthToRarity(
+        player.records.bestReality.glyphStrength,
+      );
       return bestRarity.div(100).clampMax(1).toNumber();
     },
     drawOrder: -1,
@@ -676,7 +796,9 @@ export const celestialNavigation = {
           const goal = 100;
           return [
             "Break a chain",
-            `Reach Glyph rarity ${formatPercents(complete * goal / 100, 1)}/${formatPercents(goal / 100, 1)}`,
+            `Reach Glyph rarity ${formatPercents(complete * goal / 100, 1)}/${
+              formatPercents(goal / 100, 1)
+            }`,
           ];
         },
         angle: 45,
@@ -687,7 +809,10 @@ export const celestialNavigation = {
     connector: {
       pathStart: 0,
       pathEnd: 1,
-      path: new LinearPath(Positions.enslavedGlyphRarity, Positions.enslavedGlyphLevel).trimStart(23).trimEnd(23),
+      path: new LinearPath(
+        Positions.enslavedGlyphRarity,
+        Positions.enslavedGlyphLevel,
+      ).trimStart(23).trimEnd(23),
       fill: "#ffa337",
       completeWidth: 6,
       incompleteWidth: 4,
@@ -703,7 +828,8 @@ export const celestialNavigation = {
         return 0;
       }
 
-      return Currency.eternityPoints.value.add(1).log10().div(4000).clampMax(1).toNumber();
+      return Currency.eternityPoints.value.add(1).log10().div(4000).clampMax(1)
+        .toNumber();
     },
     node: {
       clickAction: () => Tab.celestials.enslaved.show(true),
@@ -738,7 +864,10 @@ export const celestialNavigation = {
     connector: {
       pathStart: 0,
       pathEnd: 1,
-      path: new LinearPath(Positions.enslavedGlyphRarity, new Vector(650 + 74 * Math.sqrt(0.75), 250 + 74 * 0.5))
+      path: new LinearPath(
+        Positions.enslavedGlyphRarity,
+        new Vector(650 + 74 * Math.sqrt(0.75), 250 + 74 * 0.5),
+      )
         .trimStart(23),
       fill: "#ffa337",
     },
@@ -773,10 +902,14 @@ export const celestialNavigation = {
           if (complete >= 1) {
             return "V's Reality";
           }
-          const galaxies = player.requirementChecks.infinity.noAD8 ? player.galaxies : 0;
+          const galaxies = player.requirementChecks.infinity.noAD8
+            ? player.galaxies
+            : 0;
           return [
             "V's unlock Achievement",
-            `Reach ${formatInt(galaxies)} / ${formatInt(goal)} Antimatter Galaxies without buying`,
+            `Reach ${formatInt(galaxies)} / ${
+              formatInt(goal)
+            } Antimatter Galaxies without buying`,
             "8th Antimatter Dimensions in your current Infinity",
           ];
         },
@@ -788,14 +921,20 @@ export const celestialNavigation = {
     connector: {
       pathStart: 0,
       pathEnd: 1,
-      path: LinearPath.connectCircles(Positions.enslavedReality, 80 - 1, Positions.vUnlockAchievement, 16 - 1),
+      path: LinearPath.connectCircles(
+        Positions.enslavedReality,
+        80 - 1,
+        Positions.vUnlockAchievement,
+        16 - 1,
+      ),
       fill: "url(#gradEnslavedV)",
       completeWidth: 6,
       incompleteWidth: 4,
     },
   },
   "v-unlock-1": {
-    visible: () => Achievement(151).isUnlocked || VUnlocks.vAchievementUnlock.isUnlocked,
+    visible: () =>
+      Achievement(151).isUnlocked || VUnlocks.vAchievementUnlock.isUnlocked,
     complete: () => vUnlockProgress(1),
     drawOrder: -1,
     node: {
@@ -807,7 +946,7 @@ export const celestialNavigation = {
         rMajor: 8,
       },
       legend: {
-        text: complete => vUnlockLegendLabel(complete, 1),
+        text: (complete) => vUnlockLegendLabel(complete, 1),
         angle: -135,
         diagonal: 50,
         horizontal: 16,
@@ -816,14 +955,18 @@ export const celestialNavigation = {
     connector: {
       pathStart: 0,
       pathEnd: 1,
-      path: new LinearPath(Positions.vUnlockAchievement, Positions.vAchievement1),
+      path: new LinearPath(
+        Positions.vUnlockAchievement,
+        Positions.vAchievement1,
+      ),
       fill: "#ffe066",
       completeWidth: 6,
       incompleteWidth: 4,
     },
   },
   "v-unlock-2": {
-    visible: () => Achievement(151).isUnlocked || VUnlocks.vAchievementUnlock.isUnlocked,
+    visible: () =>
+      Achievement(151).isUnlocked || VUnlocks.vAchievementUnlock.isUnlocked,
     complete: () => vUnlockProgress(2),
     drawOrder: -1,
     node: {
@@ -835,7 +978,7 @@ export const celestialNavigation = {
         rMajor: 8,
       },
       legend: {
-        text: complete => vUnlockLegendLabel(complete, 2),
+        text: (complete) => vUnlockLegendLabel(complete, 2),
         angle: -45,
         diagonal: 30,
         horizontal: 16,
@@ -844,14 +987,18 @@ export const celestialNavigation = {
     connector: {
       pathStart: 0,
       pathEnd: 1,
-      path: new LinearPath(Positions.vUnlockAchievement, Positions.vAchievement2),
+      path: new LinearPath(
+        Positions.vUnlockAchievement,
+        Positions.vAchievement2,
+      ),
       fill: "#ffe066",
       completeWidth: 6,
       incompleteWidth: 4,
     },
   },
   "v-unlock-3": {
-    visible: () => Achievement(151).isUnlocked || VUnlocks.vAchievementUnlock.isUnlocked,
+    visible: () =>
+      Achievement(151).isUnlocked || VUnlocks.vAchievementUnlock.isUnlocked,
     complete: () => vUnlockProgress(3),
     drawOrder: -1,
     node: {
@@ -863,7 +1010,7 @@ export const celestialNavigation = {
         rMajor: 8,
       },
       legend: {
-        text: complete => vUnlockLegendLabel(complete, 3),
+        text: (complete) => vUnlockLegendLabel(complete, 3),
         angle: 45,
         diagonal: 30,
         horizontal: 16,
@@ -872,14 +1019,18 @@ export const celestialNavigation = {
     connector: {
       pathStart: 0,
       pathEnd: 1,
-      path: new LinearPath(Positions.vUnlockAchievement, Positions.vAchievement3),
+      path: new LinearPath(
+        Positions.vUnlockAchievement,
+        Positions.vAchievement3,
+      ),
       fill: "#ffe066",
       completeWidth: 6,
       incompleteWidth: 4,
     },
   },
   "v-unlock-4": {
-    visible: () => Achievement(151).isUnlocked || VUnlocks.vAchievementUnlock.isUnlocked,
+    visible: () =>
+      Achievement(151).isUnlocked || VUnlocks.vAchievementUnlock.isUnlocked,
     complete: () => vUnlockProgress(4),
     drawOrder: -1,
     node: {
@@ -891,7 +1042,7 @@ export const celestialNavigation = {
         rMajor: 8,
       },
       legend: {
-        text: complete => vUnlockLegendLabel(complete, 4),
+        text: (complete) => vUnlockLegendLabel(complete, 4),
         angle: 135,
         diagonal: 30,
         horizontal: 16,
@@ -900,14 +1051,18 @@ export const celestialNavigation = {
     connector: {
       pathStart: 0,
       pathEnd: 1,
-      path: new LinearPath(Positions.vUnlockAchievement, Positions.vAchievement4),
+      path: new LinearPath(
+        Positions.vUnlockAchievement,
+        Positions.vAchievement4,
+      ),
       fill: "#ffe066",
       completeWidth: 6,
       incompleteWidth: 4,
     },
   },
   "v-unlock-5": {
-    visible: () => Achievement(151).isUnlocked || VUnlocks.vAchievementUnlock.isUnlocked,
+    visible: () =>
+      Achievement(151).isUnlocked || VUnlocks.vAchievementUnlock.isUnlocked,
     complete: () => vUnlockProgress(5),
     drawOrder: -1,
     node: {
@@ -919,7 +1074,7 @@ export const celestialNavigation = {
         rMajor: 8,
       },
       legend: {
-        text: complete => vUnlockLegendLabel(complete, 5),
+        text: (complete) => vUnlockLegendLabel(complete, 5),
         angle: -135,
         diagonal: 30,
         horizontal: 16,
@@ -928,14 +1083,18 @@ export const celestialNavigation = {
     connector: {
       pathStart: 0,
       pathEnd: 1,
-      path: new LinearPath(Positions.vUnlockAchievement, Positions.vAchievement5),
+      path: new LinearPath(
+        Positions.vUnlockAchievement,
+        Positions.vAchievement5,
+      ),
       fill: "#ffe066",
       completeWidth: 6,
       incompleteWidth: 4,
     },
   },
   "v-unlock-6": {
-    visible: () => Achievement(151).isUnlocked || VUnlocks.vAchievementUnlock.isUnlocked,
+    visible: () =>
+      Achievement(151).isUnlocked || VUnlocks.vAchievementUnlock.isUnlocked,
     complete: () => vUnlockProgress(6),
     drawOrder: -1,
     node: {
@@ -947,7 +1106,7 @@ export const celestialNavigation = {
         rMajor: 8,
       },
       legend: {
-        text: complete => vUnlockLegendLabel(complete, 6),
+        text: (complete) => vUnlockLegendLabel(complete, 6),
         angle: -135,
         diagonal: 30,
         horizontal: 16,
@@ -956,7 +1115,10 @@ export const celestialNavigation = {
     connector: {
       pathStart: 0,
       pathEnd: 1,
-      path: new LinearPath(Positions.vUnlockAchievement, Positions.vAchievement0),
+      path: new LinearPath(
+        Positions.vUnlockAchievement,
+        Positions.vAchievement0,
+      ),
       fill: "#ffe066",
       completeWidth: 6,
       incompleteWidth: 4,
@@ -984,7 +1146,9 @@ export const celestialNavigation = {
           const completions = VRunUnlocks.all[0].completions;
           return [
             "V-Achievement",
-            `Reach ${formatInt(completions)} / ${formatInt(6)} completions in ${name}.`,
+            `Reach ${formatInt(completions)} / ${
+              formatInt(6)
+            } completions in ${name}.`,
           ];
         },
         angle: -135,
@@ -1022,7 +1186,9 @@ export const celestialNavigation = {
           const completions = VRunUnlocks.all[1].completions;
           return [
             "V-Achievement",
-            `Reach ${formatInt(completions)} / ${formatInt(6)} completions in ${name}.`,
+            `Reach ${formatInt(completions)} / ${
+              formatInt(6)
+            } completions in ${name}.`,
           ];
         },
         angle: 20,
@@ -1060,7 +1226,9 @@ export const celestialNavigation = {
           const completions = VRunUnlocks.all[2].completions;
           return [
             "V-Achievement",
-            `Reach ${formatInt(completions)} / ${formatInt(6)} completions in ${name}.`,
+            `Reach ${formatInt(completions)} / ${
+              formatInt(6)
+            } completions in ${name}.`,
           ];
         },
         angle: 315,
@@ -1098,7 +1266,9 @@ export const celestialNavigation = {
           const completions = VRunUnlocks.all[3].completions;
           return [
             "V-Achievement",
-            `Reach ${formatInt(completions)} / ${formatInt(6)} completions in ${name}.`,
+            `Reach ${formatInt(completions)} / ${
+              formatInt(6)
+            } completions in ${name}.`,
           ];
         },
         angle: 135,
@@ -1136,7 +1306,9 @@ export const celestialNavigation = {
           const completions = VRunUnlocks.all[4].completions;
           return [
             "V-Achievement",
-            `Reach ${formatInt(completions)} / ${formatInt(6)} completions in ${name}.`,
+            `Reach ${formatInt(completions)} / ${
+              formatInt(6)
+            } completions in ${name}.`,
           ];
         },
         angle: 60,
@@ -1174,7 +1346,9 @@ export const celestialNavigation = {
           const completions = VRunUnlocks.all[5].completions;
           return [
             "V-Achievement",
-            `Reach ${formatInt(completions)} / ${formatInt(6)} completions in ${name}.`,
+            `Reach ${formatInt(completions)} / ${
+              formatInt(6)
+            } completions in ${name}.`,
           ];
         },
         angle: 260,
@@ -1508,17 +1682,27 @@ export const celestialNavigation = {
   "laitela-unlock": {
     visible: () => Ra.unlocks.vUnlock.isUnlocked,
     complete: () => {
-      if (DarkMatterDimension(1).unlockUpgrade.canBeBought || Laitela.isUnlocked) {
+      if (
+        DarkMatterDimension(1).unlockUpgrade.canBeBought || Laitela.isUnlocked
+      ) {
         return 1;
       }
       if (MachineHandler.isIMUnlocked) {
         if (player.requirementChecks.reality.maxID1.neq(0)) {
           return 0.5;
         }
-        return 0.5 + 0.5 * Math.clampMax(0.999, player.antimatter.add(1).log10().div(1.5e12).min(100).toNumber());
+        return 0.5 +
+          0.5 *
+            Math.clampMax(
+              0.999,
+              player.antimatter.add(1).log10().div(1.5e12).min(100).toNumber(),
+            );
       }
-      return Math.clampMax(0.5, Currency.realityMachines.value.add(1).log10()
-        .div(MachineHandler.baseRMCap.log10()).min(2).toNumber());
+      return Math.clampMax(
+        0.5,
+        Currency.realityMachines.value.add(1).log10()
+          .div(MachineHandler.baseRMCap.log10()).min(2).toNumber(),
+      );
     },
     drawOrder: -1,
     node: {
@@ -1592,7 +1776,9 @@ export const celestialNavigation = {
       }
       return Laitela.difficultyTier < 1
         ? 0
-        : player.celestials.laitela.fastestCompletion.recip().mul(30).clampMin(1).toNumber();
+        : player.celestials.laitela.fastestCompletion.recip().mul(30).clampMin(
+          1,
+        ).toNumber();
     },
     node: {
       clickAction: () => Tab.celestials.laitela.show(true),
@@ -1614,7 +1800,12 @@ export const celestialNavigation = {
           if (complete >= 1) {
             return [
               dmdText,
-              `Dark Matter ${format(Currency.darkMatter.max.min(goal), dim.isUnlocked ? 0 : 2)} / ${format(goal)}`,
+              `Dark Matter ${
+                format(
+                  Currency.darkMatter.max.min(goal),
+                  dim.isUnlocked ? 0 : 2,
+                )
+              } / ${format(goal)}`,
             ];
           }
 
@@ -1623,12 +1814,20 @@ export const celestialNavigation = {
             return [
               dmdText,
               `Imaginary Machines
-            ${format(upgrade.currency.value.clampMax(upgrade.cost), upgrade.canBeBought ? 1 : 2)}
+            ${
+                format(
+                  upgrade.currency.value.clampMax(upgrade.cost),
+                  upgrade.canBeBought ? 1 : 2,
+                )
+              }
             / ${format(upgrade.cost, 1)}`,
             ];
           }
 
-          if (player.celestials.laitela.fastestCompletion.gt(30) && Laitela.difficultyTier < 0) {
+          if (
+            player.celestials.laitela.fastestCompletion.gt(30) &&
+            Laitela.difficultyTier < 0
+          ) {
             return [
               dmdText,
               `Beat Lai'tela's Reality in less that ${format(30)} seconds`,
@@ -1647,7 +1846,10 @@ export const celestialNavigation = {
     connector: {
       pathStart: 0.17,
       pathEnd: 0.89,
-      path: new LinearPath(Positions.laitelaFirstCenter, Positions.laitelaFirstLeft),
+      path: new LinearPath(
+        Positions.laitelaFirstCenter,
+        Positions.laitelaFirstLeft,
+      ),
       fill: "white",
       completeWidth: 6,
       incompleteWidth: 4,
@@ -1655,9 +1857,10 @@ export const celestialNavigation = {
   },
   "laitela-singularity": {
     visible: () => Laitela.isUnlocked,
-    complete: () => (Currency.singularities.gte(1)
-      ? 1
-      : Decimal.clampMax(0.999, Currency.darkEnergy.value.div(Singularity.cap)).toNumber()),
+    complete: () => (Currency.singularities.gte(1) ? 1 : Decimal.clampMax(
+      0.999,
+      Currency.darkEnergy.value.div(Singularity.cap),
+    ).toNumber()),
     node: {
       clickAction: () => Tab.celestials.laitela.show(true),
       incompleteClass: "c-celestial-nav__test-incomplete",
@@ -1687,14 +1890,18 @@ export const celestialNavigation = {
     connector: {
       pathStart: 0.17,
       pathEnd: 0.89,
-      path: new LinearPath(Positions.laitelaFirstCenter, Positions.laitelaFirstRight),
+      path: new LinearPath(
+        Positions.laitelaFirstCenter,
+        Positions.laitelaFirstRight,
+      ),
       fill: "white",
       completeWidth: 6,
       incompleteWidth: 4,
     },
   },
   "laitela-3rd-dim": {
-    visible: () => DarkMatterDimension(2).isUnlocked && Currency.singularities.gte(1),
+    visible: () =>
+      DarkMatterDimension(2).isUnlocked && Currency.singularities.gte(1),
     complete: () => {
       const upgrade = DarkMatterDimension(3).unlockUpgrade;
       if (upgrade.canBeBought || upgrade.isBought) {
@@ -1706,7 +1913,8 @@ export const celestialNavigation = {
       if (!player.auto.singularity.isActive) {
         return 0.5;
       }
-      return Decimal.clampMax(0.999, Singularity.singularitiesGained.div(20)).toNumber();
+      return Decimal.clampMax(0.999, Singularity.singularitiesGained.div(20))
+        .toNumber();
     },
     node: {
       clickAction: () => Tab.celestials.laitela.show(true),
@@ -1728,7 +1936,12 @@ export const celestialNavigation = {
           if (complete >= 1) {
             return [
               dmdText,
-              `Dark Matter ${format(Currency.darkMatter.max.clampMax(goal), dim.isUnlocked ? 0 : 2)} / ${format(goal)}`,
+              `Dark Matter ${
+                format(
+                  Currency.darkMatter.max.clampMax(goal),
+                  dim.isUnlocked ? 0 : 2,
+                )
+              } / ${format(goal)}`,
             ];
           }
 
@@ -1737,7 +1950,12 @@ export const celestialNavigation = {
             return [
               dmdText,
               `Imaginary Machines
-            ${format(Decimal.min(upgrade.currency.value, upgrade.cost), upgrade.canBeBought ? 0 : 2)}
+            ${
+                format(
+                  Decimal.min(upgrade.currency.value, upgrade.cost),
+                  upgrade.canBeBought ? 0 : 2,
+                )
+              }
             / ${format(upgrade.cost)}`,
             ];
           }
@@ -1746,14 +1964,18 @@ export const celestialNavigation = {
             return [
               dmdText,
               "Unlock Automatic Singularities",
-              `${format(Currency.singularities.value)} / ${format(SingularityMilestone.autoCondense.start)}`,
+              `${format(Currency.singularities.value)} / ${
+                format(SingularityMilestone.autoCondense.start)
+              }`,
             ];
           }
 
           return [
             dmdText,
             `Automatically Condense ${format(20)} Singularities at once`,
-            `${format(Decimal.clampMax(Singularity.singularitiesGained, 20))} / ${format(20)}`,
+            `${
+              format(Decimal.clampMax(Singularity.singularitiesGained, 20))
+            } / ${format(20)}`,
           ];
         },
         angle: 15,
@@ -1765,18 +1987,24 @@ export const celestialNavigation = {
       {
         pathStart: 0.1,
         pathEnd: 0.89,
-        path: new LinearPath(Positions.laitelaFirstLeft, Positions.laitelaSecondCenter),
+        path: new LinearPath(
+          Positions.laitelaFirstLeft,
+          Positions.laitelaSecondCenter,
+        ),
         fill: "white",
         completeWidth: 6,
         incompleteWidth: 4,
-      }, {
+      },
+      {
         pathStart: 0.1,
         pathEnd: 0.89,
-        path: new LinearPath(Positions.laitelaFirstRight, Positions.laitelaSecondCenter),
+        path: new LinearPath(
+          Positions.laitelaFirstRight,
+          Positions.laitelaSecondCenter,
+        ),
         fill: "white",
         completeWidth: 6,
         incompleteWidth: 4,
-
       },
     ],
   },
@@ -1790,7 +2018,9 @@ export const celestialNavigation = {
       if (upgrade.isAvailableForPurchase) {
         return upgrade.currency.value.div(upgrade.cost).clampMax(1).toNumber();
       }
-      return Replicanti.galaxies.total.add(player.galaxies).add(player.dilation.totalTachyonGalaxies).div(80000)
+      return Replicanti.galaxies.total.add(player.galaxies).add(
+        player.dilation.totalTachyonGalaxies,
+      ).div(80000)
         .clampMax(1).toNumber();
     },
     node: {
@@ -1813,7 +2043,12 @@ export const celestialNavigation = {
           if (complete >= 1) {
             return [
               dmdText,
-              `Dark Matter ${format(Currency.darkMatter.max.clampMax(goal), dim.isUnlocked ? 0 : 2)} / ${format(goal)}`,
+              `Dark Matter ${
+                format(
+                  Currency.darkMatter.max.clampMax(goal),
+                  dim.isUnlocked ? 0 : 2,
+                )
+              } / ${format(goal)}`,
             ];
           }
 
@@ -1822,16 +2057,25 @@ export const celestialNavigation = {
             return [
               dmdText,
               `Imaginary Machines
-            ${format(upgrade.currency.value.clampMax(upgrade.cost), upgrade.canBeBought ? 1 : 2)}
+            ${
+                format(
+                  upgrade.currency.value.clampMax(upgrade.cost),
+                  upgrade.canBeBought ? 1 : 2,
+                )
+              }
             / ${format(upgrade.cost, 1)}`,
             ];
           }
 
-          const allGalaxies = player.dilation.totalTachyonGalaxies.add(Replicanti.galaxies.total).add(player.galaxies);
+          const allGalaxies = player.dilation.totalTachyonGalaxies.add(
+            Replicanti.galaxies.total,
+          ).add(player.galaxies);
           return [
             dmdText,
             `Have ${format(80000)} total Galaxies`,
-            `${format(Decimal.clampMax(allGalaxies, 80000))} / ${format(80000)}`,
+            `${format(Decimal.clampMax(allGalaxies, 80000))} / ${
+              format(80000)
+            }`,
           ];
         },
         angle: 225,
@@ -1842,7 +2086,10 @@ export const celestialNavigation = {
     connector: {
       pathStart: 0.11,
       pathEnd: 0.89,
-      path: new LinearPath(Positions.laitelaSecondCenter, Positions.laitelaSecondLeft),
+      path: new LinearPath(
+        Positions.laitelaSecondCenter,
+        Positions.laitelaSecondLeft,
+      ),
       fill: "white",
       completeWidth: 6,
       incompleteWidth: 4,
@@ -1884,14 +2131,18 @@ export const celestialNavigation = {
     connector: {
       pathStart: 0.11,
       pathEnd: 0.89,
-      path: new LinearPath(Positions.laitelaSecondCenter, Positions.laitelaSecondRight),
+      path: new LinearPath(
+        Positions.laitelaSecondCenter,
+        Positions.laitelaSecondRight,
+      ),
       fill: "white",
       completeWidth: 6,
       incompleteWidth: 4,
     },
   },
   "laitela-destabilization": {
-    visible: () => DarkMatterDimension(4).isUnlocked && ImaginaryUpgrade(19).isBought,
+    visible: () =>
+      DarkMatterDimension(4).isUnlocked && ImaginaryUpgrade(19).isBought,
     complete: () => Laitela.difficultyTier / 8,
     node: {
       clickAction: () => Tab.celestials.laitela.show(true),
@@ -1910,7 +2161,9 @@ export const celestialNavigation = {
               "Destabilize Lai'tela's Reality",
               "To the point where you cannot",
               "use any Dimensions",
-              `${format(Laitela.difficultyTier)} / ${format(8)} Dimensions disabled`,
+              `${format(Laitela.difficultyTier)} / ${
+                format(8)
+              } Dimensions disabled`,
             ];
           }
           return [
@@ -1927,14 +2180,21 @@ export const celestialNavigation = {
       {
         pathStart: 0.11,
         pathEnd: 0.83,
-        path: new LinearPath(Positions.laitelaSecondLeft, Positions.laitelaThirdCenter),
+        path: new LinearPath(
+          Positions.laitelaSecondLeft,
+          Positions.laitelaThirdCenter,
+        ),
         fill: "white",
         completeWidth: 6,
         incompleteWidth: 4,
-      }, {
+      },
+      {
         pathStart: 0.11,
         pathEnd: 0.83,
-        path: new LinearPath(Positions.laitelaSecondRight, Positions.laitelaThirdCenter),
+        path: new LinearPath(
+          Positions.laitelaSecondRight,
+          Positions.laitelaThirdCenter,
+        ),
         fill: "white",
         completeWidth: 6,
         incompleteWidth: 4,
@@ -1947,13 +2207,23 @@ export const celestialNavigation = {
       if (Pelle.isUnlocked) {
         return 1;
       }
-      const imCost = Decimal.clampMax(emphasizeEnd(Currency.imaginaryMachines.value.max(1).log10()
-        .div(Math.log10(1.6e15))), 1).toNumber();
+      const imCost = Decimal.clampMax(
+        emphasizeEnd(
+          Currency.imaginaryMachines.value.max(1).log10()
+            .div(Math.log10(1.6e15)),
+        ),
+        1,
+      ).toNumber();
       let laitelaProgress = Laitela.isRunning
-        ? Decimal.min(Currency.eternityPoints.value.max(1).log10()
-            .div(4000), 0.99).toNumber()
+        ? Decimal.min(
+          Currency.eternityPoints.value.max(1).log10()
+            .div(4000),
+          0.99,
+        ).toNumber()
         : 0;
-      if (Laitela.difficultyTier !== 8 || Glyphs.activeWithoutCompanion.length > 1) {
+      if (
+        Laitela.difficultyTier !== 8 || Glyphs.activeWithoutCompanion.length > 1
+      ) {
         laitelaProgress = 0;
       } else if (ImaginaryUpgrade(25).isAvailableForPurchase) {
         laitelaProgress = 1;
@@ -1976,8 +2246,13 @@ export const celestialNavigation = {
               "The Celestial of Antimatter",
             ];
           }
-          let laitelaString = `${format(Currency.eternityPoints.value)} / ${format("1e4000")} EP`;
-          if (!Laitela.isRunning || Laitela.difficultyTier !== 8 || Glyphs.activeWithoutCompanion.length > 1) {
+          let laitelaString = `${format(Currency.eternityPoints.value)} / ${
+            format("1e4000")
+          } EP`;
+          if (
+            !Laitela.isRunning || Laitela.difficultyTier !== 8 ||
+            Glyphs.activeWithoutCompanion.length > 1
+          ) {
             laitelaString = "Lai'tela's Reality is still intact";
           } else if (ImaginaryUpgrade(25).isAvailableForPurchase) {
             laitelaString = "Lai'tela's Reality has been destroyed";
@@ -1985,7 +2260,9 @@ export const celestialNavigation = {
           return [
             "Unlock Pelle",
             "The Celestial of Antimatter",
-            `${format(Currency.imaginaryMachines.value, 2)} / ${format(1.6e15, 2)} iM`,
+            `${format(Currency.imaginaryMachines.value, 2)} / ${
+              format(1.6e15, 2)
+            } iM`,
             laitelaString,
           ];
         },
@@ -2009,9 +2286,13 @@ export const celestialNavigation = {
       if (Pelle.isDoomed) {
         return 1;
       }
-      const achievements = Achievements.prePelleRows.countWhere(r => r.every(a => a.isUnlocked))
-        / Achievements.prePelleRows.length;
-      const alchemy = AlchemyResources.all.countWhere(r => r.capped) / AlchemyResources.all.length;
+      const achievements =
+        Achievements.prePelleRows.countWhere((r) =>
+          r.every((a) => a.isUnlocked)
+        ) /
+        Achievements.prePelleRows.length;
+      const alchemy = AlchemyResources.all.countWhere((r) => r.capped) /
+        AlchemyResources.all.length;
       return (emphasizeEnd(achievements) + emphasizeEnd(alchemy)) / 2;
     },
     node: {
@@ -2030,12 +2311,23 @@ export const celestialNavigation = {
           if (complete >= 1) {
             return Pelle.isDoomed ? "Doomed Reality" : "Doom your Reality";
           }
-          const achievements = [Achievements.prePelleRows.countWhere(r => r.every(a => a.isUnlocked)),
-            Achievements.prePelleRows.length];
-          const alchemy = [AlchemyResources.all.countWhere(r => r.capped), AlchemyResources.all.length];
+          const achievements = [
+            Achievements.prePelleRows.countWhere((r) =>
+              r.every((a) => a.isUnlocked)
+            ),
+            Achievements.prePelleRows.length,
+          ];
+          const alchemy = [
+            AlchemyResources.all.countWhere((r) => r.capped),
+            AlchemyResources.all.length,
+          ];
           return [
-            `Complete ${formatInt(achievements[0])} / ${formatInt(achievements[1])} rows of Achievements`,
-            `Fill ${formatInt(alchemy[0])} / ${formatInt(alchemy[1])} Alchemy Resources`,
+            `Complete ${formatInt(achievements[0])} / ${
+              formatInt(achievements[1])
+            } rows of Achievements`,
+            `Fill ${formatInt(alchemy[0])} / ${
+              formatInt(alchemy[1])
+            } Alchemy Resources`,
           ];
         },
         angle: 290,
@@ -2046,7 +2338,10 @@ export const celestialNavigation = {
     connector: {
       pathStart: 0,
       pathEnd: 1,
-      path: new LinearPath(Positions.pelleUnlock, Positions.pelleAchievementRequirement),
+      path: new LinearPath(
+        Positions.pelleUnlock,
+        Positions.pelleAchievementRequirement,
+      ),
       fill: "crimson",
       completeWidth: 6,
       incompleteWidth: 4,
@@ -2072,7 +2367,9 @@ export const celestialNavigation = {
       legend: {
         text: () => [
           "Galaxy Generator:",
-          `${format(GalaxyGenerator.generatedGalaxies, 2)} / ${format(GalaxyGenerator.generationCap, 2)} Galaxies`,
+          `${format(GalaxyGenerator.generatedGalaxies, 2)} / ${
+            format(GalaxyGenerator.generationCap, 2)
+          } Galaxies`,
         ],
         angle: 290,
         diagonal: 40,
@@ -2095,22 +2392,38 @@ export const celestialNavigation = {
   "pelle-galaxy-generator-path": {
     visible: () => Pelle.hasGalaxyGenerator,
     complete: () => {
-      const riftCaps = PelleRifts.all.map(r => r.config.galaxyGeneratorThreshold);
-      const brokenRifts = riftCaps.countWhere(n => GalaxyGenerator.generatedGalaxies.gte(n));
+      const riftCaps = PelleRifts.all.map((r) =>
+        r.config.galaxyGeneratorThreshold
+      );
+      const brokenRifts = riftCaps.countWhere((n) =>
+        GalaxyGenerator.generatedGalaxies.gte(n)
+      );
       if (brokenRifts === 5) {
         return 1;
       }
-      const prevRift = riftCaps.filter(n => GalaxyGenerator.generatedGalaxies.gte(n)).max().clampMax(1e100).toNumber();
-      const nextRift = riftCaps.filter(n => GalaxyGenerator.generatedGalaxies.lt(n)).min().clampMax(1e100).toNumber();
-      const currRiftProp = Math.sqrt((GalaxyGenerator.generatedGalaxies.clampMax(1e100).toNumber() - prevRift)
-        / (nextRift - prevRift));
+      const prevRift = riftCaps.filter((n) =>
+        GalaxyGenerator.generatedGalaxies.gte(n)
+      ).max().clampMax(1e100).toNumber();
+      const nextRift = riftCaps.filter((n) =>
+        GalaxyGenerator.generatedGalaxies.lt(n)
+      ).min().clampMax(1e100).toNumber();
+      const currRiftProp = Math.sqrt(
+        (GalaxyGenerator.generatedGalaxies.clampMax(1e100).toNumber() -
+          prevRift) /
+          (nextRift - prevRift),
+      );
       return (brokenRifts + currRiftProp) / 5;
     },
     connector: (function () {
       const pathStart = 0.5 * Math.PI;
       const pathEnd = pathStart + 10 * Math.PI;
-      const path = LogarithmicSpiral.fromPolarEndpoints(pelleStarPosition(0, 0),
-        pathStart, 18, pathEnd, 150);
+      const path = LogarithmicSpiral.fromPolarEndpoints(
+        pelleStarPosition(0, 0),
+        pathStart,
+        18,
+        pathEnd,
+        150,
+      );
       return {
         pathStart,
         pathEnd,
@@ -2124,13 +2437,25 @@ export const celestialNavigation = {
 
   // The path BG is invisible, but we want to make sure it extends far enough that it expands out "forever"
   "pelle-galaxy-generator-infinite": {
-    visible: () => Pelle.hasGalaxyGenerator && !Decimal.gt(GalaxyGenerator.generationCap, 1e100),
-    complete: () => Decimal.clamp((GalaxyGenerator.generatedGalaxies.sub(1e10)).div(2e11), 1e-6, 1).toNumber(),
+    visible: () =>
+      Pelle.hasGalaxyGenerator &&
+      !Decimal.gt(GalaxyGenerator.generationCap, 1e100),
+    complete: () =>
+      Decimal.clamp(
+        (GalaxyGenerator.generatedGalaxies.sub(1e10)).div(2e11),
+        1e-6,
+        1,
+      ).toNumber(),
     connector: (function () {
       const pathStart = 0.5 * Math.PI;
       const pathEnd = pathStart + 10 * Math.PI;
-      const path = LogarithmicSpiral.fromPolarEndpoints(pelleStarPosition(0, 0),
-        pathStart, 150, pathEnd, 1250);
+      const path = LogarithmicSpiral.fromPolarEndpoints(
+        pelleStarPosition(0, 0),
+        pathStart,
+        150,
+        pathEnd,
+        1250,
+      );
       return {
         pathStart,
         pathEnd,

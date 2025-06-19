@@ -38,7 +38,7 @@
     /* Path resolution */
     "paths": {
       "@/*": ["./src/*"]
-    },
+    }
   },
   "include": [
     "**/*.js",

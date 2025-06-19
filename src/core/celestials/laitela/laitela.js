@@ -47,26 +47,47 @@ export const Laitela = {
     }
   },
   get matterExtraPurchaseFactor() {
-    return Decimal.pow(Currency.darkMatter.max.add(1).max(1).log10().div(50), 0.4)
-      .times((SingularityMilestone.continuumMult.effectOrDefault(DC.D0)).add(1)).div(2).add(1);
+    return Decimal.pow(
+      Currency.darkMatter.max.add(1).max(1).log10().div(50),
+      0.4,
+    )
+      .times((SingularityMilestone.continuumMult.effectOrDefault(DC.D0)).add(1))
+      .div(2).add(1);
   },
   get realityReward() {
-    return Decimal.clampMin(Decimal.pow(100, this.difficultyTier)
-      .mul(Decimal.pow(player.celestials.laitela.fastestCompletion.recip().mul(360), 2)), 1);
+    return Decimal.clampMin(
+      Decimal.pow(100, this.difficultyTier)
+        .mul(
+          Decimal.pow(
+            player.celestials.laitela.fastestCompletion.recip().mul(360),
+            2,
+          ),
+        ),
+      1,
+    );
   },
   // Note that entropy goes from 0 to 1, with 1 being completion
   get entropyGainPerSecond() {
-    return Decimal.clamp(Decimal.pow(Currency.antimatter.value.add(1).log10().div(1e11), 2), 0, 100).div(200);
+    return Decimal.clamp(
+      Decimal.pow(Currency.antimatter.value.add(1).log10().div(1e11), 2),
+      0,
+      100,
+    ).div(200);
   },
   get darkMatterMultGain() {
-    return Decimal.pow(Currency.darkMatter.value.dividedBy(this.annihilationDMRequirement)
-      .plus(1).log10(), 1.5).mul(ImaginaryUpgrade(21).effectOrDefault(1));
+    return Decimal.pow(
+      Currency.darkMatter.value.dividedBy(this.annihilationDMRequirement)
+        .plus(1).log10(),
+      1.5,
+    ).mul(ImaginaryUpgrade(21).effectOrDefault(1));
   },
   get darkMatterMult() {
     return this.celestial.darkMatterMult;
   },
   get darkMatterMultRatio() {
-    return (this.celestial.darkMatterMult.add(this.darkMatterMultGain)).div(this.celestial.darkMatterMult);
+    return (this.celestial.darkMatterMult.add(this.darkMatterMultGain)).div(
+      this.celestial.darkMatterMult,
+    );
   },
   get annihilationUnlocked() {
     return ImaginaryUpgrade(19).isBought;
@@ -75,13 +96,16 @@ export const Laitela = {
     return 1e60;
   },
   get canAnnihilate() {
-    return Laitela.annihilationUnlocked && Currency.darkMatter.gte(this.annihilationDMRequirement);
+    return Laitela.annihilationUnlocked &&
+      Currency.darkMatter.gte(this.annihilationDMRequirement);
   },
   annihilate(force) {
     if (!force && !this.canAnnihilate) {
       return false;
     }
-    this.celestial.darkMatterMult = this.celestial.darkMatterMult.add(this.darkMatterMultGain);
+    this.celestial.darkMatterMult = this.celestial.darkMatterMult.add(
+      this.darkMatterMultGain,
+    );
     DarkMatterDimensions.reset();
     Laitela.quotes.annihilation.show();
     Achievement(176).unlock();
@@ -91,7 +115,7 @@ export const Laitela = {
   maxAllDMDimensions(maxTier) {
     // Note that tier is 1-indexed
     const unlockedDimensions = DarkMatterDimensions.all
-      .filter(d => d.isUnlocked && d.tier <= maxTier);
+      .filter((d) => d.isUnlocked && d.tier <= maxTier);
     for (let i = 0; i < maxTier; i++) {
       unlockedDimensions[i].buyManyInterval(Infinity);
     }

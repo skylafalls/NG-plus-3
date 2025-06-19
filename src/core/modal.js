@@ -94,8 +94,13 @@ export class Modal {
   applyCloseListeners(closeEvent) {
     // Most of the time the close event will be a prestige event, in which case we want it to trigger on all higher
     // prestiges as well
-    const prestigeOrder = [GAME_EVENT.DIMBOOST_AFTER, GAME_EVENT.GALAXY_RESET_AFTER, GAME_EVENT.BIG_CRUNCH_AFTER,
-      GAME_EVENT.ETERNITY_RESET_AFTER, GAME_EVENT.REALITY_RESET_AFTER];
+    const prestigeOrder = [
+      GAME_EVENT.DIMBOOST_AFTER,
+      GAME_EVENT.GALAXY_RESET_AFTER,
+      GAME_EVENT.BIG_CRUNCH_AFTER,
+      GAME_EVENT.ETERNITY_RESET_AFTER,
+      GAME_EVENT.REALITY_RESET_AFTER,
+    ];
     let shouldClose = false;
     for (const prestige of prestigeOrder) {
       if (prestige === closeEvent) {
@@ -150,7 +155,9 @@ export class Modal {
 
   removeFromQueue() {
     EventHub.ui.offAll(this._component);
-    ui.view.modal.queue = ui.view.modal.queue.filter(m => m._uniqueID !== this._uniqueID);
+    ui.view.modal.queue = ui.view.modal.queue.filter((m) =>
+      m._uniqueID !== this._uniqueID
+    );
     if (ui.view.modal.queue.length === 0) {
       ui.view.modal.current = undefined;
     } else {
@@ -214,23 +221,57 @@ class TimeModal extends Modal {
 // If a new modal which can be shown in the same queue multiple times needs to be added
 // Additional code needs to be written to account for that
 
-Modal.startEternityChallenge = new ChallengeConfirmationModal(EternityChallengeStartModal);
-Modal.startInfinityChallenge = new ChallengeConfirmationModal(InfinityChallengeStartModal);
-Modal.startNormalChallenge = new ChallengeConfirmationModal(NormalChallengeStartModal);
+Modal.startEternityChallenge = new ChallengeConfirmationModal(
+  EternityChallengeStartModal,
+);
+Modal.startInfinityChallenge = new ChallengeConfirmationModal(
+  InfinityChallengeStartModal,
+);
+Modal.startNormalChallenge = new ChallengeConfirmationModal(
+  NormalChallengeStartModal,
+);
 
 Modal.catchup = new TimeModal(CatchupModal, -1);
 
-Modal.dimensionBoost = new Modal(DimensionBoostModal, 1, GAME_EVENT.DIMBOOST_AFTER);
+Modal.dimensionBoost = new Modal(
+  DimensionBoostModal,
+  1,
+  GAME_EVENT.DIMBOOST_AFTER,
+);
 
-Modal.antimatterGalaxy = new Modal(AntimatterGalaxyModal, 1, GAME_EVENT.GALAXY_RESET_AFTER);
+Modal.antimatterGalaxy = new Modal(
+  AntimatterGalaxyModal,
+  1,
+  GAME_EVENT.GALAXY_RESET_AFTER,
+);
 Modal.bigCrunch = new Modal(BigCrunchModal, 1, GAME_EVENT.BIG_CRUNCH_AFTER);
-Modal.exitChallenge = new Modal(ExitChallengeModal, 1, GAME_EVENT.REALITY_RESET_AFTER);
-Modal.replicantiGalaxy = new Modal(ReplicantiGalaxyModal, 1, GAME_EVENT.ETERNITY_RESET_AFTER);
+Modal.exitChallenge = new Modal(
+  ExitChallengeModal,
+  1,
+  GAME_EVENT.REALITY_RESET_AFTER,
+);
+Modal.replicantiGalaxy = new Modal(
+  ReplicantiGalaxyModal,
+  1,
+  GAME_EVENT.ETERNITY_RESET_AFTER,
+);
 Modal.eternity = new Modal(EternityModal, 1, GAME_EVENT.ETERNITY_RESET_AFTER);
-Modal.enterDilation = new Modal(EnterDilationModal, 1, GAME_EVENT.REALITY_RESET_AFTER);
-Modal.exitDilation = new Modal(ExitDilationModal, 1, GAME_EVENT.REALITY_RESET_AFTER);
+Modal.enterDilation = new Modal(
+  EnterDilationModal,
+  1,
+  GAME_EVENT.REALITY_RESET_AFTER,
+);
+Modal.exitDilation = new Modal(
+  ExitDilationModal,
+  1,
+  GAME_EVENT.REALITY_RESET_AFTER,
+);
 Modal.reality = new Modal(RealityModal, 1, GAME_EVENT.REALITY_RESET_AFTER);
-Modal.resetReality = new Modal(ResetRealityModal, 1, GAME_EVENT.REALITY_RESET_AFTER);
+Modal.resetReality = new Modal(
+  ResetRealityModal,
+  1,
+  GAME_EVENT.REALITY_RESET_AFTER,
+);
 Modal.celestials = new Modal(EnterCelestialsModal, 1);
 Modal.hardReset = new Modal(HardResetModal, 1);
 Modal.backupWindows = new Modal(BackupWindowModal, 1);
@@ -256,14 +297,30 @@ Modal.upgradeLock = new Modal(UpgradeMechanicLockModal, 1);
 Modal.deleteCompanion = new Modal(DeleteCompanionGlyphModal, 1);
 Modal.glyphDelete = new Modal(DeleteGlyphModal, 1, GAME_EVENT.GLYPHS_CHANGED);
 Modal.glyphPurge = new Modal(PurgeGlyphModal, 1, GAME_EVENT.GLYPHS_CHANGED);
-Modal.glyphSacrifice = new Modal(SacrificeGlyphModal, 1, GAME_EVENT.GLYPHS_CHANGED);
+Modal.glyphSacrifice = new Modal(
+  SacrificeGlyphModal,
+  1,
+  GAME_EVENT.GLYPHS_CHANGED,
+);
 Modal.glyphRefine = new Modal(RefineGlyphModal, 1, GAME_EVENT.GLYPHS_CHANGED);
-Modal.deleteAllUnprotectedGlyphs = new Modal(PurgeAllUnprotectedGlyphsModal, 1, GAME_EVENT.GLYPHS_CHANGED);
-Modal.deleteAllRejectedGlyphs = new Modal(PurgeAllRejectedGlyphsModal, 1, GAME_EVENT.GLYPHS_CHANGED);
+Modal.deleteAllUnprotectedGlyphs = new Modal(
+  PurgeAllUnprotectedGlyphsModal,
+  1,
+  GAME_EVENT.GLYPHS_CHANGED,
+);
+Modal.deleteAllRejectedGlyphs = new Modal(
+  PurgeAllRejectedGlyphsModal,
+  1,
+  GAME_EVENT.GLYPHS_CHANGED,
+);
 
 Modal.glyphShowcasePanel = new Modal(GlyphShowcasePanelModal);
 Modal.glyphUndo = new Modal(UndoGlyphModal, 1, GAME_EVENT.REALITY_RESET_AFTER);
-Modal.glyphReplace = new Modal(ReplaceGlyphModal, 1, GAME_EVENT.REALITY_RESET_AFTER);
+Modal.glyphReplace = new Modal(
+  ReplaceGlyphModal,
+  1,
+  GAME_EVENT.REALITY_RESET_AFTER,
+);
 Modal.enslavedHints = new Modal(EnslavedHintsModal);
 Modal.realityGlyph = new Modal(RealityGlyphCreationModal);
 Modal.glyphSetSaveDelete = new Modal(GlyphSetSaveDeleteModal);
@@ -287,7 +344,11 @@ Modal.studyString = new Modal(StudyStringModal);
 Modal.singularityMilestones = new Modal(SingularityMilestonesModal);
 Modal.pelleEffects = new Modal(PelleEffectsModal);
 Modal.sacrifice = new Modal(SacrificeModal, 1, GAME_EVENT.DIMBOOST_AFTER);
-Modal.breakInfinity = new Modal(BreakInfinityModal, 1, GAME_EVENT.ETERNITY_RESET_AFTER);
+Modal.breakInfinity = new Modal(
+  BreakInfinityModal,
+  1,
+  GAME_EVENT.ETERNITY_RESET_AFTER,
+);
 
 Modal.s12Games = new Modal(S12GamesModal);
 
@@ -314,22 +375,37 @@ function getSaveInfo(save) {
   };
   // This code ends up getting run on raw save data before any migrations are applied, so we need to default to props
   // which only exist on the pre-reality version when applicable. Note that new Decimal(undefined) gives zero.
-  resources.realTimePlayed = save.records?.realTimePlayed ?? 100 * save.totalTimePlayed;
-  resources.totalAntimatter.copyFrom(new Decimal(save.records?.totalAntimatter));
+  resources.realTimePlayed = save.records?.realTimePlayed ??
+    100 * save.totalTimePlayed;
+  resources.totalAntimatter.copyFrom(
+    new Decimal(save.records?.totalAntimatter),
+  );
   resources.infinities.copyFrom(new Decimal(save.infinities));
   resources.eternities.copyFrom(new Decimal(save.eternities));
   resources.realities = save.realities ?? 0;
   resources.infinityPoints.copyFrom(new Decimal(save.infinityPoints));
   resources.eternityPoints.copyFrom(new Decimal(save.eternityPoints));
-  resources.realityMachines.copyFrom(new Decimal(save.reality?.realityMachines));
-  resources.imaginaryMachines.copyFrom(new Decimal(save.reality?.imaginaryMachines));
+  resources.realityMachines.copyFrom(
+    new Decimal(save.reality?.realityMachines),
+  );
+  resources.imaginaryMachines.copyFrom(
+    new Decimal(save.reality?.imaginaryMachines),
+  );
   // Use max DT instead of current DT because spending it can cause it to drop and trigger the conflict modal
   // unnecessarily. We only use current DT as a fallback (eg. loading a save from pre-reality versions)
-  resources.dilatedTime.copyFrom(new Decimal(save.records?.thisReality.maxDT ?? (save.dilation?.dilatedTime ?? 0)));
+  resources.dilatedTime.copyFrom(
+    new Decimal(
+      save.records?.thisReality.maxDT ?? (save.dilation?.dilatedTime ?? 0),
+    ),
+  );
   resources.bestLevel = save.records?.bestReality.glyphLevel ?? 0;
-  resources.pelleAM.copyFrom(new Decimal(save.celestials?.pelle.records.totalAntimatter));
+  resources.pelleAM.copyFrom(
+    new Decimal(save.celestials?.pelle.records.totalAntimatter),
+  );
   resources.remnants = save.celestials?.pelle.remnants ?? 0;
-  resources.realityShards.copyFrom(new Decimal(save.celestials?.pelle.realityShards));
+  resources.realityShards.copyFrom(
+    new Decimal(save.celestials?.pelle.realityShards),
+  );
   resources.pelleLore = save.celestials?.pelle.quoteBits ?? 0;
   resources.saveName = save.options?.saveFileName ?? "";
   resources.compositeProgress = ProgressChecker.getCompositeProgress(save);
@@ -341,7 +417,13 @@ Modal.cloudSaveConflict = new Modal(CloudSaveConflictModal);
 Modal.cloudLoadConflict = new Modal(CloudLoadConflictModal);
 Modal.cloudInvalidData = new Modal(CloudInvalidDataModal);
 
-Modal.addCloudConflict = function (saveId, saveComparison, cloudSave, localSave, onAccept) {
+Modal.addCloudConflict = function (
+  saveId,
+  saveComparison,
+  cloudSave,
+  localSave,
+  onAccept,
+) {
   Modal.hide();
   ui.view.modal.cloudConflict = {
     saveId,

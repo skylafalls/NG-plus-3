@@ -15,8 +15,8 @@ export const gbGluonUpgrades = [
   {
     id: 3,
     cost: () => new Decimal(5),
-    description: () => `Bump the IP multiplier upgrade to ${formatX(2.25, 2)}.`,
-    effect: () => 2.25,
+    description: () => `Bump the IP multiplier upgrade to ${formatX(3, 0, 0)}.`,
+    effect: () => 3,
   },
   {
     id: 4,
@@ -33,16 +33,16 @@ export const gbGluonUpgrades = [
   {
     id: 6,
     cost: () => new Decimal(4e19),
-    description: () => "Infinity Power weakes Distant & Remote Antimatter Galaxy scaling.",
-    effect: () => Currency.infinityPower.value.plus(10).slog(10),
-    formatEffect: value => `${formatPercents(value, 2)} weaker`,
+    description: () => "Infinity Power weakes Distant Antimatter Galaxy scaling.",
+    effect: () => Currency.infinityPower.value.plus(1).log10().plus(1).log10().div(20).plus(1),
+    formatEffect: value => `${formatPercents(value.sub(1), 2)} weaker`,
   },
   {
     id: 7,
     cost: () => new Decimal(3e25),
-    description: () => "Replicanti also boosts the Infinity Power effect exponent (at a reduced rate).",
+    description: () => "Replicanti slows down Remote Antimatter Galaxy scaling.",
     effect: () => Replicanti.amount.plus(1).log10().plus(1).log10().div(24).plus(1),
-    formatEffect: value => `+${formatPow(value, 3)}`,
+    formatEffect: value => `${formatPercents(value.sub(1), 2)} weaker`,
   },
   {
     id: 8,

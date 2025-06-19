@@ -7,10 +7,14 @@ export const Speedrun = {
     if (player.speedrun.isUnlocked) {
       return;
     }
-    Modal.message.show(`You have unlocked Speedrun Mode! This allows you to start a new save file with some slight
+    Modal.message.show(
+      `You have unlocked Speedrun Mode! This allows you to start a new save file with some slight
       changes which can be helpful if you're trying to complete the game as quickly as possible. The option to
       start a Speedrun Save is now available in the Options tab, under Saving. Choosing to start a Speedrun Save
-      will provide you with another modal with more in-depth information.`, {}, 3);
+      will provide you with another modal with more in-depth information.`,
+      {},
+      3,
+    );
     player.speedrun.isUnlocked = true;
   },
   // Used to block the seed-changing modal from opening (other functions assume this is checked beforehand)
@@ -23,16 +27,19 @@ export const Speedrun = {
     switch (key) {
       case SPEEDRUN_SEED_STATE.FIXED: {
         player.reality.initialSeed = this.officialFixedSeed;
-        player.speedrun.initialSeed = this.officialFixedSeed; return;
+        player.speedrun.initialSeed = this.officialFixedSeed;
+        return;
       }
       case SPEEDRUN_SEED_STATE.RANDOM: {
         newSeed = Math.floor(1e13 * Math.random());
         player.reality.initialSeed = newSeed;
-        player.speedrun.initialSeed = newSeed; return;
+        player.speedrun.initialSeed = newSeed;
+        return;
       }
       case SPEEDRUN_SEED_STATE.PLAYER: {
         player.reality.initialSeed = seed;
-        player.speedrun.initialSeed = seed; return;
+        player.speedrun.initialSeed = seed;
+        return;
       }
       default: {
         throw new Error("Unrecognized speedrun seed setting option");
@@ -135,7 +142,7 @@ export const Speedrun = {
 class SpeedrunMilestone extends GameMechanicState {
   constructor(config) {
     super(config);
-    this.registerEvents(config.checkEvent, args => this.tryComplete(args));
+    this.registerEvents(config.checkEvent, (args) => this.tryComplete(args));
   }
 
   get name() {
@@ -158,9 +165,13 @@ class SpeedrunMilestone extends GameMechanicState {
       return;
     }
     // Rounding slightly reduces filesize by removing weird float rounding
-    player.speedrun.records[this.config.id] = Math.round(player.records.trueTimePlayed);
+    player.speedrun.records[this.config.id] = Math.round(
+      player.records.trueTimePlayed,
+    );
     GameUI.notify.success(`Speedrun Milestone Reached: ${this.name}`);
   }
 }
 
-export const SpeedrunMilestones = SpeedrunMilestone.createAccessor(GameDatabase.speedrunMilestones);
+export const SpeedrunMilestones = SpeedrunMilestone.createAccessor(
+  GameDatabase.speedrunMilestones,
+);

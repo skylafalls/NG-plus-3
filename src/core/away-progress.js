@@ -4,7 +4,8 @@ class AwayProgress {
   constructor(config) {
     this.name = config.name;
     this.forcedName = config.forcedName;
-    this.isUnlocked = () => config.isUnlocked() || player.records.fullGameCompletions > 0;
+    this.isUnlocked = () =>
+      config.isUnlocked() || player.records.fullGameCompletions > 0;
     this.awayOption = config.awayOption ?? this.name;
     this.showOption = config.showOption ?? true;
     // This is an array of strings, each one the name of the next entry in the player object to navigate to
@@ -12,7 +13,7 @@ class AwayProgress {
     this.reference = config.reference ?? [this.name];
     // Most of the entries in offline progress are props which can be directly read from the player object, but eg. for
     // achievements the raw data is an array of bitmasks. This structure allows generic support for indirect values.
-    this.applyFn = config.applyFn ?? (x => x);
+    this.applyFn = config.applyFn ?? ((x) => x);
     this.classObjectReference = config.classObjectReference ?? this.name;
     this.appearsInAwayModal = config.appearsInAwayModal ?? true;
   }
@@ -28,7 +29,8 @@ class AwayProgress {
   get classObject() {
     // Format the camelCase name to kebab-case
     return `c-modal-away-progress__${
-      this.classObjectReference.replaceAll(/[A-Z]/gu, match => `-${match.toLowerCase()}`)
+      this.classObjectReference.replaceAll(/[A-Z]/gu, (match) =>
+        `-${match.toLowerCase()}`)
     }`;
   }
 
@@ -38,8 +40,8 @@ class AwayProgress {
     }
     // Format the camelCase name to Title Case, with spaces added before the capital letters
     return this.name
-      .replaceAll(/[A-Z]/gu, match => ` ${match}`)
-      .replace(/^\w/u, c => c.toUpperCase());
+      .replaceAll(/[A-Z]/gu, (match) => ` ${match}`)
+      .replace(/^\w/u, (c) => c.toUpperCase());
   }
 
   // Pass in player object. Navigate to there using each reference point. Return the place you arrived at.

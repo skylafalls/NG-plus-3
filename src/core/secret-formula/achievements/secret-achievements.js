@@ -35,8 +35,12 @@ export const secretAchievements = [
       return `Use a "painful" notation for ${formatInt(10)} real-time minutes
       after doing an Eternity.`;
     },
-    checkRequirement: () => AchievementTimers.pain
-      .check(PlayerProgress.eternityUnlocked() && Notations.current.isPainful, 600),
+    checkRequirement: () =>
+      AchievementTimers.pain
+        .check(
+          PlayerProgress.eternityUnlocked() && Notations.current.isPainful,
+          600,
+        ),
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
   },
   {
@@ -48,7 +52,9 @@ export const secretAchievements = [
     id: 18,
     name: "Do you feel lucky? Well do ya punk?",
     get description() {
-      return `You have a ${formatInt(1)}/${formatInt(1e5)} chance of getting this achievement every second.`;
+      return `You have a ${formatInt(1)}/${
+        formatInt(1e5)
+      } chance of getting this achievement every second.`;
     },
   },
   {
@@ -60,9 +66,12 @@ export const secretAchievements = [
     id: 22,
     name: "Deep fried",
     get description() {
-      return `Buy ${formatInt(1e5)} Antimatter Galaxies in total while using emoji notation.`;
+      return `Buy ${
+        formatInt(1e5)
+      } Antimatter Galaxies in total while using emoji notation.`;
     },
-    checkRequirement: () => player.requirementChecks.permanent.emojiGalaxies.gte(1e5),
+    checkRequirement: () =>
+      player.requirementChecks.permanent.emojiGalaxies.gte(1e5),
     checkEvent: GAME_EVENT.GALAXY_RESET_AFTER,
   },
   {
@@ -73,7 +82,8 @@ export const secretAchievements = [
   {
     id: 24,
     name: "Real news",
-    description: "Click on a news ticker message that does something when you click on it.",
+    description:
+      "Click on a news ticker message that does something when you click on it.",
   },
   {
     id: 25,
@@ -84,7 +94,9 @@ export const secretAchievements = [
     id: 26,
     name: "You're a failure",
     get description() {
-      return `Fail Eternity Challenges ${formatInt(10)} times without refreshing.
+      return `Fail Eternity Challenges ${
+        formatInt(10)
+      } times without refreshing.
       What are you doing with your life...`;
     },
     checkRequirement: (function () {
@@ -116,17 +128,19 @@ export const secretAchievements = [
     id: 32,
     name: "Less than or equal to 0.001",
     get description() {
-      return `Get a fastest infinity or eternity time of less than or equal to ${format(0.001, 3, 3)} seconds.`;
+      return `Get a fastest infinity or eternity time of less than or equal to ${
+        format(0.001, 3, 3)
+      } seconds.`;
     },
     checkRequirement: () =>
-      Time.bestInfinity.totalMilliseconds.lte(1)
-      || Time.bestEternity.totalMilliseconds.lte(1),
+      Time.bestInfinity.totalMilliseconds.lte(1) ||
+      Time.bestEternity.totalMilliseconds.lte(1),
     checkEvent: [GAME_EVENT.BIG_CRUNCH_AFTER, GAME_EVENT.ETERNITY_RESET_AFTER],
   },
   {
     id: 33,
     name: "A sound financial decision",
-    description: "Import \"Shop\" (temporary req)",
+    description: 'Import "Shop" (temporary req)',
   },
   {
     id: 34,
@@ -139,7 +153,8 @@ export const secretAchievements = [
     get description() {
       return `Buy single Tickspeed upgrades ${formatInt(1e5)} times.`;
     },
-    checkRequirement: () => player.requirementChecks.permanent.singleTickspeed >= 1e5,
+    checkRequirement: () =>
+      player.requirementChecks.permanent.singleTickspeed >= 1e5,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
   },
   {
@@ -171,23 +186,29 @@ export const secretAchievements = [
     id: 43,
     name: "A cacophonous chorus",
     description: "Have all equipped Glyphs be Music Glyphs.",
-    checkRequirement: () => Glyphs.active.length && Glyphs.active.every(x => Glyphs.isMusicGlyph(x)),
+    checkRequirement: () =>
+      Glyphs.active.length &&
+      Glyphs.active.every((x) => Glyphs.isMusicGlyph(x)),
     checkEvent: GAME_EVENT.GLYPHS_EQUIPPED_CHANGED,
   },
   {
     id: 44,
     name: "Are you statisfied now?",
     get description() {
-      return `Stare intently at the statistics tab for ${formatInt(15)} real-time minutes.`;
+      return `Stare intently at the statistics tab for ${
+        formatInt(15)
+      } real-time minutes.`;
     },
-    checkRequirement: () => AchievementTimers.stats.check(Tab.statistics.isOpen, 900),
+    checkRequirement: () =>
+      AchievementTimers.stats.check(Tab.statistics.isOpen, 900),
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
   },
   {
     id: 45,
     name: "This dragging is dragging on",
     description: "Drag the Perks around for a minute.",
-    checkRequirement: () => player.requirementChecks.permanent.perkTreeDragging++ / 100 >= 60,
+    checkRequirement: () =>
+      player.requirementChecks.permanent.perkTreeDragging++ / 100 >= 60,
   },
   {
     id: 46,

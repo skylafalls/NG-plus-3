@@ -35,7 +35,7 @@ export default defineComponent({
 <template>
   <div class="l-challenges-tab">
     <ChallengeTabHeader />
-    Within Quantum Challenges, only Electrons work while Positrons are disabled.
+    Pair Production effects are disabled while in Quantum Challenges.
     <ChallengeGrid
       v-slot="{ challenge }"
       :challenges="challenges"

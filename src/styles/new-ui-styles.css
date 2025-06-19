@@ -921,7 +921,7 @@ body.t-s12 {
 .t-normal .c-sacrificed-glyphs--dragover,
 .t-s12 .c-sacrificed-glyphs--dragover {
   border-color: rgb(255, 255, 255);
-  box-shadow: 0 0 0.1rem 0.1rem  rgb(255, 255, 255);
+  box-shadow: 0 0 0.1rem 0.1rem rgb(255, 255, 255);
 }
 
 .t-normal .c-glyph-choice-icon,

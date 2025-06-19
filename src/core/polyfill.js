@@ -19,7 +19,7 @@ if (!Array.prototype.includes) {
     value(searchElement, fromIndex) {
       // 1. Let O be ? ToObject(this value).
       if (this === null) {
-        throw new TypeError("\"this\" is null or not defined");
+        throw new TypeError('"this" is null or not defined');
       }
 
       const o = Object(this);
@@ -44,7 +44,9 @@ if (!Array.prototype.includes) {
       let k = Math.max(n >= 0 ? n : len - Math.abs(n), 0);
 
       function sameValueZero(x, y) {
-        return x === y || (typeof x === "number" && typeof y === "number" && isNaN(x) && isNaN(y));
+        return x === y ||
+          (typeof x === "number" && typeof y === "number" && isNaN(x) &&
+            isNaN(y));
       }
 
       // 7. Repeat, while k < len
@@ -90,7 +92,7 @@ if (!Array.prototype.find) {
     value(predicate) {
       // 1. Let O be ? ToObject(this value).
       if (this === null) {
-        throw new TypeError("\"this\" is null or not defined");
+        throw new TypeError('"this" is null or not defined');
       }
 
       const o = Object(this);

@@ -36,7 +36,7 @@ export const Quote = {
 // Gives an array specifying proportions of celestials to blend together on the modal, as a function of time, to
 // provide a smoother transition between different celestials to reduce potential photosensitivity issues
 function blendCel(cels) {
-  const totalTime = cels.map(cel => cel[1]).nSum();
+  const totalTime = cels.map((cel) => cel[1]).nSum();
   const tick = (Date.now() / 1000) % totalTime;
 
   // Blend the first blendTime seconds with the previous celestial and the last blendTime seconds with the next;
@@ -46,7 +46,8 @@ function blendCel(cels) {
   const blendTime = cels[0][1] / 2;
   let start = 0;
   for (let index = 0; index < cels.length; index++) {
-    const prevCel = cels[(index + cels.length - 1) % cels.length], currCel = cels[index],
+    const prevCel = cels[(index + cels.length - 1) % cels.length],
+      currCel = cels[index],
       nextCel = cels[(index + 1) % cels.length];
 
     // Durations of time from after last transition and after next transition. May be negative, which is how we
@@ -88,7 +89,11 @@ class QuoteLine {
     this._line = typeof line === "string"
       ? line
       // This matches each digit after a $ and replaces it with the wordCycle of an array with the digit it matched.
-      : () => line.text.replaceAll(replacementMatch, (_, i) => wordShift.wordCycle(line[i]));
+      : () =>
+        line.text.replaceAll(
+          replacementMatch,
+          (_, i) => wordShift.wordCycle(line[i]),
+        );
   }
 
   get line() {
@@ -96,11 +101,13 @@ class QuoteLine {
   }
 
   get celestials() {
-    return typeof this._celestialArray === "function" ? this._celestialArray() : this._celestialArray;
+    return typeof this._celestialArray === "function"
+      ? this._celestialArray()
+      : this._celestialArray;
   }
 
   get celestialSymbols() {
-    return this.celestials.map(c => Celestials[c[0]].symbol);
+    return this.celestials.map((c) => Celestials[c[0]].symbol);
   }
 
   get showCelestialName() {
@@ -116,7 +123,7 @@ class CelQuotes extends BitUpgradeState {
   constructor(config, celestial) {
     super(config);
     this._celestial = celestial;
-    this._lines = config.lines.map(line => new QuoteLine(line, this));
+    this._lines = config.lines.map((line) => new QuoteLine(line, this));
   }
 
   get bits() {
@@ -160,30 +167,30 @@ class CelQuotes extends BitUpgradeState {
 export const Quotes = {
   teresa: mapGameDataToObject(
     GameDatabase.celestials.quotes.teresa,
-    config => new CelQuotes(config, "teresa"),
+    (config) => new CelQuotes(config, "teresa"),
   ),
   effarig: mapGameDataToObject(
     GameDatabase.celestials.quotes.effarig,
-    config => new CelQuotes(config, "effarig"),
+    (config) => new CelQuotes(config, "effarig"),
   ),
   enslaved: mapGameDataToObject(
     GameDatabase.celestials.quotes.enslaved,
-    config => new CelQuotes(config, "enslaved"),
+    (config) => new CelQuotes(config, "enslaved"),
   ),
   v: mapGameDataToObject(
     GameDatabase.celestials.quotes.v,
-    config => new CelQuotes(config, "v"),
+    (config) => new CelQuotes(config, "v"),
   ),
   ra: mapGameDataToObject(
     GameDatabase.celestials.quotes.ra,
-    config => new CelQuotes(config, "ra"),
+    (config) => new CelQuotes(config, "ra"),
   ),
   laitela: mapGameDataToObject(
     GameDatabase.celestials.quotes.laitela,
-    config => new CelQuotes(config, "laitela"),
+    (config) => new CelQuotes(config, "laitela"),
   ),
   pelle: mapGameDataToObject(
     GameDatabase.celestials.quotes.pelle,
-    config => new CelQuotes(config, "pelle"),
+    (config) => new CelQuotes(config, "pelle"),
   ),
 };

@@ -78,17 +78,17 @@ export class AutobuyerState {
   static createAccessor() {
     const entryCount = this.entryCount;
     /** @type {object[]} */
-    const zeroIndexed = Array.range(1, entryCount).map(id => new this(id));
+    const zeroIndexed = Array.range(1, entryCount).map((id) => new this(id));
     const oneIndexed = [null, ...zeroIndexed];
     /** @param {number} id */
-    const accessor = id => oneIndexed[id];
+    const accessor = (id) => oneIndexed[id];
     Object.defineProperties(accessor, {
       oneIndexed: { get: () => oneIndexed },
       zeroIndexed: { get: () => zeroIndexed },
       entryCount: { get: () => entryCount },
-      anyUnlocked: { get: () => zeroIndexed.some(x => x.isUnlocked) },
-      allUnlocked: { get: () => zeroIndexed.every(x => x.isUnlocked) },
-      allActive: { get: () => zeroIndexed.every(x => x.isActive) },
+      anyUnlocked: { get: () => zeroIndexed.some((x) => x.isUnlocked) },
+      allUnlocked: { get: () => zeroIndexed.every((x) => x.isUnlocked) },
+      allActive: { get: () => zeroIndexed.every((x) => x.isActive) },
       groupName: { get: () => this.autobuyerGroupName },
       isActive: {
         get: () => this.isActive,
@@ -143,8 +143,8 @@ export class IntervaledAutobuyerState extends AutobuyerState {
  */
 export class UpgradeableAutobuyerState extends IntervaledAutobuyerState {
   /**
-  * @abstract
-  */
+   * @abstract
+   */
   get baseInterval() {
     throw new NotImplementedError();
   }
@@ -155,7 +155,9 @@ export class UpgradeableAutobuyerState extends IntervaledAutobuyerState {
 
   get interval() {
     const interval = this.data.interval;
-    return BreakInfinityUpgrade.autobuyerSpeed.isBought ? interval / 2 : interval;
+    return BreakInfinityUpgrade.autobuyerSpeed.isBought
+      ? interval / 2
+      : interval;
   }
 
   get hasMaxedInterval() {
@@ -183,7 +185,10 @@ export class UpgradeableAutobuyerState extends IntervaledAutobuyerState {
   }
 
   reset() {
-    if (EternityMilestone.keepAutobuyers.isReached || PelleUpgrade.keepAutobuyers.canBeApplied) {
+    if (
+      EternityMilestone.keepAutobuyers.isReached ||
+      PelleUpgrade.keepAutobuyers.canBeApplied
+    ) {
       return;
     }
     this.data.interval = this.baseInterval;
@@ -193,10 +198,13 @@ export class UpgradeableAutobuyerState extends IntervaledAutobuyerState {
   static createAccessor() {
     const accessor = super.createAccessor();
     Object.defineProperty(accessor, "allMaxedInterval", {
-      get: () => accessor.zeroIndexed.every(x => x.hasMaxedInterval),
+      get: () => accessor.zeroIndexed.every((x) => x.hasMaxedInterval),
     });
     Object.defineProperty(accessor, "hasInstant", {
-      get: () => accessor.zeroIndexed.some(x => x.interval < player.options.updateRate),
+      get: () =>
+        accessor.zeroIndexed.some((x) =>
+          x.interval < player.options.updateRate
+        ),
     });
     return accessor;
   }

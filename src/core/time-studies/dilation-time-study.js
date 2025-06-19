@@ -19,7 +19,9 @@ export class DilationTimeStudyState extends TimeStudyState {
   }
 
   get cost() {
-    return typeof this.config.cost === "function" ? this.config.cost() : this.config.cost;
+    return typeof this.config.cost === "function"
+      ? this.config.cost()
+      : this.config.cost;
   }
 
   get totalTimeTheoremRequirement() {
@@ -48,8 +50,13 @@ export class DilationTimeStudyState extends TimeStudyState {
       if (!Pelle.isDoomed) {
         Currency.tachyonParticles.bumpTo(Perk.startTP.effectOrDefault(0));
       }
-      if (Ra.unlocks.unlockDilationStartingTP.canBeApplied && !isInCelestialReality() && !Pelle.isDoomed) {
-        Currency.tachyonParticles.bumpTo(getTP(Ra.unlocks.unlockDilationStartingTP.effectOrDefault(0), false));
+      if (
+        Ra.unlocks.unlockDilationStartingTP.canBeApplied &&
+        !isInCelestialReality() && !Pelle.isDoomed
+      ) {
+        Currency.tachyonParticles.bumpTo(
+          getTP(Ra.unlocks.unlockDilationStartingTP.effectOrDefault(0), false),
+        );
       }
       TabNotification.dilationAfterUnlock.tryTrigger();
     } else if (this.id === 6) {
@@ -67,7 +74,7 @@ export class DilationTimeStudyState extends TimeStudyState {
 
 DilationTimeStudyState.studies = mapGameData(
   GameDatabase.eternity.timeStudies.dilation,
-  config => new DilationTimeStudyState(config),
+  (config) => new DilationTimeStudyState(config),
 );
 
 /**
@@ -98,5 +105,7 @@ TimeStudy.masteryStudies = DilationTimeStudyState.studies[7];
 TimeStudy.pairProduction = DilationTimeStudyState.studies[8];
 
 TimeStudy.boughtDilationTS = function () {
-  return player.dilation.studies.map(id => DilationTimeStudyState.studies[id]);
+  return player.dilation.studies.map((id) =>
+    DilationTimeStudyState.studies[id]
+  );
 };

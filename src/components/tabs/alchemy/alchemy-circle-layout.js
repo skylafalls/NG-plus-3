@@ -1,7 +1,7 @@
 class AlchemyOrbitLayout {
   constructor(tier, radius, angleOffset = 0) {
     this._resources = AlchemyResources.all
-      .filter(y => y.config.tier === tier)
+      .filter((y) => y.config.tier === tier)
       .sort((x, y) => x.config.uiOrder - y.config.uiOrder);
     this._radius = radius;
     this._angleOffset = angleOffset;
@@ -37,12 +37,12 @@ export class AlchemyCircleLayout {
       new AlchemyOrbitLayout(5, 0),
     ];
     const nodes = [];
-    for (const orbitNodes of this.orbits.map(o => o.nodes)) {
+    for (const orbitNodes of this.orbits.map((o) => o.nodes)) {
       nodes.push(...orbitNodes);
     }
     const size = Decimal.max(
-      nodes.map(p => Math.abs(p.x)).max(),
-      nodes.map(p => Math.abs(p.y)).max(),
+      nodes.map((p) => Math.abs(p.x)).max(),
+      nodes.map((p) => Math.abs(p.y)).max(),
     ).toNumber() * 2;
     for (const node of nodes) {
       node.x = (node.x / size + 0.5) * 100;
@@ -51,9 +51,9 @@ export class AlchemyCircleLayout {
     const reactionArrows = [];
     for (const reaction of AlchemyReactions.all.compact()) {
       const productNode = nodes
-        .find(n => n.resource === reaction.product);
+        .find((n) => n.resource === reaction.product);
       const reagentNodes = reaction.reagents
-        .map(r => nodes.find(n => n.resource === r.resource));
+        .map((r) => nodes.find((n) => n.resource === r.resource));
       for (const reagentNode of reagentNodes) {
         reactionArrows.push({
           reaction,

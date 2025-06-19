@@ -2,8 +2,15 @@ export declare module Greenworks {
   export interface NodeModule {
     initAPI(): boolean;
     getSteamId(): SteamId;
-    getAuthSessionTicket(resolve: (ticket: SteamAuthTicket) => void, reject: (error: any) => void): void;
-    activateAchievement(id: string, resolve: () => void, reject: (error: any) => void): void;
+    getAuthSessionTicket(
+      resolve: (ticket: SteamAuthTicket) => void,
+      reject: (error: any) => void,
+    ): void;
+    activateAchievement(
+      id: string,
+      resolve: () => void,
+      reject: (error: any) => void,
+    ): void;
     getAchievementNames(): string[];
     initDiscordAPI(clientId: string, steamGameId: number): void;
     runDiscordCallbacks(): void;
@@ -28,4 +35,3 @@ export declare module Greenworks {
     state: string;
   }
 }
-

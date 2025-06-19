@@ -31,7 +31,7 @@ export class BitPurchasableMechanicState extends PurchasableMechanicState {
 
   set isBought(value) {
     if (value) {
-      this.bits |= (1 << this.bitIndex);
+      this.bits |= 1 << this.bitIndex;
     } else {
       this.bits &= ~(1 << this.bitIndex);
     }

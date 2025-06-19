@@ -10,7 +10,8 @@ export class TimeTheoremAutobuyerState extends AutobuyerState {
   }
 
   get isUnlocked() {
-    return Perk.ttBuySingle.isBought && !Pelle.isDisabled("timeTheoremAutobuyer");
+    return Perk.ttBuySingle.isBought &&
+      !Pelle.isDisabled("timeTheoremAutobuyer");
   }
 
   get hasUnlimitedBulk() {

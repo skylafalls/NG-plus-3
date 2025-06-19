@@ -32,10 +32,14 @@ window.formatInt = function formatInt(value) {
     return "END";
   }
   if (typeof value === "number") {
-    return value > 1e9 ? format(value, 2, 2) : formatWithCommas(value.toFixed(0));
+    return value > 1e9
+      ? format(value, 2, 2)
+      : formatWithCommas(value.toFixed(0));
   }
   return (!(value instanceof Decimal) || value.lt(1e9))
-    ? formatWithCommas(value instanceof Decimal ? value.toNumber().toFixed(0) : 1)
+    ? formatWithCommas(
+      value instanceof Decimal ? value.toNumber().toFixed(0) : 1,
+    )
     : format(value, 2, 2);
 };
 
@@ -46,7 +50,11 @@ window.formatFloat = function formatFloat(value, digits) {
   return formatWithCommas(value.toFixed(digits));
 };
 
-window.formatPostBreak = function formatPostBreak(value, places, placesUnder1000) {
+window.formatPostBreak = function formatPostBreak(
+  value,
+  places,
+  placesUnder1000,
+) {
   if (isEND()) {
     return "END";
   }
@@ -100,14 +108,20 @@ window.formatTet = function formatTet(value, places, placesUnder1000) {
   return `^^${format(value, places, placesUnder1000)}`;
 };
 
-window.formatEffectPos = function formatEffectPos(effect, effectedValue, tet = true) {
+window.formatEffectPos = function formatEffectPos(
+  effect,
+  effectedValue,
+  tet = true,
+) {
   if (effect.lt(1000)) {
     return formatInt(effect, 2, 4) + "%";
   }
   if (effect.lt("1e100000") || effectedValue.lt(2)) {
     return formatX(effect, 2, 2);
   }
-  if ((effect.lt("10^^100") && tet || effect.lt("10^^4")) || effectedValue.lt(10)) {
+  if (
+    (effect.lt("10^^100") && tet || effect.lt("10^^4")) || effectedValue.lt(10)
+  ) {
     return formatPow(effect.log10(), 2, 2);
   }
   if (tet) {
@@ -117,7 +131,8 @@ window.formatEffectPos = function formatEffectPos(effect, effectedValue, tet = t
   val = new Decimal(effect);
   val.layer = 1;
 
-  return formatInt(Math.floor(effect.slog() - 1)) + "th Expo " + formatPow(val, 2, 2);
+  return formatInt(Math.floor(effect.slog() - 1)) + "th Expo " +
+    formatPow(val, 2, 2);
 };
 
 // Does not take negative numbers fyi, just ints between 0-1 (excluding)
@@ -134,7 +149,8 @@ window.formatEffectNeg = function formatEffectNeg(effect, effectedValue) {
   val = new Decimal(effect);
   val.layer = 1;
 
-  return formatInt(Math.floor(effect.recip().slog().toNumber() - 1)) + "th Expo " + formatPow(val, 2, 2);
+  return formatInt(Math.floor(effect.recip().slog().toNumber() - 1)) +
+    "th Expo " + formatPow(val, 2, 2);
 };
 
 window.formatEffectAuto = function formatEffectAuto(value, effectedValue) {
@@ -233,7 +249,13 @@ window.generatePlural = function generatePlural(word) {
  * @returns {string} - the formatted {value} followed by the {name} after having been pluralized based on the {value}
  */
 
-window.quantify = function quantify(name, value, places, placesUnder1000, formatType = format) {
+window.quantify = function quantify(
+  name,
+  value,
+  places,
+  placesUnder1000,
+  formatType = format,
+) {
   if (name === undefined || value === undefined) {
     throw new TypeError("Arguments must be defined");
   }
@@ -279,7 +301,11 @@ window.makeEnumeration = function makeEnumeration(items) {
   return `${commaSeparated}, and ${last}`;
 };
 
-window.exponentialFormat = function exponentialFormat(num, precision, mantissa = true) {
+window.exponentialFormat = function exponentialFormat(
+  num,
+  precision,
+  mantissa = true,
+) {
   let e = Decimal.log10(num).floor();
   let m = new Decimal(num.m);
   if (m.toFixed(0) === "10") {
@@ -289,8 +315,8 @@ window.exponentialFormat = function exponentialFormat(num, precision, mantissa =
   const eString = e.gte(1e6)
     ? format(e, Math.max(Math.max(precision, 3), 2))
     : e.gte(10000)
-      ? commaFormat(e, 0)
-      : e.toStringWithDecimalPlaces(0);
+    ? commaFormat(e, 0)
+    : e.toStringWithDecimalPlaces(0);
   if (mantissa) {
     return m.toStringWithDecimalPlaces(precision) + "e" + eString;
   }
@@ -339,9 +365,16 @@ const e3 = new Decimal(1e3);
 const nearOne = new Decimal(0.98);
 const thousandth = new Decimal(0.001);
 const zero = new Decimal(0);
-function formatInternal(num, precision = 2, precisionUnder1000 = 2, small = false) {
+function formatInternal(
+  num,
+  precision = 2,
+  precisionUnder1000 = 2,
+  small = false,
+) {
   num = new Decimal(num);
-  if (Number.isNaN(num.sign) || Number.isNaN(num.layer) || Number.isNaN(num.mag)) {
+  if (
+    Number.isNaN(num.sign) || Number.isNaN(num.layer) || Number.isNaN(num.mag)
+  ) {
     return "NaN";
   }
   if (num.sign < 0) {
@@ -356,9 +389,9 @@ function formatInternal(num, precision = 2, precisionUnder1000 = 2, small = fals
       return "F" + format(slog.floor());
     }
     return (
-      Decimal.pow(10, slog.sub(slog.floor())).toStringWithDecimalPlaces(3)
-      + "F"
-      + commaFormat(slog.floor(), 0)
+      Decimal.pow(10, slog.sub(slog.floor())).toStringWithDecimalPlaces(3) +
+      "F" +
+      commaFormat(slog.floor(), 0)
     );
   }
 
@@ -413,9 +446,10 @@ function toPlaces(x, precision, maxAccepted) {
   x = new Decimal(x);
   let result = x.toStringWithDecimalPlaces(precision);
   if (new Decimal(result).gte(maxAccepted)) {
-    result = Decimal.sub(maxAccepted, Math.pow(0.1, precision)).toStringWithDecimalPlaces(
-      precision,
-    );
+    result = Decimal.sub(maxAccepted, Math.pow(0.1, precision))
+      .toStringWithDecimalPlaces(
+        precision,
+      );
   }
   return result;
 }
@@ -434,7 +468,12 @@ function invertOOM(x) {
   return x;
 }
 
-window.formatGain = function formatGain(base, gain, precision = 0, precisionUnder1000 = 0) {
+window.formatGain = function formatGain(
+  base,
+  gain,
+  precision = 0,
+  precisionUnder1000 = 0,
+) {
   const next = base.plus(gain);
   const sqrt10 = 3.1622776601683795;
   let difference;
@@ -447,30 +486,48 @@ window.formatGain = function formatGain(base, gain, precision = 0, precisionUnde
     return `(+^^${format(difference, precision, precisionUnder1000)}/sec)`;
   }
 
-  difference = next.plus(1).log10().plus(1).log10().plus(1).log10().plus(1).log10()
-    .div(base.plus(1).log10().plus(1).log10().plus(1).log10().plus(1).log10()).log10();
-  if (difference.gte(10) || (difference.gte(sqrt10) && base.gte("eeee1e1000"))) {
-    return `(+${format(difference.mul(20), precision, precisionUnder1000)} OoM^5/sec)`;
+  difference = next.plus(1).log10().plus(1).log10().plus(1).log10().plus(1)
+    .log10()
+    .div(base.plus(1).log10().plus(1).log10().plus(1).log10().plus(1).log10())
+    .log10();
+  if (
+    difference.gte(10) || (difference.gte(sqrt10) && base.gte("eeee1e1000"))
+  ) {
+    return `(+${
+      format(difference.mul(20), precision, precisionUnder1000)
+    } OoM^5/sec)`;
   }
 
-  difference = next.plus(1).log10().plus(1).log10().plus(1).log10().div(base.plus(1).log10().plus(1).log10().plus(1).log10()).log10();
+  difference = next.plus(1).log10().plus(1).log10().plus(1).log10().div(
+    base.plus(1).log10().plus(1).log10().plus(1).log10(),
+  ).log10();
   if (difference.gte(10) || (difference.gte(sqrt10) && base.gte("eee1e1000"))) {
-    return `(+${format(difference.mul(20), precision, precisionUnder1000)} OoM^4/sec)`;
+    return `(+${
+      format(difference.mul(20), precision, precisionUnder1000)
+    } OoM^4/sec)`;
   }
 
-  difference = next.plus(1).log10().plus(1).log10().div(base.plus(1).log10().plus(1).log10()).log10();
+  difference = next.plus(1).log10().plus(1).log10().div(
+    base.plus(1).log10().plus(1).log10(),
+  ).log10();
   if (difference.gte(10) || (difference.gte(sqrt10) && base.gte("ee1e1000"))) {
-    return `(+${format(difference.mul(20), precision, precisionUnder1000)} OoM^3/sec)`;
+    return `(+${
+      format(difference.mul(20), precision, precisionUnder1000)
+    } OoM^3/sec)`;
   }
 
   difference = next.plus(1).log10().div(base.plus(1).log10()).log10();
   if (difference.gte(10) || (difference.gte(sqrt10) && base.gte("e1e1000"))) {
-    return `(+${format(difference.mul(20), precision, precisionUnder1000)} OoM^2/sec)`;
+    return `(+${
+      format(difference.mul(20), precision, precisionUnder1000)
+    } OoM^2/sec)`;
   }
 
   difference = next.div(base);
   if (difference.gte(10) || (difference.gte(sqrt10) && base.gte("1e1000"))) {
-    return `(+${format(difference.log10().mul(20), precision, precisionUnder1000)} OoM/sec)`;
+    return `(+${
+      format(difference.log10().mul(20), precision, precisionUnder1000)
+    } OoM/sec)`;
   }
 
   return `(+${format(gain, precision, precisionUnder1000)}/sec)`;

@@ -16,10 +16,11 @@ class AutomatorParser extends Parser {
 
     $.RULE("script", () => $.SUBRULE($.block));
 
-    $.RULE("block", () => $.MANY_SEP({
-      SEP: T.EOL,
-      DEF: () => $.OPTION(() => $.SUBRULE($.command)),
-    }));
+    $.RULE("block", () =>
+      $.MANY_SEP({
+        SEP: T.EOL,
+        DEF: () => $.OPTION(() => $.SUBRULE($.command)),
+      }));
 
     // This is a bit ugly looking. Chevrotain uses Function.toString() to do crazy
     // optimizations. That clashes with our desire to build our list of commands dynamically.
@@ -42,22 +43,29 @@ class AutomatorParser extends Parser {
       commandAlts.push(`$.SUBRULE($.${cmd.id})`);
     }
 
-    const commandOr = window.Function("$", "EOF", `
+    const commandOr = window.Function(
+      "$",
+      "EOF",
+      `
       return () => $.OR($.c1 || ($.c1 = [
-        ${commandAlts.map(e => `{ ALT: () => ${e} },`).join("\n")}]));
-    `);
+        ${commandAlts.map((e) => `{ ALT: () => ${e} },`).join("\n")}]));
+    `,
+    );
 
     $.RULE("command", commandOr($, EOF));
 
-    $.RULE("badCommand", () => $.AT_LEAST_ONE(() => $.SUBRULE($.badCommandToken)),
+    $.RULE(
+      "badCommand",
+      () => $.AT_LEAST_ONE(() => $.SUBRULE($.badCommandToken)),
       { resyncEnabled: false },
     );
 
-    $.RULE("badCommandToken", () => $.OR([
-      { ALT: () => $.CONSUME(T.Identifier) },
-      { ALT: () => $.CONSUME(T.NumberLiteral) },
-      { ALT: () => $.CONSUME(T.ComparisonOperator) },
-    ]), { resyncEnabled: false });
+    $.RULE("badCommandToken", () =>
+      $.OR([
+        { ALT: () => $.CONSUME(T.Identifier) },
+        { ALT: () => $.CONSUME(T.NumberLiteral) },
+        { ALT: () => $.CONSUME(T.ComparisonOperator) },
+      ]), { resyncEnabled: false });
 
     $.RULE("comparison", () => {
       $.SUBRULE($.compareValue);
@@ -65,26 +73,28 @@ class AutomatorParser extends Parser {
       $.SUBRULE2($.compareValue);
     });
 
-    $.RULE("compareValue", () => $.OR([
-      { ALT: () => $.CONSUME(T.NumberLiteral) },
-      { ALT: () => $.CONSUME(T.Identifier) },
-      { ALT: () => $.CONSUME(T.AutomatorCurrency) },
-    ]));
+    $.RULE("compareValue", () =>
+      $.OR([
+        { ALT: () => $.CONSUME(T.NumberLiteral) },
+        { ALT: () => $.CONSUME(T.Identifier) },
+        { ALT: () => $.CONSUME(T.AutomatorCurrency) },
+      ]));
 
     $.RULE("duration", () => {
       $.CONSUME(T.NumberLiteral);
       $.CONSUME(T.TimeUnit);
     });
 
-    $.RULE("eternityChallenge", () => $.OR([
-      {
-        ALT: () => {
-          $.CONSUME(T.EC);
-          $.CONSUME(T.NumberLiteral);
+    $.RULE("eternityChallenge", () =>
+      $.OR([
+        {
+          ALT: () => {
+            $.CONSUME(T.EC);
+            $.CONSUME(T.NumberLiteral);
+          },
         },
-      },
-      { ALT: () => $.CONSUME(T.ECLiteral) },
-    ]));
+        { ALT: () => $.CONSUME(T.ECLiteral) },
+      ]));
 
     $.RULE("studyList", () => {
       $.AT_LEAST_ONE(() => $.SUBRULE($.studyListEntry));

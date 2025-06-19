@@ -38,7 +38,9 @@ export class ScriptTemplate {
         break;
       }
       default: {
-        throw new Error(`Unrecognized template name ${templateName} in ScriptTemplate`);
+        throw new Error(
+          `Unrecognized template name ${templateName} in ScriptTemplate`,
+        );
       }
     }
   }
@@ -76,9 +78,17 @@ export class ScriptTemplate {
   storeTreeData(params) {
     const nowaitStr = params.treeNowait ? " nowait" : "";
     if (params.treePreset) {
-      const presetObj = player.timestudy.presets.map((p, i) => ({ ...p, id: i + 1 }))
-        .find(p => (p.name === params.treePreset || p.id === Number(params.treePreset)));
-      const preset = presetObj.name ? `name ${presetObj.name}` : `id ${presetObj.id}`;
+      const presetObj = player.timestudy.presets.map((p, i) => ({
+        ...p,
+        id: i + 1,
+      }))
+        .find(
+          (p) => (p.name === params.treePreset ||
+            p.id === Number(params.treePreset)),
+        );
+      const preset = presetObj.name
+        ? `name ${presetObj.name}`
+        : `id ${presetObj.id}`;
       this.storedTreeStr = `studies${nowaitStr} load ${preset}`;
       this.storedTreeObj = new TimeStudyTree(presetObj.studies);
     } else {
@@ -88,10 +98,17 @@ export class ScriptTemplate {
     if (this.storedTreeObj.invalidStudies.length > 0) {
       this.warnings.push("Tree contains invalid Study IDs");
     }
-    if (this.storedTreeObj.purchasedStudies.length < this.storedTreeObj.selectedStudies.length) {
-      this.warnings.push("Tree structure results in some unbought studies when imported with an empty tree");
+    if (
+      this.storedTreeObj.purchasedStudies.length <
+        this.storedTreeObj.selectedStudies.length
+    ) {
+      this.warnings.push(
+        "Tree structure results in some unbought studies when imported with an empty tree",
+      );
       if (!params.treeNowait) {
-        this.warnings.push("Automator may possibly get stuck with \"Keep buying Studies\" setting");
+        this.warnings.push(
+          'Automator may possibly get stuck with "Keep buying Studies" setting',
+        );
       }
     }
   }
@@ -112,7 +129,9 @@ export class ScriptTemplate {
         return `${this.format(value)} seconds`;
       }
       default: {
-        throw new Error(`Unrecognized autobuyer mode ${mode} in automator script templates`);
+        throw new Error(
+          `Unrecognized autobuyer mode ${mode} in automator script templates`,
+        );
       }
     }
   }
@@ -130,10 +149,20 @@ export class ScriptTemplate {
    */
   templateClimbEP(params) {
     this.lines.push("// Template: Climb EP");
-    this.lines.push(`notify "Running Template Climb EP (to ${format(params.finalEP)})"`);
+    this.lines.push(
+      `notify "Running Template Climb EP (to ${format(params.finalEP)})"`,
+    );
     this.storeTreeData(params);
-    this.lines.push(`auto infinity ${this.parseAutobuyerProp(params.autoInfMode, params.autoInfValue)}`);
-    this.lines.push(`auto eternity ${this.parseAutobuyerProp(params.autoEterMode, params.autoEterValue)}`);
+    this.lines.push(
+      `auto infinity ${
+        this.parseAutobuyerProp(params.autoInfMode, params.autoInfValue)
+      }`,
+    );
+    this.lines.push(
+      `auto eternity ${
+        this.parseAutobuyerProp(params.autoEterMode, params.autoEterValue)
+      }`,
+    );
     this.lines.push(`while ep < ${this.format(params.finalEP)} {`);
     this.lines.push(` ${this.storedTreeStr}`);
     this.lines.push(" studies respec");
@@ -151,16 +180,24 @@ export class ScriptTemplate {
    */
   templateGrindEternities(params) {
     this.lines.push("// Template: Grind Eternities");
-    this.lines.push(`notify "Running Template Grind Eternities (to ${format(params.eternities)})"`);
+    this.lines.push(
+      `notify "Running Template Grind Eternities (to ${
+        format(params.eternities)
+      })"`,
+    );
     this.storeTreeData(params);
     this.lines.push(this.storedTreeStr);
     this.lines.push("auto eternity 0 ep");
     // We give it a bit of an extra "safety factor" of 5x in order to make sure it doesn't end up repeatedly going
     // to something like 1.6e308 due to poor rounding. The startingValue may fluctuate based on achievements, but
     // this can be a significant time save that we want to actually give the player if they have the e130 perk
-    const gapToEternity = Number.MAX_VALUE / Currency.infinityPoints.startingValue.toNumber() * 5;
-    this.lines.push(`auto infinity ${this.format(
-      Decimal.pow(gapToEternity, 1 / params.crunchesPerEternity))} x highest`);
+    const gapToEternity = Number.MAX_VALUE /
+      Currency.infinityPoints.startingValue.toNumber() * 5;
+    this.lines.push(`auto infinity ${
+      this.format(
+        Decimal.pow(gapToEternity, 1 / params.crunchesPerEternity),
+      )
+    } x highest`);
     this.lines.push(`wait eternities > ${this.format(params.eternities)}`);
     this.lines.push("auto eternity off");
   }
@@ -178,20 +215,34 @@ export class ScriptTemplate {
    */
   templateGrindInfinities(params) {
     this.lines.push("// Template: Grind Infinities");
-    this.lines.push(`notify "Running Template Grind Infinities (to ${format(params.infinities)})"`);
+    this.lines.push(
+      `notify "Running Template Grind Infinities (to ${
+        format(params.infinities)
+      })"`,
+    );
     this.storeTreeData(params);
     this.lines.push(this.storedTreeStr);
     this.lines.push("auto eternity off");
     this.lines.push("auto infinity 5s");
     if (params.isBanked) {
-      const has191 = this.storedTreeObj.purchasedStudies.includes(TimeStudy(191));
+      const has191 = this.storedTreeObj.purchasedStudies.includes(
+        TimeStudy(191),
+      );
       if (!has191) {
-        this.warnings.push(`TS191 is not reachable from an empty tree; banking anything in this template
-        will require Achievement "${Achievement(131).name}"`);
+        this.warnings.push(
+          `TS191 is not reachable from an empty tree; banking anything in this template
+        will require Achievement "${Achievement(131).name}"`,
+        );
       }
       const bankRate = has191 ? 0.1 : 0.05;
-      this.lines.push("// Note: This template attempts to get all the Banked Infinities within a single Eternity");
-      this.lines.push(`wait infinities > ${this.format(params.infinities.dividedBy(bankRate), 2)}`);
+      this.lines.push(
+        "// Note: This template attempts to get all the Banked Infinities within a single Eternity",
+      );
+      this.lines.push(
+        `wait infinities > ${
+          this.format(params.infinities.dividedBy(bankRate), 2)
+        }`,
+      );
       this.lines.push("eternity");
     } else {
       this.lines.push(`wait infinities > ${this.format(params.infinities, 2)}`);
@@ -211,7 +262,9 @@ export class ScriptTemplate {
    */
   templateDoEC(params) {
     this.lines.push("// Template: Complete Eternity Challenge");
-    this.lines.push(`notify "Running Template Complete Eternity Challenge (EC${params.ec})"`);
+    this.lines.push(
+      `notify "Running Template Complete Eternity Challenge (EC${params.ec})"`,
+    );
     // Force an eternity in order to buy the study tree first
     this.lines.push("eternity respec");
 
@@ -226,12 +279,18 @@ export class ScriptTemplate {
         this.warnings.push("Specified Study Tree cannot reach specified EC");
       }
     } else if (tree.ec !== params.ec) {
-      this.warnings.push("Specified Study Tree already has a different EC unlocked");
+      this.warnings.push(
+        "Specified Study Tree already has a different EC unlocked",
+      );
     }
 
     // Apply autobuyer settings; we specifically want to turn auto-eternity off so that we can manually trigger the
     // prestige - otherwise, the autobuyer may end up preempting multiple completions
-    this.lines.push(`auto infinity ${this.parseAutobuyerProp(params.autoInfMode, params.autoInfValue)}`);
+    this.lines.push(
+      `auto infinity ${
+        this.parseAutobuyerProp(params.autoInfMode, params.autoInfValue)
+      }`,
+    );
     this.lines.push("auto eternity off");
     if (!TimeStudy.eternityChallenge(params.ec)) {
       this.warnings.push("Specified template EC does not exist");
@@ -239,7 +298,9 @@ export class ScriptTemplate {
     this.lines.push(`start ec ${params.ec}`);
 
     if (params.completions > 5) {
-      this.warnings.push(`ECs cannot be completed more than ${formatInt(5)} times`);
+      this.warnings.push(
+        `ECs cannot be completed more than ${formatInt(5)} times`,
+      );
     }
     this.lines.push(`wait pending completions >= ${params.completions}`);
     this.lines.push("eternity");
@@ -256,14 +317,26 @@ export class ScriptTemplate {
    */
   templateUnlockDilation(params) {
     this.lines.push("// Template: Unlock Dilation");
-    this.lines.push("notify \"Running Template Unlock Dilation\"");
+    this.lines.push('notify "Running Template Unlock Dilation"');
     this.storeTreeData(params);
-    if (![231, 232, 233, 234].some(s => this.storedTreeObj.purchasedStudies.includes(TimeStudy(s)))) {
+    if (
+      ![231, 232, 233, 234].some((s) =>
+        this.storedTreeObj.purchasedStudies.includes(TimeStudy(s))
+      )
+    ) {
       this.warnings.push("Specified Study Tree cannot reach Dilation");
     }
     this.lines.push("auto infinity off");
-    this.lines.push(`auto eternity ${this.parseAutobuyerProp(params.autoEterMode, params.autoEterValue)}`);
-    this.lines.push(`while total tt < ${this.format(TimeStudy.dilation.totalTimeTheoremRequirement)} {`);
+    this.lines.push(
+      `auto eternity ${
+        this.parseAutobuyerProp(params.autoEterMode, params.autoEterValue)
+      }`,
+    );
+    this.lines.push(
+      `while total tt < ${
+        this.format(TimeStudy.dilation.totalTimeTheoremRequirement)
+      } {`,
+    );
     this.lines.push(` ${this.storedTreeStr}`);
     this.lines.push(" studies respec");
     this.lines.push(" wait eternity");

@@ -51,7 +51,9 @@ export const Effarig = {
     }
   },
   get eternityCap() {
-    return this.isRunning && this.currentStage === EFFARIG_STAGES.ETERNITY ? DC.E50 : undefined;
+    return this.isRunning && this.currentStage === EFFARIG_STAGES.ETERNITY
+      ? DC.E50
+      : undefined;
   },
   get glyphLevelCap() {
     switch (this.currentStage) {
@@ -72,11 +74,16 @@ export const Effarig = {
     if (!TeresaUnlocks.effarig.canBeApplied) {
       return DC.D0;
     }
-    return Decimal.floor(Decimal.pow(Currency.eternityPoints.value.add(1).log10().div(7500),
-      getActiveGlyphEffects().length)).times(AlchemyResource.effarig.effectValue);
+    return Decimal.floor(
+      Decimal.pow(
+        Currency.eternityPoints.value.add(1).log10().div(7500),
+        getActiveGlyphEffects().length,
+      ),
+    ).times(AlchemyResource.effarig.effectValue);
   },
   get maxRarityBoost() {
-    return Decimal.log10(Decimal.log10(Currency.relicShards.value.add(10))).times(5);
+    return Decimal.log10(Decimal.log10(Currency.relicShards.value.add(10)))
+      .times(5);
   },
   nerfFactor(power) {
     let c;
@@ -95,7 +102,9 @@ export const Effarig = {
         break;
       }
     }
-    return (DC.D1.sub(new Decimal(c).div(Decimal.sqrt(power.add(1).absLog10()).add(c)))).times(3);
+    return (DC.D1.sub(
+      new Decimal(c).div(Decimal.sqrt(power.add(1).absLog10()).add(c)),
+    )).times(3);
   },
   get tickDilation() {
     return this.nerfFactor(Currency.timeShards.value).div(10).add(0.7);
@@ -113,7 +122,9 @@ export const Effarig = {
   },
   get bonusRG() {
     // Will return 0 if Effarig Infinity is uncompleted
-    return Decimal.floor(replicantiCap().max(1).log10().div(LOG10_MAX_VALUE).sub(1));
+    return Decimal.floor(
+      replicantiCap().max(1).log10().div(LOG10_MAX_VALUE).sub(1),
+    );
   },
   quotes: Quotes.effarig,
   symbol: "Ϙ",
@@ -158,7 +169,7 @@ class EffarigUnlockState extends BitUpgradeState {
 
 export const EffarigUnlock = mapGameDataToObject(
   GameDatabase.celestials.effarig.unlocks,
-  config => new EffarigUnlockState(config),
+  (config) => new EffarigUnlockState(config),
 );
 
 EventHub.logic.on(GAME_EVENT.TAB_CHANGED, () => {

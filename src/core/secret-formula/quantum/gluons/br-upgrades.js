@@ -9,7 +9,7 @@ export const brGluonUpgrades = [
   {
     id: 2,
     cost: () => new Decimal(2),
-    description: () => "Dimensional Sacrifice also affects Dilated Time production but at a reduced rate.",
+    description: () => "Dimensional Sacrifice affects Dilated Time gain at a reduced rate.",
     effect: () => Sacrifice.totalBoost.plus(1).logPow(0.15),
     formatEffect: value => formatX(value, 2, 2),
   },
@@ -17,14 +17,14 @@ export const brGluonUpgrades = [
     id: 3,
     cost: () => new Decimal(5),
     description: () => "Gain more Dilated Time based on Tachyon Particles.",
-    effect: () => Currency.tachyonParticles.value.plus(1).log10().plus(1).pow(0.25),
+    effect: () => Currency.tachyonParticles.value.plus(1).log10().div(111).plus(1),
     formatEffect: value => formatPow(value, 2, 3),
   },
   {
     id: 4,
     cost: () => new Decimal(100),
-    description: () => "Electrons also boost the Time Dimension per-purchase multiplier but at a reduced rate.",
-    effect: () => Currency.electrons.value.plus(1).sqrt(),
+    description: () => "Electrons boosts the Time Dimension per-purchase multiplier at a reduced rate.",
+    effect: () => player.quantum.pair.electrons.plus(1).pow(0.1),
     formatEffect: value => formatX(value, 2, 2),
   },
   {
@@ -45,7 +45,7 @@ export const brGluonUpgrades = [
     id: 7,
     cost: () => new Decimal(3e25),
     description: () => "Eternity Points makes Remote Antimatter Galaxy scaling start later.",
-    effect: () => Currency.eternityPoints.value.plus(1).log10().pow(0.4),
+    effect: () => Currency.eternityPoints.value.plus(1).log10().sqrt(),
     formatEffect: value => `${formatPlus(value, 2, 0)}`,
   },
   {

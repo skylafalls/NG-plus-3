@@ -3,10 +3,10 @@ export class Effect {
     if (effect === undefined || this.isCustomEffect) {
       return;
     }
-    const isFunction = v => typeof v === "function";
-    const isNumber = v => typeof v === "number";
-    const isDecimal = v => v instanceof Decimal;
-    const isConstant = v => isNumber(v) || isDecimal(v);
+    const isFunction = (v) => typeof v === "function";
+    const isNumber = (v) => typeof v === "number";
+    const isDecimal = (v) => v instanceof Decimal;
+    const isConstant = (v) => isNumber(v) || isDecimal(v);
     if (!isFunction(effect) && !isConstant(effect)) {
       throw new Error("Unknown effect value type.");
     }
@@ -29,11 +29,19 @@ export class Effect {
       }
       const conditionProperty = createProperty();
       conditionProperty.get = condition;
-      Object.defineProperty(this, "isEffectConditionSatisfied", conditionProperty);
+      Object.defineProperty(
+        this,
+        "isEffectConditionSatisfied",
+        conditionProperty,
+      );
     }
     const uncappedEffectValueProperty = createProperty();
     addGetter(uncappedEffectValueProperty, effect);
-    Object.defineProperty(this, "uncappedEffectValue", uncappedEffectValueProperty);
+    Object.defineProperty(
+      this,
+      "uncappedEffectValue",
+      uncappedEffectValueProperty,
+    );
     if (cap !== undefined) {
       const capProperty = createProperty();
       addGetter(capProperty, cap);
@@ -72,7 +80,9 @@ export class Effect {
       } else if (isDecimal(effect)) {
         effectValueProperty.get = () => {
           const capValue = this.cap;
-          return capValue === undefined ? effect : Decimal.min(effect, capValue);
+          return capValue === undefined
+            ? effect
+            : Decimal.min(effect, capValue);
         };
       } else if (isFunction(effect)) {
         // Postpone effectValue specialization until the first call
@@ -83,12 +93,16 @@ export class Effect {
           if (isNumber(effectValue)) {
             specializedProperty.get = () => {
               const capValue = this.cap;
-              return capValue === undefined ? effect() : Math.min(effect(), capValue);
+              return capValue === undefined
+                ? effect()
+                : Math.min(effect(), capValue);
             };
           } else if (isDecimal(effectValue)) {
             specializedProperty.get = () => {
               const capValue = this.cap;
-              return capValue === undefined ? effect() : Decimal.min(effect(), capValue);
+              return capValue === undefined
+                ? effect()
+                : Decimal.min(effect(), capValue);
             };
           } else {
             throw new Error("Unknown effect value type.");

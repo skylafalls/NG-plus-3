@@ -2,7 +2,8 @@ import { DC } from "../constants";
 
 import { UpgradeableAutobuyerState } from "./autobuyer";
 
-export class AntimatterDimensionAutobuyerState extends UpgradeableAutobuyerState {
+export class AntimatterDimensionAutobuyerState
+  extends UpgradeableAutobuyerState {
   get tier() {
     return this.id;
   }
@@ -52,7 +53,9 @@ export class AntimatterDimensionAutobuyerState extends UpgradeableAutobuyerState
 
   get bulk() {
     // Use 1e100 to avoid issues with Infinity.
-    return this.hasUnlimitedBulk ? 1e100 : Math.clampMax(this.data.bulk, this.bulkCap);
+    return this.hasUnlimitedBulk
+      ? 1e100
+      : Math.clampMax(this.data.bulk, this.bulkCap);
   }
 
   get hasUnlimitedBulk() {
@@ -97,7 +100,8 @@ export class AntimatterDimensionAutobuyerState extends UpgradeableAutobuyerState
     const settingConfig = player.auto.antimatterDims;
     const individualSetting = settingConfig.all[this.tier - 1];
     const groupSetting = settingConfig.isActive;
-    const thisSetting = individualSetting && (Autobuyer.antimatterDimension.collapseDisplay ? groupSetting : true);
+    const thisSetting = individualSetting &&
+      (Autobuyer.antimatterDimension.collapseDisplay ? groupSetting : true);
 
     // General availability
     const dim = AntimatterDimension(this.tier);
@@ -107,7 +111,8 @@ export class AntimatterDimensionAutobuyerState extends UpgradeableAutobuyerState
     const intervalTick = this.timeSinceLastTick >= this.interval;
 
     // From AutobuyerState.canTick (ignores this.constructor.isActive because that's accounted for in thisSetting)
-    const autoTick = player.auto.autobuyersOn && this.isActive && (this.isUnlocked || this.isBought);
+    const autoTick = player.auto.autobuyersOn && this.isActive &&
+      (this.isUnlocked || this.isBought);
 
     return thisSetting && hasAutobuyer && intervalTick && autoTick;
   }
@@ -147,12 +152,17 @@ export class AntimatterDimensionAutobuyerState extends UpgradeableAutobuyerState
   }
 
   get resetTickOn() {
-    return Perk.antimatterNoReset.canBeApplied ? PRESTIGE_EVENT.ANTIMATTER_GALAXY : PRESTIGE_EVENT.DIMENSION_BOOST;
+    return Perk.antimatterNoReset.canBeApplied
+      ? PRESTIGE_EVENT.ANTIMATTER_GALAXY
+      : PRESTIGE_EVENT.DIMENSION_BOOST;
   }
 
   reset() {
     super.reset();
-    if (EternityMilestone.keepAutobuyers.isReached || PelleUpgrade.keepAutobuyers.canBeApplied) {
+    if (
+      EternityMilestone.keepAutobuyers.isReached ||
+      PelleUpgrade.keepAutobuyers.canBeApplied
+    ) {
       return;
     }
     this.data.isUnlocked = false;
@@ -181,11 +191,15 @@ export class AntimatterDimensionAutobuyerState extends UpgradeableAutobuyerState
   static createAccessor() {
     const accessor = super.createAccessor();
     Object.defineProperties(accessor, {
-      allBought: { get: () => accessor.zeroIndexed.every(x => x.isBought) },
+      allBought: { get: () => accessor.zeroIndexed.every((x) => x.isBought) },
       // We can get away with this since allUnlimitedBulk is the same for all AD autos
       allUnlimitedBulk: { get: () => accessor.zeroIndexed[0].hasUnlimitedBulk },
       bulkCap: { get: () => accessor.zeroIndexed[0].bulkCap },
-      collapseDisplay: { get: () => accessor.allMaxedInterval && accessor.allUnlocked && accessor.allUnlimitedBulk },
+      collapseDisplay: {
+        get: () =>
+          accessor.allMaxedInterval && accessor.allUnlocked &&
+          accessor.allUnlimitedBulk,
+      },
     });
     return accessor;
   }

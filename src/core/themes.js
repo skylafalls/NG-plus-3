@@ -24,7 +24,9 @@ export const Theme = function Theme(name, config) {
       return true;
     }
     // Note: match[0] gets the full string of a match, here the initial S and number in a theme name.
-    return player.secretUnlocks.themes.some(theme => theme.match(/^S[0-9]*/u)[0] === name);
+    return player.secretUnlocks.themes.some((theme) =>
+      theme.match(/^S[0-9]*/u)[0] === name
+    );
   };
 
   this.displayName = function () {
@@ -32,7 +34,9 @@ export const Theme = function Theme(name, config) {
       return name;
     }
     // Secret themes are stored as "S9Whatever", so we need to strip the SN part
-    return player.secretUnlocks.themes.find(theme => theme.match(/^S[0-9]*/u)[0] === name).replace(/^S[0-9]*/u, "");
+    return player.secretUnlocks.themes.find((theme) =>
+      theme.match(/^S[0-9]*/u)[0] === name
+    ).replace(/^S[0-9]*/u, "");
   };
 
   this.set = function () {
@@ -107,7 +111,7 @@ Theme.isSecretTheme = function (name) {
 };
 
 Theme.animatedThemeUnlocked = function () {
-  return Themes.all.some(theme => theme.isAvailable && theme.isAnimated);
+  return Themes.all.some((theme) => theme.isAvailable && theme.isAnimated);
 };
 
 Theme.tryUnlock = function (name) {
@@ -122,10 +126,18 @@ Theme.tryUnlock = function (name) {
   Theme.set(prefix);
   SecretAchievement(25).unlock();
   if (!isAlreadyUnlocked) {
-    GameUI.notify.success(`You have unlocked the ${name.capitalize()} theme!`, 5000);
+    GameUI.notify.success(
+      `You have unlocked the ${name.capitalize()} theme!`,
+      5000,
+    );
     if (Theme.current().isAnimated) {
-      setTimeout(Modal.message.show(`This secret theme has animations. If they are giving you performance issues,
-        you can turn them off in the Options/Visual tab to reduce lag.`), 100);
+      setTimeout(
+        Modal.message.show(
+          `This secret theme has animations. If they are giving you performance issues,
+        you can turn them off in the Options/Visual tab to reduce lag.`,
+        ),
+        100,
+      );
     }
   }
   return true;
@@ -143,7 +155,6 @@ Theme.create = function (name, settings) {
 
 export const Themes = {
   all: [
-
     // Note that "Normal" is a special case where dark is overridden elsewhere with whether or not the UI is Modern
     Theme.create("Normal", {}),
     Theme.create("Metro", { metro: true }),
@@ -162,19 +173,23 @@ export const Themes = {
     Theme.create("S7", { metro: true, secret: true }),
     Theme.create("S8", { metro: true, secret: true }),
     Theme.create("S9", { secret: true }),
-    Theme.create("S10", { dark: true, metro: true, animated: true, secret: true }),
+    Theme.create("S10", {
+      dark: true,
+      metro: true,
+      animated: true,
+      secret: true,
+    }),
     Theme.create("S11", { dark: true, animated: true, secret: true }),
     Theme.create("S12", { secret: true }),
-
   ],
 
   available() {
     return Themes.all
-      .filter(theme => theme.isAvailable());
+      .filter((theme) => theme.isAvailable());
   },
 
   find(name) {
     return Themes.all
-      .find(theme => theme.name === name);
+      .find((theme) => theme.name === name);
   },
 };

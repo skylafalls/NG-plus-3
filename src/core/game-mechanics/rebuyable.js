@@ -48,7 +48,9 @@ export class RebuyableMechanicState extends GameMechanicState {
   }
 
   get isEffectActive() {
-    return isNumber(this.boughtAmount) ? this.boughtAmount > 0 : this.boughtAmount.gt(0);
+    return isNumber(this.boughtAmount)
+      ? this.boughtAmount > 0
+      : this.boughtAmount.gt(0);
   }
 
   get canBeBought() {
@@ -63,7 +65,9 @@ export class RebuyableMechanicState extends GameMechanicState {
       return false;
     }
     this.currency.subtract(this.cost);
-    this.boughtAmount = isNumber(this.boughtAmount) ? this.boughtAmount + 1 : this.boughtAmount.add(1);
+    this.boughtAmount = isNumber(this.boughtAmount)
+      ? this.boughtAmount + 1
+      : this.boughtAmount.add(1);
     this.onPurchased();
     GameUI.update();
     return true;

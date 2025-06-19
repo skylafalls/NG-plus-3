@@ -80,7 +80,9 @@ class AlchemyResourceState extends GameMechanicState {
     if (V.isRunning && this.config.id === 14) {
       return DC.D0;
     }
-    return this.config.effect(Pelle.isDisabled("alchemy") ? DC.D0 : this.amount);
+    return this.config.effect(
+      Pelle.isDisabled("alchemy") ? DC.D0 : this.amount,
+    );
   }
 
   get reaction() {
@@ -112,7 +114,10 @@ class BasicAlchemyResourceState extends AlchemyResourceState {
   }
 
   set highestRefinementValue(value) {
-    player.celestials.ra.highestRefinementValue[this._name] = Decimal.max(this.highestRefinementValue, value);
+    player.celestials.ra.highestRefinementValue[this._name] = Decimal.max(
+      this.highestRefinementValue,
+      value,
+    );
   }
 
   get cap() {
@@ -122,7 +127,7 @@ class BasicAlchemyResourceState extends AlchemyResourceState {
 
 class AdvancedAlchemyResourceState extends AlchemyResourceState {
   get cap() {
-    const reagentCaps = this.reaction.reagents.map(x => x.resource.cap);
+    const reagentCaps = this.reaction.reagents.map((x) => x.resource.cap);
     return Decimal.min(...reagentCaps);
   }
 }
@@ -145,11 +150,14 @@ class AlchemyReaction {
   // 100%, but the reaction will be forced to occur at higher than 100% if there is significantly more reagent than
   // product. This allows resources to be created quickly when its reaction is initially turned on with saved reagents.
   get reactionYield() {
-    if (!this._product.isUnlocked || this._reagents.some(r => !r.resource.isUnlocked)) {
+    if (
+      !this._product.isUnlocked ||
+      this._reagents.some((r) => !r.resource.isUnlocked)
+    ) {
       return new Decimal();
     }
-    let forcingFactor = (this._reagents
-      .map(r => r.resource.amount));
+    let forcingFactor = this._reagents
+      .map((r) => r.resource.amount);
     while (forcingFactor.length > 1) {
       if (forcingFactor[0].gt(forcingFactor[1])) {
         forcingFactor.splice(1, 1);
@@ -161,7 +169,7 @@ class AlchemyReaction {
     forcingFactor = forcingFactor.sub(this._product.amount);
     forcingFactor = forcingFactor.div(100);
     const totalYield = this._reagents
-      .map(r => r.resource.amount.div(r.cost));
+      .map((r) => r.resource.amount.div(r.cost));
     while (totalYield.length > 1) {
       if (totalYield[0].gt(totalYield[1])) {
         totalYield.splice(1, 1);
@@ -175,16 +183,23 @@ class AlchemyReaction {
   // Check each reagent for if a full reaction would drop it below the product amount.  If so, reduce reaction yield
   get actualYield() {
     // Assume a full reaction to see what the maximum possible product is
-    const maxFromReaction = this.baseProduction.mul(this.reactionYield).mul(this.reactionEfficiency);
+    const maxFromReaction = this.baseProduction.mul(this.reactionYield).mul(
+      this.reactionEfficiency,
+    );
     const prodBefore = this._product.amount;
     const prodAfter = prodBefore.add(maxFromReaction);
     let cappedYield = this.reactionYield;
     for (const reagent of this._reagents) {
       const reagentBefore = reagent.resource.amount;
-      const reagentAfter = reagent.resource.amount.sub(this.reactionYield.mul(reagent.cost));
+      const reagentAfter = reagent.resource.amount.sub(
+        this.reactionYield.mul(reagent.cost),
+      );
       const diffBefore = reagentBefore.sub(prodBefore);
       const diffAfter = reagentAfter.sub(prodAfter);
-      cappedYield = Decimal.min(cappedYield, this.reactionYield.mul(diffBefore).div(diffBefore.sub(diffAfter)));
+      cappedYield = Decimal.min(
+        cappedYield,
+        this.reactionYield.mul(diffBefore).div(diffBefore.sub(diffAfter)),
+      );
     }
     return Decimal.clampMin(cappedYield, 0);
   }
@@ -195,7 +210,9 @@ class AlchemyReaction {
   get priority() {
     let maxReagent = Glyphs.levelCap;
     for (const reagent of this._reagents) {
-      const afterReaction = reagent.resource.amount.sub(reagent.cost.mul(this.actualYield));
+      const afterReaction = reagent.resource.amount.sub(
+        reagent.cost.mul(this.actualYield),
+      );
       maxReagent = Decimal.min(maxReagent, afterReaction);
     }
     return maxReagent;
@@ -234,44 +251,60 @@ class AlchemyReaction {
       return;
     }
     const unpredictabilityEffect = AlchemyResource.unpredictability.effectValue;
-    let times = poissonDistribution(unpredictabilityEffect.div(unpredictabilityEffect.sub(1).neg())).add(1);
+    let times = poissonDistribution(
+      unpredictabilityEffect.div(unpredictabilityEffect.sub(1).neg()),
+    ).add(1);
     const cap = this._product.cap;
     times = times.clampMax(1e4).toNumber();
     for (let i = 0; i < times; i++) {
       const reactionYield = this.actualYield;
       for (const reagent of this._reagents) {
-        reagent.resource.amount = reagent.resource.amount.sub(reactionYield.mul(reagent.cost));
+        reagent.resource.amount = reagent.resource.amount.sub(
+          reactionYield.mul(reagent.cost),
+        );
       }
       // The minimum reaction yield is 0.05 so the cap is actually reached
-      const effectiveYield = Decimal.clampMin(reactionYield.mul(this.reactionProduction), 0.05);
-      this._product.amount = Decimal.clampMax(this._product.amount.add(effectiveYield), cap);
+      const effectiveYield = Decimal.clampMin(
+        reactionYield.mul(this.reactionProduction),
+        0.05,
+      );
+      this._product.amount = Decimal.clampMax(
+        this._product.amount.add(effectiveYield),
+        cap,
+      );
     }
   }
 }
 
 export const AlchemyResource = mapGameDataToObject(
   GameDatabase.celestials.alchemy.resources,
-  config => (config.isBaseResource
+  (
+    config,
+  ) => (config.isBaseResource
     ? new BasicAlchemyResourceState(config)
     : new AdvancedAlchemyResourceState(config)),
 );
 
 export const AlchemyResources = {
   all: AlchemyResource.all,
-  base: AlchemyResource.all.filter(r => r.isBaseResource),
+  base: AlchemyResource.all.filter((r) => r.isBaseResource),
 };
 
-export const AlchemyReactions = (function () {
+export const AlchemyReactions = function () {
   // For convenience and readability, stuff is named differently in GameDatabase
   function mapReagents(resource) {
     return resource.config.reagents
-      .map(r => ({
-        resource: AlchemyResources.all.find(x => x.id === r.resource),
+      .map((r) => ({
+        resource: AlchemyResources.all.find((x) => x.id === r.resource),
         cost: r.amount,
       }));
   }
   return {
     all: AlchemyResources.all
-      .map(r => (r.isBaseResource ? null : new AlchemyReaction(r, mapReagents(r)))),
+      .map(
+        (
+          r,
+        ) => (r.isBaseResource ? null : new AlchemyReaction(r, mapReagents(r))),
+      ),
   };
-}());
+}();

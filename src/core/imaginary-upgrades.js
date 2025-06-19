@@ -1,4 +1,7 @@
-import { BitPurchasableMechanicState, RebuyableMechanicState } from "./game-mechanics";
+import {
+  BitPurchasableMechanicState,
+  RebuyableMechanicState,
+} from "./game-mechanics";
 import { DC } from "./constants";
 
 class ImaginaryUpgradeState extends BitPurchasableMechanicState {
@@ -12,11 +15,15 @@ class ImaginaryUpgradeState extends BitPurchasableMechanicState {
   }
 
   get requirement() {
-    return typeof this.config.requirement === "function" ? this.config.requirement() : this.config.requirement;
+    return typeof this.config.requirement === "function"
+      ? this.config.requirement()
+      : this.config.requirement;
   }
 
   get lockEvent() {
-    return typeof this.config.lockEvent === "function" ? this.config.lockEvent() : this.config.lockEvent;
+    return typeof this.config.lockEvent === "function"
+      ? this.config.lockEvent()
+      : this.config.lockEvent;
   }
 
   get currency() {
@@ -48,7 +55,8 @@ class ImaginaryUpgradeState extends BitPurchasableMechanicState {
   }
 
   get isLockingMechanics() {
-    return this.hasPlayerLock && this.isPossible && !this.isAvailableForPurchase;
+    return this.hasPlayerLock && this.isPossible &&
+      !this.isAvailableForPurchase;
   }
 
   // Required to be changed this way to avoid direct prop mutation in Vue components
@@ -63,7 +71,11 @@ class ImaginaryUpgradeState extends BitPurchasableMechanicState {
   // Note we don't actually show the modal if we already failed or unlocked it
   tryShowWarningModal(specialLockText) {
     if (this.isPossible && !this.isAvailableForPurchase) {
-      Modal.upgradeLock.show({ upgrade: this, isImaginary: true, specialLockText });
+      Modal.upgradeLock.show({
+        upgrade: this,
+        isImaginary: true,
+        specialLockText,
+      });
     }
   }
 
@@ -84,11 +96,16 @@ class ImaginaryUpgradeState extends BitPurchasableMechanicState {
   }
 
   tryUnlock() {
-    if (!MachineHandler.isIMUnlocked || this.isAvailableForPurchase || !this.config.checkRequirement()) {
+    if (
+      !MachineHandler.isIMUnlocked || this.isAvailableForPurchase ||
+      !this.config.checkRequirement()
+    ) {
       return;
     }
-    player.reality.imaginaryUpgReqs |= (1 << this.id);
-    GameUI.notify.reality(`You've unlocked an Imaginary Upgrade: ${this.config.name}`);
+    player.reality.imaginaryUpgReqs |= 1 << this.id;
+    GameUI.notify.reality(
+      `You've unlocked an Imaginary Upgrade: ${this.config.name}`,
+    );
     this.hasPlayerLock = false;
   }
 
@@ -149,12 +166,14 @@ class RebuyableImaginaryUpgradeState extends RebuyableMechanicState {
 
 ImaginaryUpgradeState.index = mapGameData(
   GameDatabase.reality.imaginaryUpgrades,
-  config => (config.id <= 10
+  (
+    config,
+  ) => (config.id <= 10
     ? new RebuyableImaginaryUpgradeState(config)
     : new ImaginaryUpgradeState(config)),
 );
 
-export const ImaginaryUpgrade = id => ImaginaryUpgradeState.index[id];
+export const ImaginaryUpgrade = (id) => ImaginaryUpgradeState.index[id];
 
 export const ImaginaryUpgrades = {
   all: ImaginaryUpgradeState.index.compact(),
@@ -167,9 +186,10 @@ export const ImaginaryUpgrades = {
     return total;
   },
   get totalSinglePurchase() {
-    return this.all.countWhere(u => u.isBought);
+    return this.all.countWhere((u) => u.isBought);
   },
   get allBought() {
-    return (player.reality.imaginaryUpgradeBits >> 6) + 1 === 1 << (GameDatabase.reality.imaginaryUpgrades.length - 5);
+    return (player.reality.imaginaryUpgradeBits >> 6) + 1 ===
+      1 << (GameDatabase.reality.imaginaryUpgrades.length - 5);
   },
 };

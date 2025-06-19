@@ -11,34 +11,44 @@ export const masteryStudies = [
     cost: new Decimal("1e140"),
     requirement: [11],
     reqType: TS_REQUIREMENT_TYPE.AT_LEAST_ONE,
-    description: () => `Remote Antimatter Galaxy scaling starts ${formatInt(1)} later per ${formatInt(3000)} dimension boosts`,
+    description: () =>
+      `Remote Antimatter Galaxy scaling starts ${formatInt(1)} later per ${
+        formatInt(3000)
+      } dimension boosts`,
     effect: () => player.dimensionBoosts.div(3000).floor(),
-    formatEffect: value => formatPlus(value, 0),
+    formatEffect: (value) => formatPlus(value, 0),
   },
   {
     id: "M22",
     cost: new Decimal("1e140"),
     requirement: [11],
     reqType: TS_REQUIREMENT_TYPE.AT_LEAST_ONE,
-    description: () => `Remote Antimatter Galaxy scaling starts ${formatInt(1)} later per ${formatInt(7)} Tachyonic Galaxies`,
+    description: () =>
+      `Remote Antimatter Galaxy scaling starts ${formatInt(1)} later per ${
+        formatInt(7)
+      } Tachyonic Galaxies`,
     effect: () => player.dilation.totalTachyonGalaxies.div(7).floor(),
-    formatEffect: value => formatPlus(value, 0),
+    formatEffect: (value) => formatPlus(value, 0),
   },
   {
     id: "M23",
     cost: new Decimal("1e140"),
     requirement: [11],
     reqType: TS_REQUIREMENT_TYPE.AT_LEAST_ONE,
-    description: () => `Remote Antimatter Galaxy scaling starts ${formatInt(1)} later per ${formatInt(4)} Replicanti Galaxies`,
+    description: () =>
+      `Remote Antimatter Galaxy scaling starts ${formatInt(1)} later per ${
+        formatInt(4)
+      } Replicanti Galaxies`,
     effect: () => Replicanti.galaxies.total.div(4).floor(),
-    formatEffect: value => formatPlus(value, 0),
+    formatEffect: (value) => formatPlus(value, 0),
   },
   {
     id: "M31",
     cost: new Decimal("1e165"),
     requirement: [21],
     reqType: TS_REQUIREMENT_TYPE.AT_LEAST_ONE,
-    description: () => "Dimension Boosts scale by 1 less 8th Antimatter Dimension",
+    description: () =>
+      "Dimension Boosts scale by 1 less 8th Antimatter Dimension",
     effect: () => 1,
   },
   {
@@ -46,9 +56,10 @@ export const masteryStudies = [
     cost: new Decimal("1e165"),
     requirement: [21],
     reqType: TS_REQUIREMENT_TYPE.AT_LEAST_ONE,
-    description: () => "Dimension Boosts boosts Meta Dimensions at a reduced rate",
+    description: () =>
+      "Dimension Boosts boosts Meta Dimensions at a reduced rate",
     effect: () => DimBoost.totalBoosts.plus(1).log10(),
-    formatEffect: value => formatX(value, 2),
+    formatEffect: (value) => formatX(value, 2),
   },
   {
     id: "M33",
@@ -57,16 +68,17 @@ export const masteryStudies = [
     reqType: TS_REQUIREMENT_TYPE.AT_LEAST_ONE,
     description: () => "Meta-Dimension Boosts boosts Dilated Time production",
     effect: () => MetaDimensions.boost.totalBoosts.plus(1).pow(0.5),
-    formatEffect: value => formatX(value, 2),
+    formatEffect: (value) => formatX(value, 2),
   },
   {
     id: "M34",
     cost: new Decimal("1e165"),
     requirement: [22],
     reqType: TS_REQUIREMENT_TYPE.AT_LEAST_ONE,
-    description: () => "Gain more Tachyon Particles based on Antimatter Galaxies",
+    description: () =>
+      "Gain more Tachyon Particles based on Antimatter Galaxies",
     effect: () => player.galaxies.plus(1).cbrt(),
-    formatEffect: value => formatX(value, 2),
+    formatEffect: (value) => formatX(value, 2),
   },
   {
     id: "M35",

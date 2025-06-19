@@ -34,15 +34,18 @@ class PerkState extends SetPurchasableMechanicState {
   }
 
   get isAvailableForPurchase() {
-    return this.id === 0 || this.connectedPerks.some(p => p.isBought);
+    return this.id === 0 || this.connectedPerks.some((p) => p.isBought);
   }
 
   get canBeApplied() {
-    return this.isBought && !(Pelle.isDoomed && Pelle.uselessPerks.includes(this.id));
+    return this.isBought &&
+      !(Pelle.isDoomed && Pelle.uselessPerks.includes(this.id));
   }
 
   initializeConnections() {
-    this.connectedPerks = GameDatabase.reality.perkConnections[this.id].map(id => Perks.find(id));
+    this.connectedPerks = GameDatabase.reality.perkConnections[this.id].map(
+      (id) => Perks.find(id),
+    );
   }
 
   onPurchased() {
@@ -53,7 +56,7 @@ class PerkState extends SetPurchasableMechanicState {
       applyEU1();
     }
     if (this.label === "ACHNR") {
-      if (Achievements.preReality.some(a => !a.isUnlocked)) {
+      if (Achievements.preReality.some((a) => !a.isUnlocked)) {
         player.reality.gainedAutoAchievements = true;
       }
       for (const achievement of Achievements.preReality) {
@@ -68,7 +71,7 @@ class PerkState extends SetPurchasableMechanicState {
 
 export const Perk = mapGameDataToObject(
   GameDatabase.reality.perks,
-  config => new PerkState(config),
+  (config) => new PerkState(config),
 );
 
 export const Perks = {
@@ -78,7 +81,7 @@ export const Perks = {
    * @returns {PerkState}
    */
   find(id) {
-    return Perks.all.find(p => p.id === id);
+    return Perks.all.find((p) => p.id === id);
   },
 };
 
@@ -87,14 +90,18 @@ for (const perk of Perks.all) {
 }
 
 export function checkPerkValidity() {
-  if (player.reality.perks.every(id => Perks.some(id) !== undefined)) {
+  if (player.reality.perks.every((id) => Perks.some(id) !== undefined)) {
     return;
   }
   dev.respecPerks();
   if (Currency.perkPoints.gte(Perks.all.length)) {
     dev.buyAllPerks();
-    Modal.message.show("Some of your Perks were invalid, but you auto-bought all valid perks.");
+    Modal.message.show(
+      "Some of your Perks were invalid, but you auto-bought all valid perks.",
+    );
   } else {
-    Modal.message.show("Some of your Perks were invalid, so your Perks have been reset and your Perk Points refunded.");
+    Modal.message.show(
+      "Some of your Perks were invalid, so your Perks have been reset and your Perk Points refunded.",
+    );
   }
 }

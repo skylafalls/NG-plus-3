@@ -5,17 +5,22 @@ export const MultiplierTabHelper = {
   activeDimCount(type) {
     switch (type) {
       case "AD": {
-        return Math.clamp(AntimatterDimensions.all.filter(ad => ad.isProducing).length,
-          1, EternityChallenge(7).isRunning ? 7 : 8);
+        return Math.clamp(
+          AntimatterDimensions.all.filter((ad) => ad.isProducing).length,
+          1,
+          EternityChallenge(7).isRunning ? 7 : 8,
+        );
       }
       case "ID": {
-        return InfinityDimensions.all.filter(id => id.isProducing).length;
+        return InfinityDimensions.all.filter((id) => id.isProducing).length;
       }
       case "TD": {
-        return TimeDimensions.all.filter(td => td.isProducing).length;
+        return TimeDimensions.all.filter((td) => td.isProducing).length;
       }
       default: {
-        throw new Error("Unrecognized Dimension type in Multiplier tab GameDB entry");
+        throw new Error(
+          "Unrecognized Dimension type in Multiplier tab GameDB entry",
+        );
       }
     }
   },
@@ -68,17 +73,26 @@ export const MultiplierTabHelper = {
       effectiveCount = effectiveCount.mul(Pelle.specialGlyphEffect.power);
 
       tickFrac = Tickspeed.totalUpgrades.mul(logBase);
-      galFrac = Decimal.log10(Decimal.max(0.01, new Decimal(1).div(baseMult).sub(effectiveCount.mul(perGalaxy))))
+      galFrac = Decimal.log10(
+        Decimal.max(
+          0.01,
+          new Decimal(1).div(baseMult).sub(effectiveCount.mul(perGalaxy)),
+        ),
+      )
         .mul(-1).div(logBase);
     } else {
       effectiveCount = effectiveCount.sub(2);
       effectiveCount = effectiveCount.mul(effects);
-      effectiveCount = effectiveCount.mul(getAdjustedGlyphEffect("realitygalaxies")
-        .mul(ImaginaryUpgrade(9).effectOrDefault(0).add(1)));
+      effectiveCount = effectiveCount.mul(
+        getAdjustedGlyphEffect("realitygalaxies")
+          .mul(ImaginaryUpgrade(9).effectOrDefault(0).add(1)),
+      );
       effectiveCount = effectiveCount.mul(Pelle.specialGlyphEffect.power);
 
       // These all need to be framed as INCREASING x/sec tick rate (ie. all multipliers > 1, all logs > 0)
-      const baseMult = new Decimal(0.965 ** 2).div(NormalChallenge(5).isRunning ? 0.83 : 0.8);
+      const baseMult = new Decimal(0.965 ** 2).div(
+        NormalChallenge(5).isRunning ? 0.83 : 0.8,
+      );
       const logBase = Decimal.log10(baseMult);
       const logPerGalaxy = DC.D0_965.log10().mul(-1);
 
@@ -191,7 +205,8 @@ export const MultiplierTabHelper = {
         return dimStr.slice(0, 2) === "AD";
       }
       case 8: {
-        return dimStr.slice(0, 2) === "AD" && Number(dimStr.charAt(2)) > 1 && Number(dimStr.charAt(2)) < 8;
+        return dimStr.slice(0, 2) === "AD" && Number(dimStr.charAt(2)) > 1 &&
+          Number(dimStr.charAt(2)) < 8;
       }
       default: {
         return false;
@@ -224,15 +239,17 @@ export const MultiplierTabHelper = {
 
   blackHoleSpeeds() {
     const currBH = BlackHoles.list
-      .filter(bh => bh.isUnlocked)
-      .map(bh => (bh.isActive ? bh.power : 1))
+      .filter((bh) => bh.isUnlocked)
+      .map((bh) => (bh.isActive ? bh.power : 1))
       .reduce((x, y) => x * y, 1);
 
     // Calculate an average black hole speedup factor
     const bh1 = BlackHole(1);
     const bh2 = BlackHole(2);
-    const avgBH = 1 + (bh1.isUnlocked ? bh1.dutyCycle * (bh1.power - 1) : 0)
-      + (bh2.isUnlocked ? bh1.dutyCycle * bh2.dutyCycle * bh1.power * (bh2.power - 1) : 0);
+    const avgBH = 1 + (bh1.isUnlocked ? bh1.dutyCycle * (bh1.power - 1) : 0) +
+      (bh2.isUnlocked
+        ? bh1.dutyCycle * bh2.dutyCycle * bh1.power * (bh2.power - 1)
+        : 0);
 
     return {
       current: currBH,
@@ -248,32 +265,43 @@ export const MultiplierTabHelper = {
   // which set of Dimensions are actually producing within NC12 - in nearly every case, one of the odd/even sets will
   // produce significantly more than the other, so we simply assume the larger one is active and the other isn't
   evenDimNC12Production() {
-    const nc12Pow = tier => ([2, 4, 6].includes(tier) ? 0.1 * (8 - tier) : 0);
-    const maxTier = Math.clampMin(2 * Math.floor(MultiplierTabHelper.activeDimCount("AD") / 2), 2);
+    const nc12Pow = (tier) => ([2, 4, 6].includes(tier) ? 0.1 * (8 - tier) : 0);
+    const maxTier = Math.clampMin(
+      2 * Math.floor(MultiplierTabHelper.activeDimCount("AD") / 2),
+      2,
+    );
     return AntimatterDimensions.all
-      .filter(ad => ad.isProducing && ad.tier % 2 === 0)
-      .map(ad => ad.multiplier.times(ad.amount.pow(nc12Pow(ad.tier))))
+      .filter((ad) => ad.isProducing && ad.tier % 2 === 0)
+      .map((ad) => ad.multiplier.times(ad.amount.pow(nc12Pow(ad.tier))))
       .reduce((x, y) => x.times(y), DC.D1)
       .times(AntimatterDimension(maxTier).totalAmount);
   },
 
   oddDimNC12Production() {
-    const maxTier = Math.clampMin(2 * Math.floor(MultiplierTabHelper.activeDimCount("AD") / 2 - 0.5) + 1, 1);
+    const maxTier = Math.clampMin(
+      2 * Math.floor(MultiplierTabHelper.activeDimCount("AD") / 2 - 0.5) + 1,
+      1,
+    );
     return AntimatterDimensions.all
-      .filter(ad => ad.isProducing && ad.tier % 2 === 1)
-      .map(ad => ad.multiplier)
+      .filter((ad) => ad.isProducing && ad.tier % 2 === 1)
+      .map((ad) => ad.multiplier)
       .reduce((x, y) => x.times(y), DC.D1)
       .times(AntimatterDimension(maxTier).totalAmount);
   },
 
   actualNC12Production() {
-    return Decimal.max(this.evenDimNC12Production(), this.oddDimNC12Production());
+    return Decimal.max(
+      this.evenDimNC12Production(),
+      this.oddDimNC12Production(),
+    );
   },
 
   multInNC12(dim) {
-    const nc12Pow = tier => ([2, 4, 6].includes(tier) ? 0.1 * (8 - tier) : 0);
+    const nc12Pow = (tier) => ([2, 4, 6].includes(tier) ? 0.1 * (8 - tier) : 0);
     const ad = AntimatterDimension(dim);
-    return ad.isProducing ? ad.multiplier.times(ad.totalAmount.pow(nc12Pow(dim))) : DC.D1;
+    return ad.isProducing
+      ? ad.multiplier.times(ad.totalAmount.pow(nc12Pow(dim)))
+      : DC.D1;
   },
 
   isNC12ProducingEven() {

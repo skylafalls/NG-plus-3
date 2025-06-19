@@ -96,7 +96,9 @@ class QuantumChallengeState extends GameMechanicState {
  * @param {number} id
  * @returns {QuantumChallengeState}
  */
-export const QuantumChallenge = QuantumChallengeState.createAccessor(GameDatabase.challenges.quantum);
+export const QuantumChallenge = QuantumChallengeState.createAccessor(
+  GameDatabase.challenges.quantum,
+);
 
 /**
  * @returns {QuantumChallengeState}
@@ -104,8 +106,7 @@ export const QuantumChallenge = QuantumChallengeState.createAccessor(GameDatabas
 Object.defineProperty(QuantumChallenge, "current", {
   get: () => (player.challenge.quantum.current === 0
     ? undefined
-    : QuantumChallenge(player.challenge.quantum.current)
-  ),
+    : QuantumChallenge(player.challenge.quantum.current)),
 });
 
 Object.defineProperty(QuantumChallenge, "isRunning", {
@@ -123,12 +124,13 @@ export const QuantumChallenges = {
     }
   },
   clearCompletions() {
-    player.challenge.quantum.completions = player.challenge.quantum.completions.fill(0);
+    player.challenge.quantum.completions = player.challenge.quantum.completions
+      .fill(0);
   },
   /**
    * @returns {QuantumChallengeState[]}
    */
   get completed() {
-    return QuantumChallenges.all.filter(qc => qc.isCompleted);
+    return QuantumChallenges.all.filter((qc) => qc.isCompleted);
   },
 };

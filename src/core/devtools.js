@@ -1,7 +1,6 @@
 /* eslint-disable */
 // Disabling eslint here is fine, this is developer tools and this file does really matter.
 
-
 import { sha512_256 } from "js-sha512";
 import { Player } from "./player";
 import { DC } from "./constants";
@@ -9,13 +8,13 @@ import FullScreenAnimationHandler from "./full-screen-animation-handler";
 
 export const dev = {};
 
-dev.speedUp = 1
+dev.speedUp = 1;
 
-dev.hardReset = function() {
+dev.hardReset = function () {
   GameStorage.hardReset();
 };
 
-dev.giveAllAchievements = function() {
+dev.giveAllAchievements = function () {
   const allAchievements = Achievements.all.concat(SecretAchievements.all);
   for (const achievement of allAchievements) achievement.unlock();
 };
@@ -23,54 +22,68 @@ dev.giveAllAchievements = function() {
 // Know that both dev.doubleEverything and dev.tripleEverything are both broken
 // with this error https://i.imgur.com/ZMEBNTv.png
 
-dev.doubleEverything = function() {
-  Object.keys(player).forEach(key => {
+dev.doubleEverything = function () {
+  Object.keys(player).forEach((key) => {
     if (typeof player[key] === "number") player[key] *= 2;
-    if (typeof player[key] === "object" && player[key].constructor !== Object) player[key] = player[key].times(2);
+    if (typeof player[key] === "object" && player[key].constructor !== Object) {
+      player[key] = player[key].times(2);
+    }
     if (typeof player[key] === "object" && !isFinite(player[key])) {
-      Object.keys(player[key]).forEach(key2 => {
+      Object.keys(player[key]).forEach((key2) => {
         if (typeof player[key][key2] === "number") player[key][key2] *= 2;
-        if (typeof player[key][key2] === "object" && player[key][key2].constructor !== Object)
+        if (
+          typeof player[key][key2] === "object" &&
+          player[key][key2].constructor !== Object
+        ) {
           player[key][key2] = player[key][key2].times(2);
+        }
       });
     }
   });
 };
 
-dev.tripleEverything = function() {
-  Object.keys(player).forEach(key => {
+dev.tripleEverything = function () {
+  Object.keys(player).forEach((key) => {
     if (typeof player[key] === "number") player[key] *= 3;
-    if (typeof player[key] === "object" && player[key].constructor !== Object) player[key] = player[key].times(3);
+    if (typeof player[key] === "object" && player[key].constructor !== Object) {
+      player[key] = player[key].times(3);
+    }
     if (typeof player[key] === "object" && !isFinite(player[key])) {
-      Object.keys(player[key]).forEach(key3 => {
+      Object.keys(player[key]).forEach((key3) => {
         if (typeof player[key][key3] === "number") player[key][key3] *= 3;
-        if (typeof player[key][key3] === "object" && player[key][key3].constructor !== Object)
+        if (
+          typeof player[key][key3] === "object" &&
+          player[key][key3].constructor !== Object
+        ) {
           player[key][key3] = player[key][key3].times(3);
+        }
       });
     }
   });
 };
 
-dev.barrelRoll = function() {
+dev.barrelRoll = function () {
   FullScreenAnimationHandler.display("a-barrel-roll", 5);
 };
 
-dev.spin3d = function() {
-  if (document.body.style.animation === "") document.body.style.animation = "a-spin3d 3s infinite";
-  else document.body.style.animation = "";
+dev.spin3d = function () {
+  if (document.body.style.animation === "") {
+    document.body.style.animation = "a-spin3d 3s infinite";
+  } else document.body.style.animation = "";
 };
 
-dev.spin4d = function() {
-  if (document.body.style.animation === "") document.body.style.animation = "a-spin4d 3s infinite";
-  else document.body.style.animation = "";
+dev.spin4d = function () {
+  if (document.body.style.animation === "") {
+    document.body.style.animation = "a-spin4d 3s infinite";
+  } else document.body.style.animation = "";
 };
 
-dev.cancerize = function() {
+dev.cancerize = function () {
   Theme.tryUnlock("Design");
   Notation.emoji.setAsCurrent();
 };
 
-dev.fixSave = function() {
+dev.fixSave = function () {
   const save = JSON.stringify(player, GameSaveSerializer.jsonConverter);
   const fixed = save.replace(/NaN/gui, "10");
   const saveData = JSON.parse(fixed);
@@ -82,35 +95,38 @@ dev.fixSave = function() {
   GameStorage.save();
 };
 
-dev.updateTDCosts = function() {
+dev.updateTDCosts = function () {
   for (let tier = 1; tier < 9; tier++) {
     const dim = TimeDimension(tier);
     dim.cost = dim.nextCost(dim.bought);
   }
 };
 
-dev.refundTimeDims = function() {
+dev.refundTimeDims = function () {
   for (const dimension of TimeDimensions.all) {
     dimension.bought = 0;
   }
   dev.updateTDCosts();
 };
 
-dev.refundEPMult = function() {
+dev.refundEPMult = function () {
   player.epmultUpgrades = 0;
 };
 
-dev.refundDilStudies = function() {
+dev.refundDilStudies = function () {
   for (const study of GameDatabase.eternity.timeStudies.dilation) {
     if (player.dilation.studies.includes(study.id)) {
-      player.dilation.studies.splice(player.dilation.studies.indexOf(study.id), 1);
+      player.dilation.studies.splice(
+        player.dilation.studies.indexOf(study.id),
+        1,
+      );
       console.log(document.getElementById(`removed dilstudy${study.id}`));
       Currency.timeTheorems.add(study.cost);
     }
   }
 };
 
-dev.resetDilation = function() {
+dev.resetDilation = function () {
   player.dilation.dilatedTime = DC.D0;
   player.dilation.tachyonParticles = DC.D0;
   player.dilation.rebuyables[1] = 0;
@@ -123,7 +139,7 @@ dev.resetDilation = function() {
 // We want to give a large degree of options
 // when making a special glyph, so no max-params
 
-dev.giveSpecialGlyph = function(color, symbol, level, rawLevel = level) {
+dev.giveSpecialGlyph = function (color, symbol, level, rawLevel = level) {
   if (GameCache.glyphInventorySpace.value === 0) return;
   const glyph = GlyphGenerator.randomGlyph({ actualLevel: level, rawLevel });
   glyph.symbol = symbol;
@@ -131,68 +147,76 @@ dev.giveSpecialGlyph = function(color, symbol, level, rawLevel = level) {
   Glyphs.addToInventory(glyph);
 };
 
-dev.giveGlyph = function(level, rawLevel = level) {
+dev.giveGlyph = function (level, rawLevel = level) {
   if (GameCache.glyphInventorySpace.value === 0) return;
-  Glyphs.addToInventory(GlyphGenerator.randomGlyph({ actualLevel: level, rawLevel }));
+  Glyphs.addToInventory(
+    GlyphGenerator.randomGlyph({ actualLevel: level, rawLevel }),
+  );
 };
 
-dev.giveRealityGlyph = function(level) {
+dev.giveRealityGlyph = function (level) {
   if (GameCache.glyphInventorySpace.value === 0) return;
   Glyphs.addToInventory(GlyphGenerator.realityGlyph());
 };
 
-dev.setCompanionGlyphEP = function(eternityPoints) {
+dev.setCompanionGlyphEP = function (eternityPoints) {
   const glyph = player.reality.glyphs.active
     .concat(player.reality.glyphs.inventory)
-    .filter(g => g.type === "companion")[0];
+    .filter((g) => g.type === "companion")[0];
   glyph.strength = rarityToStrength(eternityPoints.max(1).log10() / 1e6);
 };
 
-dev.decriminalize = function() {
+dev.decriminalize = function () {
   SecretAchievement(23).lock();
   EventHub.dispatch(GAME_EVENT.ACHIEVEMENT_UNLOCKED);
 };
 
-dev.removeAch = function(name) {
+dev.removeAch = function (name) {
   if (name === "all") {
     const allAchievements = Achievements.all.concat(SecretAchievements.all);
     for (const achievement of allAchievements) achievement.lock();
     return "removed all achievements";
   }
-  if (typeof (name) === "number") return Achievement(name).lock();
-  if (name.startsWith("r")) return Achievement(parseInt(name.slice(1), 10)).lock();
-  if (name.startsWith("s")) return SecretAchievement(parseInt(name.slice(1), 10)).lock();
+  if (typeof name === "number") return Achievement(name).lock();
+  if (name.startsWith("r")) {
+    return Achievement(parseInt(name.slice(1), 10)).lock();
+  }
+  if (name.startsWith("s")) {
+    return SecretAchievement(parseInt(name.slice(1), 10)).lock();
+  }
   return "failed to delete achievement";
 };
 
 window.nextNewsMessageId = undefined;
 
-dev.setNextNewsMessage = function(id) {
+dev.setNextNewsMessage = function (id) {
   nextNewsMessageId = id;
 };
 
-dev.implode = function() {
+dev.implode = function () {
   bigCrunchAnimation();
 };
 
-dev.eternify = function() {
+dev.eternify = function () {
   eternityAnimation();
 };
 
-dev.dilate = function() {
+dev.dilate = function () {
   animateAndDilate();
 };
 
-dev.undilate = function() {
+dev.undilate = function () {
   animateAndUndilate();
 };
 
-dev.realize = function() {
+dev.realize = function () {
   runRealityAnimation();
 };
 
-dev.respecPerks = function() {
-  player.reality.perkPoints = player.reality.perkPoints.add(player.reality.perks.size);
+dev.respecPerks = function () {
+  player.reality.perkPoints = player.reality.perkPoints.add(
+    player.reality.perks.size,
+  );
   player.reality.perks = new Set();
   GameCache.achievementPeriod.invalidate();
   GameCache.buyablePerks.invalidate();
@@ -205,39 +229,55 @@ export function isDevEnvironment() {
 
 export function isLocalEnvironment() {
   const href = window.location.href;
-  return href.includes("file") || href.includes("127.0.0.1") || href.includes("localhost");
+  return href.includes("file") || href.includes("127.0.0.1") ||
+    href.includes("localhost");
 }
 
-dev.togglePerformanceStats = function() {
+dev.togglePerformanceStats = function () {
   PerformanceStats.toggle();
 };
 
 // Buys all perks, will end up buying semi-randomly if not enough pp
-dev.buyAllPerks = function() {
+dev.buyAllPerks = function () {
   const visited = [];
   const toVisit = [Perk.firstPerk];
   while (toVisit.length > 0) {
     if (player.reality.perkPoints.lt(1)) break;
     const perk = toVisit.shift();
     visited.push(perk);
-    toVisit.push(...perk.connectedPerks.filter(p => !visited.includes(p)));
+    toVisit.push(...perk.connectedPerks.filter((p) => !visited.includes(p)));
     perk.purchase();
   }
 };
 
 // This should help for balancing different glyph types, strong rounding of values is intentional
-dev.printResourceTotals = function() {
+dev.printResourceTotals = function () {
   console.log(`Antimatter: e${Currency.antimatter.exponent.toPrecision(3)}`);
-  console.log(`RM: e${Math.round(MachineHandler.gainedRealityMachines.log10())}`);
-  console.log(`Glyph level: ${100 * Math.floor(gainedGlyphLevel().actualLevel / 100 + 0.5)}`);
+  console.log(
+    `RM: e${Math.round(MachineHandler.gainedRealityMachines.log10())}`,
+  );
+  console.log(
+    `Glyph level: ${
+      100 * Math.floor(gainedGlyphLevel().actualLevel / 100 + 0.5)
+    }`,
+  );
 
   console.log(`Tickspeed: e${-Tickspeed.current.exponent.toPrecision(3)}`);
-  console.log(`Gamespeed: ${Math.pow(getGameSpeedupFactor(), 1.2).toPrecision(1)}`);
+  console.log(
+    `Gamespeed: ${Math.pow(getGameSpeedupFactor(), 1.2).toPrecision(1)}`,
+  );
   const aGalaxy = 100 * Math.floor(player.galaxies / 100 + 0.5);
   const rGalaxy = 100 * Math.floor(Replicanti.galaxies.total / 100 + 0.5);
-  const dGalaxy = 100 * Math.floor(player.dilation.totalTachyonGalaxies / 100 + 0.5);
-  console.log(`Galaxies: ${aGalaxy}+${rGalaxy}+${dGalaxy} (${aGalaxy + rGalaxy + dGalaxy})`);
-  console.log(`Tick reduction: e${-Math.round(getTickSpeedMultiplier().log10())}`);
+  const dGalaxy = 100 *
+    Math.floor(player.dilation.totalTachyonGalaxies / 100 + 0.5);
+  console.log(
+    `Galaxies: ${aGalaxy}+${rGalaxy}+${dGalaxy} (${
+      aGalaxy + rGalaxy + dGalaxy
+    })`,
+  );
+  console.log(
+    `Tick reduction: e${-Math.round(getTickSpeedMultiplier().log10())}`,
+  );
 
   let ADmults = DC.D1;
   for (let i = 1; i <= 8; i++) {
@@ -254,132 +294,145 @@ dev.printResourceTotals = function() {
     TDmults = TDmults.times(TimeDimension(i).multiplier);
   }
   console.log(`TD mults: e${TDmults.log10().toPrecision(3)}`);
-  console.log(`Tickspeed from TD: ${formatWithCommas(Decimal.floor(player.totalTickGained.div(1000).add(0.5)).mul(1000))}`);
+  console.log(
+    `Tickspeed from TD: ${
+      formatWithCommas(
+        Decimal.floor(player.totalTickGained.div(1000).add(0.5)).mul(1000),
+      )
+    }`,
+  );
 
   console.log(`Infinities: e${Math.round(player.infinities.log10())}`);
   console.log(`Eternities: e${Math.round(player.eternities.log10())}`);
-  console.log(`Replicanti: e${formatWithCommas(1e5 * Math.floor(Replicanti.amount.log10() / 1e5 + 0.5))}`);
+  console.log(
+    `Replicanti: e${
+      formatWithCommas(1e5 * Math.floor(Replicanti.amount.log10() / 1e5 + 0.5))
+    }`,
+  );
 
   console.log(`TT: e${Math.round(player.timestudy.theorem.log10())}`);
   console.log(`DT: e${Math.round(player.dilation.dilatedTime.log10())}`);
   console.log(`TP: e${Math.round(player.dilation.tachyonParticles.log10())}`);
 };
 
-dev.unlockCelestialQuotes = function(celestial) {
-  Quotes[celestial].all.forEach(x => x.show());
+dev.unlockCelestialQuotes = function (celestial) {
+  Quotes[celestial].all.forEach((x) => x.show());
 };
 
-dev.presentCelestialQuotes = function(celestial) {
-  Quotes[celestial].all.forEach(x => x.present());
+dev.presentCelestialQuotes = function (celestial) {
+  Quotes[celestial].all.forEach((x) => x.present());
 };
 
 // This doesn't check everything but hopefully it gets some of the more obvious ones.
-dev.testReplicantiCode = function(singleId, useDebugger = false) {
+dev.testReplicantiCode = function (singleId, useDebugger = false) {
   const situationLists = [
     [
-      function() {
+      function () {
         player.infinities = DC.E12;
         player.celestials.effarig.unlockBits = 64;
-      }
+      },
     ],
     [
-      function() {
+      function () {
         player.replicanti.interval = 1;
-      }
+      },
     ],
     [
-      function() {
+      function () {
         player.timestudy.studies.push(33);
-      }
+      },
     ],
     [
-      function() {
+      function () {
         player.timestudy.studies.push(62);
-      }
+      },
     ],
     [
-      function() {
+      function () {
         player.timestudy.studies.push(131);
       },
-      function() {
+      function () {
         player.timestudy.studies.push(132);
       },
-      function() {
+      function () {
         player.timestudy.studies.push(133);
       },
-      function() {
+      function () {
         player.timestudy.studies.push(131, 132, 133);
-      }
+      },
     ],
     [
-      function() {
+      function () {
         player.timestudy.studies.push(192);
-      }
+      },
     ],
     [
-      function() {
+      function () {
         player.timestudy.studies.push(213);
-      }
+      },
     ],
     [
-      function() {
+      function () {
         player.timestudy.studies.push(225);
-      }
+      },
     ],
     [
-      function() {
+      function () {
         player.timestudy.studies.push(226);
-      }
+      },
     ],
     [
-      function() {
+      function () {
         player.achievementBits[8] |= 16;
-      }
+      },
     ],
     [
-      function() {
+      function () {
         player.achievementBits[12] |= 8;
-      }
+      },
     ],
     [
-      function() {
+      function () {
         player.achievementBits[12] |= 128;
-      }
+      },
     ],
     [
-      function() {
+      function () {
         player.reality.perks = new Set([32]);
-      }
+      },
     ],
     [
-      function() {
+      function () {
         Autobuyer.replicantiGalaxy.isActive = true;
-      }
+      },
     ],
     [
-      function() {
+      function () {
         Replicanti.galaxies.isPlayerHoldingR = true;
-      }
+      },
     ],
     [
-      function() {
+      function () {
         player.replicanti.boughtGalaxyCap = 100;
       },
-      function() {
+      function () {
         player.replicanti.boughtGalaxyCap = 100;
         player.replicanti.galaxies = 50;
-      }
+      },
     ],
     [
-      function() {
-        player.reality.upgReqs = (1 << 6);
+      function () {
+        player.reality.upgReqs = 1 << 6;
         player.reality.upgradeBits = 64;
-      }
-    ]
+      },
+    ],
   ];
-  const situationCount = situationLists.map(x => x.length + 1).reduce((x, y) => x * y);
+  const situationCount = situationLists.map((x) => x.length + 1).reduce((
+    x,
+    y,
+  ) => x * y);
   const resultList = [];
-  const runSituation = function(id) {
+  const runSituation = function (id) {
     Replicanti.galaxies.isPlayerHoldingR = false;
     GameStorage.loadPlayerObject(Player.defaultStart);
     player.infinities = DC.D1;
@@ -387,15 +440,22 @@ dev.testReplicantiCode = function(singleId, useDebugger = false) {
     Replicanti.unlock();
     player.replicanti.chance = 1;
     for (let i = 0; i < situationLists.length; i++) {
-      const div = situationLists.slice(0, i).map(x => x.length + 1).reduce((x, y) => x * y, 1);
+      const div = situationLists.slice(0, i).map((x) => x.length + 1).reduce(
+        (x, y) => x * y,
+        1,
+      );
 
-      const situation = [() => {}].concat(situationLists[i])[Math.floor(id / div) % (situationLists[i].length + 1)];
+      const situation = [() => {}].concat(
+        situationLists[i],
+      )[Math.floor(id / div) % (situationLists[i].length + 1)];
       situation();
     }
     function doReplicantiTicks() {
       for (let j = 0; j <= 5; j++) {
         replicantiLoop(Math.pow(10, j));
-        resultList.push(Notation.scientific.formatDecimal(Replicanti.amount, 5, 5));
+        resultList.push(
+          Notation.scientific.formatDecimal(Replicanti.amount, 5, 5),
+        );
         resultList.push(player.replicanti.galaxies);
         resultList.push(Replicanti.galaxies.total);
       }
@@ -410,7 +470,9 @@ dev.testReplicantiCode = function(singleId, useDebugger = false) {
     const total = 4000;
     const p = 10007;
     if (total * p < situationCount) {
-      throw new Error("Prime p is not large enough to go through all situations.");
+      throw new Error(
+        "Prime p is not large enough to go through all situations.",
+      );
     }
     for (let i = 0; i < total; i++) {
       const actual = i * p % situationCount;
@@ -425,13 +487,12 @@ dev.testReplicantiCode = function(singleId, useDebugger = false) {
   const hash = sha512_256(resultList.toString());
   console.log(hash);
   if (useDebugger) {
-
     debugger;
   }
   return hash;
 };
 
-dev.testGlyphs = function(config) {
+dev.testGlyphs = function (config) {
   const glyphLevel = config.glyphLevel || 6500;
   const duration = config.duration || 4000;
   let glyphId = Date.now();
@@ -445,24 +506,35 @@ dev.testGlyphs = function(config) {
     id: glyphId++,
     effects: makeGlyphEffectBitmask(effects),
   });
-  const makeAllEffectGlyph = type => makeGlyph(type, GlyphTypes[type].effects.map(e => e.id));
+  const makeAllEffectGlyph = (type) =>
+    makeGlyph(type, GlyphTypes[type].effects.map((e) => e.id));
   const effarigGlyphs = [
-    makeGlyph("effarig", ["effarigantimatter", "effarigdimensions", "effarigforgotten", "effarigblackhole"]),
-    makeGlyph("effarig", ["effarigantimatter", "effarigdimensions", "effarigforgotten", "effarigachievement"]),
+    makeGlyph("effarig", [
+      "effarigantimatter",
+      "effarigdimensions",
+      "effarigforgotten",
+      "effarigblackhole",
+    ]),
+    makeGlyph("effarig", [
+      "effarigantimatter",
+      "effarigdimensions",
+      "effarigforgotten",
+      "effarigachievement",
+    ]),
   ];
   function makeCombinationsWithRepeats(count, elements) {
     if (elements.length === 0) return [];
     if (count === 0) return [[]];
     const withoutFirst = makeCombinationsWithRepeats(count, elements.slice(1));
     const withFirst = makeCombinationsWithRepeats(count - 1, elements);
-    withFirst.forEach(e => e.push(elements[0]));
+    withFirst.forEach((e) => e.push(elements[0]));
     return withFirst.concat(withoutFirst);
   }
   const sets5 = makeCombinationsWithRepeats(5, GlyphInfo.basicGlyphTypes)
-    .map(s => s.map(t => makeAllEffectGlyph(t)));
+    .map((s) => s.map((t) => makeAllEffectGlyph(t)));
   const sets4 = makeCombinationsWithRepeats(4, GlyphInfo.basicGlyphTypes)
-    .map(s => s.map(t => makeAllEffectGlyph(t)));
-  const effarigSets = effarigGlyphs.map(g => sets4.map(s => [g].concat(s)));
+    .map((s) => s.map((t) => makeAllEffectGlyph(t)));
+  const effarigSets = effarigGlyphs.map((g) => sets4.map((s) => [g].concat(s)));
   const glyphSets = sets5.concat(...effarigSets);
   function equipSet(index) {
     player.reality.glyphs.active = glyphSets[index].map((g, idx) => {
@@ -474,26 +546,38 @@ dev.testGlyphs = function(config) {
   }
   function glyphToShortString(glyph) {
     if (glyph.type === "effarig") {
-      return effarigGlyphs.findIndex(e => e.id === glyph.id).toString();
+      return effarigGlyphs.findIndex((e) => e.id === glyph.id).toString();
     }
     return GLYPH_SYMBOLS[glyph.type];
   }
   function padString(s, length, before = false) {
     if (s.length >= length) return s;
-    return before ? (" ").repeat(length - s.length) + s : s + (" ").repeat(length - s.length);
+    return before
+      ? (" ").repeat(length - s.length) + s
+      : s + (" ").repeat(length - s.length);
   }
   function finishTrial(index) {
-    const done = padString(`${Math.floor(100 * (index + 1) / glyphSets.length)}%`, 4, true);
-    const rm = padString(MachineHandler.gainedRealityMachines.toPrecision(2), 9);
+    const done = padString(
+      `${Math.floor(100 * (index + 1) / glyphSets.length)}%`,
+      4,
+      true,
+    );
+    const rm = padString(
+      MachineHandler.gainedRealityMachines.toPrecision(2),
+      9,
+    );
     const gl = padString(gainedGlyphLevel().actualLevel, 4);
     const ep = padString(player.eternityPoints.exponent.toString(), 6);
     const ip = padString(player.infinityPoints.exponent.toString(), 8);
     const am = padString(Currency.antimatter.exponent.toString(), 12);
     const dimboosts = DimBoost.purchasedBoosts;
-    const galaxies = Replicanti.galaxies.total + player.galaxies + player.dilation.totalTachyonGalaxies;
+    const galaxies = Replicanti.galaxies.total + player.galaxies +
+      player.dilation.totalTachyonGalaxies;
     const glyphData = glyphSets[index].map(glyphToShortString).sum();
-    console.log(`${done} ${glyphData} rm=${rm} gl=${gl} ep=${ep} ip=${ip} am=${am} ` +
-      `dimboosts=${dimboosts} galaxies=${galaxies}`);
+    console.log(
+      `${done} ${glyphData} rm=${rm} gl=${gl} ep=${ep} ip=${ip} am=${am} ` +
+        `dimboosts=${dimboosts} galaxies=${galaxies}`,
+    );
     GameStorage.offlineEnabled = false;
     GameStorage.import(save);
     if (index < glyphSets.length - 1) {
@@ -509,7 +593,7 @@ dev.testGlyphs = function(config) {
 };
 
 // May want to make this command in particular publicly known if automator gating is a common complaint post-release
-dev.unlockAutomator = function() {
+dev.unlockAutomator = function () {
   player.reality.automator.forceUnlock = true;
 };
 
@@ -518,7 +602,7 @@ dev.unlockAutomator = function() {
 // saving if the player says to in the modal. The check can fail if the cloud save is somehow malformed and missing
 // props. This can lead to the check always failing, the modal never showing up, and cloud saving never occurring. That
 // should in principle only show up in dev, as migrations aren't run on cloud saves, but this allows fixing in case.
-dev.forceCloudSave = async function() {
+dev.forceCloudSave = async function () {
   const save = await Cloud.load();
   const root = GameSaveSerializer.deserialize(save);
   const saveId = GameStorage.currentSlot;
@@ -528,97 +612,110 @@ dev.forceCloudSave = async function() {
 };
 
 // TODO Figure out if we want to remove this before release
-dev.unlockAllCosmeticSets = function() {
-  player.reality.glyphs.cosmetics.unlockedFromNG = Object.keys(GameDatabase.reality.glyphCosmeticSets);
+dev.unlockAllCosmeticSets = function () {
+  player.reality.glyphs.cosmetics.unlockedFromNG = Object.keys(
+    GameDatabase.reality.glyphCosmeticSets,
+  );
 };
 
 // You would never guess what these are for
-dev.beTests = {}
+dev.beTests = {};
 
-dev.beTests.speed = function() {
-  dev.speedUp = 1e24
-}
+dev.beTests.speed = function () {
+  dev.speedUp = 1e24;
+};
 
-dev.beTests.consecutiveInfinities = function(amnt) {
-  player.infinityPoints = player.infinityPoints.add(gainedInfinityPoints().times(amnt))
-  player.infinities = player.infinities.add(gainedInfinities().round())
-}
+dev.beTests.consecutiveInfinities = function (amnt) {
+  player.infinityPoints = player.infinityPoints.add(
+    gainedInfinityPoints().times(amnt),
+  );
+  player.infinities = player.infinities.add(gainedInfinities().round());
+};
 
-dev.beTests.completeChalleges = {}
+dev.beTests.completeChalleges = {};
 
-dev.beTests.completeChalleges.normal = function() {
-  for (let i = 1; i < 13; i++) NormalChallenge(i).complete()
-}
+dev.beTests.completeChalleges.normal = function () {
+  for (let i = 1; i < 13; i++) NormalChallenge(i).complete();
+};
 
-dev.beTests.completeChalleges.infinity = function() {
-  for (let i = 1; i < 9; i++) InfinityChallenge(i).complete()
-}
+dev.beTests.completeChalleges.infinity = function () {
+  for (let i = 1; i < 9; i++) InfinityChallenge(i).complete();
+};
 
 dev.beTests.completeChalleges.eternity = function () {
-  for (let i = 1; i < 13; i++) EternityChallenge(i).completions = 5
-}
+  for (let i = 1; i < 15; i++) EternityChallenge(i).completions = 5;
+};
 
 dev.beTests.completeChalleges.all = function () {
-  dev.beTests.completeChalleges.normal()
-  dev.beTests.completeChalleges.infinity()
-  dev.beTests.completeChalleges.eternity()
-}
+  dev.beTests.completeChalleges.normal();
+  dev.beTests.completeChalleges.infinity();
+  dev.beTests.completeChalleges.eternity();
+};
 
 dev.beTests.nanFuckIteration = function (value, value2) {
   for (const item in value) {
-    console.log(value[item])
-    console.log(value2[item])
+    console.log(value[item]);
+    console.log(value2[item]);
     if (value[item] instanceof Decimal && value2[item] != undefined) {
       if (value2[item].neq(0)) {
-        if (value[item].lt(0) || value[item].layer > 8e15)
-          value[item] = value2[item]
+        if (value[item].lt(0) || value[item].layer > 8e15) {
+          value[item] = value2[item];
+        }
       } else {
-        if (value[item].layer > 8e15)
-          value[item] = value2[item]
+        if (value[item].layer > 8e15) {
+          value[item] = value2[item];
+        }
       }
     }
     if (value[item] instanceof Number && value2[item] != undefined) {
       if (value2[item] == 0) {
         if (value[item] > 1e300) {
-          value[item] = value2[item]
+          value[item] = value2[item];
         }
       } else {
         if (value[item] > 1e300 || value[item] < 0) {
-          value[item] = value2[item]
+          value[item] = value2[item];
         }
       }
     }
-    if ((value[item] instanceof Object || value[item] instanceof Array) && !(value[item] instanceof Decimal) && value2[item] != undefined)
-      value[item] = dev.beTests.nanFuckIteration(value[item], value2[item])
-    if (value[item] == undefined  && value2[item] != undefined)
-      value[item] = value2[item]
+    if (
+      (value[item] instanceof Object || value[item] instanceof Array) &&
+      !(value[item] instanceof Decimal) && value2[item] != undefined
+    ) {
+      value[item] = dev.beTests.nanFuckIteration(value[item], value2[item]);
+    }
+    if (value[item] == undefined && value2[item] != undefined) {
+      value[item] = value2[item];
+    }
   }
-  return value
-}
+  return value;
+};
 
 dev.beTests.nanFuck = function () {
-  player = dev.beTests.nanFuckIteration(player, Player.defaultStart)
-  GameStorage.save()
-}
+  player = dev.beTests.nanFuckIteration(player, Player.defaultStart);
+  GameStorage.save();
+};
 
 dev.beTests.prepare = function (completeAllChallenges = false) {
-  if(completeAllChallenges) dev.beTests.completeChalleges.all()
-  else dev.beTests.completeChalleges.normal()
+  if (completeAllChallenges) dev.beTests.completeChalleges.all();
+  else dev.beTests.completeChalleges.normal();
 
-  dev.beTests.consecutiveInfinities(new Decimal("1e350"))
-  dev.beTests.speed()
-  GameStorage.import("blob")
-  Notation.scientific.setAsCurrent()
-  Achievement(61).unlock()
-}
+  dev.beTests.consecutiveInfinities(new Decimal("1e350"));
+  dev.beTests.speed();
+  GameStorage.import("blob");
+  Notation.scientific.setAsCurrent();
+  Achievement(61).unlock();
+};
 
 dev.breakInfinity = function () {
   for (const autobuyer of Autobuyers.all) {
-    if (autobuyer.data.interval !== undefined) {autobuyer.maxIntervalForFree();}
+    if (autobuyer.data.interval !== undefined) autobuyer.maxIntervalForFree();
   }
   Achievement(61).tryUnlock();
   player.break = !player.break;
   TabNotification.ICUnlock.tryTrigger();
-  EventHub.dispatch(player.break ? GAME_EVENT.BREAK_INFINITY : GAME_EVENT.FIX_INFINITY);
+  EventHub.dispatch(
+    player.break ? GAME_EVENT.BREAK_INFINITY : GAME_EVENT.FIX_INFINITY,
+  );
   GameUI.update();
-}
+};

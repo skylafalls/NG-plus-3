@@ -26,7 +26,8 @@ export class InfinityDimensionAutobuyerState extends IntervaledAutobuyerState {
   }
 
   get isUnlocked() {
-    return EternityMilestone[`autobuyerID${this.tier}`].isReached || PelleUpgrade.IDAutobuyers.canBeApplied;
+    return EternityMilestone[`autobuyerID${this.tier}`].isReached ||
+      PelleUpgrade.IDAutobuyers.canBeApplied;
   }
 
   get resetTickOn() {
@@ -38,7 +39,8 @@ export class InfinityDimensionAutobuyerState extends IntervaledAutobuyerState {
   }
 
   get canTick() {
-    return InfinityDimensions.canAutobuy() && this.dimension.isAvailableForPurchase && super.canTick;
+    return InfinityDimensions.canAutobuy() &&
+      this.dimension.isAvailableForPurchase && super.canTick;
   }
 
   tick() {

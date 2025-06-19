@@ -23,12 +23,17 @@ class VRunUnlockState extends GameMechanicState {
 
   get conditionBaseValue() {
     const value = this.config.values[this.completions];
-    return value === undefined ? this.config.values[this.completions - 1] : value;
+    return value === undefined
+      ? this.config.values[this.completions - 1]
+      : value;
   }
 
   get canBeReduced() {
-    return this.completions < this.config.values.length && this.completions !== 0
-      && new Decimal(this.reduction).neq(this.config.maxShardReduction(this.conditionBaseValue));
+    return this.completions < this.config.values.length &&
+      this.completions !== 0 &&
+      new Decimal(this.reduction).neq(
+        this.config.maxShardReduction(this.conditionBaseValue),
+      );
   }
 
   get isReduced() {
@@ -39,11 +44,16 @@ class VRunUnlockState extends GameMechanicState {
   }
 
   get reductionCost() {
-    const stepCount = this.config.reductionStepSize ? this.config.reductionStepSize : 1;
+    const stepCount = this.config.reductionStepSize
+      ? this.config.reductionStepSize
+      : 1;
     if (this.config.isHard) {
       // The numbers come from inside of nextHardReductionCost, this is an effective bulk-buy factor
       const modifiedStepCount = (Math.pow(1.15, stepCount) - 1) / 0.15;
-      return modifiedStepCount * V.nextHardReductionCost(player.celestials.v.goalReductionSteps[this.id]);
+      return modifiedStepCount *
+        V.nextHardReductionCost(
+          player.celestials.v.goalReductionSteps[this.id],
+        );
     }
     return stepCount * V.nextNormalReductionCost();
   }
@@ -54,7 +64,11 @@ class VRunUnlockState extends GameMechanicState {
 
   get reduction() {
     const value = this.conditionBaseValue;
-    return Decimal.clamp(this.config.shardReduction(this.tiersReduced), 0, this.config.maxShardReduction(value));
+    return Decimal.clamp(
+      this.config.shardReduction(this.tiersReduced),
+      0,
+      this.config.maxShardReduction(value),
+    );
   }
 
   get conditionValue() {
@@ -81,13 +95,20 @@ class VRunUnlockState extends GameMechanicState {
   tryComplete() {
     const playerData = player.celestials.v;
     const value = this.config.currentValue();
-    if (this.config.condition() && Decimal.gte(value, playerData.runRecords[this.id])) {
+    if (
+      this.config.condition() &&
+      Decimal.gte(value, playerData.runRecords[this.id])
+    ) {
       playerData.runRecords[this.id] = value;
-      playerData.runGlyphs[this.id] = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
+      playerData.runGlyphs[this.id] = Glyphs.copyForRecords(
+        Glyphs.active.filter((g) => g !== null),
+      );
     }
 
-    while (this.completions < this.config.values.length
-      && Decimal.gte(playerData.runRecords[this.id], this.conditionValue)) {
+    while (
+      this.completions < this.config.values.length &&
+      Decimal.gte(playerData.runRecords[this.id], this.conditionValue)
+    ) {
       if (!V.isFlipped && this.config.isHard) {
         continue;
       }
@@ -157,7 +178,9 @@ class VUnlockState extends BitUpgradeState {
  * @param {number} id
  * @return {VRunUnlockState}
  */
-export const VRunUnlock = VRunUnlockState.createAccessor(GameDatabase.celestials.v.runUnlocks);
+export const VRunUnlock = VRunUnlockState.createAccessor(
+  GameDatabase.celestials.v.runUnlocks,
+);
 
 export const VRunUnlocks = {
   /**
@@ -168,7 +191,7 @@ export const VRunUnlocks = {
 
 export const VUnlocks = mapGameDataToObject(
   GameDatabase.celestials.v.unlocks,
-  config => new VUnlockState(config),
+  (config) => new VUnlockState(config),
 );
 
 export const V = {
@@ -200,8 +223,11 @@ export const V = {
     return VUnlocks.vAchievementUnlock.canBeUnlocked;
   },
   unlockCelestial() {
-    player.celestials.v.unlockBits |= (1 << VUnlocks.vAchievementUnlock.id);
-    GameUI.notify.success("You have unlocked V, The Celestial Of Achievements!", 10000);
+    player.celestials.v.unlockBits |= 1 << VUnlocks.vAchievementUnlock.id;
+    GameUI.notify.success(
+      "You have unlocked V, The Celestial Of Achievements!",
+      10000,
+    );
     V.quotes.unlock.show();
   },
   initializeRun() {
