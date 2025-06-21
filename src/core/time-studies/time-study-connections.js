@@ -28,10 +28,10 @@ export class TimeStudyConnection {
 /**
  * @type {TimeStudyConnection[]}
  */
-TimeStudy.allConnections = function () {
-  const TS = (id) => TimeStudy(id);
-  const MS = (id) => MasteryStudy(id);
-  const EC = (id) => TimeStudy.eternityChallenge(id);
+TimeStudy.allConnections = (function () {
+  const TS = id => TimeStudy(id);
+  const MS = id => MasteryStudy(id);
+  const EC = id => TimeStudy.eternityChallenge(id);
   const connections = [
     [TS(11), TS(21)],
     [TS(11), TS(22)],
@@ -109,8 +109,8 @@ TimeStudy.allConnections = function () {
       TS(171),
       TS(181),
       () =>
-        !Perk.bypassEC1Lock.isBought || !Perk.bypassEC2Lock.isBought ||
-        !Perk.bypassEC3Lock.isBought,
+        !Perk.bypassEC1Lock.isBought || !Perk.bypassEC2Lock.isBought
+        || !Perk.bypassEC3Lock.isBought,
     ],
 
     [EC(1), TS(181), () => Perk.bypassEC1Lock.isBought],
@@ -162,17 +162,17 @@ TimeStudy.allConnections = function () {
     [TimeStudy.timeDimension(7), TimeStudy.timeDimension(8)],
     [TimeStudy.timeDimension(8), TimeStudy.metaDimensions],
     [TimeStudy.metaDimensions, TimeStudy.masteryStudies],
-  ].map((props) => new TimeStudyConnection(props[0], props[1], props[2]));
+  ].map(props => new TimeStudyConnection(props[0], props[1], props[2]));
 
   return connections;
-}();
+}());
 
 /**
  * @type {TimeStudyConnection[]}
  */
-MasteryStudy.allConnections = function () {
-  const MS = (id) => MasteryStudy(id);
-  const EC = (id) => TimeStudy.eternityChallenge(id);
+MasteryStudy.allConnections = (function () {
+  const MS = id => MasteryStudy(id);
+  const EC = id => TimeStudy.eternityChallenge(id);
   const connections = [
     [MS(11), MS(21)],
     [MS(11), MS(22)],
@@ -194,7 +194,13 @@ MasteryStudy.allConnections = function () {
 
     [TimeStudy.pairProduction, EC(13)],
     [TimeStudy.pairProduction, EC(14)],
-  ].map((props) => new TimeStudyConnection(props[0], props[1], props[2]));
+
+    [MS(42), TimeStudy.pairProduction],
+    [MS(41), MS(42)],
+    [MS(43), MS(42)],
+    [MS(51), MS(41)],
+    [MS(52), MS(43)],
+  ].map(props => new TimeStudyConnection(props[0], props[1], props[2]));
 
   return connections;
-}();
+})();

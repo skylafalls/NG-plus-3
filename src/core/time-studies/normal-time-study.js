@@ -34,8 +34,8 @@ NormalTimeStudies.pathList = [
 ];
 
 NormalTimeStudies.paths = NormalTimeStudies.pathList.mapToObject(
-  (e) => e.path,
-  (e) => e.studies,
+  e => e.path,
+  e => e.studies,
 );
 
 export class NormalTimeStudyState extends TimeStudyState {
@@ -44,8 +44,8 @@ export class NormalTimeStudyState extends TimeStudyState {
       ? TIME_STUDY_TYPE.TRIAD
       : TIME_STUDY_TYPE.NORMAL;
     super(config, type);
-    const path = NormalTimeStudies.pathList.find((p) =>
-      p.studies.includes(this.id)
+    const path = NormalTimeStudies.pathList.find(p =>
+      p.studies.includes(this.id),
     );
     this._path = path?.path ?? TIME_STUDY_PATH.NONE;
   }
@@ -65,28 +65,26 @@ export class NormalTimeStudyState extends TimeStudyState {
   // The requiresST prop is an array containing IDs indicating other studies which, if ANY in the array are purchased,
   // will cause the study to also cost space theorems. This array is effectively assumed to be empty if not present.
   costsST() {
-    return this.config.requiresST &&
-      this.config.requiresST.some((s) => TimeStudy(s).isBought);
+    return this.config.requiresST
+      && this.config.requiresST.some(s => TimeStudy(s).isBought);
   }
 
   checkRequirement() {
-    const check = (
-      req,
-    ) => (typeof req === "number" ? TimeStudy(req).isBought : req());
+    const check = req => (typeof req === "number" ? TimeStudy(req).isBought : req());
     const currTree = GameCache.currentStudyTree.value;
     switch (this.config.reqType) {
       case TS_REQUIREMENT_TYPE.AT_LEAST_ONE: {
-        return this.config.requirement.some((r) => check(r));
+        return this.config.requirement.some(r => check(r));
       }
       case TS_REQUIREMENT_TYPE.ALL: {
-        return this.config.requirement.every((r) => check(r));
+        return this.config.requirement.every(r => check(r));
       }
       case TS_REQUIREMENT_TYPE.DIMENSION_PATH: {
-        return this.config.requirement.every((r) => check(r)) && currTree &&
-          currTree.currDimPathCount < currTree.allowedDimPathCount;
+        return this.config.requirement.every(r => check(r)) && (currTree
+          && currTree.currDimPathCount < currTree.allowedDimPathCount);
       }
       default: {
-        throw Error(`Unrecognized TS requirement type: ${this.reqType}`);
+        throw new TypeError(`Unrecognized TS requirement type: ${this.reqType}`);
       }
     }
   }
@@ -94,6 +92,10 @@ export class NormalTimeStudyState extends TimeStudyState {
   // This checks for and forbids buying studies due to being part of a set which can't normally be bought
   // together (eg. active/passive/idle and light/dark) unless the player has the requisite ST.
   checkSetRequirement() {
+    if ((this.path === TIME_STUDY_PATH.ACTIVE || this.path === TIME_STUDY_PATH.PASSIVE
+      || this.path === TIME_STUDY_PATH.IDLE) && MasteryStudy(42).isBought) {
+      return true;
+    }
     return this.costsST()
       ? !Pelle.isDisabled("V") && (V.availableST >= this.STCost)
       : true;
@@ -115,8 +117,8 @@ export class NormalTimeStudyState extends TimeStudyState {
       return false;
     }
     if (
-      ImaginaryUpgrade(19).isLockingMechanics &&
-      player.timestudy.studies.length === 8
+      ImaginaryUpgrade(19).isLockingMechanics
+      && player.timestudy.studies.length === 8
     ) {
       if (!auto) {
         ImaginaryUpgrade(19).tryShowWarningModal();
@@ -154,11 +156,11 @@ export class NormalTimeStudyState extends TimeStudyState {
 
 NormalTimeStudyState.studies = mapGameData(
   GameDatabase.eternity.timeStudies.normal,
-  (config) => new NormalTimeStudyState(config),
+  config => new NormalTimeStudyState(config),
 );
 
-NormalTimeStudyState.all = NormalTimeStudyState.studies.filter((e) =>
-  e !== undefined
+NormalTimeStudyState.all = NormalTimeStudyState.studies.filter(e =>
+  e !== undefined,
 );
 
 /**
@@ -172,7 +174,7 @@ export function TimeStudy(id) {
  * @returns {NormalTimeStudyState[]}
  */
 TimeStudy.boughtNormalTS = function () {
-  return player.timestudy.studies.map((id) => TimeStudy(id));
+  return player.timestudy.studies.map(id => TimeStudy(id));
 };
 
 TimeStudy.preferredPaths = {
@@ -182,20 +184,20 @@ TimeStudy.preferredPaths = {
     },
     set path(value) {
       const options = new Set([1, 2, 3]);
-      player.timestudy.preferredPaths[0] = value.filter((id) =>
-        options.has(id)
+      player.timestudy.preferredPaths[0] = value.filter(id =>
+        options.has(id),
       );
     },
     get studies() {
-      return player.timestudy.preferredPaths[0].flatMap((path) =>
-        NormalTimeStudies.paths[path]
+      return player.timestudy.preferredPaths[0].flatMap(path =>
+        NormalTimeStudies.paths[path],
       );
     },
     get usePriority() {
-      return this.path.length > 1 ||
-        TimeStudy(201).isBought ||
-        DilationUpgrade.timeStudySplit.isBought ||
-        PlayerProgress.realityUnlocked();
+      return this.path.length > 1
+        || TimeStudy(201).isBought
+        || DilationUpgrade.timeStudySplit.isBought
+        || PlayerProgress.realityUnlocked();
     },
   },
   pace: {

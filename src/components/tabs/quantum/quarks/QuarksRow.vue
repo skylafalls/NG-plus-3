@@ -1,8 +1,12 @@
 <script>
+import PrimaryButton from "@/components/PrimaryButton.vue";
 import { defineComponent } from "vue";
 
 export default defineComponent({
   name: "QuarksRow",
+  components: {
+    PrimaryButton,
+  },
   props: {
     color: {
       type: String,
@@ -61,35 +65,70 @@ export default defineComponent({
         }
       }
     },
+    assortQuarks() {
+      switch (this.color) {
+        case "red": {
+          console.log("red");
+          break;
+        }
+        case "green": {
+          console.log("green");
+          break;
+        }
+        case "blue": {
+          console.log("blue");
+          break;
+        }
+        default: {
+          throw new TypeError("Unrecongized quark color");
+        }
+      }
+    },
   },
 });
 </script>
 
 <template>
-  <tr :class="styling">
-    <td>
-      <span class="quantum-quarks-amount">
-        {{ format(quarkColorAmount) }}
-      </span>
-      {{ color }} quarks
-    </td>
-    <td>
-      <span class="quantum-quarks-power">
-        {{ format(quarkPower) }}
-      </span>
-      {{ color }} power
-      <br>
-      <span class="quantum-quarks-power-gain">
-        {{ format(powerGain) }}
-      </span>
-    </td>
-    <td>
-      <span class="quantum-quarks-power-gain">
-        {{ formatFunction(powerEffect) }}
-      </span>
-      {{ effectDisplay }}
-    </td>
-  </tr>
+  <table>
+    <tbody>
+      <tr :class="styling">
+        <td>
+          <span class="quantum-quarks-amount">
+            {{ format(quarkColorAmount) }}
+          </span>
+          {{ color }} quarks
+        </td>
+        <td>
+          <span class="quantum-quarks-power">
+            {{ format(quarkPower) }}
+          </span>
+          {{ color }} power
+          <br>
+          <span class="quantum-quarks-power-gain">
+            {{ formatGain(quarkPower, powerGain, 2, 2) }}
+          </span>
+        </td>
+        <td>
+          <span class="quantum-quarks-power-gain">
+            {{ formatFunction(powerEffect) }}
+          </span>
+          {{ effectDisplay }}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <PrimaryButton @click="assortQuarks">
+            Assort
+          </PrimaryButton>
+          &nbsp;
+          <input
+            type="number"
+            @change.prevent=""
+          >
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </template>
 
 <style lang="css" scoped>

@@ -17,8 +17,8 @@ export const brGluonUpgrades = [
     id: 3,
     cost: () => new Decimal(5),
     description: () => "Gain more Dilated Time based on Tachyon Particles.",
-    effect: () => Currency.tachyonParticles.value.plus(1).log10().div(111).plus(1),
-    formatEffect: value => formatPow(value, 2, 3),
+    effect: () => Currency.tachyonParticles.value.plus(1).pow(0.1),
+    formatEffect: value => formatX(value, 2, 3),
   },
   {
     id: 4,

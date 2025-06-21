@@ -4,12 +4,8 @@ import type { AntimatterDimensions as AD } from "@/core/dimensions/antimatter-di
 import type { TimeDimensions as TD } from "@/core/dimensions/time-dimension.js";
 import type { InfinityDimensions as ID } from "@/core/dimensions/infinity-dimension.js";
 import type {
-  CostHandler,
-  scale,
-  scaleAllLevels,
-  ScalingTypes,
-  softcap,
-  SoftcapModes,
+  scale as scaleFun,
+  softcap as softcapFun,
 } from "@/core/scaling.js";
 import type { dev as D } from "@/core/devtools";
 import type DecimalBE from "./break_eternity";
@@ -27,15 +23,32 @@ declare global {
   const TimeDimensions: typeof TD;
   const InfinityDimensions: typeof ID;
   const dev: typeof D;
+  const scale: typeof scaleFun;
+  const softcap: typeof softcapFun;
+  enum SOFTCAP_MODES {
+    MULTIPLICATIVE = 1,
+    POLYNOMIAL = 2,
+    DILATION = 3,
+    EXPONENTIAL = 4,
+    LOGARITHMIC = 5,
+    REPEATED_LOGARITHM = 6,
+    SUPER_LOGARITHMIC = 7,
+  }
+
+  enum SCALING_TYPES {
+    MULTIPLICATIVE = 1,
+    POLYNOMIAL = 2,
+    EXPONENTIAL = 3,
+    DILATION = 4,
+    DILATION_TIER_2 = 5,
+    REPEATED_EXPONENTIATION = 6,
+    TETRATION = 7,
+  }
 
   interface Window {
     Decimal: typeof DecimalBE;
     scale: typeof scale;
-    scaleAllLevels: typeof scaleAllLevels;
     softcap: typeof softcap;
-    SoftcapModes: typeof SoftcapModes;
-    ScalingTypes: typeof ScalingTypes;
-    CostHandler: typeof CostHandler;
   }
   interface ArrayConstructor {
     range(start: number, count: number): Array<number>;

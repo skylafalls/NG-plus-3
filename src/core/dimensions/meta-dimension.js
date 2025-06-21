@@ -8,6 +8,8 @@ export function metaDimensionCommonMultiplier() {
   multiplier = multiplier.timesEffectsOf(
     DilationUpgrade.mdMultTickspeed,
     MasteryStudy(32),
+    MasteryStudy(52),
+    GluonUpgrade.blueRed(5),
     QuantumChallenge(3).reward,
   );
 
@@ -64,7 +66,7 @@ class MetaDimensionState extends DimensionState {
     return new ExponentialCostScaling({
       baseCost: this._baseCost,
       baseIncrease: this._baseCostMultiplier,
-      costScale: new Decimal(15).minusEffectOf(QuantumChallenge(7).reward),
+      costScale: new Decimal(10),
       scalingCostThreshold: DC.NUMMAX,
     });
   }

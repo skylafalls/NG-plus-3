@@ -3,7 +3,7 @@ export const rgGluonUpgrades = [
     id: 1,
     cost: () => new Decimal(1),
     description: () => "Remote Antimatter Galaxy scaling is 50% weaker.",
-    effect: () => 0.5,
+    effect: () => 1.5,
   },
   {
     id: 2,
@@ -22,7 +22,7 @@ export const rgGluonUpgrades = [
   {
     id: 4,
     cost: () => new Decimal(100),
-    description: () => "All Galaxies are 50% stronger but Pair Production is 30% weaker.",
+    description: () => "All Galaxies are 50% stronger.",
     effect: () => 1.5,
   },
   {
@@ -43,8 +43,8 @@ export const rgGluonUpgrades = [
     id: 7,
     cost: () => new Decimal(3e25),
     description: () => "Red-green Gluons slow down Remote Antimatter Galaxy scaling.",
-    effect: () => player.quantum.gluons.rg.plus(1).log10().recip(),
-    formatEffect: value => `${formatPercents(value, 2)} weaker`,
+    effect: () => player.quantum.gluons.rg.plus(1).log10().plus(1).log10().plus(1),
+    formatEffect: value => `${formatPercents(value.sub(1), 2)} weaker`,
   },
   {
     id: 8,

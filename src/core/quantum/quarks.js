@@ -1,22 +1,32 @@
-import { GameMechanicState } from "../game-mechanics/game-mechanic.js";
+import { RebuyableMechanicState } from "../game-mechanics/rebuyable.js";
+import { DC } from "../constants.js";
 
-class QuarkMultUpgrade extends GameMechanicState {
-  get cost() {
-    return Decimal.pow(this.costIncrease, this.purchaseCount.add(1));
+class QuarkMultUpgrade extends RebuyableMechanicState {
+  constructor() {
+    super({
+      id: "quarkMultiplierUpgrade",
+      cost: () => Decimal.pow(DC.D5, player.quantum.multiplierUpgrades),
+      description: () => `Multiply Quarks gain by ${formatX(2)}`,
+      effect: () => DC.D2.pow(player.quantum.multiplierUpgrades),
+      formatEffect: value => formatX(value, 2, 2),
+      formatCost: value => format(value, 2, 2),
+    });
   }
 
-  get purchaseCount() {
+  get currency() {
+    return Currency.quarks.value;
+  }
+
+  set currency(newValue) {
+    Currency.quarks.value = newValue;
+  }
+
+  get boughtAmount() {
     return player.quantum.multiplierUpgrades;
   }
 
-  get hasIncreasedCost() {
-    return this.purchaseCount.gte(this.purchasesAtIncrease);
-  }
-
-  get costIncrease() {
-    return typeof this.config.costIncrese === "function"
-      ? this.config.costIncrese()
-      : this.config.costIncrese;
+  set boughtAmount(newValue) {
+    player.quantum.multiplierUpgrades = newValue;
   }
 
   get isCapped() {
@@ -27,13 +37,8 @@ class QuarkMultUpgrade extends GameMechanicState {
     return this.isCapped;
   }
 
-  get isRequirementSatisfied() {
-    return player.quantum.times.gte(1);
-  }
-
-  get canBeBought() {
-    return !this.isCapped && Currency.quarks.gte(this.cost) &&
-      this.isRequirementSatisfied;
+  get isAvailableForPurchase() {
+    return true;
   }
 
   purchase(amount = 1) {
@@ -68,9 +73,7 @@ class QuarkMultUpgrade extends GameMechanicState {
 }
 
 export const Quarks = {
-  multiplierUpgrade: new QuarkMultUpgrade(
-    GameDatabase.quantum.quarkMultiplierConfig,
-  ),
+  multiplierUpgrade: new QuarkMultUpgrade(),
 
   get netTotal() {
     let total = Currency.quarks.value;
@@ -86,7 +89,7 @@ export const Quarks = {
       powers: player.quantum.quarkPowers.red,
       effect: () =>
         player.quantum.quarkPowers.red.plus(1).log10().sqrt().div(50).plus(1),
-      gain: () => new Decimal(0),
+      gain: () => player.quantum.colors.red.pow(2.5),
     };
   },
 
@@ -94,18 +97,17 @@ export const Quarks = {
     return {
       amount: player.quantum.colors.green,
       powers: player.quantum.quarkPowers.green,
-      effect: () =>
-        player.quantum.quarkPowers.green.plus(1).log10().root(5).plus(1),
-      gain: () => new Decimal(0),
+      effect: () => player.quantum.quarkPowers.green.plus(1).log10().root(5).plus(1),
+      gain: () => player.quantum.colors.green.pow(0.9),
     };
   },
 
   get blue() {
     return {
-      amount: player.quantum.colors.green,
-      powers: player.quantum.quarkPowers.green,
-      effect: () => player.quantum.quarkPowers.green.plus(1).logPow(0.75),
-      gain: () => new Decimal(0),
+      amount: player.quantum.colors.blue,
+      powers: player.quantum.quarkPowers.blue,
+      effect: () => player.quantum.quarkPowers.blue.plus(1).logPow(0.75),
+      gain: () => player.quantum.colors.blue.pow(0.6),
     };
   },
 
@@ -116,4 +118,10 @@ export const Quarks = {
     );
     return baseGain;
   },
+
+  tick(diff) {
+    for (const color of ["red", "green", "blue"]) {
+      player.quantum.quarkPowers[color] = player.quantum.quarkPowers[color].add(this[color].gain());
+    }
+  }
 };

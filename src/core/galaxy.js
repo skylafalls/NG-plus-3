@@ -1,13 +1,13 @@
 import { DC } from "./constants";
 
 /** @enum */
-export const GALAXY_TYPE = {
+export const GALAXY_TYPE = Object.freeze({
   NORMAL: 0,
   DISTANT: 1,
   REMOTE: 2,
   OBSCURE: 3,
   INVISIBLE: 4,
-};
+});
 
 class GalaxyRequirement {
   constructor(tier, amount) {
@@ -23,13 +23,7 @@ class GalaxyRequirement {
 
 export const Galaxy = {
   get remoteStart() {
-    let start = new Decimal(800);
-    start = start.plusEffectsOf(
-      MasteryStudy(21),
-      MasteryStudy(22),
-      MasteryStudy(23),
-    );
-    return start;
+    return this.scalingStart[GALAXY_TYPE.REMOTE];
   },
 
   get requirement() {
@@ -60,7 +54,22 @@ export const Galaxy = {
       ).floor().max(minVal);
     }
 
+    // Why does this mod use bulkBuyBinarySearch? Simple, it's because it simply will not
+    // scale properly. Especially if we were trying to implement custom powers and formulas.
+    return new Decimal(
+      bulkBuyBinarySearch(
+        new Decimal(currency),
+        {
+          costFunction: x => this.requirementAt(new Decimal(x)).amount,
+          cumulative: false,
+        },
+        0,
+        true,
+      ).quantity,
+    ).floor().add(1).max(minVal);
+
     // Plz no ask how exponential math work i dont know i just code, see https://discord.com/channels/351476683016241162/439241762603663370/1210707188964659230m
+    // oxlint-disable no-unreachable
     const minV = Galaxy.costScalingStart.min(Galaxy.remoteStart); // Take the smallest of the two values
     if (
       currency.lt(
@@ -80,26 +89,13 @@ export const Galaxy = {
     }
 
     let remoteStart = Decimal.max(1e6, Galaxy.remoteStart);
-    let power = new Decimal(1.002).powEffectsOf(GluonUpgrade.redGreen(1), GluonUpgrade.redGreen(7));
+    let power = this.scalingPower[GALAXY_TYPE.REMOTE];
 
     if (Galaxy.requirementAt(remoteStart).amount.lt(currency)) {
       return Decimal.log(currency.div(Galaxy.requirementAt(remoteStart)), power)
         .add(remoteStart).floor().max(minVal);
     }
-    // Ignore BBBS' warning, even though its theoretically quite dangerous
-    // We can do this because at most, 1e6 galaxies of dimension would be put into this
-    // So at most the output is 1e6, less than its 1e15 max, and for higher we use the above equation
-    return new Decimal(
-      bulkBuyBinarySearch(
-        new Decimal(currency),
-        {
-          costFunction: x => this.requirementAt(new Decimal(x)).amount,
-          cumulative: false,
-        },
-        0,
-        true,
-      ).quantity,
-    ).floor().add(1).max(minVal);
+    // oxlint-enable no-unreachable
   },
 
   requirementAt(galaxies) {
@@ -115,16 +111,16 @@ export const Galaxy = {
 
     if (type === GALAXY_TYPE.DISTANT || type === GALAXY_TYPE.REMOTE) {
       const galaxyCostScalingStart = this.costScalingStart;
-      const galaxiesAfterDistant = Decimal.clampMin(equivGal.sub(galaxyCostScalingStart).add(1), 0);
+      const galaxiesAfterDistant = Decimal.clampMin(equivGal.sub(galaxyCostScalingStart)
+        .times(this.scalingPower[GALAXY_TYPE.DISTANT]).add(1), 0);
       amount = amount.add(Decimal.pow(galaxiesAfterDistant, 2).add(galaxiesAfterDistant));
     }
 
     if (type === GALAXY_TYPE.REMOTE || QuantumChallenge(5).isRunning) {
-      let power = new Decimal(1.002).powEffectsOf(GluonUpgrade.redGreen(1), GluonUpgrade.redGreen(7));
       const galaxiesAmount = QuantumChallenge(5).isRunning
         ? galaxies
-        : galaxies.sub(Galaxy.remoteStart.sub(1));
-      amount = amount.times(Decimal.pow(power, galaxiesAmount));
+        : galaxies.sub(Galaxy.remoteStart.sub(1)).times(this.scalingPower[GALAXY_TYPE.REMOTE]);
+      amount = amount.times(Decimal.pow(1.002, galaxiesAmount));
     }
 
     amount = amount.sub(Effects.sum(InfinityUpgrade.resetBoost));
@@ -139,6 +135,59 @@ export const Galaxy = {
     amount = Decimal.floor(amount);
     const tier = Galaxy.requiredTier;
     return new GalaxyRequirement(tier, amount);
+  },
+
+  get scalingStart() {
+    let invisibleStart = new Decimal(3e5);
+    let obscureStart = new Decimal(50000).min(invisibleStart);
+    let remoteStart = new Decimal(800).plusEffectsOf(
+      MasteryStudy(21),
+      MasteryStudy(22),
+      MasteryStudy(23),
+      GluonUpgrade.blueRed(7),
+    ).min(obscureStart);
+
+    let distantStart = DC.E2.plusEffectsOf(
+      TimeStudy(223),
+      TimeStudy(224),
+      TimeStudy(302),
+      EternityChallenge(5).reward,
+    ).add(GlyphInfo.power.sacrificeInfo.effect()).min(remoteStart);
+
+    if (EternityChallenge(5).isRunning) {
+      distantStart = new Decimal(0);
+    }
+
+    return {
+      [GALAXY_TYPE.DISTANT]: distantStart.floor(),
+      [GALAXY_TYPE.REMOTE]: remoteStart.floor(),
+      [GALAXY_TYPE.OBSCURE]: obscureStart.floor(),
+      [GALAXY_TYPE.INVISIBLE]: invisibleStart.floor(),
+    };
+  },
+
+  get scalingPower() {
+    let distantPower = new Decimal(1)
+      .dividedByEffectsOf(
+        GluonUpgrade.redGreen(6),
+        GluonUpgrade.greenBlue(6),
+      );
+    let remotePower = new Decimal(1)
+      .dividedByEffectsOf(
+        GluonUpgrade.redGreen(1),
+        GluonUpgrade.redGreen(7),
+        GluonUpgrade.greenBlue(7),
+      );
+
+    let obscurePower = new Decimal(1);
+    let invisiblePower = new Decimal(1);
+
+    return {
+      [GALAXY_TYPE.DISTANT]: distantPower,
+      [GALAXY_TYPE.REMOTE]: remotePower,
+      [GALAXY_TYPE.OBSCURE]: obscurePower,
+      [GALAXY_TYPE.INVISIBLE]: invisiblePower,
+    };
   },
 
   get costMult() {
@@ -191,15 +240,7 @@ export const Galaxy = {
   },
 
   get costScalingStart() {
-    if (EternityChallenge(5).isRunning) {
-      return DC.D0;
-    }
-    return DC.E2.plusEffectsOf(
-      TimeStudy(223),
-      TimeStudy(224),
-      TimeStudy(302),
-      EternityChallenge(5).reward,
-    ).add(GlyphInfo.power.sacrificeInfo.effect());
+    return this.scalingStart[GALAXY_TYPE.DISTANT];
   },
 
   get type() {
@@ -207,10 +248,16 @@ export const Galaxy = {
   },
 
   typeAt(galaxies) {
-    if (galaxies.gte(Galaxy.remoteStart)) {
+    if (galaxies.gte(this.scalingStart[GALAXY_TYPE.INVISIBLE])) {
+      return GALAXY_TYPE.INVISIBLE;
+    }
+    if (galaxies.gte(this.scalingStart[GALAXY_TYPE.OBSCURE])) {
+      return GALAXY_TYPE.OBSCURE;
+    }
+    if (galaxies.gte(this.scalingStart[GALAXY_TYPE.REMOTE])) {
       return GALAXY_TYPE.REMOTE;
     }
-    if (galaxies.gte(this.costScalingStart)) {
+    if (galaxies.gte(this.scalingStart[GALAXY_TYPE.DISTANT])) {
       return GALAXY_TYPE.DISTANT;
     }
     return GALAXY_TYPE.NORMAL;

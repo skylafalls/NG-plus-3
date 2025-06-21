@@ -34,8 +34,8 @@ export default {
       // than normal and therefore default filling won't be meaningful. Since challenges get completed or abandoned from
       // the inside outwards, we show the goals in that priority as well. It only makes sense to check cel6 and not the
       // others because pre-cel3 completion it'll default to e4000 and cel4/5 don't have meaningful single goals
-      const inSpecialRun = Player.isInAntimatterChallenge || EternityChallenge.isRunning || player.dilation.active
-        || Laitela.isRunning;
+      const inSpecialRun = Player.isInAntimatterChallenge || EternityChallenge.isRunning
+        || player.dilation.active || QuantumChallenge.isRunning || Laitela.isRunning;
       if (inSpecialRun) {
         if (Player.isInAntimatterChallenge) {
           setProgress(Currency.antimatter.value, Player.antimatterChallenge.goal, "Percentage to Challenge goal");
@@ -58,6 +58,8 @@ export default {
           } else {
             setProgress(Currency.infinityPoints.value, Player.eternityGoal, "Percentage to Eternity in Dilation");
           }
+        } else if (QuantumChallenge.isRunning) {
+          setProgress(Currency.antimatter.value, Player.quantumGoal.am, "Percentage to Quantum Challenge goal");
         } else {
           // Lai'tela destabilization; since the progress bar is logarithmically-scaled, we need to pow10 the arguments
           setProgress(Decimal.pow10(player.celestials.laitela.entropy), new Decimal(10),
@@ -90,7 +92,7 @@ export default {
         // Show all other goals from the top down, starting at features in the highest prestige layer
         setProgress(Currency.infinityPoints.value, Tesseracts.nextCost, "Percentage to next Tesseract");
       } else if (PlayerProgress.dilationUnlocked()) {
-        setProgress(Currency.eternityPoints.value, DC.E4000, "Percentage to Reality");
+        setProgress(Currency.metaAntimatter.value, Player.quantumGoal.ma, "Percentage to Quantum");
       } else if (InfinityDimension(8).isUnlocked) {
         setProgress(Currency.infinityPoints.value, Player.eternityGoal, "Percentage to Eternity");
       } else if (player.break) {

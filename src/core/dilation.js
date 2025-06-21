@@ -228,6 +228,9 @@ export function getDilationGainPerSecond() {
       AlchemyResource.dilation,
       Ra.unlocks.continuousTTBoost.effects.dilatedTime,
       Ra.unlocks.peakGamespeedDT,
+      GluonUpgrade.blueRed(2),
+      GluonUpgrade.blueRed(3),
+      MasteryStudy(51),
       QuantumChallenge(1).reward,
     )
     .times(
@@ -265,6 +268,7 @@ export function tachyonGainMultiplier() {
     RealityUpgrade(4),
     RealityUpgrade(8),
     RealityUpgrade(15),
+    GluonUpgrade.blueRed(1),
   ).times(GlyphInfo.dilation.sacrificeInfo.effect()).pow(pow);
 }
 

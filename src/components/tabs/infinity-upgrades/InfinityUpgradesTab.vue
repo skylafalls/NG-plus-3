@@ -87,6 +87,7 @@ export default {
       this.ipMultHardCap = GameDatabase.infinity.upgrades.ipMult.costCap;
       this.eternityUnlocked = PlayerProgress.current.isEternityUnlocked;
       this.bottomRowUnlocked = Achievement(41).isUnlocked;
+      this.uncappedIPMult = MasteryStudy(11).isBought;
     },
     btnClassObject(column) {
       const classObject = {
@@ -175,10 +176,15 @@ export default {
       />
     </div>
     <div v-if="eternityUnlocked && bottomRowUnlocked">
-      The Infinity Point multiplier becomes more expensive
-      <br>
-      above {{ formatPostBreak(ipMultSoftCap) }} Infinity Points, and cannot be purchased past
-      {{ formatPostBreak(ipMultHardCap) }} Infinity Points.
+      <template v-if="uncappedIPMult">
+        The Infinity Point multiplier upgrade becomes more expensive above {{ formatPostBreak(ipMultSoftCap) }} Infinity Points.
+      </template>
+      <template v-else>
+        The Infinity Point multiplier becomes more expensive
+        <br>
+        above {{ formatPostBreak(ipMultSoftCap) }} Infinity Points, and cannot be purchased past
+        {{ formatPostBreak(ipMultHardCap) }} Infinity Points.
+      </template>
     </div>
   </div>
 </template>

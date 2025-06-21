@@ -24,7 +24,9 @@ window.format = function format(value, places = 2, placesUnder1000 = 2) {
   if (value.gte(Number.MAX_VALUE) && !player.break) {
     return "Infinite";
   }
-  return formatInternal(value, places, placesUnder1000);
+
+  if (value.lt("ee100")) return Notations.current.format(value, places, placesUnder1000, 3);
+  return LNotations.current.formatLDecimal(value, places);
 };
 
 window.formatInt = function formatInt(value) {
@@ -55,10 +57,39 @@ window.formatPostBreak = function formatPostBreak(
   places,
   placesUnder1000,
 ) {
-  if (isEND()) {
-    return "END";
+  if (isEND()) return "END";
+  const notation = Notations.current;
+  const lNotation = LNotations.current;
+  // This is basically just a copy of the format method from notations library,
+  // with the pre-break case removed.
+  if (typeof value === "number" && !Number.isFinite(value)) {
+    return notation.infinite;
   }
-  return formatInternal(value, places, placesUnder1000);
+
+  const decimal = Decimal.fromValue_noAlloc(value);
+
+  if (decimal.eq(0)) return notation.formatUnder1000(0, placesUnder1000);
+
+  if (decimal.abs().log10().lt(-300)) {
+    return decimal.sign < 0
+      ? notation.formatVerySmallNegativeDecimal(decimal.abs(), placesUnder1000)
+      : notation.formatVerySmallDecimal(decimal, placesUnder1000);
+  }
+
+  if (decimal.abs().log10().lt(3)) {
+    const number = decimal.toNumber();
+    return number < 0
+      ? notation.formatNegativeUnder1000(Math.abs(number), placesUnder1000)
+      : notation.formatUnder1000(number, placesUnder1000);
+  }
+
+  if (decimal.layer >= 2) {
+    return lNotation.formatLDecimal(decimal, places);
+  }
+
+  return decimal.sign < 0
+    ? notation.formatNegativeDecimal(decimal.abs(), places)
+    : notation.formatDecimal(decimal, places);
 };
 
 window.formatPlus = function formatX(value, places, placesUnder1000) {
@@ -301,133 +332,6 @@ window.makeEnumeration = function makeEnumeration(items) {
   return `${commaSeparated}, and ${last}`;
 };
 
-window.exponentialFormat = function exponentialFormat(
-  num,
-  precision,
-  mantissa = true,
-) {
-  let e = Decimal.log10(num).floor();
-  let m = new Decimal(num.m);
-  if (m.toFixed(0) === "10") {
-    m = new Decimal(1);
-    e = e.add(1);
-  }
-  const eString = e.gte(1e6)
-    ? format(e, Math.max(Math.max(precision, 3), 2))
-    : e.gte(10000)
-    ? commaFormat(e, 0)
-    : e.toStringWithDecimalPlaces(0);
-  if (mantissa) {
-    return m.toStringWithDecimalPlaces(precision) + "e" + eString;
-  }
-  return "e" + eString;
-};
-
-window.commaFormat = function commaFormat(num, precision) {
-  if (num === null || num === undefined) {
-    return "NaN";
-  }
-  num = new Decimal(num);
-  if (num.mag < 0.001) {
-    return (0).toFixed(precision);
-  }
-  const init = num.toStringWithDecimalPlaces(precision);
-  const portions = init.split(".");
-  portions[0] = portions[0].replaceAll(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
-  if (portions.length === 1) {
-    return portions[0];
-  }
-  return portions[0] + "." + portions[1];
-};
-
-window.regularFormat = function regularFormat(num, precision) {
-  if (num === null || num === undefined) {
-    return "NaN";
-  }
-  num = new Decimal(num);
-  if (num.mag < 0.0001) {
-    return (0).toFixed(precision);
-  }
-  if (num.mag < 0.1 && precision !== 0) {
-    precision = Math.max(
-      Math.max(precision, num.log10().negate().ceil().toNumber()),
-      2,
-    );
-  }
-  return num.toStringWithDecimalPlaces(precision);
-};
-
-const eeee1000 = new Decimal("eeee1000");
-const e1000 = new Decimal("e1000");
-const e9 = new Decimal(1e9);
-const e6 = new Decimal(1e6);
-const e3 = new Decimal(1e3);
-const nearOne = new Decimal(0.98);
-const thousandth = new Decimal(0.001);
-const zero = new Decimal(0);
-function formatInternal(
-  num,
-  precision = 2,
-  precisionUnder1000 = 2,
-  small = false,
-) {
-  num = new Decimal(num);
-  if (
-    Number.isNaN(num.sign) || Number.isNaN(num.layer) || Number.isNaN(num.mag)
-  ) {
-    return "NaN";
-  }
-  if (num.sign < 0) {
-    return "-" + format(num.neg(), precision);
-  }
-  if (num.mag === Number.POSITIVE_INFINITY) {
-    return "Infinity";
-  }
-  if (num.gte(eeee1000)) {
-    const slog = num.slog();
-    if (slog.gte(e6)) {
-      return "F" + format(slog.floor());
-    }
-    return (
-      Decimal.pow(10, slog.sub(slog.floor())).toStringWithDecimalPlaces(3) +
-      "F" +
-      commaFormat(slog.floor(), 0)
-    );
-  }
-
-  if (num.gte("e1e15")) {
-    return exponentialFormat(num, 0, false);
-  }
-  if (num.gte("e1e14")) {
-    return exponentialFormat(num, 0);
-  }
-  if (num.gte("e1e13")) {
-    return exponentialFormat(num, 1);
-  }
-  if (num.gte("e1e12")) {
-    return exponentialFormat(num, 2);
-  }
-  if (num.gte(e6)) {
-    return exponentialFormat(num, precision);
-  }
-  if (num.gte(e3)) {
-    return commaFormat(num, precisionUnder1000);
-  }
-  if (num.gte(thousandth) || !small) {
-    return regularFormat(num, precisionUnder1000);
-  }
-  if (num.eq(zero)) {
-    return (0).toFixed(precisionUnder1000);
-  }
-
-  num = invertOOM(num);
-  if (num.lt(e1000)) {
-    const val = exponentialFormat(num, precision);
-    return val.replace(/([^(?:e|F)]*)$/, "-$1");
-  }
-  return format(num, precision) + "⁻¹";
-}
-
 window.formatWhole = function formatWhole(num) {
   num = new Decimal(num);
   if (num.sign < 0) {
@@ -442,21 +346,16 @@ window.formatWhole = function formatWhole(num) {
   return format(num, 0);
 };
 
-function toPlaces(x, precision, maxAccepted) {
-  x = new Decimal(x);
-  let result = x.toStringWithDecimalPlaces(precision);
-  if (new Decimal(result).gte(maxAccepted)) {
-    result = Decimal.sub(maxAccepted, Math.pow(0.1, precision))
-      .toStringWithDecimalPlaces(
-        precision,
-      );
-  }
-  return result;
-}
-
 // Will also display very small numbers
-window.formatSmall = function formatSmall(x, precision) {
-  return format(x, precision, true);
+window.formatSmall = function formatSmall(value, places = 2, placesUnder1000 = 3) {
+  if (isEND()) return "END";
+  if (!isDecimal(value)) value = new Decimal(value);
+  if(value.gte(1)) return format(value, places, placesUnder1000);
+
+  if(value.gte(0.01)) return format(value, 3, 3);
+  value = invertOOM(value);
+  const val = Notation.scientific.format(value, places, placesUnder1000);
+  return val.replace(/([^(?:e|F| )]*)$/, "-$1");
 };
 
 function invertOOM(x) {

@@ -1096,9 +1096,6 @@ export const Player = {
   },
 
   get infinityGoal() {
-    if (QuantumChallenge.isRunning) {
-      return QuantumChallenge.current.goal.am;
-    }
     const challenge = NormalChallenge.current || InfinityChallenge.current;
     return challenge === undefined ? DC.NUMMAX : challenge.goal;
   },
@@ -1115,9 +1112,13 @@ export const Player = {
   },
 
   get quantumGoal() {
-    return QuantumChallenge.isRunning
-      ? QuantumChallenge.current.goal.ma
-      : Decimal.dNumberMax.pow(3);
+    if (QuantumChallenge.isRunning) {
+      return QuantumChallenge.current.goal;
+    }
+    return {
+      am: DC.BEMAX,
+      ma: Decimal.pow(Number.MAX_VALUE, 1.25),
+    };
   },
 
   get automatorUnlocked() {

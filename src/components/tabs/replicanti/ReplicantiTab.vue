@@ -32,6 +32,10 @@ export default defineComponent({
       multDT: new Decimal(),
       hasIPMult: false,
       multIP: new Decimal(),
+      hasMS51: false,
+      multMS51: new Decimal(),
+      hasMS52: false,
+      multMS52: new Decimal(),
       hasRaisedCap: false,
       replicantiCap: new Decimal(),
       capMultText: "",
@@ -52,8 +56,18 @@ export default defineComponent({
     replicantiChanceSetup() {
       return new ReplicantiUpgradeButtonSetup(
         ReplicantiUpgrade.chance,
-        value => `Replicate chance: ${formatPercents(value)}`,
-        cost => `+${formatPercents(0.01)} Costs: ${format(cost)} IP`,
+        (_value) => {
+          if (Replicanti.chance.gt("e1e7")) {
+            return `Replication frequency: ${format(Replicanti.chance.log10())}/sec`;
+          }
+          return `Replicate chance: ${formatPercents(Replicanti.chance)}`;
+        },
+        (cost) => {
+          if (Replicanti.chance.gt("e1e7")) {
+            return;
+          }
+          return `+${formatPercents(0.01)} Costs: ${format(cost)} IP`
+        },
       );
     },
     replicantiIntervalSetup() {
@@ -118,6 +132,14 @@ export default defineComponent({
         boostList.push(`a <span class="c-replicanti-description__accent">${formatX(this.multDT, 2, 2)}</span>
           multiplier to Dilated Time ${additionalEffect}from Glyphs`);
       }
+      if (this.hasMS51) {
+        boostList.push(`a <span class="c-replicanti-description__accent">${formatX(this.multMS51, 2, 2)}</span>
+          multiplier on Dilated Time production from Mastery Study 51`);
+      }
+      if (this.hasMS52) {
+        boostList.push(`a <span class="c-replicanti-description__accent">${formatX(this.multMS52, 2, 2)}</span>
+          multiplier on all Meta Dimensions from Mastery Study 52`);
+      }
       if (this.hasIPMult) {
         boostList.push(`a <span class="c-replicanti-description__accent">${formatX(this.multIP)}</span>
           multiplier to Infinity Points from Glyph Alchemy`);
@@ -165,6 +187,10 @@ export default defineComponent({
         Decimal.log10(Replicanti.amount).times(getAdjustedGlyphEffect("replicationdtgain")),
         1,
       );
+      this.hasMS51 = MasteryStudy(51).isBought;
+      this.multMS51.copyFrom(MasteryStudy(51).effectValue);
+      this.hasMS52 = MasteryStudy(52).isBought;
+      this.multMS52.copyFrom(MasteryStudy(52).effectValue);
       this.hasIPMult = AlchemyResource.exponential.amount.gt(0) && !this.isDoomed;
       this.multIP = Replicanti.amount.powEffectOf(AlchemyResource.exponential);
       this.isUncapped = PelleRifts.vacuum.milestones[1].canBeApplied;
@@ -193,7 +219,7 @@ export default defineComponent({
     // This is copied out of a short segment of ReplicantiGainText with comments and unneeded variables stripped
     calculateEstimate() {
       const updateRateMs = player.options.updateRate;
-      const logGainFactorPerTick = player.replicanti.chance.add(1).ln().mul(updateRateMs)
+      const logGainFactorPerTick = Replicanti.chance.add(1).ln().mul(updateRateMs)
         .mul(getGameSpeedupForDisplay()).div(getReplicantiInterval());
       const postScale = Decimal.log10(ReplicantiGrowth.scaleFactor).div(ReplicantiGrowth.scaleLog10);
       const nextMilestone = this.maxReplicanti;

@@ -202,6 +202,7 @@ export function timeDimensionCommonMultiplier() {
       Replicanti.areUnlocked && Replicanti.amount.gt(1)
         ? DilationUpgrade.tdMultReplicanti
         : null,
+      GluonUpgrade.blueRed(6),
       Pelle.isDoomed ? null : RealityUpgrade(22),
       AlchemyResource.dimensionality,
       PelleRifts.chaos,
@@ -424,6 +425,7 @@ class TimeDimensionState extends DimensionState {
           ? GlyphInfo.time.sacrificeInfo.effect()
           : new Decimal(1),
       )
+      .timesEffectOf(GluonUpgrade.blueRed(4))
       .pow(ImaginaryUpgrade(14).effectOrDefault(1));
   }
 

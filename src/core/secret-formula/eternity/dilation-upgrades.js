@@ -117,8 +117,8 @@ export const dilationUpgrades = {
     },
     effect: (bought) => {
       let eff = Decimal.mul(0.25, bought);
-      if (eff.gte(5)) {
-        eff = eff.div(5).pow(0.4).mul(5);
+      if (eff.gte(8)) {
+        eff = eff.div(8).pow(0.5).mul(8);
       }
       return eff;
     },
@@ -242,9 +242,9 @@ export const dilationUpgrades = {
     cost: 1e15,
     description: "Generate Time Theorems based on Tachyon Particles",
     effect: () => {
-      let gain = Currency.tachyonParticles.value.div(20000);
-      if (gain.gte(1e170)) {
-        gain = Decimal.pow10(gain.div(1e170).log10().pow(0.75)).mul(1e170);
+      let gain = Currency.tachyonParticles.value.pow(1.1);
+      if (gain.gte(1e80)) {
+        gain = Decimal.pow10(gain.div(1e80).max(1).log10().sqrt()).mul(1e80);
       }
       return gain;
     },

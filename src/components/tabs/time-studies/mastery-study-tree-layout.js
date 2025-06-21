@@ -63,6 +63,8 @@ export class MasteryStudyTreeLayout {
       wideRow(MS(31), MS(32), MS(33), MS(34), MS(35), MS(36)),
       normalRow(EC(13), EC(14)),
       normalRow(TimeStudy.pairProduction),
+      normalRow(MS(41), MS(42), MS(43)),
+      normalRow(MS(51), null, MS(52)),
     );
 
     /**

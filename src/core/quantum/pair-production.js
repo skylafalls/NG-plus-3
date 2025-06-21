@@ -13,13 +13,10 @@ class ElectronsEffectState extends GameMechanicState {
     let base = player.quantum.pair.electrons.timesEffectOf(
       QuantumChallenge(6).reward,
     );
-    let exp = new Decimal(0.33);
+    let exp = new Decimal(0.35);
     let eff = base.plus(1).pow(exp);
     if (eff.gte(1e6)) {
       eff = eff.div(1e6).pow(0.7).mul(1e6);
-    }
-    if (GluonUpgrade.redGreen(4).isBought) {
-      eff = eff.times(0.7);
     }
     return eff;
   }
@@ -47,9 +44,6 @@ class PositronsEffectState extends GameMechanicState {
     let eff = player.quantum.pair.positrons.plus(1);
     if (eff.gte(1e5)) {
       eff = eff.div(1e5).pow(0.5).mul(1e5);
-    }
-    if (GluonUpgrade.redGreen(4).isBought) {
-      eff = eff.times(0.7);
     }
     return eff;
   }
@@ -153,6 +147,7 @@ class ElectronsUpgradeState extends RebuyableMechanicState {
       this.boughtAmount = this.boughtAmount.plus(1);
       this.currency.sub(this.cost).max(0);
     }
+    PairProduction.updateDischarges();
   }
 }
 class PositronsUpgradeState extends RebuyableMechanicState {
@@ -165,7 +160,7 @@ class PositronsUpgradeState extends RebuyableMechanicState {
   get cost() {
     return Decimal.pow(
       this.config.increment,
-      Decimal.pow(this.boughtAmount.plus(1), 3),
+      Decimal.pow(this.boughtAmount.minusEffectOf(GluonUpgrade.greenBlue(6)).max(1), 3),
     ).times(this.config.initialCost).round();
   }
 
@@ -247,6 +242,7 @@ class PositronsUpgradeState extends RebuyableMechanicState {
       this.boughtAmount = this.boughtAmount.plus(1);
       this.currency.sub(this.cost).max(0);
     }
+    PairProduction.updateDischarges();
   }
 }
 

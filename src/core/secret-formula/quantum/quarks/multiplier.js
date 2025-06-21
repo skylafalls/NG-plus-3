@@ -7,6 +7,5 @@ export const quarkMultiplierConfig = {
   costIncrease: () => DC.D5,
   description: () => `Multiply Quarks gain by ${formatX(2)}`,
   effect: () => DC.D2.pow(player.quantum.quarkMultiplierPurchases),
-  cap: () => {},
-  formatEffect: (value) => formatX(value, 2, 2),
+  formatEffect: value => formatX(value, 2, 2),
 };

@@ -64,14 +64,14 @@ export class TimeStudyTree {
     }
     let test = input.replaceAll(/ +/gu, "");
     TimeStudyTree.sets.forEach((_, x) =>
-      test = test.replaceAll(new RegExp(`${x},?`, "gu"), "")
+      test = test.replaceAll(new RegExp(`${x},?`, "gu"), ""),
     );
     return /^,?((\d{2,3}(-\d{2,3})?)\b,?)*(\|\d{1,2}!?)?$/iu.test(test);
   }
 
   // Getter for all the studies in the current game state
   static get currentStudies() {
-    const currentStudies = player.timestudy.studies.map((s) => TimeStudy(s));
+    const currentStudies = player.timestudy.studies.map(s => TimeStudy(s));
     if (player.challenge.eternity.unlocked !== 0) {
       currentStudies.push(
         TimeStudy.eternityChallenge(player.challenge.eternity.unlocked),
@@ -123,12 +123,12 @@ export class TimeStudyTree {
       ["dark", [222, 224, 226, 228, 232, 234]],
       ...(Ra.unlocks.unlockHardV.canBeApplied
         ? [[
-          "triad",
-          [301, 302, 303, 304].slice(
-            0,
-            Ra.unlocks.unlockHardV.effectOrDefault(0),
-          ),
-        ]]
+            "triad",
+            [301, 302, 303, 304].slice(
+              0,
+              Ra.unlocks.unlockHardV.effectOrDefault(0),
+            ),
+          ]]
         : []),
     ]);
   }
@@ -157,7 +157,7 @@ export class TimeStudyTree {
   // to invalid studies for additional information to present to the player
   parseStudyImport(input) {
     const studyDB = new Set(
-      GameDatabase.eternity.timeStudies.normal.map((s) => s.id),
+      GameDatabase.eternity.timeStudies.normal.map(s => s.id),
     );
     const output = [];
     const studiesString = TimeStudyTree.truncateInput(input).split("|")[0];
@@ -191,7 +191,7 @@ export class TimeStudyTree {
     const ecID = parseInt(ecString, 10);
     const ecDB = GameDatabase.eternity.timeStudies.ec;
     // Specifically exclude 0 because saved presets will contain it by default
-    if (!ecDB.map((c) => c.id).includes(ecID) && ecID !== 0) {
+    if (!ecDB.map(c => c.id).includes(ecID) && ecID !== 0) {
       this.invalidStudies.push(`EC${ecID}`);
       return output;
     }
@@ -248,25 +248,23 @@ export class TimeStudyTree {
 
     // Because the player data may not reflect the state of the TimeStudyTree object's purchasedStudies,
     // we have to do all the checks here with purchasedStudies. study.isBought and similar functions cannot be used.
-    const check = (
-      req,
-    ) => (typeof req === "number"
+    const check = req => (typeof req === "number"
       ? this.purchasedStudies.includes(TimeStudy(req))
       : req());
     const config = study.config;
     let reqSatisfied;
     switch (config.reqType) {
       case TS_REQUIREMENT_TYPE.AT_LEAST_ONE: {
-        reqSatisfied = config.requirement.some((r) => check(r));
+        reqSatisfied = config.requirement.some(r => check(r));
         break;
       }
       case TS_REQUIREMENT_TYPE.ALL: {
-        reqSatisfied = config.requirement.every((r) => check(r));
+        reqSatisfied = config.requirement.every(r => check(r));
         break;
       }
       case TS_REQUIREMENT_TYPE.DIMENSION_PATH: {
-        reqSatisfied = config.requirement.every((r) => check(r)) &&
-          this.currDimPathCount < this.allowedDimPathCount;
+        reqSatisfied = config.requirement.every(r => check(r))
+          && this.currDimPathCount < this.allowedDimPathCount;
         break;
       }
       default: {
@@ -274,11 +272,11 @@ export class TimeStudyTree {
       }
     }
     if (study instanceof ECTimeStudyState) {
-      if (this.purchasedStudies.some((s) => s instanceof ECTimeStudyState)) {
+      if (this.purchasedStudies.some(s => s instanceof ECTimeStudyState)) {
         return false;
       }
-      const hasForbiddenStudies = !Perk.studyECRequirement.isBought &&
-        study.config.secondary.forbiddenStudies?.some((s) => check(s));
+      const hasForbiddenStudies = !Perk.studyECRequirement.isBought
+        && study.config.secondary.forbiddenStudies?.some(s => check(s));
       // We want to only check the structure for script template error instructions
       if (checkOnlyStructure) {
         return reqSatisfied && !hasForbiddenStudies;
@@ -289,10 +287,10 @@ export class TimeStudyTree {
       const hasEnoughTT = totalTT.subtract(this.spentTheorems[0]).gte(
         study.cost,
       );
-      const secondaryGoal = Perk.studyECRequirement.isBought ||
-        study.isEntryGoalMet;
-      return reqSatisfied && !hasForbiddenStudies &&
-        (study.isBought || (secondaryGoal && hasEnoughTT));
+      const secondaryGoal = Perk.studyECRequirement.isBought
+        || study.isEntryGoalMet;
+      return reqSatisfied && !hasForbiddenStudies
+        && (study.isBought || (secondaryGoal && hasEnoughTT));
     }
     return reqSatisfied;
   }
@@ -301,10 +299,10 @@ export class TimeStudyTree {
   buySingleStudy(study, checkCosts) {
     const config = study.config;
     const stDiscount = VUnlocks.raUnlock.effectOrDefault(0);
-    const stNeeded = config.STCost &&
-        config.requiresST.some((s) =>
-          this.purchasedStudies.includes(TimeStudy(s))
-        )
+    const stNeeded = (config.STCost
+      && config.requiresST.some(s =>
+        this.purchasedStudies.includes(TimeStudy(s)),
+      ))
       ? Math.clampMin(config.STCost - stDiscount, 0)
       : 0;
     // Took these out of the checkCosts check as these aren't available early game
@@ -331,13 +329,13 @@ export class TimeStudyTree {
   }
 
   get currDimPathCount() {
-    return [71, 72, 73].countWhere((x) =>
-      this.purchasedStudies.includes(TimeStudy(x))
+    return [71, 72, 73].countWhere(x =>
+      this.purchasedStudies.includes(TimeStudy(x)),
     );
   }
 
   get allowedDimPathCount() {
-    if (DilationUpgrade.timeStudySplit.isBought) {
+    if (DilationUpgrade.timeStudySplit.isBought || MasteryStudy(42).isBought) {
       return 3;
     }
     if (this.purchasedStudies.includes(TimeStudy(201))) {
@@ -354,7 +352,7 @@ export class TimeStudyTree {
       TIME_STUDY_PATH.TIME_DIM,
     ];
     for (const path of validPaths) {
-      const pathEntry = NormalTimeStudies.pathList.find((p) => p.path === path);
+      const pathEntry = NormalTimeStudies.pathList.find(p => p.path === path);
       for (const study of this.purchasedStudies) {
         if (pathEntry.studies.includes(study.id)) {
           pathSet.add(pathEntry.name);
@@ -373,7 +371,7 @@ export class TimeStudyTree {
       TIME_STUDY_PATH.IDLE,
     ];
     for (const path of validPaths) {
-      const pathEntry = NormalTimeStudies.pathList.find((p) => p.path === path);
+      const pathEntry = NormalTimeStudies.pathList.find(p => p.path === path);
       for (const study of this.purchasedStudies) {
         if (pathEntry.studies.includes(study.id)) {
           pathSet.add(pathEntry.name);
@@ -386,8 +384,8 @@ export class TimeStudyTree {
 
   get ec() {
     // This technically takes the very first EC entry if there's more than one, but that shouldn't happen in practice
-    const ecStudies = this.purchasedStudies.find((s) =>
-      s instanceof ECTimeStudyState
+    const ecStudies = this.purchasedStudies.find(s =>
+      s instanceof ECTimeStudyState,
     );
     return ecStudies ? ecStudies.id : 0;
   }
@@ -396,8 +394,8 @@ export class TimeStudyTree {
   get exportString() {
     return `${
       this.purchasedStudies
-        .filter((s) => s instanceof NormalTimeStudyState)
-        .map((s) => s.id)
+        .filter(s => s instanceof NormalTimeStudyState)
+        .map(s => s.id)
         .join(",")
     }|${this.ec}${player.challenge.eternity.current === 0 ? "" : "!"}`;
   }

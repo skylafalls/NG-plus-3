@@ -386,7 +386,7 @@ export const normalTimeStudies = [
         ? `Replicanti Galaxies are ${formatPercents(0.4)} stronger`
         : `Replicanti Galaxies are ${
           formatPercents(0.4)
-        } stronger and Replicanti are 
+        } stronger and Replicanti are
         ${
           Perk.studyPassive.isBought
             ? formatX(3)

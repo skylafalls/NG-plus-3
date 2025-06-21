@@ -1,18 +1,19 @@
 <script>
 import { defineComponent } from "vue";
 import QuarksRow from "./QuarksRow.vue";
+import QuarksMultiplierButton from "./QuarksMultiplierButton.vue";
 
 export default defineComponent({
   name: "QuarksTab",
   components: {
     QuarksRow,
+    QuarksMultiplierButton,
   },
 });
 </script>
 
 <template>
   <div>
-    <p>Hello, World!</p>
     <table class="centered">
       <tbody>
         <QuarksRow
@@ -32,6 +33,8 @@ export default defineComponent({
         />
       </tbody>
     </table>
+    <br>
+    <QuarksMultiplierButton />
   </div>
 </template>
 

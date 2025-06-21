@@ -1,10 +1,11 @@
 <script>
-import DescriptionDisplay from "@/components/DescriptionDisplay";
-import EffectDisplay from "@/components/EffectDisplay";
-import HintText from "@/components/HintText";
-import TimeStudyButton from "./TimeStudyButton";
+import DescriptionDisplay from "@/components/DescriptionDisplay.vue";
+import EffectDisplay from "@/components/EffectDisplay.vue";
+import HintText from "@/components/HintText.vue";
+import TimeStudyButton from "./TimeStudyButton.vue";
+import { defineComponent } from "vue";
 
-export default {
+export default defineComponent({
   name: "NormalTimeStudy",
   components: {
     DescriptionDisplay,
@@ -49,7 +50,7 @@ export default {
         && TimeStudy(this.study.id).costsST() && !Pelle.isDoomed;
     },
   },
-};
+});
 </script>
 
 <template>

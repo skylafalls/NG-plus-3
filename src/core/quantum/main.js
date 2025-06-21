@@ -191,3 +191,7 @@ export function quantumReset(force = false) {
   resetPreQuantumResources();
   restorePreQuantumResources(basePlayer);
 }
+
+export function handleQuantumTick(diff) {
+  Quarks.tick(diff);
+}

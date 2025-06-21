@@ -58,44 +58,44 @@ function highestInArray(array, isNum = false) {
 
 export const GameCache = {
   worstChallengeTime: new Lazy(() =>
-    highestInArray(player.challenge.normal.bestTimes)
+    highestInArray(player.challenge.normal.bestTimes),
   ),
 
   bestRunIPPM: new Lazy(() =>
     player.records.recentInfinities
-      .map((run) => run[3].div(run[1].times(60000)))
-      .reduce(Decimal.maxReducer)
+      .map(run => run[3].div(run[1].times(60000)))
+      .reduce(Decimal.maxReducer),
   ),
 
   averageRealTimePerEternity: new Lazy(() =>
     player.records.recentEternities
-      .map((run) => run[2])
+      .map(run => run[2])
       .reduce(Decimal.sumReducer).div(
         1000 * player.records.recentEternities.length,
-      )
+      ),
   ),
 
   tickSpeedMultDecrease: new Lazy(() =>
-    new Decimal(10).sub(Effects.sum(
+    Effects.min(new Decimal(10).sub(Effects.sum(
       BreakInfinityUpgrade.tickspeedCostMult,
       EternityChallenge(11).reward,
-    )).plusEffectOf(QuantumChallenge(7))
+    )), GluonUpgrade.greenBlue(4)).plusEffectOf(QuantumChallenge(7)),
   ),
 
   dimensionMultDecrease: new Lazy(() =>
     new Decimal(10).sub(Effects.sum(
       BreakInfinityUpgrade.dimCostMult,
       EternityChallenge(6).reward,
-    )).plusEffectOf(QuantumChallenge(7))
+    )).plusEffectOf(QuantumChallenge(7)),
   ),
 
   timeStudies: new Lazy(() =>
     NormalTimeStudyState.studies
-      .map((s) => player.timestudy.studies.includes(s.id))
+      .map(s => player.timestudy.studies.includes(s.id)),
   ),
 
   currentStudyTree: new Lazy(() =>
-    new TimeStudyTree(TimeStudyTree.currentStudies)
+    new TimeStudyTree(TimeStudyTree.currentStudies),
   ),
 
   achievementPeriod: new Lazy(() =>
@@ -104,65 +104,65 @@ export const GameCache = {
       Perk.achievementGroup2,
       Perk.achievementGroup3,
       Perk.achievementGroup4,
-    ))).totalMilliseconds
+    ))).totalMilliseconds,
   ),
 
-  buyablePerks: new Lazy(() => Perks.all.filter((p) => p.canBeBought)),
+  buyablePerks: new Lazy(() => Perks.all.filter(p => p.canBeBought)),
 
   // Cached because it needs to be checked upon any change to antimatter, but that's a hot path and we want to keep
   // unnecessary repetitive calculations and accessing to a minimum
   cheapestAntimatterAutobuyer: new Lazy(() =>
     Autobuyer.antimatterDimension.zeroIndexed.concat(Autobuyer.tickspeed)
-      .filter((ab) => !(ab.isBought || ab.isUnlocked))
-      .map((ab) => ab.antimatterCost.toNumber())
-      .nMin()
+      .filter(ab => !(ab.isBought || ab.isUnlocked))
+      .map(ab => ab.antimatterCost.toNumber())
+      .nMin(),
   ),
 
   // The effect is defined in antimatter_dimensions.js because that's where the non-cached
   // code originally lived.
   antimatterDimensionCommonMultiplier: new Lazy(() =>
-    antimatterDimensionCommonMultiplier()
+    antimatterDimensionCommonMultiplier(),
   ),
 
   // 0 will cause a crash if invoked; this way the tier can be used as an index
   antimatterDimensionFinalMultipliers: Array.range(0, 9)
-    .map((tier) => new Lazy(() => getDimensionFinalMultiplierUncached(tier))),
+    .map(tier => new Lazy(() => getDimensionFinalMultiplierUncached(tier))),
 
   infinityDimensionCommonMultiplier: new Lazy(() =>
-    infinityDimensionCommonMultiplier()
+    infinityDimensionCommonMultiplier(),
   ),
 
   timeDimensionCommonMultiplier: new Lazy(() =>
-    timeDimensionCommonMultiplier()
+    timeDimensionCommonMultiplier(),
   ),
 
   metaDimensionCommonMultiplier: new Lazy(() =>
-    metaDimensionCommonMultiplier()
+    metaDimensionCommonMultiplier(),
   ),
 
   glyphInventorySpace: new Lazy(() => Glyphs.freeInventorySpace),
 
   glyphEffects: new Lazy(() =>
     orderedEffectList.mapToObject(
-      (k) => k,
-      (k) => getAdjustedGlyphEffectUncached(k),
-    )
+      k => k,
+      k => getAdjustedGlyphEffectUncached(k),
+    ),
   ),
 
   staticGlyphWeights: new Lazy(() => staticGlyphWeights()),
 
   logTotalGlyphSacrifice: new Lazy(() =>
-    GlyphSacrificeHandler.logTotalSacrifice
+    GlyphSacrificeHandler.logTotalSacrifice,
   ),
 
   totalIPMult: new Lazy(() => totalIPMult()),
 
   challengeTimeSum: new Lazy(() =>
-    player.challenge.normal.bestTimes.reduce(Decimal.sumReducer)
+    player.challenge.normal.bestTimes.reduce(Decimal.sumReducer),
   ),
 
   infinityChallengeTimeSum: new Lazy(() =>
-    player.challenge.infinity.bestTimes.reduce(Decimal.sumReducer)
+    player.challenge.infinity.bestTimes.reduce(Decimal.sumReducer),
   ),
 };
 

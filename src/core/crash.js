@@ -47,9 +47,6 @@ window.GlobalErrorHandler = {
   },
 };
 
-window.addEventListener("error", (event, source) => {
-  if (!source.endsWith(".js")) {
-    return;
-  }
+window.addEventListener("error", (event) => {
   GlobalErrorHandler.onerror(event);
 });

@@ -7,7 +7,11 @@ export const ReplicantiGrowth = {
     return Math.log10(Number.MAX_VALUE);
   },
   get scaleFactor() {
-    return 2;
+    let factor = 2;
+    if (GluonUpgrade.greenBlue(2).isBought) {
+      factor = Math.pow(factor, GluonUpgrade.greenBlue(2).effectOrDefault(1));
+    }
+    return factor;
   },
 };
 
@@ -46,8 +50,8 @@ export function replicantiGalaxy(auto) {
   player.replicanti.timer = DC.D0;
   Replicanti.amount = Achievement(126).isUnlocked && !Pelle.isDoomed
     ? Decimal.pow10(
-      Replicanti.amount.max(1).log10().sub(galaxyGain.mul(LOG10_MAX_VALUE)),
-    )
+        Replicanti.amount.max(1).log10().sub(galaxyGain.mul(LOG10_MAX_VALUE)),
+      )
     : new Decimal(1);
   addReplicantiGalaxies(galaxyGain);
 }
@@ -69,8 +73,8 @@ export function replicantiGalaxyRequest() {
 // Produces replicanti quickly below e308, will auto-bulk-RG if production is fast enough
 // Returns the remaining unused gain factor
 function fastReplicantiBelow308(log10GainFactor, isAutobuyerActive) {
-  const shouldBuyRG = isAutobuyerActive &&
-    !RealityUpgrade(6).isLockingMechanics;
+  const shouldBuyRG = isAutobuyerActive
+    && !RealityUpgrade(6).isLockingMechanics;
   // More than e308 galaxies per tick causes the game to die, and I don't think it's worth the performance hit of
   // Decimalifying the entire calculation.  And yes, this can and does actually happen super-lategame.
   const uncappedAmount = DC.E1.pow(
@@ -155,7 +159,9 @@ export function getReplicantiInterval(overCapOverride, intervalIn) {
   if (V.isRunning) {
     // This is a boost if interval < 1, but that only happens in EC12
     // and handling it would make the replicanti code a lot more complicated.
-    interval = interval.pow(2);
+    // Is an if/else statemenet that complicated?
+    if (interval.lt(1)) interval = interval.sqrt();
+    else interval = interval.pow(2);
   }
   return interval;
 }
@@ -178,6 +184,7 @@ export function totalReplicantiSpeedMult(overCap) {
     TimeStudy(62),
     TimeStudy(213),
     DilationUpgrade.dilatedTimeToReplicanti,
+    GluonUpgrade.greenBlue(1),
     RealityUpgrade(2),
     RealityUpgrade(6),
     RealityUpgrade(23),
@@ -210,9 +217,9 @@ export function totalReplicantiSpeedMult(overCap) {
 export function replicantiCap() {
   return EffarigUnlock.infinity.canBeApplied
     ? Currency.infinitiesTotal.value
-      .pow(TimeStudy(31).isBought ? 120 : 30)
-      .clampMin(1)
-      .times(DC.NUMMAX)
+        .pow(TimeStudy(31).isBought ? 120 : 30)
+        .clampMin(1)
+        .times(DC.NUMMAX)
     : DC.NUMMAX;
 }
 
@@ -240,7 +247,7 @@ export function replicantiLoop(diff) {
   }
   tickCount = tickCount.floor();
 
-  const singleTickAvg = Replicanti.amount.times(player.replicanti.chance);
+  const singleTickAvg = Replicanti.amount.times(Replicanti.chance);
   // Note that code inside this conditional won't necessarily run every game tick; when game ticks are slower than
   // replicanti ticks, then tickCount will look like [0, 0, 0, 1, 0, 0, ...] on successive game ticks
   if (tickCount.gte(100) || (singleTickAvg.gte(10) && tickCount.gte(1))) {
@@ -256,7 +263,7 @@ export function replicantiLoop(diff) {
     }
 
     // Note that remainingGain is in log10 terms.
-    let remainingGain = tickCount.times(player.replicanti.chance.add(1).ln())
+    let remainingGain = tickCount.times(Replicanti.chance.add(1).ln())
       .times(LOG10_E);
     // It is intended to be possible for both of the below conditionals to trigger.
     if (!isUncapped || Replicanti.amount.lte(replicantiCap())) {
@@ -265,8 +272,8 @@ export function replicantiLoop(diff) {
       remainingGain = fastReplicantiBelow308(remainingGain, areRGsBeingBought);
     }
     if (
-      isUncapped && Replicanti.amount.gte(replicantiCap()) &&
-      remainingGain.gt(0)
+      isUncapped && Replicanti.amount.gte(replicantiCap())
+      && remainingGain.gt(0)
     ) {
       // Recalculate the interval (it may have increased due to additional replicanti, or,
       // far less importantly, decreased due to Reality Upgrade 6 and additional RG).
@@ -284,10 +291,10 @@ export function replicantiLoop(diff) {
     // Multiple ticks but "slow" gain: This happens at low replicanti chance and amount with a fast interval, which
     // can happen often in early cel7. In this case we "batch" ticks together as full doubling events and then draw
     // from a Poisson distribution for how many times to do that. Any leftover ticks are used as binomial samples
-    const batchTicks = player.replicanti.chance.add(1).log(2).mul(tickCount)
+    const batchTicks = Replicanti.chance.add(1).log(2).mul(tickCount)
       .floor();
     const binomialTicks = tickCount.sub(
-      batchTicks.div(player.replicanti.chance.add(1).log(2)),
+      batchTicks.div(Replicanti.chance.add(1).log(2)),
     );
 
     Replicanti.amount = Replicanti.amount.times(
@@ -296,7 +303,7 @@ export function replicantiLoop(diff) {
     for (let t = 0; t < binomialTicks.floor().toNumber(); t++) {
       const reproduced = binomialDistribution(
         Replicanti.amount,
-        player.replicanti.chance,
+        Replicanti.chance,
       );
       Replicanti.amount = Replicanti.amount.plus(reproduced);
     }
@@ -310,7 +317,7 @@ export function replicantiLoop(diff) {
     // Single tick: Take a single binomial sample to properly simulate replicanti growth with randomness
     const reproduced = binomialDistribution(
       Replicanti.amount,
-      player.replicanti.chance,
+      Replicanti.chance,
     );
     Replicanti.amount = Replicanti.amount.plus(reproduced);
   }
@@ -320,8 +327,8 @@ export function replicantiLoop(diff) {
   }
 
   if (
-    Pelle.isDoomed &&
-    Replicanti.amount.max(1).log10().sub(replicantiBeforeLoop.max(1).log10())
+    Pelle.isDoomed
+    && Replicanti.amount.max(1).log10().sub(replicantiBeforeLoop.max(1).log10())
       .gt(308)
   ) {
     Replicanti.amount = replicantiBeforeLoop.times(1e308);
@@ -409,8 +416,8 @@ class ReplicantiUpgradeState {
   }
 
   get canBeBought() {
-    return !this.isCapped && Currency.infinityPoints.gte(this.cost) &&
-      player.eterc8repl !== 0;
+    return !this.isCapped && Currency.infinityPoints.gte(this.cost)
+      && player.eterc8repl !== 0;
   }
 
   purchase() {
@@ -544,11 +551,14 @@ export const ReplicantiUpgrade = {
     }
 
     get costIncrease() {
+      if (MasteryStudy(41).isBought) {
+        return Decimal.pow(1e10, this.value.min(1).recip());
+      }
       return 1e10;
     }
 
     get cap() {
-      return Effects.min(50, TimeStudy(22));
+      return Effects.min(50, TimeStudy(22), MasteryStudy(41));
     }
 
     get isCapped() {
@@ -851,9 +861,9 @@ export const Replicanti = {
         return false;
       }
       // If the confirmation is enabled, we presume the player wants to confirm each Replicanti Galaxy purchase
-      return (buyer.canTick && buyer.isEnabled) ||
-        (!player.options.confirmations.replicantiGalaxy &&
-          this.isPlayerHoldingR);
+      return (buyer.canTick && buyer.isEnabled)
+        || (!player.options.confirmations.replicantiGalaxy
+          && this.isPlayerHoldingR);
     },
     get gain() {
       if (!this.canBuyMore) {
@@ -871,7 +881,12 @@ export const Replicanti = {
     },
   },
   get isUncapped() {
-    return TimeStudy(192).isBought ||
-      PelleRifts.vacuum.milestones[1].canBeApplied;
+    return TimeStudy(192).isBought
+      || PelleRifts.vacuum.milestones[1].canBeApplied;
+  },
+
+  get chance() {
+    let chance = player.replicanti.chance.powEffectOf(MasteryStudy(43));
+    return chance;
   },
 };
