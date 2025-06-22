@@ -60,7 +60,7 @@ export default defineComponent({
     <link
       rel="stylesheet"
       type="text/css"
-      href="/src/styles/new-ui-styles.css"
+      href="styles/new-ui-styles.css"
     >
     <div
       :key="newGameKey"

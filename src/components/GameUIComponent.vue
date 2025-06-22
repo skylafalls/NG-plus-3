@@ -43,7 +43,7 @@ export default defineComponent({
       return subtab.config.component;
     },
     themeCss() {
-      return `/src/styles/theme-${this.view.theme}.css`;
+      return `styles/theme-${this.view.theme}.css`;
     },
   },
 });

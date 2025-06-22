@@ -54,7 +54,7 @@ export default defineComponent({
     <link
       rel="stylesheet"
       type="text/css"
-      href="/src/styles/old-ui.css"
+      href="styles/old-ui.css"
     >
     <BigCrunchButton />
     <template v-if="!bigCrunch">

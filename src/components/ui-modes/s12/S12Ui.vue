@@ -70,7 +70,7 @@ export default {
     <link
       rel="stylesheet"
       type="text/css"
-      :href="isOldUi ? '/src/styles/old-ui.css' : '/src/styles/new-ui-styles.css'"
+      :href="isOldUi ? 'styles/old-ui.css' : 'styles/new-ui-styles.css'"
     >
     <span
       class="c-s12-close-button"
