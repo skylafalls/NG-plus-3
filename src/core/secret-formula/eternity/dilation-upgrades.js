@@ -117,8 +117,8 @@ export const dilationUpgrades = {
     },
     effect: (bought) => {
       let eff = Decimal.mul(0.25, bought);
-      if (eff.gte(8)) {
-        eff = eff.div(8).pow(0.5).mul(8);
+      if (eff.gte(5)) {
+        eff = eff.div(5).pow(0.5).mul(5);
       }
       return eff;
     },
@@ -220,7 +220,7 @@ export const dilationUpgrades = {
     cost: 1e60,
     description:
       "Meta-Dimensions Boosts and MD per-10 multiplier are boosted by Dilated Time",
-    effect: () => Currency.dilatedTime.value.plus(1).log10().plus(1).log10(),
+    effect: () => Currency.dilatedTime.value.plus(1).log10().plus(1).log10().plus(1),
     formatEffect: value => `${formatX(value, 2, 1)}`,
   },
   mdEffectBuff: {

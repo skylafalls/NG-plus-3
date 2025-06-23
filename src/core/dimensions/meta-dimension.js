@@ -207,7 +207,7 @@ class MetaDimensionState extends DimensionState {
     if (!hasPrevTier) {
       return false;
     }
-    return this.tier < 7 || !NormalChallenge(10).isRunning;
+    return TimeStudy.metaDimensions.isBought;
   }
 
   reset() {
@@ -268,7 +268,7 @@ export const MetaDimensions = {
 
   get metaAMtoDimBoostExponent() {
     let exponent = QuantumChallenge(3).isRunning
-      ? Currency.metaAntimatter.value.plus(1).log10().max(1)
+      ? player.records.thisQuantum.bestMA.plus(1).log2().max(1)
       : new Decimal(8);
     exponent = Effects.max(exponent, DilationUpgrade.mdEffectBuff);
     exponent = exponent.plusEffectOf(EternityChallenge(13).reward);
@@ -300,9 +300,6 @@ export const MetaDimensions = {
   get buyTenMultiplier() {
     let mult = DC.D2;
     mult = mult.timesEffectOf(DilationUpgrade.mdBuffDT);
-    if (QuantumChallenge(1).isRunning) {
-      mult = mult.timesEffectOf(PairProduction.electronEffect);
-    }
     return mult;
   },
 

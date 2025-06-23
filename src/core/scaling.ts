@@ -1,61 +1,49 @@
-/**
- * @enum
- */
-export const SOFTCAP_MODES = Object.freeze({
-  MULTIPLICATIVE: 1,
-  POLYNOMIAL: 2,
-  DILATION: 3,
-  EXPONENTIAL: 4,
-  LOGARITHMIC: 5,
-  REPEATED_LOGARITHM: 6,
-  SUPER_LOGARITHMIC: 7,
-});
+export enum SOFTCAP_MODES {
+  MULTIPLICATIVE = 1,
+  POLYNOMIAL = 2,
+  DILATION = 3,
+  DILATION_TIER_2 = 4,
+  EXPONENTIAL = 5,
+  LOGARITHMIC = 6,
+  REPEATED_LOGARITHM = 7,
+  SUPER_LOGARITHMIC = 8,
+};
 
-/**
- * @enum
- */
-export const SCALING_TYPES = Object.freeze({
-  MULTIPLICATIVE: 1,
-  POLYNOMIAL: 2,
-  EXPONENTIAL: 3,
-  DILATION: 4,
-  DILATION_TIER_2: 5,
-  REPEATED_EXPONENTIATION: 6,
-  TETRATION: 7,
-});
+export enum SCALING_TYPES {
+  MULTIPLICATIVE = 1,
+  POLYNOMIAL = 2,
+  EXPONENTIAL = 3,
+  DILATION = 4,
+  DILATION_TIER_2 = 5,
+  REPEATED_EXPONENTIATION = 6,
+  TETRATION = 7,
+};
 
-/**
- * @typedef SoftcapParameters
- * @property {Decimal} baseResource
- * @property {Decimal | number | string} softcapStart
- * @property {Decimal | number | string} softcapPower
- * @property {SOFTCAP_MODES} softcapType
- * @property {boolean?} isDisabled
- */
+interface SoftcapParameters {
+  baseResource: Decimal;
+  softcapStart: Decimal | number | string;
+  softcapPower: Decimal | number | string;
+  softcapType: SOFTCAP_MODES;
+}
 
-/**
- * @typedef ScaleParameters
- * @property {Decimal} baseResource
- * @property {Decimal | number | string} scaleStart
- * @property {Decimal | number | string} scalePower
- * @property {SCALING_TYPES} scaleMode
- * @property {boolean?} isInverted
- */
+interface ScaleParameters {
+  baseResource: Decimal;
+  scaleStart: Decimal | number | string;
+  scalePower: Decimal | number | string;
+  scaleMode: SCALING_TYPES;
+  isInverted?: boolean;
+}
 
-/**
- * @param {SoftcapParameters} parameters
- * @returns {Decimal}
- */
-export function softcap(parameters) {
+export function softcap(parameters: SoftcapParameters) {
   const start = new Decimal(parameters.softcapStart);
   const power = new Decimal(parameters.softcapPower);
-  if (!parameters.isDisabled && parameters.baseResource.lt(start)) {
+  if (parameters.baseResource.lt(start)) {
     return parameters.baseResource;
   }
 
   switch (parameters.softcapType) {
     case SOFTCAP_MODES.POLYNOMIAL: {
-      return parameters.baseResource.div(start).max(1).pow(power).mul(start);
+      return parameters.baseResource.div(start).pow(power).mul(start);
     }
 
     case SOFTCAP_MODES.MULTIPLICATIVE: {
@@ -97,11 +85,7 @@ export function softcap(parameters) {
   }
 }
 
-/**
- * @param {ScaleParameters} parameters
- * @returns {Decimal}
- */
-export function scale(parameters) {
+export function scale(parameters: ScaleParameters) {
   const start = new Decimal(parameters.scaleStart);
   const power = new Decimal(parameters.scalePower);
   if (parameters.baseResource.lt(start)) {

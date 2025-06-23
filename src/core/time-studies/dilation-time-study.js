@@ -103,6 +103,14 @@ TimeStudy.masteryStudies = DilationTimeStudyState.studies[7];
  * @type {DilationTimeStudyState}
  */
 TimeStudy.pairProduction = DilationTimeStudyState.studies[8];
+/**
+ * @type {DilationTimeStudyState}
+ */
+TimeStudy.quantumChallenges = DilationTimeStudyState.studies[9];
+/**
+ * @type {DilationTimeStudyState}
+ */
+TimeStudy.pairedChallenges = DilationTimeStudyState.studies[10];
 
 TimeStudy.boughtDilationTS = function () {
   return player.dilation.studies.map((id) =>

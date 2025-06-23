@@ -44,6 +44,12 @@ export default {
       if (this.id === 8) {
         return `Requirement: ${formatInt(5)} EC13 & EC14 completions, ${formatInt(50)} net quarks within your best Quantum`;
       }
+      if (this.id === 9) {
+        return `Requirement: ${formatInt(16750)} Positrons`;
+      }
+      if (this.id === 10) {
+        return "Requirement: Beat Quantum Challenge 8";
+      }
       return "";
     },
     theoremTimeEstimate() {
@@ -63,7 +69,7 @@ export default {
       if (this.id === 6) {
         this.showRequirement = !Pelle.isDoomed;
       }
-      if (this.id === 7) {
+      if (this.id >= 7) {
         this.showRequirement = true;
       }
       this.currTT.copyFrom(Currency.timeTheorems.value);
@@ -83,12 +89,8 @@ export default {
         case 6: {
           return () => Tab.dimensions.meta.show();
         }
-        case 7:
-        case 8: {
-          return () => {};
-        }
         default: {
-          throw new Error("Unrecognized Dilation study was clicked");
+          return () => {};
         }
       }
     },

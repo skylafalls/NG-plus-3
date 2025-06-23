@@ -12,8 +12,8 @@ export function updateNormalAndInfinityChallenges(diff) {
       Currency.matter.multiply(Decimal.pow(cappedBase, diff.div(20)));
     }
     if (
-      Currency.matter.gt(Currency.antimatter.value) &&
-      NormalChallenge(11).isRunning && !Player.canCrunch
+      Currency.matter.gt(Currency.antimatter.value)
+      && NormalChallenge(11).isRunning && !Player.canCrunch
     ) {
       const values = [Currency.antimatter.value, Currency.matter.value];
       softReset(0, true, true);
@@ -62,9 +62,9 @@ class NormalChallengeState extends GameMechanicState {
 
   get isRunning() {
     const isPartOfIC1 = this.id !== 9 && this.id !== 12;
-    return player.challenge.normal.current === this.id ||
-      (isPartOfIC1 && InfinityChallenge(1).isRunning) ||
-      (this.id === 12 && QuantumChallenge(4).isRunning);
+    return player.challenge.normal.current === this.id
+      || (isPartOfIC1 && InfinityChallenge(1).isRunning)
+      || (this.id === 12 && QuantumChallenge(4).isRunning);
   }
 
   get isOnlyActiveChallenge() {

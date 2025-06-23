@@ -14,7 +14,7 @@ export const infinityChallenges = [
           formatX(1.3, 1, 1)
         } on all Infinity Dimensions for each Infinity Challenge completed`,
       effect: () => Math.pow(1.3, InfinityChallenges.completed.length),
-      formatEffect: (value) => formatX(value, 1, 1),
+      formatEffect: value => formatX(value, 1, 1),
     },
     unlockAM: DC.E2000,
   },
@@ -55,9 +55,9 @@ export const infinityChallenges = [
     effect: () =>
       Decimal.pow(
         player.galaxies.times(0.005).add(1.05),
-        player.totalTickBought,
+        Laitela.continuumActive ? Tickspeed.continuumValue : player.totalTickBought,
       ),
-    formatEffect: (value) => formatX(value, 2, 2),
+    formatEffect: value => formatX(value, 2, 2),
     reward: {
       description:
         "Antimatter Dimension multiplier based on Antimatter Galaxies and Tickspeed purchases",
@@ -73,7 +73,7 @@ export const infinityChallenges = [
         }
         return eff;
       },
-      formatEffect: (value) => formatX(value, 2, 2),
+      formatEffect: value => formatX(value, 2, 2),
     },
     unlockAM: DC.E12000,
   },
@@ -119,11 +119,11 @@ export const infinityChallenges = [
     goal: DC.D2E22222,
     isQuickResettable: true,
     effect: () => Currency.matter.value.clampMin(1),
-    formatEffect: (value) => `/${format(value, 1, 2)}`,
+    formatEffect: value => `/${format(value, 1, 2)}`,
     reward: {
       description: "Infinity Dimension multiplier based on tickspeed",
       effect: () => Tickspeed.perSecond.pow(0.0005),
-      formatEffect: (value) => formatX(value, 2, 2),
+      formatEffect: value => formatX(value, 2, 2),
     },
     unlockAM: DC.E22500,
   },
@@ -157,8 +157,8 @@ export const infinityChallenges = [
     description: () =>
       `AD production rapidly and continually drops over time. Purchasing Antimatter Dimension or Tickspeed
         upgrades sets production back to ${
-        formatPercents(1)
-      } before it starts dropping again.`,
+          formatPercents(1)
+        } before it starts dropping again.`,
     goal: DC.E27000,
     isQuickResettable: true,
     effect: () =>
@@ -177,7 +177,7 @@ export const infinityChallenges = [
         AntimatterDimension(1).multiplier.times(
           AntimatterDimension(8).multiplier,
         ).pow(0.02),
-      formatEffect: (value) => formatX(value, 2, 2),
+      formatEffect: value => formatX(value, 2, 2),
     },
     unlockAM: DC.E28000,
   },

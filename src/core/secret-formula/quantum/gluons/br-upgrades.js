@@ -3,7 +3,7 @@ export const brGluonUpgrades = [
     id: 1,
     cost: () => new Decimal(1),
     description: () => "Dilated Time boosts Tachyon Particle gain.",
-    effect: () => Currency.dilatedTime.value.plus(1).log2(),
+    effect: () => Currency.dilatedTime.value.plus(1).log2().plus(1),
     formatEffect: value => formatX(value, 2, 2),
   },
   {

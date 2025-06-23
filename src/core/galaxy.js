@@ -10,6 +10,10 @@ export const GALAXY_TYPE = Object.freeze({
 });
 
 class GalaxyRequirement {
+  /**
+   * @param {number} tier
+   * @param {Decimal} amount
+   */
   constructor(tier, amount) {
     this.tier = tier;
     this.amount = amount;
@@ -37,99 +41,68 @@ export const Galaxy = {
    * @returns {Decimal} Max number of galaxies (total)
    */
   buyableGalaxies(currency, minVal = player.galaxies) {
-    const alter = GlyphAlteration.isAdded("power")
-      ? getSecondaryGlyphEffect("powerpow")
-      : DC.D1;
-    const dis = Galaxy.costScalingStart;
-    const scale = Galaxy.costMult;
-    let base = Galaxy.baseCost.sub(Effects.sum(InfinityUpgrade.resetBoost));
-    if (InfinityChallenge(5).isCompleted) {
-      base = base.sub(1);
+    const costMult = this.costMult;
+    const base = this.baseCost.sub(InfinityChallenge(5).isCompleted ? 1 : 0).minusEffectOf(InfinityUpgrade.resetBoost);
+    const unscaledGalaxies = currency.sub(base).div(costMult);
+    let calculatedGalaxies = unscaledGalaxies;
+
+    if (this.typeAt(calculatedGalaxies) >= GALAXY_TYPE.DISTANT) {
+      calculatedGalaxies = scale({
+        baseResource: unscaledGalaxies,
+        scaleStart: this.scalingStart[GALAXY_TYPE.DISTANT],
+        scalePower: Decimal.pow(2, this.scalingPower[GALAXY_TYPE.DISTANT]),
+        scaleMode: SCALING_TYPES.POLYNOMIAL,
+        isInverted: true,
+      });
     }
 
-    if (QuantumChallenge(5).isRunning) {
-      return Decimal.log(
-        currency.div(Galaxy.requirementAt(new Decimal(0)).amount),
-        1.05,
-      ).floor().max(minVal);
+    if (this.typeAt(calculatedGalaxies) >= GALAXY_TYPE.REMOTE) {
+      calculatedGalaxies = scale({
+        baseResource: calculatedGalaxies,
+        scaleStart: this.scalingStart[GALAXY_TYPE.REMOTE],
+        scalePower: Decimal.pow(1.1, this.scalingPower[GALAXY_TYPE.REMOTE]),
+        scaleMode: SCALING_TYPES.EXPONENTIAL,
+        isInverted: true,
+      });
     }
 
-    // Why does this mod use bulkBuyBinarySearch? Simple, it's because it simply will not
-    // scale properly. Especially if we were trying to implement custom powers and formulas.
-    return new Decimal(
-      bulkBuyBinarySearch(
-        new Decimal(currency),
-        {
-          costFunction: x => this.requirementAt(new Decimal(x)).amount,
-          cumulative: false,
-        },
-        0,
-        true,
-      ).quantity,
-    ).floor().add(1).max(minVal);
-
-    // Plz no ask how exponential math work i dont know i just code, see https://discord.com/channels/351476683016241162/439241762603663370/1210707188964659230m
-    // oxlint-disable no-unreachable
-    const minV = Galaxy.costScalingStart.min(Galaxy.remoteStart); // Take the smallest of the two values
-    if (
-      currency.lt(
-        Galaxy.requirementAt(minV).amount, /* Pre exponential/quadratic? */
-      )
-    ) {
-      return Decimal.max(currency.sub(base).div(scale).floor().add(1), minVal);
-    }
-
-    if (currency.lt(Galaxy.requirementAt(Galaxy.remoteStart).amount)) {
-      // Quadratic equation https://discord.com/channels/351476683016241162/1131505261903880244/1261706311901511691
-      const a = DC.D1;
-      const b = scale.add(1).sub(dis.mul(2));
-      const c = base.add(dis.pow(2)).sub(dis).sub(scale).sub(currency.div(alter));
-      const quad = decimalQuadraticSolution(a, b, c).floor();
-      return Decimal.max(quad, minVal);
-    }
-
-    let remoteStart = Decimal.max(1e6, Galaxy.remoteStart);
-    let power = this.scalingPower[GALAXY_TYPE.REMOTE];
-
-    if (Galaxy.requirementAt(remoteStart).amount.lt(currency)) {
-      return Decimal.log(currency.div(Galaxy.requirementAt(remoteStart)), power)
-        .add(remoteStart).floor().max(minVal);
-    }
-    // oxlint-enable no-unreachable
+    return calculatedGalaxies.floor().add(1);
   },
 
+  // The existing galaxy calculation was shit so i revamped it
   requirementAt(galaxies) {
-    // Beyond 1e6 (or further if remote is beyond that) the other effects are so small in changes that it doesn't matter
-    // This does technically make it slightly weaker than vanilla, but its so minor you would rarely ever notice, and it
-    // allows the inverse to be correct beyond 1e6 without using any really annoying math methods that i dont understand
-    let equivGal = Decimal.min(
-      Decimal.max(1e6, Galaxy.remoteStart),
-      galaxies,
-    );
+    let equivGal = new Decimal(galaxies);
     const type = Galaxy.typeAt(galaxies);
+
+    if (QuantumChallenge(5).isRunning) {
+      return new GalaxyRequirement(this.requiredTier, this.baseCost
+        .add(Decimal.pow(1.002, equivGal).times(this.costMult)));
+    }
+
+    if (type >= GALAXY_TYPE.DISTANT) {
+      const distantStart = this.scalingStart[GALAXY_TYPE.DISTANT];
+      const distantPower = this.scalingPower[GALAXY_TYPE.DISTANT];
+      equivGal = scale({
+        baseResource: equivGal,
+        scaleStart: distantStart,
+        scalePower: Decimal.pow(2, distantPower),
+        scaleMode: SCALING_TYPES.POLYNOMIAL,
+      });
+    }
+
+    if (type >= GALAXY_TYPE.REMOTE) {
+      equivGal = scale({
+        baseResource: equivGal,
+        scaleStart: this.scalingStart[GALAXY_TYPE.REMOTE],
+        scalePower: Decimal.pow(1.1, this.scalingPower[GALAXY_TYPE.REMOTE]),
+        scaleMode: SCALING_TYPES.EXPONENTIAL,
+      });
+    }
+
     let amount = Galaxy.baseCost.add(equivGal.times(Galaxy.costMult));
-
-    if (type === GALAXY_TYPE.DISTANT || type === GALAXY_TYPE.REMOTE) {
-      const galaxyCostScalingStart = this.costScalingStart;
-      const galaxiesAfterDistant = Decimal.clampMin(equivGal.sub(galaxyCostScalingStart)
-        .times(this.scalingPower[GALAXY_TYPE.DISTANT]).add(1), 0);
-      amount = amount.add(Decimal.pow(galaxiesAfterDistant, 2).add(galaxiesAfterDistant));
-    }
-
-    if (type === GALAXY_TYPE.REMOTE || QuantumChallenge(5).isRunning) {
-      const galaxiesAmount = QuantumChallenge(5).isRunning
-        ? galaxies
-        : galaxies.sub(Galaxy.remoteStart.sub(1)).times(this.scalingPower[GALAXY_TYPE.REMOTE]);
-      amount = amount.times(Decimal.pow(1.002, galaxiesAmount));
-    }
-
     amount = amount.sub(Effects.sum(InfinityUpgrade.resetBoost));
     if (InfinityChallenge(5).isCompleted) {
       amount = amount.sub(1);
-    }
-
-    if (GlyphAlteration.isAdded("power")) {
-      amount = amount.mul(getSecondaryGlyphEffect("powerpow"));
     }
 
     amount = Decimal.floor(amount);

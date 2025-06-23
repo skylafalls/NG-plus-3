@@ -92,4 +92,4 @@ export * from "./speedrun";
 export * from "./automator/script-templates";
 
 export * from "./quantum/index.js";
-export * from "./scaling.js";
+export * from "./scaling.ts";

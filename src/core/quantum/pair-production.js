@@ -22,9 +22,9 @@ class ElectronsEffectState extends GameMechanicState {
   }
 
   get canBeApplied() {
-    return ((PlayerProgress.quantumUnlocked() &&
-      TimeStudy.pairProduction.isBought) || true) &&
-      !QuantumChallenge.isRunning;
+    return (PlayerProgress.quantumUnlocked()
+      && TimeStudy.pairProduction.isBought)
+    && !QuantumChallenge.isRunning;
   }
 
   get type() {
@@ -49,9 +49,9 @@ class PositronsEffectState extends GameMechanicState {
   }
 
   get canBeApplied() {
-    return ((PlayerProgress.quantumUnlocked() &&
-      TimeStudy.pairProduction.isBought) || true) &&
-      !QuantumChallenge.isRunning;
+    return (PlayerProgress.quantumUnlocked()
+      && TimeStudy.pairProduction.isBought)
+    && !QuantumChallenge.isRunning;
   }
 }
 

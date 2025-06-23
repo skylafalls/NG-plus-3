@@ -19,10 +19,6 @@ export const DimBoost = {
       return DC.D1;
     }
 
-    if (QuantumChallenge(3).isRunning) {
-      return replicantiMult().plus(1).logPow(0.7);
-    }
-
     let boost = new Decimal(Effects.max(
       2,
       InfinityUpgrade.dimboostMult,
@@ -30,7 +26,7 @@ export const DimBoost = {
       InfinityChallenge(7),
       TimeStudy(81),
     ));
-    if (TimeStudy.metaDimensions.isBought) {
+    if (TimeStudy.metaDimensions.isBought && !QuantumChallenge(3).isRunning) {
       boost = boost.times(MetaDimensions.dimensionBoostMultiplier);
     }
     boost = boost.timesEffectsOf(

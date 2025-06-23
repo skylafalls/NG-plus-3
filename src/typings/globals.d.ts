@@ -29,10 +29,11 @@ declare global {
     MULTIPLICATIVE = 1,
     POLYNOMIAL = 2,
     DILATION = 3,
-    EXPONENTIAL = 4,
-    LOGARITHMIC = 5,
-    REPEATED_LOGARITHM = 6,
-    SUPER_LOGARITHMIC = 7,
+    DILATION_TIER_2 = 4,
+    EXPONENTIAL = 5,
+    LOGARITHMIC = 6,
+    REPEATED_LOGARITHM = 7,
+    SUPER_LOGARITHMIC = 8,
   }
 
   enum SCALING_TYPES {
@@ -60,6 +61,9 @@ declare global {
     isWhiteSpace(value: string): boolean;
   }
   interface Number {
+    /**
+     * Converts a number prmitive into a Decimal value.
+     */
     toDecimal(): Decimal;
   }
 }

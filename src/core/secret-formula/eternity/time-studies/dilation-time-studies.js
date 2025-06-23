@@ -76,4 +76,18 @@ export const dilationTimeStudies = [
       && EternityChallenge(14).isFullyCompleted
       && EternityChallenge(13).isFullyCompleted,
   },
+  {
+    id: 9,
+    description: "Unlock Quantum Challenges",
+    cost: new Decimal(1e95),
+    requirement: () =>
+      player.quantum.pair.positrons.gte(16750),
+  },
+  {
+    id: 10,
+    description: "Unlock Paired Challenges",
+    cost: new Decimal(1e95),
+    requirement: () =>
+      QuantumChallenge(8).isCompleted,
+  },
 ];

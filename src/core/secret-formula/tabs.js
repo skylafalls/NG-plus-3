@@ -256,7 +256,7 @@ export const tabs = [
         name: "Quantum Challenges",
         symbol: "⚛",
         component: "QuantumChallengesTab",
-        condition: () => PlayerProgress.quantumUnlocked(),
+        condition: () => TimeStudy.quantumChallenges.isBought,
         id: 3,
         hidable: true,
       },

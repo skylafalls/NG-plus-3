@@ -7,6 +7,14 @@ import { DC } from "../constants.js";
 export function resetPreQuantumResources() {
   // We reset in order of when the player sees the game mechanic (eg. we reset dilation, then time studies, then eternities)
   // I'm not really sure why, but it seems like a nice way to organize it.
+  // Stage Negative One: Pair Production & Quark Powers (i forgot^2)
+  for (const color of ["red", "green", "blue"]) {
+    player.quantum.quarkPowers[color] = new Decimal(0);
+  }
+  player.quantum.pair.electrons = new Decimal(0);
+  player.quantum.pair.positrons = new Decimal(0);
+  player.quantum.pair.dischargedGalaxies = new Decimal(0);
+
   // Stage Zero: Meta Dimensions (I forgot)
   player.meta.boosts = new Decimal(0);
   MetaDimensions.reset();
@@ -194,4 +202,23 @@ export function quantumReset(force = false) {
 
 export function handleQuantumTick(diff) {
   Quarks.tick(diff);
+}
+
+export function mockQuantumReset() {
+  fullResetTimeDimensions();
+  player.eternityPoints = new Decimal(0);
+  player.dilation.tachyonParticles = new Decimal(0);
+  player.dilation.dilatedTime = new Decimal(0);
+  player.dilation.rebuyables[1] = new Decimal(0);
+  player.dilation.rebuyables[3] = new Decimal(0);
+  player.dilation.rebuyables[4] = new Decimal(0);
+  player.dilation.nextThreshold = DC.E3;
+  player.dilation.baseTachyonGalaxies = DC.D0;
+  player.dilation.totalTachyonGalaxies = DC.D0;
+  EternityUpgrade.epMult.reset();
+  MetaDimensions.reset();
+  Currency.metaAntimatter.reset();
+  player.meta.boosts = new Decimal(5);
+  player.records.thisQuantum.bestMA = new Decimal(0);
+  eternity(true, false);
 }

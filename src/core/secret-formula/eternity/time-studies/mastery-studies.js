@@ -117,7 +117,7 @@ export const masteryStudies = [
     requirement: [42],
     reqType: TS_REQUIREMENT_TYPE.AT_LEAST_ONE,
     description: () => "Replicanti chance strongly boosts itself.",
-    effect: () => player.replicanti.chance.plus(1).pow(0.75),
+    effect: () => player.replicanti.chance.plus(1).pow(0.6),
     formatEffect: value => formatPow(value, 2, 2),
   },
   {

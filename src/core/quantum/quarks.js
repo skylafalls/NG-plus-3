@@ -88,7 +88,7 @@ export const Quarks = {
       amount: player.quantum.colors.red,
       powers: player.quantum.quarkPowers.red,
       effect: () =>
-        player.quantum.quarkPowers.red.plus(1).log10().sqrt().div(50).plus(1),
+        player.quantum.quarkPowers.red.plus(1).log10().sqrt().div(30).plus(1),
       gain: () => player.quantum.colors.red.pow(2.5),
     };
   },
@@ -97,7 +97,7 @@ export const Quarks = {
     return {
       amount: player.quantum.colors.green,
       powers: player.quantum.quarkPowers.green,
-      effect: () => player.quantum.quarkPowers.green.plus(1).log10().root(5).plus(1),
+      effect: () => player.quantum.quarkPowers.green.plus(1).log10().sqrt().plus(1),
       gain: () => player.quantum.colors.green.pow(0.9),
     };
   },
@@ -121,7 +121,8 @@ export const Quarks = {
 
   tick(diff) {
     for (const color of ["red", "green", "blue"]) {
-      player.quantum.quarkPowers[color] = player.quantum.quarkPowers[color].add(this[color].gain());
+      player.quantum.quarkPowers[color] = player.quantum.quarkPowers[color]
+        .add(this[color].gain().times(diff.div(10)));
     }
-  }
+  },
 };

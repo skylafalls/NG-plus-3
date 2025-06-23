@@ -25,7 +25,10 @@ class QuantumChallengeState extends GameMechanicState {
   }
 
   get isUnlocked() {
-    return true; // TimeStudy.quantumChallenges.isBought;
+    if (this.id === 1) {
+      return TimeStudy.quantumChallenges.isBought;
+    }
+    return TimeStudy.quantumChallenges.isBought && QuantumChallenge(this.id - 1).isCompleted;
   }
 
   get completions() {
