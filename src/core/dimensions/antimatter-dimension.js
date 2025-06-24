@@ -401,12 +401,9 @@ export function buyMaxDimension(tier, bulk = Infinity) {
   if (maxBought === null) {
     return;
   }
-  let buying = maxBought.quantity;
-  if (buying.gt(bulkLeft)) {
-    buying = new Decimal(bulkLeft);
-  }
+  let buying = maxBought.quantity.min(bulkLeft);
   // For some reason it was adding 10x more purchases then it should so i fixed it
-  dimension.amount = dimension.amount.plus(buying);
+  dimension.amount = dimension.amount.plus(buying).round();
   dimension.bought = dimension.bought.add(buying);
   dimension.currencyAmount = dimension.currencyAmount.minus(
     Decimal.pow10(maxBought.logPrice),
@@ -836,7 +833,6 @@ export const AntimatterDimensions = {
         InfinityUpgrade.buy10Mult,
         Achievement(58),
         PairProduction.electronEffect,
-        QuantumChallenge(6),
       );
 
       return mult.max(1);

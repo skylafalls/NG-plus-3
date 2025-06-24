@@ -110,12 +110,13 @@ export const Autobuyers = (function () {
   return {
     all: all.flat(),
     display: [multiple, single],
-    upgradeable: antimatterDimensions.concat(
+    upgradeable: [
+      ...antimatterDimensions,
       Autobuyer.tickspeed,
       Autobuyer.dimboost,
       Autobuyer.galaxy,
       Autobuyer.bigCrunch,
-    ),
+    ],
 
     get unlocked() {
       return Autobuyers.all.filter(a => a.isUnlocked || a.isBought);
@@ -144,9 +145,7 @@ export const Autobuyers = (function () {
       // The canTick condition must be checked after the previous autobuyer has triggered
       // in order to avoid slow dimension autobuyers.
       for (const autobuyer of Autobuyers.all) {
-        if (autobuyer.canTick) {
-          autobuyer.tick();
-        }
+        if (autobuyer.canTick) autobuyer.tick();
       }
 
       PerformanceStats.end();

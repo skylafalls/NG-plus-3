@@ -67,8 +67,8 @@ export class TickspeedAutobuyerState extends UpgradeableAutobuyerState {
   }
 
   get canTick() {
-    return Tickspeed.isAvailableForPurchase && Tickspeed.isAffordable &&
-      super.canTick;
+    return Tickspeed.isAvailableForPurchase && Tickspeed.isAffordable
+      && super.canTick;
   }
 
   tick() {

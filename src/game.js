@@ -526,7 +526,6 @@ export function trueTimeMechanics(trueDiff) {
     Enslaved.nextTickDiff = trueDiff;
   }
 
-  Autobuyers.tick();
   Tutorial.tutorialLoop();
 
   if (
@@ -563,11 +562,12 @@ export function realTimeMechanics(realDiff) {
     Enslaved.storeRealTime(realDiff);
     // Most autobuyers will only tick usefully on the very first tick, but this needs to be here in order to allow
     // the autobuyers unaffected by time storage to tick as well
-    Autobuyers.tick();
     GameUI.update();
+    Autobuyers.tick();
     return true;
   }
 
+  Autobuyers.tick();
   BlackHoles.updatePhases(realDiff);
   return false;
 }
@@ -622,11 +622,11 @@ export function gameLoop(passedDiff, options = {}) {
     return;
   }
 
-  trueTimeMechanics(trueDiff);
 
   if (diff === undefined || Enslaved.isReleaseTick) {
     diff = new Decimal(Enslaved.nextTickDiff);
   }
+  trueTimeMechanics(trueDiff);
   // Run all the functions which only depend on real time and not game time, skipping the rest of the loop if needed
   if (realTimeMechanics(realDiff)) {
     return;
@@ -1442,7 +1442,7 @@ function animateTweens(time) {
   let delta = time - lastFrame;
   lastFrame = time;
   if (player.dilation.active) {
-    delta /= Pelle.isDoomed ? 1.5 : 10;
+    delta /= 10;
   }
   tweenTime += delta;
   TWEEN.update(tweenTime);

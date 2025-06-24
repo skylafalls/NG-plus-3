@@ -61,7 +61,7 @@ class NormalChallengeState extends GameMechanicState {
   }
 
   get isRunning() {
-    const isPartOfIC1 = this.id !== 9 && this.id !== 12;
+    const isPartOfIC1 = this.id !== 9 && this.id !== 12 && this.id !== 1;
     return player.challenge.normal.current === this.id
       || (isPartOfIC1 && InfinityChallenge(1).isRunning)
       || (this.id === 12 && QuantumChallenge(4).isRunning);

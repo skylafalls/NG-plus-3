@@ -97,7 +97,7 @@ export const Galaxy = {
       });
     }
 
-    return calculatedGalaxies.floor().add(1);
+    return calculatedGalaxies.floor().add(2);
   },
 
   // The existing galaxy calculation was shit so i revamped it
@@ -305,7 +305,7 @@ export function galaxyReset() {
   if (
     !Achievement(143).isUnlocked
     || (Pelle.isDoomed && !PelleUpgrade.galaxyNoResetDimboost.canBeApplied)
-    || EternityMilestone.noADReset.canBeApplied
+    || EternityMilestone.noADReset.isReached
   ) {
     player.dimensionBoosts = DC.D0;
   }

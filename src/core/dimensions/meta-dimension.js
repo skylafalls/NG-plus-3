@@ -66,7 +66,7 @@ class MetaDimensionState extends DimensionState {
     return new ExponentialCostScaling({
       baseCost: this._baseCost,
       baseIncrease: this._baseCostMultiplier,
-      costScale: new Decimal(10),
+      costScale: QuantumChallenge(7).isRunning ? DC.NUMMAX : new Decimal(10),
       scalingCostThreshold: DC.NUMMAX,
     });
   }
@@ -302,6 +302,7 @@ export const MetaDimensions = {
   get buyTenMultiplier() {
     let mult = DC.D2;
     mult = mult.timesEffectOf(DilationUpgrade.mdBuffDT);
+    mult = mult.timesEffectOf(QuantumChallenge(6));
     return mult;
   },
 
@@ -492,7 +493,7 @@ export const MetaDimensions = {
       }
 
       let boostEffects;
-      if (NormalChallenge(8).isRunning) {
+      if (QuantumChallenge(4).isRunning || QuantumChallenge(8).isRunning) {
         boostEffects = newUnlock;
       } else if (newUnlock === "") {
         boostEffects = `${formattedMultText} ${dimensionRange}`;

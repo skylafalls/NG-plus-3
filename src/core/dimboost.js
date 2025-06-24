@@ -259,7 +259,7 @@ export function softReset(
   EventHub.dispatch(GAME_EVENT.DIMBOOST_BEFORE, bulk);
   player.dimensionBoosts = Decimal.max(DC.D0, player.dimensionBoosts.add(bulk));
   resetChallengeStuff();
-  const canKeepDimensions = EternityMilestone.noADReset.canBeApplied;
+  const canKeepDimensions = EternityMilestone.noADReset.isReached;
   if (forcedADReset || !canKeepDimensions) {
     AntimatterDimensions.reset();
     player.sacrificed = DC.D0;
