@@ -3,6 +3,7 @@ import vue2 from "@vitejs/plugin-vue2";
 import { fileURLToPath } from "node:url";
 
 const config: UserConfig = defineConfig({
+  base: "/NG-plus-3",
   plugins: [vue2()],
   resolve: {
     extensions: [".js", ".ts", ".json", ".vue"],
