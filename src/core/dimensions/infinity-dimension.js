@@ -391,13 +391,7 @@ export const InfinityDimensions = {
     const equation = Currency.infinityPower.value.plus(1).log10().sub(
       this.convSoftcapStart.log10(),
     ).max(1).log10();
-    let formula = equation.times(1.25).plus(equation.times(0.45));
-    if (formula.gte(10)) {
-      formula = formula.times(equation.times(4));
-    }
-    if (formula.gte(200)) {
-      formula = formula.div(200).pow(3).mul(200);
-    }
+    let formula = equation.pow(1.5);
     return Decimal.max(formula, 1);
   },
 

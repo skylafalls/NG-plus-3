@@ -15,10 +15,11 @@ export function resetPreQuantumResources() {
   player.quantum.pair.positrons = new Decimal(0);
   player.quantum.pair.dischargedGalaxies = new Decimal(0);
 
-  // Stage Zero: Meta Dimensions (I forgot)
+  // Stage Zero: Meta Dimensions & Mastery Studies (I forgot)
   player.meta.boosts = new Decimal(0);
   MetaDimensions.reset();
   Currency.metaAntimatter.reset();
+  player.timestudy.mastery = [];
 
   // Stage One: Time Dilation
   player.dilation.studies = [];
@@ -166,8 +167,8 @@ export function restorePreQuantumResources(playerState) {
 export function canPerformQuantumReset() {
   if (QuantumChallenge.isRunning) {
     if (
-      Currency.antimatter.lt(Player.infinityGoal) &&
-      Currency.metaAntimatter.lt(Player.quantumGoal)
+      Currency.antimatter.lt(Player.infinityGoal)
+      && Currency.metaAntimatter.lt(Player.quantumGoal)
     ) {
       return false;
     }
@@ -220,5 +221,12 @@ export function mockQuantumReset() {
   Currency.metaAntimatter.reset();
   player.meta.boosts = new Decimal(5);
   player.records.thisQuantum.bestMA = new Decimal(0);
+  for (const color of ["red", "green", "blue"]) {
+    player.quantum.quarkPowers[color] = new Decimal(0);
+  }
+  player.quantum.pair.electrons = new Decimal(0);
+  player.quantum.pair.positrons = new Decimal(0);
+  player.quantum.pair.dischargedGalaxies = new Decimal(0);
+  player.eternities = new Decimal(1e9);
   eternity(true, false);
 }

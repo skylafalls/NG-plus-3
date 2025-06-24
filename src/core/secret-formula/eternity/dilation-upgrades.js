@@ -202,10 +202,10 @@ export const dilationUpgrades = {
     cost: 1e25,
     description: () => "Eternities and Dilated Time power up each other",
     // The actual effect is handled somewhere else.
-    effect: () => Currency.dilatedTime.value,
-    formatEffect: _value =>
-      `${formatX(Currency.eternities.value.clampMin(1).pow(0.15), 2)} to DT, ${
-        formatX(Currency.dilatedTime.value.clampMin(1).pow(0.1), 2)
+    effect: () => Currency.dilatedTime.value.clampMin(1).pow(0.1),
+    formatEffect: value =>
+      `${formatX(Currency.eternities.value.clampMin(1).pow(0.35), 2)} to DT, ${
+        formatX(value, 2)
       } to eternities`,
   },
   mdMultTickspeed: {

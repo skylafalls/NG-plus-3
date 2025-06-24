@@ -170,7 +170,7 @@ export default defineComponent({
       <span
         class="c-dilation-tab__galaxies"
         :ach-tooltip="baseGalaxyText"
-      >{{ format(totalGalaxies, 3, 0) }}</span>
+      >{{ formatInt(totalGalaxies) }}</span>
       {{ pluralize("Tachyon Galaxy", totalGalaxies) }}
     </span>
     <span v-if="hasMaxText">

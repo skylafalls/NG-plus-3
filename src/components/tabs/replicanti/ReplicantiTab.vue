@@ -57,13 +57,13 @@ export default defineComponent({
       return new ReplicantiUpgradeButtonSetup(
         ReplicantiUpgrade.chance,
         (_value) => {
-          if (Replicanti.chance.gt("e1e7")) {
+          if (Replicanti.chance.gt("e1e6")) {
             return `Replication frequency: ${format(Replicanti.chance.log10())}/sec`;
           }
           return `Replicate chance: ${formatPercents(Replicanti.chance)}`;
         },
         (cost) => {
-          if (Replicanti.chance.gt("e1e7")) {
+          if (Replicanti.chance.gt("e1e6")) {
             return;
           }
           return `+${formatPercents(0.01)} Costs: ${format(cost)} IP`

@@ -7,6 +7,7 @@ export const GALAXY_TYPE = Object.freeze({
   REMOTE: 2,
   OBSCURE: 3,
   INVISIBLE: 4,
+  ETHEREAL: 5,
 });
 
 class GalaxyRequirement {
@@ -26,10 +27,6 @@ class GalaxyRequirement {
 }
 
 export const Galaxy = {
-  get remoteStart() {
-    return this.scalingStart[GALAXY_TYPE.REMOTE];
-  },
-
   get requirement() {
     return this.requirementAt(player.galaxies);
   },
@@ -46,6 +43,10 @@ export const Galaxy = {
     const unscaledGalaxies = currency.sub(base).div(costMult);
     let calculatedGalaxies = unscaledGalaxies;
 
+    if (QuantumChallenge(5).isRunning) {
+      return currency.sub(base).div(costMult).log(1.05).floor().add(1);
+    }
+
     if (this.typeAt(calculatedGalaxies) >= GALAXY_TYPE.DISTANT) {
       calculatedGalaxies = scale({
         baseResource: unscaledGalaxies,
@@ -60,7 +61,37 @@ export const Galaxy = {
       calculatedGalaxies = scale({
         baseResource: calculatedGalaxies,
         scaleStart: this.scalingStart[GALAXY_TYPE.REMOTE],
-        scalePower: Decimal.pow(1.1, this.scalingPower[GALAXY_TYPE.REMOTE]),
+        scalePower: Decimal.pow(1.005, this.scalingPower[GALAXY_TYPE.REMOTE]),
+        scaleMode: SCALING_TYPES.EXPONENTIAL,
+        isInverted: true,
+      });
+    }
+
+    if (this.typeAt(calculatedGalaxies) >= GALAXY_TYPE.OBSCURE) {
+      calculatedGalaxies = scale({
+        baseResource: calculatedGalaxies,
+        scaleStart: this.scalingStart[GALAXY_TYPE.OBSCURE],
+        scalePower: Decimal.pow(5, this.scalingPower[GALAXY_TYPE.OBSCURE]),
+        scaleMode: SCALING_TYPES.POLYNOMIAL,
+        isInverted: true,
+      });
+    }
+
+    if (this.typeAt(calculatedGalaxies) >= GALAXY_TYPE.INVISIBLE) {
+      calculatedGalaxies = scale({
+        baseResource: calculatedGalaxies,
+        scaleStart: this.scalingStart[GALAXY_TYPE.INVISIBLE],
+        scalePower: Decimal.pow(3, this.scalingPower[GALAXY_TYPE.INVISIBLE]),
+        scaleMode: SCALING_TYPES.DILATION,
+        isInverted: true,
+      });
+    }
+
+    if (this.typeAt(calculatedGalaxies) >= GALAXY_TYPE.ETHEREAL) {
+      calculatedGalaxies = scale({
+        baseResource: calculatedGalaxies,
+        scaleStart: this.scalingStart[GALAXY_TYPE.ETHEREAL],
+        scalePower: Decimal.pow(1.5, this.scalingPower[GALAXY_TYPE.ETHEREAL]),
         scaleMode: SCALING_TYPES.EXPONENTIAL,
         isInverted: true,
       });
@@ -76,7 +107,43 @@ export const Galaxy = {
 
     if (QuantumChallenge(5).isRunning) {
       return new GalaxyRequirement(this.requiredTier, this.baseCost
-        .add(Decimal.pow(1.002, equivGal).times(this.costMult)));
+        .add(Decimal.pow(1.05, equivGal).times(this.costMult)));
+    }
+
+    if (type >= GALAXY_TYPE.ETHEREAL) {
+      equivGal = scale({
+        baseResource: equivGal,
+        scaleStart: this.scalingStart[GALAXY_TYPE.ETHEREAL],
+        scalePower: Decimal.pow(1.5, this.scalingPower[GALAXY_TYPE.ETHEREAL]),
+        scaleMode: SCALING_TYPES.EXPONENTIAL,
+      });
+    }
+
+    if (type >= GALAXY_TYPE.INVISIBLE) {
+      equivGal = scale({
+        baseResource: equivGal,
+        scaleStart: this.scalingStart[GALAXY_TYPE.INVISIBLE],
+        scalePower: Decimal.pow(3, this.scalingPower[GALAXY_TYPE.INVISIBLE]),
+        scaleMode: SCALING_TYPES.DILATION,
+      });
+    }
+
+    if (type >= GALAXY_TYPE.OBSCURE) {
+      equivGal = scale({
+        baseResource: equivGal,
+        scaleStart: this.scalingStart[GALAXY_TYPE.OBSCURE],
+        scalePower: Decimal.pow(5, this.scalingPower[GALAXY_TYPE.OBSCURE]),
+        scaleMode: SCALING_TYPES.POLYNOMIAL,
+      });
+    }
+
+    if (type >= GALAXY_TYPE.REMOTE) {
+      equivGal = scale({
+        baseResource: equivGal,
+        scaleStart: this.scalingStart[GALAXY_TYPE.REMOTE],
+        scalePower: Decimal.pow(1.005, this.scalingPower[GALAXY_TYPE.REMOTE]),
+        scaleMode: SCALING_TYPES.EXPONENTIAL,
+      });
     }
 
     if (type >= GALAXY_TYPE.DISTANT) {
@@ -87,15 +154,6 @@ export const Galaxy = {
         scaleStart: distantStart,
         scalePower: Decimal.pow(2, distantPower),
         scaleMode: SCALING_TYPES.POLYNOMIAL,
-      });
-    }
-
-    if (type >= GALAXY_TYPE.REMOTE) {
-      equivGal = scale({
-        baseResource: equivGal,
-        scaleStart: this.scalingStart[GALAXY_TYPE.REMOTE],
-        scalePower: Decimal.pow(1.1, this.scalingPower[GALAXY_TYPE.REMOTE]),
-        scaleMode: SCALING_TYPES.EXPONENTIAL,
       });
     }
 
@@ -111,13 +169,13 @@ export const Galaxy = {
   },
 
   get scalingStart() {
-    let invisibleStart = new Decimal(3e5);
+    let etherealStart = new Decimal(1e6);
+    let invisibleStart = new Decimal(3e5).min(etherealStart);
     let obscureStart = new Decimal(50000).min(invisibleStart);
     let remoteStart = new Decimal(800).plusEffectsOf(
       MasteryStudy(21),
       MasteryStudy(22),
       MasteryStudy(23),
-      GluonUpgrade.blueRed(7),
     ).min(obscureStart);
 
     let distantStart = DC.E2.plusEffectsOf(
@@ -136,6 +194,7 @@ export const Galaxy = {
       [GALAXY_TYPE.REMOTE]: remoteStart.floor(),
       [GALAXY_TYPE.OBSCURE]: obscureStart.floor(),
       [GALAXY_TYPE.INVISIBLE]: invisibleStart.floor(),
+      [GALAXY_TYPE.ETHEREAL]: etherealStart.floor(),
     };
   },
 
@@ -144,22 +203,26 @@ export const Galaxy = {
       .dividedByEffectsOf(
         GluonUpgrade.redGreen(6),
         GluonUpgrade.greenBlue(6),
+        GluonUpgrade.blueRed(6),
       );
     let remotePower = new Decimal(1)
       .dividedByEffectsOf(
         GluonUpgrade.redGreen(1),
         GluonUpgrade.redGreen(7),
         GluonUpgrade.greenBlue(7),
+        GluonUpgrade.blueRed(7),
       );
 
     let obscurePower = new Decimal(1);
     let invisiblePower = new Decimal(1);
+    let etherealPower = new Decimal(1);
 
     return {
       [GALAXY_TYPE.DISTANT]: distantPower,
       [GALAXY_TYPE.REMOTE]: remotePower,
       [GALAXY_TYPE.OBSCURE]: obscurePower,
       [GALAXY_TYPE.INVISIBLE]: invisiblePower,
+      [GALAXY_TYPE.ETHEREAL]: etherealPower,
     };
   },
 
@@ -212,15 +275,14 @@ export const Galaxy = {
     return null;
   },
 
-  get costScalingStart() {
-    return this.scalingStart[GALAXY_TYPE.DISTANT];
-  },
-
   get type() {
     return this.typeAt(player.galaxies);
   },
 
   typeAt(galaxies) {
+    if (galaxies.gte(this.scalingStart[GALAXY_TYPE.ETHEREAL])) {
+      return GALAXY_TYPE.ETHEREAL;
+    }
     if (galaxies.gte(this.scalingStart[GALAXY_TYPE.INVISIBLE])) {
       return GALAXY_TYPE.INVISIBLE;
     }

@@ -34,7 +34,7 @@ export const gbGluonUpgrades = [
     id: 6,
     cost: () => new Decimal(4e19),
     description: () => "Infinity Power weakes Distant Antimatter Galaxy scaling.",
-    effect: () => Currency.infinityPower.value.plus(1).log10().plus(1).log10().div(20).plus(1),
+    effect: () => Currency.infinityPower.value.plus(1).log10().plus(1).log10().div(100).plus(1),
     formatEffect: value => `${formatPercents(value.sub(1), 2)} weaker`,
   },
   {

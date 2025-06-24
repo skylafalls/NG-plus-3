@@ -1,3 +1,4 @@
+import { speedrunMilestones } from "../speedrun-milestones.js";
 import { brGluonUpgrades } from "./gluons/br-upgrades.js";
 import { gbGluonUpgrades } from "./gluons/gb-upgrades.js";
 import { rgGluonUpgrades } from "./gluons/rg-upgrades.js";
@@ -14,4 +15,5 @@ export const quantum = {
   rgGluonUpgrades,
   electronMultiplierUpgrades,
   positronMultiplierUpgrades,
+  speedrunMilestones,
 };

@@ -2,7 +2,7 @@ export const quantumChallenges = [
   {
     id: 1,
     description: () => "Production from Antimatter Dimensions 3-8 are disabled.",
-    goal: { am: new Decimal("e5.49e9"), ma: new Decimal("9.4e881") },
+    goal: { am: new Decimal("e1.294e10"), ma: new Decimal("1.68e918") },
     reward: {
       description: () =>
         `Add ${formatX(0.5)} to Electron's production factor for each QC completion
@@ -15,7 +15,7 @@ export const quantumChallenges = [
   {
     id: 2,
     description: () => `The tickspeed multiplier is fixed at ${formatFloat(1.125, 3)}x.`,
-    goal: { am: new Decimal("e8.983e10"), ma: new Decimal("1.8e797") },
+    goal: { am: new Decimal("e1.133e11"), ma: new Decimal("1.8e994") },
     reward: {
       description: () => "Gain more Tachyonic Galaxies.",
       effect: completions => (completions * 0.25) + 1,
@@ -26,7 +26,7 @@ export const quantumChallenges = [
     id: 3,
     description: () => `Only Infinity Dimensions can be affected by Meta-Antimatter but
       Meta-Antimatter cannot affect Dimension Boosts.`,
-    goal: { am: new Decimal("e3.73e9"), ma: new Decimal("7.4e782") },
+    goal: { am: new Decimal("e2.88e10"), ma: new Decimal("2.46e986") },
     reward: {
       description: () =>
         "Infinity Power also affects Meta Dimensions at a heavily reduced rate.",
@@ -42,7 +42,7 @@ export const quantumChallenges = [
     description: () =>
       `Automatic Big Crunch Challenge is applied to all dimension types.
       Meta-Dimension Boosts scale slower but their effects are nullified.`,
-    goal: { am: new Decimal("e6.67e10"), ma: new Decimal("1.5e395") },
+    goal: { am: new Decimal("e5.28e10"), ma: new Decimal("9.8e408") },
     effect: () => 5,
     reward: {
       description: () =>
@@ -63,7 +63,7 @@ export const quantumChallenges = [
     description: () =>
       `Dimension Supersonic scaling starts instantly and grows much faster. All galaxy types scale
       also grow much faster and nullify the AD per-10 multiplier.`,
-    goal: { am: new Decimal("e1.657e9"), ma: new Decimal("4.7e924") },
+    goal: { am: new Decimal("e7.216e7"), ma: new Decimal("6.3e880") },
     reward: {
       description: () => "Antimatter affects the Meta-Dimension Boost multiplier at a reduced rate.",
       effect: completions =>
@@ -74,9 +74,9 @@ export const quantumChallenges = [
   {
     id: 6,
     description: () =>
-      `You are trapped in Infinity Challenges 2, 3, 6, and 7 and you
+      `You are trapped in Infinity Challenges 1, 2, 3, 6, and 7 and you
       can't gain Dimension Boosts. The AD per-10 multiplier is buffed to compensate.`,
-    goal: { am: new Decimal("e3.684e7"), ma: new Decimal("8.5e1093") },
+    goal: { am: new Decimal("e4.037e7"), ma: new Decimal("2.3e1127") },
     effect: () => new Decimal("1e33"),
     reward: {
       description: () => "Electrons are stronger based on Dimension Boosts.",
@@ -90,7 +90,7 @@ export const quantumChallenges = [
     description: () =>
       `Antimatter & Meta Dimensions scale by 1.80e308x instead of their normal rates.
       The multiplier per-10 dimensions and Meta-Antimatter's effect is disabled.`,
-    goal: { am: new Decimal("e4.024e7"), ma: new Decimal("6.4e1192") },
+    goal: { am: new Decimal("e7.931e9"), ma: new Decimal("1.2e1511") },
     effect: () => Number.MAX_VALUE,
     reward: {
       description: () => "Free tickspeed upgrade threshold is reduced (before scaling).",
@@ -102,7 +102,7 @@ export const quantumChallenges = [
     id: 8,
     description: () =>
       "Infinity and Time Dimensions are disabled and Meta-Dimension Boosts have no effect.",
-    goal: { am: new Decimal("e8.864e10"), ma: new Decimal("4e771") },
+    goal: { am: new Decimal("e1.064e11"), ma: new Decimal("2.7e788") },
     reward: {
       description: () => "Gain more Extra Replicanti Galaxies.",
       effect: completions => (completions * 0.2) + 1,

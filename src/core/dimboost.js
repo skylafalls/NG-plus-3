@@ -112,7 +112,7 @@ export const DimBoost = {
   },
 
   get supersonicScalingStart() {
-    return QuantumChallenge(5).isRunning ? DC.D0 : new Decimal(1.2e6);
+    return QuantumChallenge(5).isRunning ? DC.D0 : new Decimal(560000);
   },
 
   bulkRequirement(bulk) {

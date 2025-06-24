@@ -175,6 +175,13 @@ window.player = {
       })),
       isActive: true,
     },
+    metaDims: {
+      all: Array.range(0, 8).map(() => ({
+        isActive: false,
+        lastTick: 0,
+      })),
+      isActive: true,
+    },
     replicantiGalaxies: {
       isActive: false,
     },
@@ -189,7 +196,7 @@ window.player = {
       isActive: false,
     },
     dilationUpgrades: {
-      all: Array.range(0, 4).map(() => ({
+      all: Array.range(0, 5).map(() => ({
         isActive: false,
         lastTick: 0,
       })),
@@ -233,6 +240,7 @@ window.player = {
       isActive: false,
     },
     positrons: { isActive: false },
+    mdBoost: { isActive: false },
   },
   infinityPoints: DC.D0,
   infinities: DC.D0,
@@ -1102,7 +1110,7 @@ export const Player = {
 
   get infinityLimit() {
     const challenge = NormalChallenge.current || InfinityChallenge.current;
-    return challenge === undefined ? DC.BEMAX : challenge.goal;
+    return challenge === undefined ? DC.BIMAX : challenge.goal;
   },
 
   get eternityGoal() {

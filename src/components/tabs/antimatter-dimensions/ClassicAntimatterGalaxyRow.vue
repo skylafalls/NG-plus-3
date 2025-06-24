@@ -1,7 +1,8 @@
 <script>
 import PrimaryButton from "@/components/PrimaryButton";
+import { defineComponent } from "vue";
 
-export default {
+export default defineComponent({
   name: "ClassicAntimatterGalaxyRow",
   components: {
     PrimaryButton,
@@ -19,14 +20,15 @@ export default {
         amount: new Decimal(),
       },
       canBeBought: false,
-      distantStart: new Decimal(),
-      remoteStart: new Decimal(),
       lockText: null,
       canBulkBuy: false,
       creditsClosed: false,
-      scalingText: {
-        distant: null,
-        remote: null,
+      scalingStart: {
+        distant: new Decimal(0),
+        remote: new Decimal(0),
+        obscure: new Decimal(0),
+        invisible: new Decimal(0),
+        ethereal: new Decimal(0),
       },
       hasTutorial: false,
     };
@@ -76,6 +78,15 @@ export default {
         case GALAXY_TYPE.REMOTE: {
           return "Remote Antimatter Galaxies";
         }
+        case GALAXY_TYPE.OBSCURE: {
+          return "Obscure Antimatter Galaxies";
+        }
+        case GALAXY_TYPE.INVISIBLE: {
+          return "Invisible Antimatter Galaxies";
+        }
+        case GALAXY_TYPE.ETHEREAL: {
+          return "Ethereal Antimatter Galaxies";
+        }
       }
       return "Antimatter Galaxies";
     },
@@ -83,21 +94,32 @@ export default {
       return this.type !== GALAXY_TYPE.NORMAL;
     },
     costScalingText() {
-      switch (this.type) {
-        case GALAXY_TYPE.DISTANT: {
-          return `Each Galaxy is more expensive past ${quantifyInt("Galaxy", this.distantStart)}`;
-        }
-        case GALAXY_TYPE.REMOTE: {
-          const scalings = [
-            { type: "distant", function: "quadratic", amount: this.distantStart },
-            { type: "remote", function: "exponential", amount: this.remoteStart },
-          ];
-          return `Increased Galaxy cost scaling: ${scalings.sort((a, b) => a.amount.compare(b.amount))
-            .map(scaling => `${scaling.function} scaling past ${this.formatGalaxies(scaling.amount)} (${scaling.type})`)
-            .join(", ").capitalize()}`;
-        }
+      if (this.type === GALAXY_TYPE.NORMAL) {
+        return;
       }
-      return;
+
+      if (this.type === GALAXY_TYPE.DISTANT) {
+        return `Each Galaxy is more expensive past ${quantifyInt("Galaxy", this.scalingStart.distant)}`;
+      }
+
+      const scalings = [
+        { type: "distant", function: "quadratic", amount: this.scalingStart.distant },
+        { type: "remote", function: "exponential", amount: this.scalingStart.remote },
+      ];
+
+      if (this.type === GALAXY_TYPE.OBSCURE) {
+        scalings.push({ type: "obscure", function: "polynomial", amount: this.scalingStart.obscure });
+      }
+      if (this.type === GALAXY_TYPE.INVISIBLE) {
+        scalings.push({ type: "invisible", function: "dilative", amount: this.scalingStart.invisible });
+      }
+      if (this.type === GALAXY_TYPE.ETHEREAL) {
+        scalings.push({ type: "ethereal", function: "exponential", amount: this.scalingStart.ethereal });
+      }
+
+      return `Increased Galaxy cost scaling: ${scalings.sort((a, b) => a.amount.compare(b.amount))
+        .map(scaling => `${scaling.function} scaling past ${this.formatGalaxies(scaling.amount)} (${scaling.type})`)
+        .join(", ").capitalize()}`;
     },
     classObject() {
       return {
@@ -110,6 +132,12 @@ export default {
   methods: {
     update() {
       this.type = Galaxy.type;
+      this.scalingStart.distant.copyFrom(Galaxy.scalingStart[GALAXY_TYPE.DISTANT]);
+      this.scalingStart.remote.copyFrom(Galaxy.scalingStart[GALAXY_TYPE.REMOTE]);
+      this.scalingStart.obscure.copyFrom(Galaxy.scalingStart[GALAXY_TYPE.OBSCURE]);
+      this.scalingStart.invisible.copyFrom(Galaxy.scalingStart[GALAXY_TYPE.INVISIBLE]);
+      this.scalingStart.ethereal.copyFrom(Galaxy.scalingStart[GALAXY_TYPE.ETHEREAL]);
+
       this.galaxies.normal.copyFrom(player.galaxies.add(GalaxyGenerator.galaxies));
       this.galaxies.replicanti.copyFrom(Replicanti.galaxies.total);
       this.galaxies.dilation.copyFrom(player.dilation.totalTachyonGalaxies);
@@ -117,8 +145,7 @@ export default {
       this.requirement.amount.copyFrom(requirement.amount);
       this.requirement.tier = requirement.tier;
       this.canBeBought = requirement.isSatisfied && Galaxy.canBeBought;
-      this.distantStart.copyFrom(Galaxy.costScalingStart);
-      this.remoteStart.copyFrom(Galaxy.remoteStart);
+
       this.lockText = Galaxy.lockText;
       this.canBulkBuy = EternityMilestone.autobuyMaxGalaxies.isReached;
       this.creditsClosed = GameEnd.creditsEverClosed;
@@ -134,7 +161,7 @@ export default {
       return num.gt(1e8) ? format(num, 2) : formatInt(num);
     },
   },
-};
+});
 </script>
 
 <template>

@@ -35,16 +35,14 @@ export const rgGluonUpgrades = [
   {
     id: 6,
     cost: () => new Decimal(4e19),
-    description: () => "Meta-Antimatter slows down Distant Antimatter Galaxy scaling.",
-    effect: () => Currency.metaAntimatter.value.plus(1).log10().plus(1).log10().div(8).plus(1),
-    formatEffect: value => `${formatPercents(value.sub(1), 2)} weaker`,
+    description: () => `Distant Antimatter Galaxy scaling is ${formatPercents(0.132, 1)} weaker.`,
+    effect: () => 1.132,
   },
   {
     id: 7,
     cost: () => new Decimal(3e25),
-    description: () => "Red-green Gluons slow down Remote Antimatter Galaxy scaling.",
-    effect: () => player.quantum.gluons.rg.plus(1).log10().plus(1).log10().plus(1),
-    formatEffect: value => `${formatPercents(value.sub(1), 2)} weaker`,
+    description: () => `Remote Antimatter Galaxy scaling is ${formatPercents(0.15, 0)} weaker.`,
+    effect: () => 1.15,
   },
   {
     id: 8,

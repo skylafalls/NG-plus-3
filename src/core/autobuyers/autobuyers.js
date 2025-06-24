@@ -2,7 +2,6 @@ import {
   EPMultAutobuyerState,
   IPMultAutobuyerState,
 } from "./prestige-currency-multiplier-autobuyer";
-
 import { AnnihilationAutobuyerState } from "./annihilation-autobuyer";
 import { AntimatterDimensionAutobuyerState } from "./antimatter-dimension-autobuyer";
 import { BigCrunchAutobuyerState } from "./big-crunch-autobuyer";
@@ -24,6 +23,8 @@ import { SingularityAutobuyerState } from "./singularity-autobuyer";
 import { TickspeedAutobuyerState } from "./tickspeed-autobuyer";
 import { TimeDimensionAutobuyerState } from "./time-dimension-autobuyer";
 import { TimeTheoremAutobuyerState } from "./time-theorem-autobuyer";
+import { MetaDimensionBoostAutobuyerState } from "./meta-dimension-boost-autobuyer";
+import { MetaDimensionAutobuyerState } from "./meta-dimension-autobuyer";
 
 export const Autobuyer = {
   annihilation: new AnnihilationAutobuyerState(),
@@ -49,14 +50,17 @@ export const Autobuyer = {
   tickspeed: new TickspeedAutobuyerState(),
   timeDimension: TimeDimensionAutobuyerState.createAccessor(),
   timeTheorem: new TimeTheoremAutobuyerState(),
+  mdBoost: new MetaDimensionBoostAutobuyerState(),
+  metaDimension: MetaDimensionAutobuyerState.createAccessor(),
 };
 
-export const Autobuyers = function () {
+export const Autobuyers = (function () {
   const antimatterDimensions = Autobuyer.antimatterDimension.zeroIndexed;
   const infinityDimensions = Autobuyer.infinityDimension.zeroIndexed;
   const timeDimensions = Autobuyer.timeDimension.zeroIndexed;
+  const metaDimensions = Autobuyer.metaDimension.zeroIndexed;
 
-  const dimensions = [antimatterDimensions, infinityDimensions, timeDimensions];
+  const dimensions = [antimatterDimensions, infinityDimensions, timeDimensions, metaDimensions];
 
   const prestige = [
     Autobuyer.bigCrunch,
@@ -70,6 +74,7 @@ export const Autobuyers = function () {
     Autobuyer.timeTheorem,
     Autobuyer.ipMult,
     Autobuyer.epMult,
+    Autobuyer.mdBoost,
     Autobuyer.darkMatterDims,
     Autobuyer.darkMatterDimsAscension,
     Autobuyer.singularity,
@@ -94,6 +99,7 @@ export const Autobuyers = function () {
     Autobuyer.antimatterDimension,
     Autobuyer.infinityDimension,
     Autobuyer.timeDimension,
+    Autobuyer.metaDimension,
     Autobuyer.replicantiUpgrade,
     Autobuyer.dilationUpgrade,
     Autobuyer.blackHolePower,
@@ -112,7 +118,7 @@ export const Autobuyers = function () {
     ),
 
     get unlocked() {
-      return Autobuyers.all.filter((a) => a.isUnlocked || a.isBought);
+      return Autobuyers.all.filter(a => a.isUnlocked || a.isBought);
     },
 
     get hasAutobuyersForEditModal() {
@@ -122,7 +128,7 @@ export const Autobuyers = function () {
         Autobuyer.bigCrunch,
         Autobuyer.eternity,
         Autobuyer.reality,
-      ].some((autobuyer) => autobuyer.isUnlocked);
+      ].some(autobuyer => autobuyer.isUnlocked);
     },
 
     toggle() {
@@ -147,8 +153,8 @@ export const Autobuyers = function () {
     },
 
     resetTick(prestigeEvent) {
-      const autobuyers = Autobuyers.all.filter((n) =>
-        n.resetTick !== undefined
+      const autobuyers = Autobuyers.all.filter(n =>
+        n.resetTick !== undefined,
       );
       for (const autobuyer of autobuyers) {
         autobuyer.resetTick(prestigeEvent);
@@ -161,7 +167,7 @@ export const Autobuyers = function () {
       }
     },
   };
-}();
+}());
 
 EventHub.logic.on(GAME_EVENT.ETERNITY_RESET_AFTER, () => Autobuyers.reset());
 EventHub.logic.on(GAME_EVENT.REALITY_RESET_AFTER, () => Autobuyers.reset());

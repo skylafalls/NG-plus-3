@@ -140,17 +140,17 @@ export default defineComponent({
 
 .rg-gluon--bought {
   animation: rgupgbought 5s infinite;
-  cursor: pointer;
+  cursor: auto;
 }
 
 .gb-gluon--bought {
   animation: gbupgbought 5s infinite;
-  cursor: pointer;
+  cursor: auto;
 }
 
 .br-gluon--bought {
   animation: brupgbought 5s infinite;
-  cursor: pointer;
+  cursor: auto;
 }
 
 @keyframes rgupg {

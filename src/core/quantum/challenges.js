@@ -134,6 +134,6 @@ export const QuantumChallenges = {
    * @returns {QuantumChallengeState[]}
    */
   get completed() {
-    return QuantumChallenges.all.filter((qc) => qc.isCompleted);
+    return QuantumChallenges.all.filter(qc => qc.isCompleted);
   },
 };

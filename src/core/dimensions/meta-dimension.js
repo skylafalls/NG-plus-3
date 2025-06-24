@@ -121,11 +121,13 @@ class MetaDimensionState extends DimensionState {
    */
   get rateOfChange() {
     const tier = this.tier;
-    if (tier === 8) {
+    if (tier === 8 || (tier > 6 && QuantumChallenge(4).isRunning)) {
       return DC.D0;
     }
 
-    let toGain = MetaDimension(tier + 1).productionPerSecond;
+    let toGain = QuantumChallenge(4).isRunning
+      ? MetaDimension(tier + 2).productionPerSecond
+      : MetaDimension(tier + 1).productionPerSecond;
     return toGain.times(getGameSpeedupForDisplay()).div(10);
   }
 

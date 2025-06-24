@@ -42,8 +42,8 @@ class PositronsEffectState extends GameMechanicState {
 
   get effectValue() {
     let eff = player.quantum.pair.positrons.plus(1);
-    if (eff.gte(1e5)) {
-      eff = eff.div(1e5).pow(0.5).mul(1e5);
+    if (eff.gte(6.5e4)) {
+      eff = eff.div(6.5e4).pow(0.3).mul(6.5e4);
     }
     return eff;
   }

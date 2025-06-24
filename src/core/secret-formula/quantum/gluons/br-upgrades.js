@@ -37,16 +37,16 @@ export const brGluonUpgrades = [
   {
     id: 6,
     cost: () => new Decimal(4e19),
-    description: () => "Meta-Dimension Boosts affects Time Dimensions at an increased rate.",
-    effect: () => Decimal.tetrate(MetaDimensions.boost.totalBoosts, 2).plus(1).logPow(1.75),
-    formatEffect: value => formatX(value, 2, 2),
+    description: () => "Meta-Dimension Boosts slows down Distant Antimatter Galaxy scaling.",
+    effect: () => MetaDimensions.boost.totalBoosts.div(340).pow(0.5).plus(1),
+    formatEffect: value => `${formatPercents(value.sub(1), 2)} weaker`,
   },
   {
     id: 7,
     cost: () => new Decimal(3e25),
-    description: () => "Eternity Points makes Remote Antimatter Galaxy scaling start later.",
-    effect: () => Currency.eternityPoints.value.plus(1).log10().sqrt(),
-    formatEffect: value => `${formatPlus(value, 2, 0)}`,
+    description: () => "Eternity Points slows down Remote Antimatter Galaxy scaling.",
+    effect: () => Currency.eternityPoints.value.plus(1).log10().plus(1).log10().div(80).plus(1),
+    formatEffect: value => `${formatPercents(value.sub(1), 2)} weaker`,
   },
   {
     id: 8,
