@@ -825,9 +825,8 @@ export const AntimatterDimensions = {
       }
 
       let mult = Effects.sum(
-        Achievement(141).effects.buyTenMult,
         EternityChallenge(3).reward,
-      );
+      ).max(1);
 
       mult = mult.timesEffectsOf(
         InfinityUpgrade.buy10Mult,

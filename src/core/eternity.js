@@ -126,8 +126,8 @@ export function eternity(force, auto, specialConditions = {}) {
   initializeResourcesAfterEternity();
 
   if (
-    !EternityMilestone.keepAutobuyers.isReached &&
-    !(Pelle.isDoomed && PelleUpgrade.keepAutobuyers.canBeApplied)
+    !EternityMilestone.keepAutobuyers.isReached
+    && !(Pelle.isDoomed && PelleUpgrade.keepAutobuyers.canBeApplied)
   ) {
     // Fix infinity because it can only break after big crunch autobuyer interval is maxed
     player.break = false;
@@ -139,7 +139,7 @@ export function eternity(force, auto, specialConditions = {}) {
   }
   resetInfinityRuns();
   InfinityDimensions.fullReset();
-  Replicanti.reset();
+  if (!QuantumSpeedrunMilestone(24).isReached) Replicanti.reset();
   resetChallengeStuff();
   AntimatterDimensions.reset();
 
@@ -178,12 +178,12 @@ export function animateAndEternity(callback) {
   if (!Player.canEternity) {
     return false;
   }
-  const hasAnimation = !FullScreenAnimationHandler.isDisplaying &&
-    !RealityUpgrade(10).isLockingMechanics &&
-    !(RealityUpgrade(12).isLockingMechanics &&
-      EternityChallenge(1).isRunning) &&
-    ((player.dilation.active && player.options.animations.dilation) ||
-      (!player.dilation.active && player.options.animations.eternity));
+  const hasAnimation = !FullScreenAnimationHandler.isDisplaying
+    && !RealityUpgrade(10).isLockingMechanics
+    && !(RealityUpgrade(12).isLockingMechanics
+      && EternityChallenge(1).isRunning)
+    && ((player.dilation.active && player.options.animations.dilation)
+      || (!player.dilation.active && player.options.animations.eternity));
 
   if (hasAnimation) {
     if (player.dilation.active) {
@@ -262,7 +262,7 @@ export function applyEU1() {
 // code since those run asynchronously from gameLoop
 export function applyEU2() {
   if (player.eternityUpgrades.size < 6 && Perk.autounlockEU2.canBeApplied) {
-    const secondRow = EternityUpgrade.all.filter((u) => u.id > 3);
+    const secondRow = EternityUpgrade.all.filter(u => u.id > 3);
     for (const upgrade of secondRow) {
       if (player.eternityPoints.gte(upgrade.cost / 1e10)) {
         player.eternityUpgrades.add(upgrade.id);
@@ -285,13 +285,13 @@ export function gainedEternities() {
   return Pelle.isDisabled("eternityMults")
     ? new Decimal(1)
     : new Decimal(getAdjustedGlyphEffect("timeetermult"))
-      .timesEffectsOf(RealityUpgrade(3), Achievement(113))
-      .times(
-        DilationUpgrade.eternitiesDTSynergy.isBought
-          ? Currency.dilatedTime.value.clampMin(1).pow(0.1)
-          : 1,
-      )
-      .pow(AlchemyResource.eternity.effectValue);
+        .timesEffectsOf(RealityUpgrade(3), Achievement(113))
+        .times(
+          DilationUpgrade.eternitiesDTSynergy.isBought
+            ? Currency.dilatedTime.value.clampMin(1).pow(0.1)
+            : 1,
+        )
+        .pow(AlchemyResource.eternity.effectValue);
 }
 
 export class EternityMilestoneState {
@@ -308,9 +308,7 @@ export class EternityMilestoneState {
 }
 export const EternityMilestone = mapGameDataToObject(
   GameDatabase.eternity.milestones,
-  (
-    config,
-  ) => (config.isBaseResource
+  config => (config.isBaseResource
     ? new EternityMilestoneState(config)
     : new EternityMilestoneState(config)),
 );
@@ -329,7 +327,7 @@ class EPMultiplierState extends GameMechanicState {
   constructor() {
     super({});
     this.cachedCost = new Lazy(() =>
-      this.costAfterCount(player.epmultUpgrades)
+      this.costAfterCount(player.epmultUpgrades),
     );
     this.cachedEffectValue = new Lazy(() => DC.D5.pow(player.epmultUpgrades));
   }
@@ -430,8 +428,8 @@ class EPMultiplierState extends GameMechanicState {
     this.boughtAmount = this.boughtAmount.add(bulk);
     let i = 0;
     while (
-      Currency.eternityPoints.gt(this.costAfterCount(this.boughtAmount)) &&
-      i < 50 && this.boughtAmount.layer < 1
+      Currency.eternityPoints.gt(this.costAfterCount(this.boughtAmount))
+      && i < 50 && this.boughtAmount.layer < 1
     ) {
       this.boughtAmount = this.boughtAmount.add(1);
       Currency.eternityPoints.subtract(
@@ -466,7 +464,7 @@ class EPMultiplierState extends GameMechanicState {
 
 export const EternityUpgrade = mapGameDataToObject(
   GameDatabase.eternity.upgrades,
-  (config) => new EternityUpgradeState(config),
+  config => new EternityUpgradeState(config),
 );
 
 EternityUpgrade.epMult = new EPMultiplierState();

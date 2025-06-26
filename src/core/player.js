@@ -78,10 +78,11 @@ window.player = {
       current: 0,
       unlocked: 0,
       requirementBits: 0,
+      completions: Array.repeat(0, 14),
     },
     quantum: {
       current: 0,
-      completions: [null, ...Array.repeat(0, 8)],
+      completions: Array.repeat(0, 8),
     },
   },
   auto: {
@@ -338,6 +339,9 @@ window.player = {
         DC.D0,
       ],
     ),
+    recentQuantums: Array.range(0, 10).map(
+      () => [Number.MAX_VALUE, DC.BEMAX, DC.BEMAX, DC.D1, DC.D1, ""],
+    ),
     thisInfinity: {
       time: DC.D0,
       realTime: DC.D0,
@@ -402,16 +406,16 @@ window.player = {
       laitelaSet: [],
     },
     thisQuantum: {
-      time: DC.D0,
-      realTime: DC.D0,
+      time: DC.BEMAX,
+      realTime: DC.BEMAX,
       trueTime: 0,
       maxTP: DC.D0,
       bestAM: DC.D0,
       bestMA: DC.D0,
     },
     bestQuantum: {
-      time: DC.D0,
-      realTime: DC.D0,
+      time: DC.BEMAX,
+      realTime: DC.BEMAX,
       trueTime: 0,
       netQuarks: DC.D0,
     },
@@ -445,7 +449,7 @@ window.player = {
     previousRuns: {},
   },
   IPMultPurchases: DC.D0,
-  version: 83,
+  version: 100,
   infinityPower: DC.D1,
   postC4Tier: 0,
   eternityPoints: DC.D0,
@@ -481,7 +485,6 @@ window.player = {
       studies: "",
     }),
   },
-  eternityChalls: {},
   respec: false,
   eterc8ids: 50,
   eterc8repl: 40,
@@ -954,6 +957,7 @@ window.player = {
       dimensionBoost: true,
       switchAutomatorMode: true,
       respecIAP: true,
+      ngPlusMode: true,
     },
     awayProgress: {
       antimatter: true,
@@ -1125,7 +1129,7 @@ export const Player = {
     }
     return {
       am: DC.BEMAX,
-      ma: Decimal.pow(Number.MAX_VALUE, 1.25),
+      ma: Decimal.pow(Number.MAX_VALUE, 2),
     };
   },
 

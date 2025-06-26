@@ -1,4 +1,3 @@
-import { deepmerge } from "@/utility/deepmerge.js";
 import { DC } from "../constants.js";
 
 /**
@@ -11,20 +10,17 @@ export function resetPreQuantumResources() {
   for (const color of ["red", "green", "blue"]) {
     player.quantum.quarkPowers[color] = new Decimal(0);
   }
-  player.quantum.pair.electrons = new Decimal(0);
-  player.quantum.pair.positrons = new Decimal(0);
-  player.quantum.pair.dischargedGalaxies = new Decimal(0);
 
   // Stage Zero: Meta Dimensions & Mastery Studies (I forgot)
-  player.meta.boosts = new Decimal(0);
+  if (!QuantumSpeedrunMilestone(17).isReached) player.meta.boosts = new Decimal(0);
   MetaDimensions.reset();
   Currency.metaAntimatter.reset();
-  player.timestudy.mastery = [];
+  if (!QuantumSpeedrunMilestone(16).isReached) player.timestudy.mastery = [];
 
   // Stage One: Time Dilation
-  player.dilation.studies = [];
+  if (!QuantumSpeedrunMilestone(16).isReached) player.dilation.studies = [];
   player.dilation.active = false;
-  player.dilation.upgrades.clear();
+  if (!QuantumSpeedrunMilestone(6).isReached) player.dilation.upgrades.clear();
   player.dilation.rebuyables = {
     1: new Decimal(),
     2: new Decimal(),
@@ -44,7 +40,7 @@ export function resetPreQuantumResources() {
   // Stage Two: Time Studies & Dimensions
   // For some reason the reset is handled within the currency reset function
   // for Time Theorems itself, which seems like a weird place to put it.
-  Currency.timeTheorems.reset();
+  if (!QuantumSpeedrunMilestone(11).isReached) Currency.timeTheorems.reset();
   ECTimeStudyState.invalidateCachedRequirements();
   fullResetTimeDimensions();
   Currency.timeShards.reset();
@@ -55,25 +51,27 @@ export function resetPreQuantumResources() {
   // Stage Three: Eternity Challenges
   player.eterc8ids = 50;
   player.eterc8repl = 40;
-  player.eternityChalls = {};
+  if (!QuantumSpeedrunMilestone(3).isReached) {
+    player.challenge.eternity.completions.fill(0);
+    player.challenge.eternity.unlocked = 0;
+    player.challenge.eternity.requirementBits = 0;
+  }
   player.challenge.eternity.current = 0;
-  player.challenge.eternity.unlocked = 0;
-  player.challenge.eternity.requirementBits = 0;
 
   // Stage Four: Rest of Eternity
   Currency.eternityPoints.reset();
   EternityUpgrade.epMult.reset();
-  Currency.eternities.reset();
-  player.eternityUpgrades.clear();
+  if (!QuantumSpeedrunMilestone(1).isReached) Currency.eternities.reset();
+  if (!QuantumSpeedrunMilestone(3).isReached) player.eternityUpgrades.clear();
   resetEternityRuns();
 
   // Stage Five: Post-Break Infinity
-  player.break = false;
-  Replicanti.reset(true);
+  if (!QuantumSpeedrunMilestone(1).isReached) player.break = false;
+  Replicanti.reset(!QuantumSpeedrunMilestone(1).isReached);
   InfinityDimensions.fullReset();
   InfinityDimensions.resetAmount();
   Currency.infinityPower.reset();
-  initializeChallengeCompletions(true);
+  initializeChallengeCompletions();
   playerInfinityUpgradesOnReset();
 
   // Stage Six: Pre-Break Infinity
@@ -91,7 +89,7 @@ export function resetPreQuantumResources() {
   player.galaxies = DC.D0;
   player.sacrificed = DC.D0;
   AntimatterDimensions.reset();
-  secondSoftReset(false);
+  if (!QuantumSpeedrunMilestone(1).isReached) secondSoftReset(false);
   Currency.antimatter.reset();
 
   // Stage Eight: Records & Requirements
@@ -118,11 +116,10 @@ export function resetPreQuantumResources() {
   player.records.bestEternity.bestEPminReality = DC.D0;
 
   // Stage Nine: Miscellaneous stuff
-  Autobuyers.reset();
+  if (!QuantumSpeedrunMilestone(1).isReached) Autobuyers.reset();
   AchievementTimers.marathon2.reset();
   Tab.dimensions.antimatter.show();
   Lazy.invalidateAll();
-  EventHub.dispatch(GAME_EVENT.QUANTUM_RESET_AFTER);
 }
 
 function updateQuantumRecords() {
@@ -138,7 +135,7 @@ function updateQuantumRecords() {
 }
 
 function addQuantumTime(trueTime, time, realTime) {
-  player.records.recentRealities.unshift([trueTime, time, realTime]);
+  player.records.recentQuantums.unshift([trueTime, time, realTime]);
 }
 
 function giveQuantumRewards() {
@@ -154,10 +151,32 @@ function giveQuantumRewards() {
 
 /**
  * Restores pre-quantum resources from the previous player state.
- * @param {object} playerState The player state before the reset.
  */
-export function restorePreQuantumResources(playerState) {
-  return;
+export function restorePreQuantumResources() {
+  if (QuantumSpeedrunMilestone(1).isReached) {
+    player.eternities = (QuantumSpeedrunMilestone(18).isReached
+      ? new Decimal(1e13)
+      : new Decimal(20000)
+    );
+  }
+  if (QuantumSpeedrunMilestone(3).isReached) {
+    dev.beTests.completeChalleges.eternity();
+  }
+  if (QuantumSpeedrunMilestone(4).isReached) {
+    player.dilation.studies.push(1);
+  }
+  if (QuantumSpeedrunMilestone(17).isReached) {
+    player.dilation.studies.push(6);
+  }
+  if (QuantumSpeedrunMilestone(18).isReached) {
+    Currency.metaAntimatter.bumpTo(5e25);
+  }
+  if (QuantumSpeedrunMilestone(22).isReached) {
+    Currency.dilatedTime.bumpTo(1e100);
+  }
+  if (QuantumSpeedrunMilestone(27).isReached) {
+    player.meta.boosts = new Decimal(4);
+  }
 }
 
 /**
@@ -185,48 +204,20 @@ export function canPerformQuantumReset() {
  * @param {boolean} force If this is true, then don't give rewards and skip to resetting everything.
  */
 export function quantumReset(force = false) {
-  const basePlayer = deepmerge({}, player);
-  if (force) {
-    Currency.quantums.add(1);
-    resetPreQuantumResources();
+  if (!canPerformQuantumReset() && !force) {
     return;
   }
-
-  if (!canPerformQuantumReset()) {
-    return;
+  Currency.quantums.add(1);
+  if (!force) {
+    EventHub.dispatch(GAME_EVENT.QUANTUM_RESET_BEFORE);
+    giveQuantumRewards();
   }
-  EventHub.dispatch(GAME_EVENT.QUANTUM_RESET_BEFORE);
-  giveQuantumRewards();
+  Currency.quantums.add(1);
   resetPreQuantumResources();
-  restorePreQuantumResources(basePlayer);
+  restorePreQuantumResources();
+  EventHub.dispatch(GAME_EVENT.QUANTUM_RESET_AFTER);
 }
 
 export function handleQuantumTick(diff) {
   Quarks.tick(diff);
-}
-
-export function mockQuantumReset() {
-  fullResetTimeDimensions();
-  player.eternityPoints = new Decimal(0);
-  player.dilation.tachyonParticles = new Decimal(0);
-  player.dilation.dilatedTime = new Decimal(0);
-  player.dilation.rebuyables[1] = new Decimal(0);
-  player.dilation.rebuyables[3] = new Decimal(0);
-  player.dilation.rebuyables[4] = new Decimal(0);
-  player.dilation.nextThreshold = DC.E3;
-  player.dilation.baseTachyonGalaxies = DC.D0;
-  player.dilation.totalTachyonGalaxies = DC.D0;
-  EternityUpgrade.epMult.reset();
-  MetaDimensions.reset();
-  Currency.metaAntimatter.reset();
-  player.meta.boosts = new Decimal(5);
-  player.records.thisQuantum.bestMA = new Decimal(0);
-  for (const color of ["red", "green", "blue"]) {
-    player.quantum.quarkPowers[color] = new Decimal(0);
-  }
-  player.quantum.pair.electrons = new Decimal(0);
-  player.quantum.pair.positrons = new Decimal(0);
-  player.quantum.pair.dischargedGalaxies = new Decimal(0);
-  player.eternities = new Decimal(1e9);
-  eternity(true, false);
 }

@@ -10,14 +10,18 @@ export class MetaDimensionBoostAutobuyerState extends AutobuyerState {
   }
 
   get isUnlocked() {
-    return TimeStudy.metaDimensions.isBought;
+    return QuantumSpeedrunMilestone(15).isReached;
   }
 
   get hasUnlimitedBulk() {
-    return true;
+    return QuantumSpeedrunMilestone(27).isReached;
   }
 
   tick() {
-    MetaDimensions.boost.maxBuy();
+    if (this.hasUnlimitedBulk) {
+      MetaDimensions.boost.maxBuy();
+    } else {
+      MetaDimensions.boost.request(1);
+    }
   }
 }

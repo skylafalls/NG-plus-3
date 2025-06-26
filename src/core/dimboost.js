@@ -202,8 +202,9 @@ export const DimBoost = {
       return "Dimension Boosts are currently useless";
     }
     const areDimensionsKept
-      = (Perk.antimatterNoReset.isBought || Achievement(111).canBeApplied)
-        && (!Pelle.isDoomed || PelleUpgrade.dimBoostResetsNothing.isBought);
+      = ((Perk.antimatterNoReset.isBought || Achievement(111).canBeApplied)
+        && (!Pelle.isDoomed || PelleUpgrade.dimBoostResetsNothing.isBought))
+      || EternityMilestone.noADReset.isReached;
     if (areDimensionsKept) {
       return boostEffects[0].toUpperCase() + boostEffects.slice(1);
     }

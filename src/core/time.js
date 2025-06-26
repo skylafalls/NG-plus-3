@@ -84,7 +84,7 @@ export const Time = {
   set totalTimePlayed(timespan) {
     this.toMilliseconds(
       timespan,
-      (value) => player.records.totalTimePlayed = value,
+      value => player.records.totalTimePlayed = value,
     );
   },
 
@@ -112,7 +112,7 @@ export const Time = {
   set realTimeDoomed(timespan) {
     this.toMilliseconds(
       timespan,
-      (value) => player.records.realTimeDoomed = value,
+      value => player.records.realTimeDoomed = value,
     );
   },
 
@@ -128,7 +128,7 @@ export const Time = {
   set realTimePlayed(timespan) {
     this.toMilliseconds(
       timespan,
-      (value) => player.records.realTimePlayed = value,
+      value => player.records.realTimePlayed = value,
     );
   },
 
@@ -144,7 +144,7 @@ export const Time = {
   set thisInfinity(timespan) {
     this.toMilliseconds(
       timespan,
-      (value) => player.records.thisInfinity.time = value,
+      value => player.records.thisInfinity.time = value,
     );
   },
 
@@ -160,7 +160,7 @@ export const Time = {
   set thisInfinityRealTime(timespan) {
     this.toMilliseconds(
       timespan,
-      (value) => player.records.thisInfinity.realTime = value,
+      value => player.records.thisInfinity.realTime = value,
     );
   },
 
@@ -169,7 +169,7 @@ export const Time = {
    */
   get thisInfinityTrueTime() {
     return this.fromMilliseconds(() =>
-      new Decimal(player.records.thisInfinity.trueTime)
+      new Decimal(player.records.thisInfinity.trueTime),
     );
   },
   /**
@@ -178,7 +178,7 @@ export const Time = {
   set thisInfinityTrueTime(timespan) {
     this.toMilliseconds(
       timespan,
-      (value) => player.records.thisInfinity.trueTime = value.toNumber(),
+      value => player.records.thisInfinity.trueTime = value.toNumber(),
     );
   },
 
@@ -194,7 +194,7 @@ export const Time = {
   set bestInfinity(timespan) {
     this.toMilliseconds(
       timespan,
-      (value) => player.records.bestInfinity.time = value,
+      value => player.records.bestInfinity.time = value,
     );
   },
 
@@ -210,7 +210,7 @@ export const Time = {
   set bestInfinityRealTime(timespan) {
     this.toMilliseconds(
       timespan,
-      (value) => player.records.bestInfinity.realTime = value,
+      value => player.records.bestInfinity.realTime = value,
     );
   },
 
@@ -226,7 +226,7 @@ export const Time = {
   set thisEternity(timespan) {
     this.toMilliseconds(
       timespan,
-      (value) => player.records.thisEternity.time = value,
+      value => player.records.thisEternity.time = value,
     );
   },
 
@@ -242,7 +242,7 @@ export const Time = {
   set thisEternityRealTime(timespan) {
     this.toMilliseconds(
       timespan,
-      (value) => player.records.thisEternity.realTime = value,
+      value => player.records.thisEternity.realTime = value,
     );
   },
 
@@ -251,7 +251,7 @@ export const Time = {
    */
   get thisEternityTrueTime() {
     return this.fromMilliseconds(() =>
-      new Decimal(player.records.thisEternity.trueTime)
+      new Decimal(player.records.thisEternity.trueTime),
     );
   },
   /**
@@ -260,7 +260,7 @@ export const Time = {
   set thisEternityTrueTime(timespan) {
     this.toMilliseconds(
       timespan,
-      (value) => player.records.thisEternity.trueTime = value.toNumber(),
+      value => player.records.thisEternity.trueTime = value.toNumber(),
     );
   },
 
@@ -276,7 +276,7 @@ export const Time = {
   set bestEternity(timespan) {
     this.toMilliseconds(
       timespan,
-      (value) => player.records.bestEternity.time = value,
+      value => player.records.bestEternity.time = value,
     );
   },
 
@@ -292,7 +292,89 @@ export const Time = {
   set bestEternityRealTime(timespan) {
     this.toMilliseconds(
       timespan,
-      (value) => player.records.bestEternity.realTime = value,
+      value => player.records.bestEternity.realTime = value,
+    );
+  },
+
+  /**
+   * @returns {TimeSpan}
+   */
+  get thisQuantum() {
+    return this.fromMilliseconds(() => player.records.thisQuantum.time);
+  },
+  /**
+   * @param {TimeSpan} timespan
+   */
+  set thisQuantum(timespan) {
+    this.toMilliseconds(
+      timespan,
+      value => player.records.thisQuantum.time = value,
+    );
+  },
+
+  /**
+   * @returns {TimeSpan}
+   */
+  get thisQuantumRealTime() {
+    return this.fromMilliseconds(() => player.records.thisQuantum.realTime);
+  },
+  /**
+   * @param {TimeSpan} timespan
+   */
+  set thisQuantumRealTime(timespan) {
+    this.toMilliseconds(
+      timespan,
+      value => player.records.thisQuantum.realTime = value,
+    );
+  },
+
+  /**
+   * @returns {TimeSpan}
+   */
+  get thisQuantumTrueTime() {
+    return this.fromMilliseconds(() =>
+      new Decimal(player.records.thisQuantum.trueTime),
+    );
+  },
+  /**
+   * @param {TimeSpan} timespan
+   */
+  set thisQuantumTrueTime(timespan) {
+    this.toMilliseconds(
+      timespan,
+      value => player.records.thisQuantum.trueTime = value.toNumber(),
+    );
+  },
+
+  /**
+   * @returns {TimeSpan}
+   */
+  get bestQuantum() {
+    return this.fromMilliseconds(() => player.records.bestQuantum.time);
+  },
+  /**
+   * @param {TimeSpan} timespan
+   */
+  set bestQuantum(timespan) {
+    this.toMilliseconds(
+      timespan,
+      value => player.records.bestQuantum.time = value,
+    );
+  },
+
+  /**
+   * @returns {TimeSpan}
+   */
+  get bestQuantumRealTime() {
+    return this.fromMilliseconds(() => player.records.bestQuantum.realTime);
+  },
+  /**
+   * @param {TimeSpan} timespan
+   */
+  set bestQuantumRealTime(timespan) {
+    this.toMilliseconds(
+      timespan,
+      value => player.records.bestQuantum.realTime = value,
     );
   },
 
@@ -308,7 +390,7 @@ export const Time = {
   set thisReality(timespan) {
     this.toMilliseconds(
       timespan,
-      (value) => player.records.thisReality.time = value,
+      value => player.records.thisReality.time = value,
     );
   },
 
@@ -324,7 +406,7 @@ export const Time = {
   set thisRealityRealTime(timespan) {
     this.toMilliseconds(
       timespan,
-      (value) => player.records.thisReality.realTime = value,
+      value => player.records.thisReality.realTime = value,
     );
   },
 
@@ -340,7 +422,7 @@ export const Time = {
   set bestReality(timespan) {
     this.toMilliseconds(
       timespan,
-      (value) => player.records.bestReality.time = value,
+      value => player.records.bestReality.time = value,
     );
   },
 
@@ -356,7 +438,7 @@ export const Time = {
   set bestRealityRealTime(timespan) {
     this.toMilliseconds(
       timespan,
-      (value) => player.records.bestReality.realTime = value,
+      value => player.records.bestReality.realTime = value,
     );
   },
 
@@ -379,7 +461,7 @@ export const Time = {
    */
   get infinityChallengeSum() {
     return this.fromMilliseconds(() =>
-      GameCache.infinityChallengeTimeSum.value
+      GameCache.infinityChallengeTimeSum.value,
     );
   },
 };

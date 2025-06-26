@@ -143,14 +143,14 @@ window.TimeSpan = class TimeSpan {
    * @returns {Decimal}
    */
   get totalHours() {
-    return this._ms.div(36e5);
+    return this._ms.div(1e3).div(60).div(60);
   }
 
   /**
    * @returns {Decimal}
    */
   get totalMinutes() {
-    return this._ms.div(6e4);
+    return this._ms.div(1e3).div(60);
   }
 
   /**

@@ -135,7 +135,7 @@ export default {
       }
 
       if (EternityChallenge.isRunning) {
-        if (!Perk.studyECBulk.isBought) {
+        if (!Achievement(152).isUnlocked) {
           this.type = EP_BUTTON_DISPLAY_TYPE.CHALLENGE;
           return;
         }

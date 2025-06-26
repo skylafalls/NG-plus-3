@@ -190,7 +190,10 @@ export function gainedEternityPoints() {
   let ep = DC.D5.pow(
     player.records.thisEternity.maxIP.plus(
       gainedInfinityPoints(),
-    ).max(1).log10().div(new Decimal(308).sub(PelleRifts.recursion.effectValue))
+    ).max(1).log10().div(Effects.min(
+      new Decimal(308),
+      Achievement(163),
+    ).sub(PelleRifts.recursion.effectValue))
       .sub(0.7),
   )
     .times(totalEPMult());
@@ -1428,6 +1431,9 @@ export function init() {
   SteamRuntime.initialize();
   Cloud.init();
   GameStorage.load();
+  if (true) {
+    Modal.ngPlusMode.show();
+  }
   Tabs.all.find(t => t.config.id === player.options.lastOpenTab).show(true);
 }
 

@@ -37,10 +37,10 @@ export default {
         return this.lockText;
       }
       const reset = [];
-      if (!Achievement(111).isUnlocked) {
+      if (!Achievement(111).isUnlocked && !EternityMilestone.noADReset.isReached) {
         reset.push("Dimensions");
       }
-      if (!Achievement(143).isUnlocked) {
+      if (!Achievement(143).isUnlocked && !EternityMilestone.noADReset.isReached) {
         reset.push("Dimension Boosts");
       }
       return reset.length === 0

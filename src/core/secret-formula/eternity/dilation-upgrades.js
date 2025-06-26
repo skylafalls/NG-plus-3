@@ -220,7 +220,7 @@ export const dilationUpgrades = {
     cost: 1e60,
     description:
       "Meta-Dimensions Boosts and MD per-10 multiplier are boosted by Dilated Time",
-    effect: () => Currency.dilatedTime.value.plus(1).log10().plus(1).log10().plus(1),
+    effect: () => Currency.dilatedTime.value.plus(1).log10().plus(1).log10().plus(1).min(3),
     formatEffect: value => `${formatX(value, 2, 1)}`,
   },
   mdEffectBuff: {

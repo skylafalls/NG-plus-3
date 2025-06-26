@@ -48,6 +48,7 @@ import QuarksTab from "./quantum/quarks/QuarksTab.vue";
 import PairProductionTab from "./quantum/pair-production/PairProductionTab.vue";
 import QuantumChallengesTab from "./quantum/quantum-challenges/QuantumChallengesTab.vue";
 import GluonUpgradesTab from "./quantum/gluon-upgrades/GluonUpgradesTab.vue";
+import QuantumMilestonesTab from "./quantum/speedrun-milestones/QuantumMilestonesTab.vue";
 
 const TabComponents = {
   AntimatterDimensionsTab,
@@ -99,6 +100,7 @@ const TabComponents = {
   PairProductionTab,
   QuantumChallengesTab,
   GluonUpgradesTab,
+  QuantumMilestonesTab,
 };
 
 export default TabComponents;

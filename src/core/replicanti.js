@@ -48,11 +48,13 @@ export function replicantiGalaxy(auto) {
     return;
   }
   player.replicanti.timer = DC.D0;
-  Replicanti.amount = Achievement(126).isUnlocked && !Pelle.isDoomed
-    ? Decimal.pow10(
-        Replicanti.amount.max(1).log10().sub(galaxyGain.mul(LOG10_MAX_VALUE)),
-      )
-    : new Decimal(1);
+  if (!QuantumSpeedrunMilestone(20).isReached) {
+    Replicanti.amount = Achievement(126).isUnlocked && !Pelle.isDoomed
+      ? Decimal.pow10(
+          Replicanti.amount.max(1).log10().sub(galaxyGain.mul(LOG10_MAX_VALUE)),
+        )
+      : new Decimal(1);
+  }
   addReplicantiGalaxies(galaxyGain);
 }
 

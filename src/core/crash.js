@@ -48,5 +48,5 @@ window.GlobalErrorHandler = {
 };
 
 window.addEventListener("error", (event) => {
-  GlobalErrorHandler.onerror(event);
+  GlobalErrorHandler.onerror(event.message);
 });

@@ -1,8 +1,9 @@
 <script>
-import PrimaryButton from "@/components/PrimaryButton";
-import PrimaryToggleButton from "@/components/PrimaryToggleButton";
+import PrimaryButton from "@/components/PrimaryButton.vue";
+import PrimaryToggleButton from "@/components/PrimaryToggleButton.vue";
+import { defineComponent } from "vue";
 
-export default {
+export default defineComponent({
   name: "ReplicantiUpgradeButton",
   components: {
     PrimaryButton,
@@ -51,7 +52,7 @@ export default {
       this.isEC8Running = EternityChallenge(8).isRunning;
     },
   },
-};
+});
 
 export class ReplicantiUpgradeButtonSetup {
   constructor(upgrade, formatDescription, formatCost) {

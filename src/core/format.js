@@ -393,7 +393,7 @@ window.formatGain = function formatGain(
     difference.gte(10) || (difference.gte(sqrt10) && base.gte("eeee1e1000"))
   ) {
     return `(+${
-      format(difference.times(Time.deltaTimeMs), precision, precisionUnder1000)
+      format(difference.times(Time.realDeltaTime.totalMilliseconds), precision, precisionUnder1000)
     } OoM^5/sec)`;
   }
 
@@ -402,7 +402,7 @@ window.formatGain = function formatGain(
   ).log10();
   if (difference.gte(10) || (difference.gte(sqrt10) && base.gte("eee1e1000"))) {
     return `(+${
-      format(difference.times(Time.deltaTimeMs), precision, precisionUnder1000)
+      format(difference.times(Time.realDeltaTime.totalMilliseconds), precision, precisionUnder1000)
     } OoM^4/sec)`;
   }
 
@@ -411,21 +411,21 @@ window.formatGain = function formatGain(
   ).log10();
   if (difference.gte(10) || (difference.gte(sqrt10) && base.gte("ee1e1000"))) {
     return `(+${
-      format(difference.times(Time.deltaTimeMs), precision, precisionUnder1000)
+      format(difference.times(Time.realDeltaTime.totalMilliseconds), precision, precisionUnder1000)
     } OoM^3/sec)`;
   }
 
   difference = next.plus(1).log10().div(base.plus(1).log10()).log10();
   if (difference.gte(10) || (difference.gte(sqrt10) && base.gte("e1e1000"))) {
     return `(+${
-      format(difference.times(Time.deltaTimeMs), precision, precisionUnder1000)
+      format(difference.times(Time.realDeltaTime.totalMilliseconds), precision, precisionUnder1000)
     } OoM^2/sec)`;
   }
 
   difference = next.div(base);
   if (difference.gte(10) || (difference.gte(sqrt10) && base.gte("1e1000"))) {
     return `(+${
-      format(difference.log10().times(Time.deltaTimeMs), precision, precisionUnder1000)
+      format(difference.log10().times(Time.realDeltaTime.totalMilliseconds), precision, precisionUnder1000)
     } OoM/sec)`;
   }
 

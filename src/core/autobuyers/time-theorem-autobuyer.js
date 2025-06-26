@@ -10,7 +10,7 @@ export class TimeTheoremAutobuyerState extends AutobuyerState {
   }
 
   get isUnlocked() {
-    return true;
+    return QuantumSpeedrunMilestone(2).isReached;
   }
 
   get hasUnlimitedBulk() {
@@ -18,10 +18,6 @@ export class TimeTheoremAutobuyerState extends AutobuyerState {
   }
 
   tick() {
-    if (this.hasUnlimitedBulk) {
-      TimeTheorems.buyMax(true);
-    } else {
-      TimeTheorems.buyOneOfEach();
-    }
+    TimeTheorems.buyMax(true);
   }
 }

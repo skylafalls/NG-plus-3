@@ -112,17 +112,18 @@ export const Quarks = {
   },
 
   get gain() {
-    const logDivisor = 924.7641466797505;
+    const logDivisor = 616.5094311198335;
     let baseGain = player.meta.antimatter.plus(1).log10().div(logDivisor).max(
       0,
     );
-    return baseGain;
+    baseGain = baseGain.timesEffectOf(this.multiplierUpgrade);
+    return baseGain.round();
   },
 
   tick(diff) {
     for (const color of ["red", "green", "blue"]) {
       player.quantum.quarkPowers[color] = player.quantum.quarkPowers[color]
-        .add(this[color].gain().times(diff.div(10)));
+        .add(this[color].gain().times(diff.div(1000)));
     }
   },
 };

@@ -1,6 +1,5 @@
-/* eslint-disable import/extensions */
+import { decodeBase64Url, encodeBase64Url } from "@std/encoding";
 import { deflateSync, inflateSync, strFromU8, strToU8 } from "fflate";
-/* eslint-enable import/extensions */
 
 export const GameSaveSerializer = {
   serialize(save) {
@@ -21,13 +20,9 @@ export const GameSaveSerializer = {
     if (typeof data !== "string") {
       return;
     }
-    try {
-      const json = this.decodeText(data, "savefile");
+    const json = this.decodeText(data, "savefile");
 
-      return JSON.parse(json, (k, v) => ((v === Infinity) ? "Infinity" : v));
-    } catch {
-      return;
-    }
+    return JSON.parse(json, (k, v) => ((v === Infinity) ? "Infinity" : v));
   },
   // These are magic strings that savefiles/automator scripts should start with.
   // Due to the way atob/btoa work, old saves (before the reality update and for
@@ -54,7 +49,7 @@ export const GameSaveSerializer = {
   // This should always be three characters long, and should ideally go AAA, AAB, AAC, etc.
   // so that we can do inequality tests on it to compare versions (though skipping a version
   // shouldn't be a problem).
-  version: "AAC",
+  version: "AAD",
   // Steps are given in encoding order.
   // Export and cloud save use the same steps because the maximum ~15% saving
   // from having them be different seems not to be worth it.
@@ -69,35 +64,18 @@ export const GameSaveSerializer = {
   // It wouldn't be too hard to allow steps to depend on version though.
   steps: [
     // This step transforms saves into unsigned 8-bit arrays, as pako requires.
-    { encode: (x) => strToU8(x), decode: (x) => strFromU8(x) },
+    { encode: x => strToU8(x), decode: x => strFromU8(x) },
     // This step is  where the compression actually happens. The pako library works with unsigned 8-bit arrays.
-    { encode: (x) => deflateSync(x), decode: (x) => inflateSync(x) },
-    // This step converts from unsigned 8-bit arrays to strings with codepoints less than 256.
-    // We need to do this outselves because GameSaveSerializer.decoder would give us unicode sometimes.
-    {
-      encode: (x) => [...x].map((i) => String.fromCodePoint(i)).join(""),
-      decode: (x) => Uint8Array.from([...x].map((i) => i.codePointAt(0))),
-    },
+    { encode: x => deflateSync(x), decode: x => inflateSync(x) },
     // This step makes the characters in saves printable. At this point in the process, all characters
     // will already have codepoints less than 256 (from the previous step), so emoji in the original save
     // won't break this.
-    { encode: (x) => btoa(x), decode: (x) => atob(x) },
-    // This step removes + and /, because if they occur, you can double-click on a save and get
-    // everything up to the first + or /, which can be hard to debug. We also remove = (always trailing)
-    // because btoa just ignores it. These regex have no potentially-unicode characters, I think,
-    // and they're applied to strings with just ASCII anyway, but I'm adding u to make Codeacy happy.
-    {
-      encode: (x) =>
-        x.replaceAll(/=+$/gu, "").replaceAll("0", "0a").replaceAll("\\+", "0b")
-          .replaceAll("\\/", "0c"),
-      decode: (x) =>
-        x.replaceAll("0b", "+").replaceAll("0c", "/").replaceAll("0a", "0"),
-    },
+    { encode: x => encodeBase64Url(x), decode: x => decodeBase64Url(x) },
     {
       encode: (x, type) => x + GameSaveSerializer.endingString[type],
       decode: (x, type) =>
         x.slice(0, x.length - GameSaveSerializer.endingString[type].length),
-      condition: (version) => version >= "AAB",
+      condition: version => version >= "AAB",
     },
   ],
   getSteps(type, version) {
@@ -105,13 +83,13 @@ export const GameSaveSerializer = {
     // and whether it's a save or automator script. We can change the last 3 letters
     // of the string savefiles start with from AAA to something else,
     // if we want a new version of savefile encoding.
-    return this.steps.filter((i) => (!i.condition) || i.condition(version))
+    return this.steps.filter(i => (!i.condition) || i.condition(version))
       .concat({
-        encode: (x) =>
+        encode: x =>
           `${
             GameSaveSerializer.startingString[type] + GameSaveSerializer.version
           }${x}`,
-        decode: (x) =>
+        decode: x =>
           x.slice(GameSaveSerializer.startingString[type].length + 3),
       });
   },

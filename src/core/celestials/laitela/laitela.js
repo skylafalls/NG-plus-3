@@ -36,10 +36,8 @@ export const Laitela = {
   },
   get continuumActive() {
     // return this.continuumUnlocked && !player.auto.disableContinuum && !Pelle.isDisabled("continuum");
-    // This is temporarily enabled after break infinity until I figure out and fix the weird AD autobuyer staggering pattern.
-    // Whatever
-    // return player.break;
-    return false;
+    // No requirement as the antimatter dimensions autobuyers are currrently broken.
+    return !player.auto.disableContinuum;
   },
   setContinuum(x) {
     player.auto.disableContinuum = !x;

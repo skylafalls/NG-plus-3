@@ -1,9 +1,10 @@
 export interface QuantumSpeedrunParameters {
   resetWithin: number
   reward: string | (() => string)
+  invisible?: boolean
 }
 
-class QuantumSpeedrunState {
+export class QuantumSpeedrunState {
   public config;
   constructor(config: QuantumSpeedrunParameters) {
     this.config = config;
@@ -18,7 +19,7 @@ class QuantumSpeedrunState {
     for (const config of database) {
       index.push(new QuantumSpeedrunState(config));
     }
-    const accessor = (id: number) => index[id + 1];
+    const accessor = (id: number) => index[id - 1];
     accessor.index = index;
     return accessor;
   }

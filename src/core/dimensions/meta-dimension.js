@@ -607,9 +607,11 @@ export const MetaDimensions = {
         tempBulk,
         this.maxBoosts.sub(player.meta.boosts),
       );
+      EventHub.dispatch(GAME_EVENT.META_DIMBOOST_BEFORE, bulk);
       player.meta.boosts = Decimal.max(DC.D0, player.meta.boosts.add(bulk));
       if (!forcedADReset) MetaDimensions.reset();
       if (!forcedAMReset) Currency.metaAntimatter.reset();
+      EventHub.dispatch(GAME_EVENT.META_DIMBOOST_AFTER, bulk);
     },
   },
 };

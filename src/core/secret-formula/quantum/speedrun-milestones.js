@@ -66,7 +66,7 @@ export const speedrunMilestones = [
   },
   {
     resetWithin: 240,
-    reward: () => `Start with ${formatInt(4)} Meta Dimension Boosts every Quantum.`,
+    reward: "All Meta Dimensions are available for purchase on Quantum.",
   },
   {
     resetWithin: 210,
@@ -82,7 +82,7 @@ export const speedrunMilestones = [
   },
   {
     resetWithin: 120,
-    reward: () => `Meta Dimensions & rebuyable dilation upgrade autobuyers are ${formatX(3)} faster.`,
+    reward: () => `Meta Dimensions & rebuyable dilation upgrade autobuyers are ${formatX(10)} faster.`,
   },
   {
     resetWithin: 90,
@@ -106,7 +106,7 @@ export const speedrunMilestones = [
   },
   {
     resetWithin: 10,
-    reward: "The Meta-Dimension Boost autobuyer can buy an infinite amount of them.",
+    reward: "You can buy the maximum amount of Meta-Dimension Boosts and you start with 4 of them.",
   },
   {
     resetWithin: 5,

@@ -1,83 +1,84 @@
-import { ProgressChecker } from "./storage/progress-checker";
+import { ProgressChecker } from "./storage/progress-checker.js";
 
-import CloudInvalidDataModal from "@/components/modals/cloud/CloudInvalidDataModal";
-import CloudLoadConflictModal from "@/components/modals/cloud/CloudLoadConflictModal";
-import CloudSaveConflictModal from "@/components/modals/cloud/CloudSaveConflictModal";
-import EternityChallengeStartModal from "@/components/modals/challenges/EternityChallengeStartModal";
-import InfinityChallengeStartModal from "@/components/modals/challenges/InfinityChallengeStartModal";
-import MessageModal from "@/components/modals/MessageModal";
-import NormalChallengeStartModal from "@/components/modals/challenges/NormalChallengeStartModal";
+import CloudInvalidDataModal from "@/components/modals/cloud/CloudInvalidDataModal.vue";
+import CloudLoadConflictModal from "@/components/modals/cloud/CloudLoadConflictModal.vue";
+import CloudSaveConflictModal from "@/components/modals/cloud/CloudSaveConflictModal.vue";
+import EternityChallengeStartModal from "@/components/modals/challenges/EternityChallengeStartModal.vue";
+import InfinityChallengeStartModal from "@/components/modals/challenges/InfinityChallengeStartModal.vue";
+import MessageModal from "@/components/modals/MessageModal.vue";
+import NormalChallengeStartModal from "@/components/modals/challenges/NormalChallengeStartModal.vue";
 
-import AntimatterGalaxyModal from "@/components/modals/prestige/AntimatterGalaxyModal";
-import ArmageddonModal from "@/components/modals/prestige/ArmageddonModal";
-import BigCrunchModal from "@/components/modals/prestige/BigCrunchModal";
-import DimensionBoostModal from "@/components/modals/prestige/DimensionBoostModal";
-import EnterCelestialsModal from "@/components/modals/prestige/EnterCelestialsModal";
-import EnterDilationModal from "@/components/modals/prestige/EnterDilationModal";
-import EternityModal from "@/components/modals/prestige/EternityModal";
-import ExitChallengeModal from "@/components/modals/prestige/ExitChallengeModal";
-import ExitDilationModal from "@/components/modals/prestige/ExitDilationModal";
-import HardResetModal from "@/components/modals/prestige/HardResetModal";
-import RealityModal from "@/components/modals/prestige/RealityModal";
-import ReplicantiGalaxyModal from "@/components/modals/prestige/ReplicantiGalaxyModal";
-import ResetRealityModal from "@/components/modals/prestige/ResetRealityModal";
+import AntimatterGalaxyModal from "@/components/modals/prestige/AntimatterGalaxyModal.vue";
+import ArmageddonModal from "@/components/modals/prestige/ArmageddonModal.vue";
+import BigCrunchModal from "@/components/modals/prestige/BigCrunchModal.vue";
+import DimensionBoostModal from "@/components/modals/prestige/DimensionBoostModal.vue";
+import EnterCelestialsModal from "@/components/modals/prestige/EnterCelestialsModal.vue";
+import EnterDilationModal from "@/components/modals/prestige/EnterDilationModal.vue";
+import EternityModal from "@/components/modals/prestige/EternityModal.vue";
+import ExitChallengeModal from "@/components/modals/prestige/ExitChallengeModal.vue";
+import ExitDilationModal from "@/components/modals/prestige/ExitDilationModal.vue";
+import HardResetModal from "@/components/modals/prestige/HardResetModal.vue";
+import RealityModal from "@/components/modals/prestige/RealityModal.vue";
+import ReplicantiGalaxyModal from "@/components/modals/prestige/ReplicantiGalaxyModal.vue";
+import ResetRealityModal from "@/components/modals/prestige/ResetRealityModal.vue";
 
-import AnimationOptionsModal from "@/components/modals/options/AnimationOptionsModal";
-import AwayProgressOptionsModal from "@/components/modals/options/AwayProgressOptionsModal";
-import BackupWindowModal from "@/components/modals/options/BackupWindowModal";
-import ConfirmationOptionsModal from "@/components/modals/options/ConfirmationOptionsModal";
-import CosmeticSetChoiceModal from "@/components/modals/options/glyph-appearance/CosmeticSetChoiceModal";
-import GlyphDisplayOptionsModal from "@/components/modals/options/glyph-appearance/GlyphDisplayOptionsModal";
-import HiddenTabsModal from "@/components/modals/options/hidden-tabs/HiddenTabsModal";
-import HotkeysModal from "@/components/modals/options/HotkeysModal";
-import InfoDisplayOptionsModal from "@/components/modals/options/InfoDisplayOptionsModal";
-import NewsOptionsModal from "@/components/modals/options/NewsOptionsModal";
-import NotationModal from "@/components/modals/options/NotationModal";
-import PreferredTreeModal from "@/components/modals/options/PreferredTreeModal";
-import SingleGlyphAppearanceModal from "@/components/modals/options/glyph-appearance/SingleGlyphAppearanceModal";
+import AnimationOptionsModal from "@/components/modals/options/AnimationOptionsModal.vue";
+import AwayProgressOptionsModal from "@/components/modals/options/AwayProgressOptionsModal.vue";
+import BackupWindowModal from "@/components/modals/options/BackupWindowModal.vue";
+import ConfirmationOptionsModal from "@/components/modals/options/ConfirmationOptionsModal.vue";
+import CosmeticSetChoiceModal from "@/components/modals/options/glyph-appearance/CosmeticSetChoiceModal.vue";
+import GlyphDisplayOptionsModal from "@/components/modals/options/glyph-appearance/GlyphDisplayOptionsModal.vue";
+import HiddenTabsModal from "@/components/modals/options/hidden-tabs/HiddenTabsModal.vue";
+import HotkeysModal from "@/components/modals/options/HotkeysModal.vue";
+import InfoDisplayOptionsModal from "@/components/modals/options/InfoDisplayOptionsModal.vue";
+import NewsOptionsModal from "@/components/modals/options/NewsOptionsModal.vue";
+import NotationModal from "@/components/modals/options/NotationModal.vue";
+import PreferredTreeModal from "@/components/modals/options/PreferredTreeModal.vue";
+import SingleGlyphAppearanceModal from "@/components/modals/options/glyph-appearance/SingleGlyphAppearanceModal.vue";
 
-import DeleteCompanionGlyphModal from "@/components/modals/glyph-management/DeleteCompanionGlyphModal";
-import DeleteGlyphModal from "@/components/modals/glyph-management/DeleteGlyphModal";
-import PurgeAllRejectedGlyphsModal from "@/components/modals/glyph-management/PurgeAllRejectedGlyphsModal";
-import PurgeAllUnprotectedGlyphsModal from "@/components/modals/glyph-management/PurgeAllUnprotectedGlyphsModal";
-import PurgeGlyphModal from "@/components/modals/glyph-management/PurgeGlyphModal";
-import RefineGlyphModal from "@/components/modals/glyph-management/RefineGlyphModal";
-import SacrificeGlyphModal from "@/components/modals/glyph-management/SacrificeGlyphModal";
+import DeleteCompanionGlyphModal from "@/components/modals/glyph-management/DeleteCompanionGlyphModal.vue";
+import DeleteGlyphModal from "@/components/modals/glyph-management/DeleteGlyphModal.vue";
+import PurgeAllRejectedGlyphsModal from "@/components/modals/glyph-management/PurgeAllRejectedGlyphsModal.vue";
+import PurgeAllUnprotectedGlyphsModal from "@/components/modals/glyph-management/PurgeAllUnprotectedGlyphsModal.vue";
+import PurgeGlyphModal from "@/components/modals/glyph-management/PurgeGlyphModal.vue";
+import RefineGlyphModal from "@/components/modals/glyph-management/RefineGlyphModal.vue";
+import SacrificeGlyphModal from "@/components/modals/glyph-management/SacrificeGlyphModal.vue";
 
-import AutobuyerEditModal from "@/components/modals/AutobuyerEditModal";
-import AutomatorScriptTemplate from "@/components/modals/AutomatorScriptTemplate";
-import AwayProgressModal from "@/components/modals/AwayProgressModal";
-import BreakInfinityModal from "@/components/modals/BreakInfinityModal";
-import CatchupModal from "@/components/modals/catchup/CatchupModal";
-import ChangelogModal from "@/components/modals/ChangelogModal";
-import ChangeNameModal from "@/components/modals/ChangeNameModal";
-import ClearConstantsModal from "@/components/modals/ClearConstantsModal";
-import CreditsModal from "@/components/modals/CreditsModal";
-import DeleteAutomatorScriptModal from "@/components/modals/DeleteAutomatorScriptModal";
-import EnslavedHintsModal from "@/components/modals/EnslavedHintsModal";
-import GlyphSetSaveDeleteModal from "@/components/modals/GlyphSetSaveDeleteModal";
-import GlyphShowcasePanelModal from "@/components/modals/GlyphShowcasePanelModal";
-import H2PModal from "@/components/modals/H2PModal";
-import ImportAutomatorDataModal from "@/components/modals/ImportAutomatorDataModal";
-import ImportFilterModal from "@/components/modals/ImportFilterModal";
-import ImportSaveModal from "@/components/modals/ImportSaveModal";
-import ImportTimeStudyConstants from "@/components/modals/ImportTimeStudyConstants";
-import InformationModal from "@/components/modals/InformationModal";
-import LoadGameModal from "@/components/modals/LoadGameModal";
-import ModifySeedModal from "@/components/modals/ModifySeedModal";
-import PelleEffectsModal from "@/components/modals/PelleEffectsModal";
-import RealityGlyphCreationModal from "@/components/modals/RealityGlyphCreationModal";
-import ReplaceGlyphModal from "@/components/modals/ReplaceGlyphModal";
-import SacrificeModal from "@/components/modals/SacrificeModal";
-import SingularityMilestonesModal from "@/components/modals/SingularityMilestonesModal";
-import SpeedrunModeModal from "@/components/modals/SpeedrunModeModal";
-import StudyStringModal from "@/components/modals/StudyStringModal";
-import SwitchAutomatorEditorModal from "@/components/modals/SwitchAutomatorEditorModal";
-import UiChoiceModal from "@/components/modals/UiChoiceModal";
-import UndoGlyphModal from "@/components/modals/UndoGlyphModal";
-import UpgradeMechanicLockModal from "@/components/modals/UpgradeMechanicLockModal";
+import AutobuyerEditModal from "@/components/modals/AutobuyerEditModal.vue";
+import AutomatorScriptTemplate from "@/components/modals/AutomatorScriptTemplate.vue";
+import AwayProgressModal from "@/components/modals/AwayProgressModal.vue";
+import BreakInfinityModal from "@/components/modals/BreakInfinityModal.vue";
+import CatchupModal from "@/components/modals/catchup/CatchupModal.vue";
+import ChangelogModal from "@/components/modals/ChangelogModal.vue";
+import ChangeNameModal from "@/components/modals/ChangeNameModal.vue";
+import ClearConstantsModal from "@/components/modals/ClearConstantsModal.vue";
+import CreditsModal from "@/components/modals/CreditsModal.vue";
+import DeleteAutomatorScriptModal from "@/components/modals/DeleteAutomatorScriptModal.vue";
+import EnslavedHintsModal from "@/components/modals/EnslavedHintsModal.vue";
+import GlyphSetSaveDeleteModal from "@/components/modals/GlyphSetSaveDeleteModal.vue";
+import GlyphShowcasePanelModal from "@/components/modals/GlyphShowcasePanelModal.vue";
+import H2PModal from "@/components/modals/H2PModal.vue";
+import ImportAutomatorDataModal from "@/components/modals/ImportAutomatorDataModal.vue";
+import ImportFilterModal from "@/components/modals/ImportFilterModal.vue";
+import ImportSaveModal from "@/components/modals/ImportSaveModal.vue";
+import ImportTimeStudyConstants from "@/components/modals/ImportTimeStudyConstants.vue";
+import InformationModal from "@/components/modals/InformationModal.vue";
+import LoadGameModal from "@/components/modals/LoadGameModal.vue";
+import ModifySeedModal from "@/components/modals/ModifySeedModal.vue";
+import PelleEffectsModal from "@/components/modals/PelleEffectsModal.vue";
+import RealityGlyphCreationModal from "@/components/modals/RealityGlyphCreationModal.vue";
+import ReplaceGlyphModal from "@/components/modals/ReplaceGlyphModal.vue";
+import SacrificeModal from "@/components/modals/SacrificeModal.vue";
+import SingularityMilestonesModal from "@/components/modals/SingularityMilestonesModal.vue";
+import SpeedrunModeModal from "@/components/modals/SpeedrunModeModal.vue";
+import StudyStringModal from "@/components/modals/StudyStringModal.vue";
+import SwitchAutomatorEditorModal from "@/components/modals/SwitchAutomatorEditorModal.vue";
+import UiChoiceModal from "@/components/modals/UiChoiceModal.vue";
+import UndoGlyphModal from "@/components/modals/UndoGlyphModal.vue";
+import UpgradeMechanicLockModal from "@/components/modals/UpgradeMechanicLockModal.vue";
 
-import S12GamesModal from "@/components/modals/secret-themes/S12GamesModal";
+import S12GamesModal from "@/components/modals/secret-themes/S12GamesModal.vue";
+import NGPlusChoiceModal from "@/components/modals/NGPlusChoiceModal.vue";
 
 let nextModalID = 0;
 export class Modal {
@@ -375,8 +376,8 @@ function getSaveInfo(save) {
   };
   // This code ends up getting run on raw save data before any migrations are applied, so we need to default to props
   // which only exist on the pre-reality version when applicable. Note that new Decimal(undefined) gives zero.
-  resources.realTimePlayed = save.records?.realTimePlayed ??
-    100 * save.totalTimePlayed;
+  resources.realTimePlayed = save.records?.realTimePlayed
+    ?? 100 * save.totalTimePlayed;
   resources.totalAntimatter.copyFrom(
     new Decimal(save.records?.totalAntimatter),
   );
@@ -470,3 +471,5 @@ Modal.message = new class extends Modal {
     Modal.hide();
   }
 }(MessageModal, 2);
+
+Modal.ngPlusMode = new Modal(NGPlusChoiceModal);

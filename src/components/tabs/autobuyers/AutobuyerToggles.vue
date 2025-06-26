@@ -1,8 +1,9 @@
 <script>
-import PrimaryButton from "@/components/PrimaryButton";
-import PrimaryToggleButton from "@/components/PrimaryToggleButton";
+import PrimaryButton from "@/components/PrimaryButton.vue";
+import PrimaryToggleButton from "@/components/PrimaryToggleButton.vue";
+import { defineComponent } from "vue";
 
-export default {
+export default defineComponent({
   name: "AutobuyerToggles",
   components: {
     PrimaryButton,
@@ -33,7 +34,7 @@ export default {
     update() {
       this.isDoomed = Pelle.isDoomed;
       this.autobuyersOn = player.auto.autobuyersOn;
-      this.showContinuum = Laitela.isUnlocked;
+      this.showContinuum = true;
       this.disableContinuum = player.auto.disableContinuum;
       this.allAutobuyersDisabled = Autobuyers.unlocked.every(autobuyer => !autobuyer.isActive);
     },
@@ -43,7 +44,7 @@ export default {
       }
     },
   },
-};
+});
 </script>
 
 <template>

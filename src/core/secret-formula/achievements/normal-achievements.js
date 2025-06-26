@@ -1427,219 +1427,174 @@ export const normalAchievements = [
   },
   {
     id: 141,
-    name: "Snap back to reality",
-    description: "Make a new Reality.",
-    checkRequirement: () => true,
-    checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
-    get reward() {
-      return `${
-        formatX(4)
-      } Infinity Point gain, and increase the multiplier for buying ${
-        formatInt(10)
-      }
-      Antimatter Dimensions by +${format(0.1, 0, 1)}.`;
-    },
-    effects: {
-      ipGain: 4,
-      buyTenMult: 0.1,
-    },
+    name: "I'm so meta",
+    description: "Unlock Meta Dimensions.",
+    checkEvent: GAME_EVENT.ACHIEVEMENT_EVENT_OTHER,
   },
   {
     id: 142,
-    name: "How does this work?",
-    description: "Unlock the automator.",
-    checkRequirement: () => Player.automatorUnlocked,
-    checkEvent: [
-      GAME_EVENT.REALITY_RESET_AFTER,
-      GAME_EVENT.REALITY_UPGRADE_BOUGHT,
-      GAME_EVENT.PERK_BOUGHT,
-      GAME_EVENT.BLACK_HOLE_UNLOCKED,
-    ],
+    name: "And still no ninth dimension...",
+    description: "Buy an Eighth Meta Dimension..",
+    checkEvent: GAME_EVENT.ACHIEVEMENT_EVENT_OTHER,
     get reward() {
-      return `Dimension Boosts are ${
-        formatPercents(new Decimal(0.5))
-      } stronger.`;
+      return `All Meta Dimensions are ${formatPercents(0.1, 0)} stronger
+        and start with ${format(100)} Meta-Antimatter on reset.`;
     },
-    effect: 1.5,
+    effect: 1.1,
   },
   {
     id: 143,
-    name: "Yo dawg, I heard you liked reskins...",
+    name: "In the grim darkness of the far endgame",
     get description() {
-      return `Have all your Eternities in your past ${
-        formatInt(10)
-      } Eternities be at least
-      ${
-        format(DC.NUMMAX, 1, 0)
-      } times higher Eternity Points than the previous one.`;
+      return `Reach ${format(DC.E40000)} Eternity Points.`;
     },
-    checkRequirement: () => {
-      if (
-        player.records.recentEternities.some(i => i[0] === Number.MAX_VALUE)
-      ) {
-        return false;
-      }
-      const eternities = player.records.recentEternities.map(run => run[3]);
-      for (let i = 0; i < eternities.length - 1; i++) {
-        if (eternities[i].lt(eternities[i + 1].times(DC.NUMMAX))) {
-          return false;
-        }
-      }
-      return true;
-    },
-    checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER,
+    checkRequirement: () => Currency.eternityPoints.gte(DC.E40000),
+    checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     reward: "Galaxies no longer reset Dimension Boosts.",
   },
   {
     id: 144,
-    name: "Is this an Interstellar reference?",
-    description: "Unlock the Black Hole.",
-    checkRequirement: () => BlackHole(1).isUnlocked,
-    checkEvent: GAME_EVENT.BLACK_HOLE_UNLOCKED,
+    name: "Meta-boosting to the max",
+    get description() {
+      return `Meta-Dimension Boosts are ${formatPercents(0.01)} stronger.`;
+    },
+    checkRequirement: () => player.meta.boosts.gt(10),
+    checkEvent: GAME_EVENT.META_DIMBOOST_AFTER,
   },
   {
     id: 145,
-    name: "Are you sure these are the right way around?",
-    description: "Have either Black Hole interval smaller than its duration.",
-    checkRequirement: () =>
-      BlackHoles.list.some(bh => bh.interval.lt(bh.duration)),
-    checkEvent: GAME_EVENT.BLACK_HOLE_UPGRADE_BOUGHT,
-    get reward() {
-      return `Black Hole intervals are ${
-        formatPercents(new Decimal(0.1))
-      } shorter.`;
+    name: "The cap is a hundred thousand, not a trillion",
+    get description() {
+      return `Eternity over ${format(DC.E12)} times.`;
     },
-    effect: 0.9,
+    checkRequirement: () => Currency.eternities.gte(DC.E12),
+    checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER,
+    get reward() {
+      return "Disable the softcap to Eternity Upgrade 2.";
+    },
   },
   {
     id: 146,
-    name: "Perks of living",
-    description: "Have all Perks bought.",
-    checkRequirement: () => player.reality.perks.size === Perks.all.length,
-    checkEvent: GAME_EVENT.PERK_BOUGHT,
-    get reward() {
-      return `+${formatPercents(new Decimal(0.01))} Glyph rarity.`;
+    name: "It will never be enough",
+    get description() {
+      return `Gain over ${format(DC.E100000)} Replicanti.`;
     },
-    effect: 1,
+    checkRequirement: () => Replicanti.amount.gte(DC.E100000),
+    checkEvent: GAME_EVENT.REPLICANTI_TICK_AFTER,
   },
   {
     id: 147,
-    name: "Master of Reality",
-    description: "Have all Reality upgrades bought.",
-    checkRequirement: () => RealityUpgrades.allBought,
-    checkEvent: GAME_EVENT.REALITY_UPGRADE_BOUGHT,
-    reward: "Unlock Teresa, the Celestial of Reality.",
+    name: "GAS GAS GAS",
+    get description() {
+      return `Get over ${formatInt(1e6)} free tickspeed upgrades from Time Shards.`;
+    },
+    checkRequirement: () => player.totalTickGained.gte(1e6),
+    checkEvent: GAME_EVENT.GAME_TICK_AFTER,
+    reward: "Unlock autobuyers for Time Dimensions and the 5x EP multiplier upgrade.",
   },
   {
     id: 148,
-    name: "Royal flush",
-    description: "Reality with one of each basic Glyph type.",
-    checkRequirement: () =>
-      GlyphInfo.basicGlyphTypes
-        .every(type => Glyphs.activeList.some(g => g.type === type)),
-    checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
-    reward:
-      "Gained Glyph level is increased by number of distinct Glyph types equipped.",
-    effect: () =>
-      (new Set(Glyphs.activeWithoutCompanion.map(g => g.type))).size,
-    formatEffect: value => `+${formatInt(value)}`,
+    name: "Universal harmony",
+    get description() {
+      return `Gain at least ${formatInt(700)} Antimatter, Replicanti, and Tachyonic Galaxies.`;
+    },
+    checkRequirement: () => player.galaxies.gte(700) && Replicanti.galaxies.total.gte(700) && player.dilation.totalTachyonGalaxies.gte(700),
+    checkEvent: GAME_EVENT.GAME_TICK_AFTER,
+    get reward() {
+      return `All galaxies are ${formatPercents(0.01)} stronger.`;
+    },
+    effect: () => 1.01,
   },
   {
     id: 151,
-    name: "You really didn't need it anyway",
+    name: "I don't have enough fuel!",
     get description() {
-      return `Get ${formatInt(800)} Antimatter Galaxies without
-      buying 8th Antimatter Dimensions in your current Infinity.`;
+      return `Reach ${format(Number.MAX_VALUE, 2)} Meta-Antimatter.`;
     },
-    checkRequirement: () =>
-      player.galaxies.gte(800) && player.requirementChecks.infinity.noAD8,
-    checkEvent: GAME_EVENT.GALAXY_RESET_AFTER,
-    reward: "Unlock V, the Celestial of Achievements.",
+    checkRequirement: () => Currency.metaAntimatter.gte(Number.MAX_VALUE),
+    checkEvent: GAME_EVENT.GAME_TICK_AFTER,
   },
   {
     id: 152,
-    name: "Y'all got any more of them Glyphs?",
+    name: "Sub-atmoic",
     get description() {
-      return `Have ${formatInt(100)} Glyphs in your inventory.`;
+      return "Study the science of the Quantum layer.";
     },
-    checkRequirement: () => Glyphs.inventoryList.length >= 100,
-    checkEvent: GAME_EVENT.GLYPHS_CHANGED,
+    get reward() {
+      return "Start with 1 Eternity and you can now bulk EC completions.";
+    },
+    checkRequirement: () => true,
+    checkEvent: GAME_EVENT.QUANTUM_RESET_AFTER,
   },
   {
     id: 153,
-    name: "More like \"reallydoesn'tmatter\"",
-    description: "Reality without producing antimatter.",
-    checkRequirement: () => player.requirementChecks.reality.noAM,
-    checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
+    name: "Hardonization",
+    description: "Have colored quarks but a neutral color charge (not implemented).",
+    checkRequirement: () => false,
+    checkEvent: GAME_EVENT.QUANTUM_RESET_AFTER,
   },
   {
     id: 154,
-    name: "I am speed",
+    name: "Work hard, not smart",
     get description() {
-      return `Reality in under ${formatInt(5)} seconds (game time).`;
+      return "Unlock Time Dilation without ever buying Eternity Upgrades.";
     },
-    checkRequirement: () => Time.thisReality.totalSeconds.lte(5),
-    checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
-    get reward() {
-      return `${formatPercents(new Decimal(0.1))} chance each Reality of ${
-        formatX(2)
-      } Realities and Perk Points.`;
-    },
-    effect: 0.1,
+    checkRequirement: () => TimeStudy.dilation.isBought && player.eternityUpgrades.size === 0,
+    checkEvent: GAME_EVENT.ACHIEVEMENT_EVENT_OTHER,
   },
   {
     id: 155,
-    name: "Achievement #15983",
+    name: "No more tax fraud!",
     get description() {
-      return `Play for ${formatFloat(13.7, 1)} billion years.`;
+      return `Get ${formatInt(900)} Antimatter Galaxies without unlocking Time Dilation.`;
     },
-    checkRequirement: () => Time.totalTimePlayed.totalYears.gt(13.7e9),
-    checkEvent: GAME_EVENT.GAME_TICK_AFTER,
+    checkRequirement: () => player.galaxies.gte(900) && !TimeStudy.dilation.isBought,
+    checkEvent: GAME_EVENT.GALAXY_RESET_AFTER,
     get reward() {
-      return `Black Hole durations are ${
-        formatPercents(new Decimal(0.1))
-      } longer.`;
+      return `Bank ${formatPercents(0.05)} of your Eternities on Quantum resets (not implemented).`;
     },
-    effect: 1.1,
+    effect: 1.05,
   },
   {
     id: 156,
-    name: "College Dropout",
-    description: "Reality without buying Time Theorems.",
-    checkRequirement: () => player.requirementChecks.reality.noPurchasedTT,
-    checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
+    name: "And the winner is...",
+    description: "Perform a Quantum study within 30 seconds.",
+    checkRequirement: () => Time.bestQuantum.totalSeconds.lt(30),
+    checkEvent: GAME_EVENT.QUANTUM_RESET_AFTER,
     get reward() {
-      return `Gain ${
-        formatX(2.5, 0, 1)
-      } generated Time Theorems, and a free coupon to McDonalds™️.`;
+      return "Eternity Points multiply your Quarks gain.";
     },
-    effect: 2.5,
+    effect: () => Currency.eternityPoints.value.plus(1).log10().powEffectOf(Achievement(168)),
+    formatEffect: value => formatX(value, 2, 2),
   },
   {
     id: 157,
-    name: "It's super effective!",
+    name: "Old age",
     get description() {
-      return `Get a Glyph with ${formatInt(4)} effects.`;
+      return `Gain ${format(DC.E1E12)} Antimatter.`;
     },
-    checkRequirement: () =>
-      Glyphs.activeList.concat(Glyphs.inventoryList).map(
-        glyph => glyph.effects.length,
-      ).max().gte(4),
-    checkEvent: GAME_EVENT.GLYPHS_CHANGED,
+    checkRequirement: () => Currency.antimatter.gte(DC.E1E12),
+    checkEvent: GAME_EVENT.GAME_TICK_AFTER,
+    get reward() {
+      return "Gain a multiplier to 1st Meta Dimensions based on your total Antimatter.";
+    },
+    effect: () => Decimal.pow(1.01, player.records.totalAntimatter.plus(1).log10().pow(0.2).plus(1)),
+    formatEffect: value => formatX(value, 2, 2),
   },
   {
     id: 158,
-    name: "Bruh, are you like, inside the hole?",
-    description: "Make both Black Holes permanent.",
-    checkRequirement: () =>
-      BlackHole(1).isPermanent && BlackHole(2).isPermanent,
-    checkEvent: GAME_EVENT.BLACK_HOLE_UPGRADE_BOUGHT,
-    get reward() {
-      return `Black Hole power increased by ${
-        formatPercents(new Decimal(0.1))
-      }.`;
+    name: "I already got rid of you...",
+    get description() {
+      return `Get ${format(DC.E400000)} Infinity Points without Time Studies and Electrons nor Positrons.`;
     },
-    effect: 1.1,
+    checkRequirement: () => Currency.infinityPoints.gte(DC.E400000) && player.timestudy.studies.length === 0
+      && player.quantum.pair.positrons.eq(0) && player.quantum.pair.electrons.eq(0),
+    checkEvent: GAME_EVENT.GAME_TICK_AFTER,
+    get reward() {
+      return "Gain a power to Time Theorem generation based on Tachyon Particles.";
+    },
+    effect: () => Currency.tachyonParticles.value.plus(1).log10().div(2000).plus(1),
+    formatEffect: value => formatPow(value, 2, 3),
   },
   {
     id: 161,
@@ -1647,8 +1602,7 @@ export const normalAchievements = [
     get description() {
       return `Get ${formatPostBreak(DC.E1E8)} antimatter while Dilated.`;
     },
-    checkRequirement: () =>
-      Currency.antimatter.gte(DC.E1E8) && player.dilation.active,
+    checkRequirement: () => Currency.antimatter.gte(DC.E1E8) && player.dilation.active,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
   },
   {
@@ -1660,48 +1614,48 @@ export const normalAchievements = [
   },
   {
     id: 163,
-    name: "Actually, super easy! Barely an inconvenience!",
+    name: "この実績は存在しません 3",
     get description() {
-      return `Complete all the Eternity Challenges ${
-        formatInt(5)
-      } times with less than ${formatInt(1)}
-      second (game time) in your current Reality.`;
+      return `Gain ${format("9e99999999")} Eternity Points.`;
     },
-    checkRequirement: () =>
-      EternityChallenges.all.map(ec => ec.completions).min().gte(5)
-      && Time.thisReality.totalSeconds.lte(1),
+    checkRequirement: () => Currency.eternityPoints.gte("9e99999999"),
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
+    get reward() {
+      return "Improve the IP => EP conversion formula (/250).";
+    },
+    effect: () => 250,
   },
   {
     id: 164,
-    name: "Infinity times two",
+    name: "What is this, Eternity Challenge 3?",
     get description() {
-      return `Get ${format(DC.NUMMAX, 1)} Infinities.`;
+      return "Study the Quantum layer without having Meta Dimensions 5-8.";
     },
-    checkRequirement: () => Currency.infinitiesTotal.gte(DC.NUMMAX),
-    checkEvent: GAME_EVENT.GAME_TICK_AFTER,
+    checkRequirement: () => {
+      for (const i of Array.range(5, 4)) {
+        if (MetaDimension(i).bought.neq(0)) {
+          return false;
+        }
+      }
+
+      return true;
+    },
+    checkEvent: GAME_EVENT.QUANTUM_RESET_AFTER,
     get reward() {
-      return `Gain ×${formatInt(1024)} more Infinities.`;
+      return "3rd Red-green Gluon Upgrade is stronger based on Meta-Dimension Boosts.";
     },
-    effect: 1024,
+    effect: () => player.meta.boosts.plus(1).log10().plus(1).sqrt(),
+    formatEffect: value => formatPow(value, 2, 3),
   },
   {
     id: 165,
-    name: "Perfectly balanced",
+    name: "Twice in a row",
     get description() {
-      return `Get a level ${
-        formatInt(5000)
-      } Glyph with all Glyph level factors equally weighted.`;
+      return "Complete Paired Challenge 4 (not implemented).";
     },
-    checkRequirement: () =>
-      gainedGlyphLevel().actualLevel.gte(5000)
-      && ["repl", "dt", "eternities"].every(
-        i =>
-          player.celestials.effarig.glyphWeights[i]
-          === player.celestials.effarig.glyphWeights.ep,
-      ),
-    checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
-    reward: "Unlock optimal automatic Glyph level factor adjustment.",
+    checkRequirement: () => false,
+    checkEvent: GAME_EVENT.QUANTUM_RESET_AFTER,
+    reward: "Unlock the \"nth dilations\" mode for the Quantum autobuyer (not implemented).",
   },
   {
     id: 166,
@@ -1718,28 +1672,29 @@ export const normalAchievements = [
   },
   {
     id: 167,
-    name: "Mr. Layer? Sorry, you're not on the list",
+    name: "Intergalactic",
     get description() {
-      return `Reach ${format(DC.NUMMAX, 1, 0)} Reality Machines.`;
+      return `Reach ${formatInt(4e6)} eighth Antimatter Dimensions without having Replicated nor Tachyonic Galaxies.`;
     },
-    checkRequirement: () => Currency.realityMachines.gte(DC.NUMMAX),
+    checkRequirement: () => AntimatterDimension(8).totalAmount.gte(4e6)
+      && player.replicanti.galaxies.eq(0) && player.dilation.totalTachyonGalaxies.eq(0),
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     reward:
-      "Gain more Reality Machines based on your current Reality Machines.",
-    effect: () =>
-      Decimal.clampMin(1, Currency.realityMachines.value.max(1).log2()),
+      "Eighth Antimatter Dimensions are stronger based on your Antimatter Galaxies.",
+    effect: () => Decimal.pow(player.galaxies, player.galaxies.pow(2)),
     formatEffect: value => `${formatX(value, 2, 2)}`,
   },
   {
     id: 168,
-    name: "Woah, we're halfway there",
+    name: "Seriously I already got rid of you",
     get description() {
-      return `Get ${formatInt(50)} total Ra Celestial Memory levels.`;
+      return `Reach ${format("e3.54e5")} Infinity Points without Time Studies, while Dilated and in Quantum Challenge 2.`;
     },
-    checkRequirement: () => Ra.totalPetLevel >= 50,
+    checkRequirement: () => Currency.infinityPoints.gte("e3.54e5") && player.timestudy.studies.length === 0
+      && QuantumChallenge(2).isRunning && player.dilation.active,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     get reward() {
-      return `Get ${formatPercents(new Decimal(0.1))} more memories.`;
+      return "Achievement 156 is stronger.";
     },
     effect: 1.1,
   },

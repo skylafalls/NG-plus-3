@@ -22,7 +22,7 @@ export class TimeDimensionAutobuyerState extends IntervaledAutobuyerState {
   }
 
   get isUnlocked() {
-    return true;
+    return Achievement(157).isUnlocked;
   }
 
   get resetTickOn() {

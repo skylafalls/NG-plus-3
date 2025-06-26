@@ -1,6 +1,4 @@
 <script>
-import { Replicanti } from "../../../core/replicanti.js";
-
 import wordShift from "@/core/word-shift.js";
 
 import ReplicantiUpgradeButton, { ReplicantiUpgradeButtonSetup } from "./ReplicantiUpgradeButton.vue";

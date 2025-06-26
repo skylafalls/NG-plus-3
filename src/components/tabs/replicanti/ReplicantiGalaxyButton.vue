@@ -1,8 +1,9 @@
 <script>
-import PrimaryButton from "@/components/PrimaryButton";
-import PrimaryToggleButton from "@/components/PrimaryToggleButton";
+import PrimaryButton from "@/components/PrimaryButton.vue";
+import PrimaryToggleButton from "@/components/PrimaryToggleButton.vue";
+import { defineComponent } from "vue";
 
-export default {
+export default defineComponent({
   name: "ReplicantiGalaxyButton",
   components: {
     PrimaryButton,
@@ -21,6 +22,9 @@ export default {
   },
   computed: {
     resetActionDisplay() {
+      if (QuantumSpeedrunMilestone(20).isReached) {
+        return null;
+      }
       return this.isDivideUnlocked && !Pelle.isDoomed
         ? `Divide Replicanti by ${format(Number.MAX_VALUE, 1, 1)}`
         : "Reset Replicanti amount";
@@ -60,7 +64,7 @@ export default {
       replicantiGalaxyRequest();
     },
   },
-};
+});
 </script>
 
 <template>
@@ -70,7 +74,12 @@ export default {
       class="o-primary-btn--replicanti-galaxy"
       @click="handleClick"
     >
-      {{ resetActionDisplay }} for a Replicanti Galaxy
+      <template v-if="resetActionDisplay === null">
+        Gain a Replicanti Galaxy
+      </template>
+      <template v-else>
+        {{ resetActionDisplay }} for a Replicanti Galaxy
+      </template>
       <br>
       {{ galaxyCountDisplay }}
     </PrimaryButton>

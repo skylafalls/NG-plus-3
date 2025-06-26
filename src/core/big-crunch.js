@@ -177,7 +177,7 @@ export function bigCrunchResetValues(enteringAntimatterChallenge) {
     );
   }
 
-  if (PelleUpgrade.replicantiGalaxyNoReset.canBeApplied) {
+  if (PelleUpgrade.replicantiGalaxyNoReset.canBeApplied || QuantumSpeedrunMilestone(28).isReached) {
     remainingGalaxies = currentReplicantiGalaxies;
   }
   // I don't think this Math.clampMax is technically needed, but if we add another source

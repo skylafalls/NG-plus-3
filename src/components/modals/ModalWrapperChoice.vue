@@ -1,9 +1,10 @@
 <script>
-import ModalCloseButton from "@/components/modals/ModalCloseButton";
-import ModalConfirmationCheck from "@/components/modals/ModalConfirmationCheck";
-import PrimaryButton from "@/components/PrimaryButton";
+import ModalCloseButton from "@/components/modals/ModalCloseButton.vue";
+import ModalConfirmationCheck from "@/components/modals/ModalConfirmationCheck.vue";
+import PrimaryButton from "@/components/PrimaryButton.vue";
+import { defineComponent } from "vue";
 
-export default {
+export default defineComponent({
   name: "ModalWrapperChoice",
   components: {
     PrimaryButton,
@@ -71,7 +72,7 @@ export default {
       EventHub.dispatch(GAME_EVENT.CLOSE_MODAL);
     },
   },
-};
+});
 </script>
 
 <template>

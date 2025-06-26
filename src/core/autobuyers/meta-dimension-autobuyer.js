@@ -18,11 +18,11 @@ export class MetaDimensionAutobuyerState extends IntervaledAutobuyerState {
   }
 
   get interval() {
-    return 50;
+    return QuantumSpeedrunMilestone(21).isReached ? 500 / 10 : 500;
   }
 
   get isUnlocked() {
-    return true;
+    return QuantumSpeedrunMilestone(6 + this.id).isReached;
   }
 
   get resetTickOn() {

@@ -1,16 +1,17 @@
 <script>
-import AutobuyerToggles from "./AutobuyerToggles";
-import BigCrunchAutobuyerBox from "./BigCrunchAutobuyerBox";
-import DimensionAutobuyerBox from "./DimensionAutobuyerBox";
-import DimensionBoostAutobuyerBox from "./DimensionBoostAutobuyerBox";
-import EternityAutobuyerBox from "./EternityAutobuyerBox";
-import GalaxyAutobuyerBox from "./GalaxyAutobuyerBox";
-import OpenModalHotkeysButton from "@/components/OpenModalHotkeysButton";
-import RealityAutobuyerBox from "./RealityAutobuyerBox";
-import SimpleAutobuyersMultiBox from "./SimpleAutobuyersMultiBox";
-import TickspeedAutobuyerBox from "./TickspeedAutobuyerBox";
+import AutobuyerToggles from "./AutobuyerToggles.vue";
+import BigCrunchAutobuyerBox from "./BigCrunchAutobuyerBox.vue";
+import DimensionAutobuyerBox from "./DimensionAutobuyerBox.vue";
+import DimensionBoostAutobuyerBox from "./DimensionBoostAutobuyerBox.vue";
+import EternityAutobuyerBox from "./EternityAutobuyerBox.vue";
+import GalaxyAutobuyerBox from "./GalaxyAutobuyerBox.vue";
+import OpenModalHotkeysButton from "@/components/OpenModalHotkeysButton.vue";
+import RealityAutobuyerBox from "./RealityAutobuyerBox.vue";
+import SimpleAutobuyersMultiBox from "./SimpleAutobuyersMultiBox.vue";
+import TickspeedAutobuyerBox from "./TickspeedAutobuyerBox.vue";
+import { defineComponent } from "vue";
 
-export default {
+export default defineComponent({
   name: "AutobuyersTab",
   components: {
     AutobuyerToggles,
@@ -61,7 +62,7 @@ export default {
       this.displayADAutobuyersIndividually = !ad.collapseDisplay;
     },
   },
-};
+});
 </script>
 
 <template>

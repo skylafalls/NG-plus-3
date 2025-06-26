@@ -19,11 +19,11 @@ export class DilationUpgradeAutobuyerState extends IntervaledAutobuyerState {
   }
 
   get interval() {
-    return 50;
+    return QuantumSpeedrunMilestone(21).isReached ? 500 / 10 : 500;
   }
 
   get isUnlocked() {
-    return true;
+    return QuantumSpeedrunMilestone(6).isReached;
   }
 
   get resetTickOn() {
@@ -31,13 +31,13 @@ export class DilationUpgradeAutobuyerState extends IntervaledAutobuyerState {
   }
 
   get hasUnlimitedBulk() {
-    return true;
+    return QuantumSpeedrunMilestone(26).isReached;
   }
 
   tick() {
     super.tick();
     const upgradeName = this._upgradeName;
-    DilationUpgrade[upgradeName].purchase(Number.POSITIVE_INFINITY);
+    DilationUpgrade[upgradeName].purchase(this.hasUnlimitedBulk ? Number.POSITIVE_INFINITY : 1);
   }
 
   static get entryCount() {

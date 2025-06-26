@@ -109,4 +109,9 @@ export const confirmationTypes = [
     option: "respecIAP",
     isUnlocked: () => true,
   },
+  {
+    name: "NG+ Features",
+    option: "ngPlusMode",
+    isUnlocked: () => true,
+  },
 ];

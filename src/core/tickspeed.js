@@ -25,10 +25,13 @@ export function effectiveBaseGalaxies() {
     ),
   );
   let antimatterGalaxies = player.galaxies;
-  if (TimeStudy.pairProduction.isBought) {
+  // Don't discharge existing antimatter galaxies if there's a quantum challenge running
+  // Pair Production is disabled anyways during quantum challenges and this would kinda just be
+  // an unfair nerf to the player
+  if (TimeStudy.pairProduction.isBought && !QuantumChallenge.isRunning) {
     antimatterGalaxies = antimatterGalaxies.sub(
       player.quantum.pair.dischargedGalaxies,
-    );
+    ).max(0);
   }
   return Decimal.max(
     antimatterGalaxies.add(GalaxyGenerator.galaxies).add(replicantiGalaxies)
@@ -52,6 +55,7 @@ export function getTickSpeedMultiplier() {
     TimeStudy(212),
     TimeStudy(232),
     Achievement(86),
+    Achievement(148),
     Achievement(178),
     InfinityChallenge(5).reward,
     PelleUpgrade.galaxyPower,

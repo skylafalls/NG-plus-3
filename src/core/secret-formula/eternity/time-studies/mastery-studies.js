@@ -16,7 +16,7 @@ export const masteryStudies = [
         formatInt(3000)
       } dimension boosts`,
     effect: () => player.dimensionBoosts.div(3000).floor(),
-    formatEffect: value => formatPlus(value, 0, 0),
+    formatEffect: value => formatPlus(value, 2, 0),
   },
   {
     id: "M22",
@@ -28,7 +28,7 @@ export const masteryStudies = [
         formatInt(7)
       } Tachyonic Galaxies`,
     effect: () => player.dilation.totalTachyonGalaxies.div(7).floor(),
-    formatEffect: value => formatPlus(value, 0, 0),
+    formatEffect: value => formatPlus(value, 2, 0),
   },
   {
     id: "M23",
@@ -40,7 +40,7 @@ export const masteryStudies = [
         formatInt(4)
       } non-extra Replicanti Galaxies`,
     effect: () => player.replicanti.galaxies.div(4).floor(),
-    formatEffect: value => formatPlus(value, 0, 0),
+    formatEffect: value => formatPlus(value, 2, 0),
   },
   {
     id: "M31",

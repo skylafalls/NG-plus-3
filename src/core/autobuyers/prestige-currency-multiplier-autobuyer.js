@@ -32,7 +32,7 @@ export class EPMultAutobuyerState extends AutobuyerState {
   }
 
   get isUnlocked() {
-    return true;
+    return Achievement(157).isUnlocked;
   }
 
   get hasUnlimitedBulk() {

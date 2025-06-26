@@ -42,7 +42,6 @@ class EternityChallengeRewardState extends GameMechanicState {
 export class EternityChallengeState extends GameMechanicState {
   constructor(config) {
     super(config);
-    this._fullId = `eterc${this.id}`;
     this._reward = new EternityChallengeRewardState(config.reward, this);
   }
 
@@ -73,12 +72,12 @@ export class EternityChallengeState extends GameMechanicState {
   }
 
   get completions() {
-    const completions = player.eternityChalls[this.fullId];
+    const completions = player.challenge.eternity.completions[this.id - 1];
     return completions === undefined ? 0 : completions;
   }
 
   set completions(value) {
-    player.eternityChalls[this.fullId] = Math.min(value, this.maxCompletions);
+    player.challenge.eternity.completions[this.id - 1] = Math.min(value, this.maxCompletions);
   }
 
   get maxCompletions() {
@@ -116,7 +115,7 @@ export class EternityChallengeState extends GameMechanicState {
     if (this.isFullyCompleted) {
       return status;
     }
-    if (!Perk.studyECBulk.isBought) {
+    if (!Achievement(152).isUnlocked) {
       if (this.canBeCompleted) {
         ++status.totalCompletions;
         status.gainedCompletions = 1;

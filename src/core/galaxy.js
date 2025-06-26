@@ -97,12 +97,12 @@ export const Galaxy = {
       });
     }
 
-    return calculatedGalaxies.floor().add(2);
+    return calculatedGalaxies.floor().add(1);
   },
 
   // The existing galaxy calculation was shit so i revamped it
   requirementAt(galaxies) {
-    let equivGal = new Decimal(galaxies);
+    let equivGal = new Decimal(galaxies).floor().plus(1);
     const type = Galaxy.typeAt(galaxies);
 
     if (QuantumChallenge(5).isRunning) {

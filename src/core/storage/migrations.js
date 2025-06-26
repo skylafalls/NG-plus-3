@@ -507,6 +507,17 @@ export const migrations = {
     83: (player) => {
       beMigration(player);
     },
+    /**
+     * Moves the old place that eternity challenge completions are calculated to
+     * player.challenge.eternity for consistency with other game mechanics.
+     */
+    100: (player) => {
+      for (let i = 0; i < 14; i++) {
+        player.challenge.eternity.completions[i] = player.eternityChalls[`eterc${i + 1}`];
+      }
+
+      delete player.eternityChalls;
+    },
   },
 
   normalizeTimespans(player) {
