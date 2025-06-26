@@ -26,6 +26,8 @@ export default defineComponent({
       mult: new Decimal(),
       hasTDMult: false,
       multTD: new Decimal(),
+      hasADMult: false,
+      multAD: new Decimal(),
       hasDTMult: false,
       multDT: new Decimal(),
       hasIPMult: false,
@@ -118,6 +120,10 @@ export default defineComponent({
       const boostList = [];
       boostList.push(`a <span class="c-replicanti-description__accent">${formatX(this.mult, 2, 2)}</span>
         multiplier on all Infinity Dimensions`);
+      if (this.hasADMult) {
+        boostList.push(`a <span class="c-replicanti-description__accent">${formatX(this.multAD, 2, 2)}</span>
+          multiplier on all Antimatter Dimensions from Time Study 101`);
+      }
       if (this.hasTDMult) {
         boostList.push(`a <span class="c-replicanti-description__accent">${formatX(this.multTD, 2, 2)}</span>
           multiplier on all Time Dimensions from a Dilation Upgrade`);
@@ -176,6 +182,8 @@ export default defineComponent({
       this.mult.copyFrom(replicantiMult());
       this.hasTDMult = DilationUpgrade.tdMultReplicanti.isBought;
       this.multTD.copyFrom(DilationUpgrade.tdMultReplicanti.effectValue);
+      this.hasADMult = TimeStudy(101).isBought;
+      this.multAD.copyFrom(TimeStudy(101).effectValue);
       this.hasDTMult = getAdjustedGlyphEffect("replicationdtgain").neq(0) && !Pelle.isDoomed;
       this.multDT = Decimal.max(
         Decimal.log10(Replicanti.amount).times(getAdjustedGlyphEffect("replicationdtgain")),

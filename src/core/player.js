@@ -26,7 +26,7 @@ window.player = {
       costBumps: DC.D0,
       amount: DC.D0,
     })),
-    infinity: Array.range(0, 8).map((tier) => ({
+    infinity: Array.range(0, 8).map(tier => ({
       isUnlocked: false,
       bought: DC.D0,
       amount: DC.D0,
@@ -42,7 +42,7 @@ window.player = {
       ][tier],
       baseAmount: DC.D0,
     })),
-    time: Array.range(0, 8).map((tier) => ({
+    time: Array.range(0, 8).map(tier => ({
       cost: [
         DC.D1,
         DC.D5,
@@ -150,7 +150,7 @@ window.player = {
       isActive: true,
     },
     antimatterDims: {
-      all: Array.range(0, 8).map((tier) => ({
+      all: Array.range(0, 8).map(tier => ({
         isUnlocked: false,
         cost: 1,
         interval: [500, 600, 700, 800, 900, 1000, 1100, 1200][tier],
@@ -538,14 +538,14 @@ window.player = {
         trash: AUTO_GLYPH_REJECT.SACRIFICE,
         simple: 0,
         types: Object.keys(getGlyphTypes())
-          .filter((t) => GlyphInfo.generatedGlyphTypes.includes(t))
-          .mapToObject((t) => t, (t) => ({
+          .filter(t => GlyphInfo.generatedGlyphTypes.includes(t))
+          .mapToObject(t => t, t => ({
             rarity: new Decimal(),
             score: 0,
             effectCount: 0,
             specifiedMask: [],
             effectScores: [...Array(GlyphInfo[t].effectIDs.length).keys()]
-              .mapToObject((e) => GlyphInfo[t].effectIDs[e], () => 0),
+              .mapToObject(e => GlyphInfo[t].effectIDs[e], () => 0),
           })),
       },
       createdRealityGlyph: false,
@@ -628,7 +628,7 @@ window.player = {
     achTimer: new Decimal(),
     hasCheckedFilter: false,
   },
-  blackHole: Array.range(0, 2).map((id) => ({
+  blackHole: Array.range(0, 2).map(id => ({
     id,
     intervalUpgrades: DC.D0,
     powerUpgrades: DC.D0,
@@ -1066,19 +1066,19 @@ export const Player = {
   },
 
   get isInAnyChallenge() {
-    return this.isInAntimatterChallenge || EternityChallenge.isRunning ||
-      QuantumChallenge.isRunning;
+    return this.isInAntimatterChallenge || EternityChallenge.isRunning
+      || QuantumChallenge.isRunning;
   },
 
   get anyChallenge() {
-    return this.antimatterChallenge || EternityChallenge.current ||
-      QuantumChallenge.current;
+    return this.antimatterChallenge || EternityChallenge.current
+      || QuantumChallenge.current;
   },
 
   get canCrunch() {
     if (
-      Enslaved.isRunning &&
-      Enslaved.BROKEN_CHALLENGES.includes(NormalChallenge.current?.id)
+      Enslaved.isRunning
+      && Enslaved.BROKEN_CHALLENGES.includes(NormalChallenge.current?.id)
     ) {
       return false;
     }
@@ -1134,8 +1134,8 @@ export const Player = {
   },
 
   get automatorUnlocked() {
-    return AutomatorPoints.totalPoints >= AutomatorPoints.pointsForAutomator ||
-      player.reality.automator.forceUnlock;
+    return AutomatorPoints.totalPoints >= AutomatorPoints.pointsForAutomator
+      || player.reality.automator.forceUnlock;
   },
 
   resetRequirements(key) {
@@ -1222,12 +1222,12 @@ export function guardFromNaNValues(obj) {
         get: () => value,
         set: function guardedSetter(newValue) {
           if (newValue === null || newValue === undefined) {
-            throw new Error("null/undefined player property assignment");
+            throw new TypeError("null/undefined player property assignment");
           }
-          if (typeof newValue !== "number" && !(newValue instanceof Decimal)) {
-            throw new Error("Non-Number assignment to Number player property");
+          if (typeof newValue !== "number") {
+            throw new TypeError("Non-Number assignment to Number player property");
           }
-          if (!Decimal.isFinite(newValue)) {
+          if (!Number.isFinite(newValue)) {
             throw new TypeError("NaN player property assignment");
           }
           value = newValue;
@@ -1242,16 +1242,14 @@ export function guardFromNaNValues(obj) {
         get: () => value,
         set: function guardedSetter(newValue) {
           if (newValue === null || newValue === undefined) {
-            throw new Error("null/undefined player property assignment");
+            throw new TypeError("null/undefined player property assignment");
           }
           if (!(newValue instanceof Decimal)) {
-            throw new Error(
-              "Non-Decimal assignment to Decimal player property",
-            );
+            throw new TypeError("Non-Decimal assignment to Decimal player property");
           }
           if (
-            !isFinite(newValue.mag) || !isFinite(newValue.sign) ||
-            !isFinite(newValue.layer)
+            !Number.isFinite(newValue.mag) || !Number.isFinite(newValue.sign)
+            || !Number.isFinite(newValue.layer)
           ) {
             throw new TypeError("NaN player property assignment");
           }

@@ -180,7 +180,7 @@ export function buyDilationUpgrade(id, bulk = 1) {
 export function maxPurchaseDilationUpgrades() {
   let didBuy = false;
   for (let i = 1; i < 5; i++) {
-    buyDilationUpgrade(i, Infinity);
+    didBuy = didBuy || buyDilationUpgrade(i, Infinity);
   }
   return didBuy;
 }
@@ -198,7 +198,7 @@ export function getTachyonGalaxyMult(thresholdUpgrade) {
     : DC.D1;
 
   if (QuantumChallenge(5).isRunning) {
-    return new Decimal(Math.PI * 100);
+    return new Decimal(Math.PI * 100 * 3.65);
   }
 
   return thresholdMult.mul(glyphReduction).add(1).pow(power);

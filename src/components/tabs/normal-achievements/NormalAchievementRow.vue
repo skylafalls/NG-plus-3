@@ -1,7 +1,8 @@
 <script>
-import NormalAchievement from "./NormalAchievement";
+import { defineComponent } from "vue";
+import NormalAchievement from "./NormalAchievement.vue";
 
-export default {
+export default defineComponent({
   name: "NormalAchievementRow",
   components: {
     NormalAchievement,
@@ -36,7 +37,7 @@ export default {
       this.isHidden = this.isCompleted && player.options.hideCompletedAchievementRows;
     },
   },
-};
+});
 </script>
 
 <template>
@@ -44,7 +45,7 @@ export default {
     v-if="!isHidden"
     :class="classObject"
   >
-    <normal-achievement
+    <NormalAchievement
       v-for="(achievement, i) in row"
       :key="i"
       :achievement="achievement"

@@ -9,7 +9,7 @@ class AchievementState extends GameMechanicState {
     this._column = this.id % 10;
     this._bitmask = 1 << (this.column - 1);
     this._inverseBitmask = ~this._bitmask;
-    this.registerEvents(config.checkEvent, (args) => this.tryUnlock(args));
+    this.registerEvents(config.checkEvent, args => this.tryUnlock(args));
   }
 
   get name() {
@@ -37,8 +37,8 @@ class AchievementState extends GameMechanicState {
   }
 
   get isDisabled() {
-    return Pelle.isDisabled("achievements") &&
-      Pelle.disabledAchievements.includes(this.id);
+    return Pelle.isDisabled("achievements")
+      && Pelle.disabledAchievements.includes(this.id);
   }
 
   get isEffectActive() {
@@ -117,38 +117,38 @@ export const Achievements = {
    * @type {AchievementState[]}
    */
   get preReality() {
-    return Achievements.all.filter((ach) => ach.isPreReality);
+    return Achievements.all.filter(ach => ach.isPreReality);
   },
 
   /**
    * @type {AchievementState[]}
    */
   get prePelle() {
-    return Achievements.all.filter((ach) => ach.isPrePelle);
+    return Achievements.all.filter(ach => ach.isPrePelle);
   },
 
   get allRows() {
-    const count = Achievements.all.map((a) => a.row).nMax();
+    const count = Achievements.all.map(a => a.row).nMax();
     return Achievements.rows(1, count);
   },
 
   get preRealityRows() {
-    const count = Achievements.preReality.map((a) => a.row).nMax();
+    const count = Achievements.preReality.map(a => a.row).nMax();
     return Achievements.rows(1, count);
   },
 
   get prePelleRows() {
-    const count = Achievements.prePelle.map((a) => a.row).nMax();
+    const count = Achievements.prePelle.map(a => a.row).nMax();
     return Achievements.rows(1, count);
   },
 
   rows: (start, count) => Array.range(start, count).map(Achievements.row),
 
-  row: (row) => Array.range(row * 10 + 1, 8).map(Achievement),
+  row: row => Array.range(row * 10 + 1, 8).map(Achievement),
 
   get effectiveCount() {
-    const unlockedAchievements = Achievements.all.countWhere((a) =>
-      a.isUnlocked
+    const unlockedAchievements = Achievements.all.countWhere(a =>
+      a.isUnlocked,
     );
     return unlockedAchievements;
   },
@@ -168,7 +168,7 @@ export const Achievements = {
       );
       return;
     }
-    if (Achievements.preReality.every((a) => a.isUnlocked)) {
+    if (Achievements.preReality.every(a => a.isUnlocked)) {
       return;
     }
 
@@ -178,7 +178,7 @@ export const Achievements = {
     }
 
     for (
-      const achievement of Achievements.preReality.filter((a) => !a.isUnlocked)
+      const achievement of Achievements.preReality.filter(a => !a.isUnlocked)
     ) {
       achievement.unlock(true);
       player.reality.achTimer = player.reality.achTimer.sub(this.period);
@@ -196,7 +196,7 @@ export const Achievements = {
     if (GameCache.achievementPeriod.value.eq(0)) {
       return DC.D0;
     }
-    if (Achievements.preReality.countWhere((a) => !a.isUnlocked) === 0) {
+    if (Achievements.preReality.countWhere(a => !a.isUnlocked) === 0) {
       return DC.D0;
     }
     return this.period.sub(player.reality.achTimer);
@@ -204,7 +204,7 @@ export const Achievements = {
 
   _power: new Lazy(() => {
     const unlockedRows = Achievements.allRows
-      .countWhere((row) => row.every((ach) => ach.isUnlocked));
+      .countWhere(row => row.every(ach => ach.isUnlocked));
     const basePower = Decimal.pow(1.25, unlockedRows).mul(
       Decimal.pow(1.03, Achievements.effectiveCount),
     );
@@ -222,7 +222,7 @@ export const Achievements = {
   },
 
   updateSteamStatus() {
-    for (const achievement of Achievements.all.filter((x) => x.isUnlocked)) {
+    for (const achievement of Achievements.all.filter(x => x.isUnlocked)) {
       SteamRuntime.activateAchievement(achievement.id);
     }
   },

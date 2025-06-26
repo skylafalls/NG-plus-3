@@ -766,7 +766,7 @@ Currency.metaAntimatter = new class extends DecimalCurrency {
   }
 
   get startingValue() {
-    return new Decimal(100);
+    return Effects.max(10, Achievement(142));
   }
 }();
 

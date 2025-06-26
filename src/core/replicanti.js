@@ -351,6 +351,14 @@ export function replicantiLoop(diff) {
 }
 
 export function replicantiMult() {
+  if (MasteryStudy(81).isBought) {
+    return Replicanti.amount.clampMin(1)
+      .pow(Replicanti.amount.clampMin(1).log10().max(1).log10())
+      .plusEffectOf(TimeStudy(21))
+      .timesEffectOf(TimeStudy(102))
+      .clampMin(1);
+  }
+
   return Decimal.pow(Decimal.log2(Replicanti.amount.clampMin(1)), 2)
     .plusEffectOf(TimeStudy(21))
     .timesEffectOf(TimeStudy(102))

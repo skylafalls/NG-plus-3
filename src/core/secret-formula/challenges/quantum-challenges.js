@@ -8,7 +8,7 @@ export const quantumChallenges = [
         `Add ${formatX(0.5)} to Electron's production factor for each QC completion
         and 1st & 2nd Antimatter Dimensions boosts Dilated Time production.`,
       effect: completions => AntimatterDimension(1).amount.mul(AntimatterDimension(2).amount)
-        .plus(1).log10().pow(1 + (completions * 0.25)),
+        .plus(1).log10().pow(1 + (completions * 0.25)).plus(1),
       formatEffect: value => formatX(value, 2, 0),
     },
   },

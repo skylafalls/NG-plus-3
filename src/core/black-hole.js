@@ -128,7 +128,7 @@ class BlackHoleState {
    * Exists to avoid recursion in calculation of whether the black hole is permanent.
    */
   get rawInterval() {
-    return this.intervalUpgrade.value.mul(Achievement(145).effectOrDefault(1));
+    return this.intervalUpgrade.value;
   }
 
   /**

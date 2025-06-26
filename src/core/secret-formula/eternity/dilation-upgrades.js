@@ -136,29 +136,24 @@ export const dilationUpgrades = {
     id: 6,
     cost: 1e9,
     description: () => {
-      const rep10 = replicantiMult().pLog10();
-      let multiplier = "0.1";
-      if (rep10.gt(9000)) {
-        const ratio = DilationUpgrade.tdMultReplicanti.effectValue.pLog10().div(
-          rep10,
-        );
-        if (ratio.lt(0.095)) {
-          multiplier = ratio.toFixed(2);
-        }
+      const eff = replicantiMult();
+      let exp = new Decimal(0.1);
+      if (eff.gte("1e9000")) {
+        exp = Decimal.div(exp, replicantiMult().plus(1).log10().pow(0.05));
       }
-      return `Time Dimensions are affected by Replicanti multiplier ${
-        formatPow(multiplier, 1, 3)
-      }, reduced
-        effect above ${formatX(DC.E9000)}`;
+      return `Time Dimensions are affected by Replicanti multiplier ${formatPow(exp, 1, 3)},
+        reduced effect above ${formatX(DC.E9000)}`;
     },
     effect: () => {
-      let rep10 = replicantiMult().pLog10().div(10);
-      rep10 = rep10.gt(9000)
-        ? new Decimal(9000).add((rep10.sub(9e3)).div(2))
-        : rep10;
+      let eff = replicantiMult();
+      if (eff.gte("1e9000")) {
+        eff = eff.pow(Decimal.div(0.1, replicantiMult().plus(1).log10().pow(0.05)));
+      } else {
+        eff = eff.pow(0.1);
+      }
       return EternityChallenge(14).isRunning
         ? new Decimal(1)
-        : Decimal.pow10(rep10);
+        : eff;
     },
     formatEffect: value => formatX(value, 2, 1),
   },

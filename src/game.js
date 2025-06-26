@@ -692,7 +692,7 @@ export function gameLoop(passedDiff, options = {}) {
   // These need to all be done consecutively in order to minimize the chance of a reset occurring between real time
   // updating and game time updating. This is only particularly noticeable when game speed is 1 and the player
   // expects to see identical numbers. We also don't increment the timers if the game has been beaten (Achievement 188)
-  const isEndReached = Achievement(188).isUnlocked;
+  const isEndReached = false;
   if (!isEndReached) {
     player.records.realTimeDoomed = player.records.realTimeDoomed.add(realDiff);
     player.records.realTimePlayed = player.records.realTimePlayed.add(realDiff);
@@ -720,9 +720,13 @@ export function gameLoop(passedDiff, options = {}) {
       .add(realDiff);
     player.records.thisReality.time = player.records.thisReality.time.add(diff);
 
+    player.records.thisQuantum.realTime = player.records.thisQuantum.realTime.add(realDiff);
+    player.records.thisQuantum.time = player.records.thisQuantum.time.add(diff);
+
     player.records.trueTimePlayed += trueDiff;
     player.records.thisInfinity.trueTime += trueDiff;
     player.records.thisEternity.trueTime += trueDiff;
+    player.records.thisQuantum.trueTime += trueDiff;
     player.records.thisReality.trueTime += trueDiff;
   }
 
@@ -808,7 +812,7 @@ export function gameLoop(passedDiff, options = {}) {
 
   // There are some external checks which prevent excessive resource gain with Teresa-25; it may give TP outside of
   // dilation, but the TP gain function is also coded to behave differently if it's active
-  const teresa1 = player.dilation.active && Ra.unlocks.autoTP.canBeApplied;
+  const teresa1 = player.dilation.active && (Ra.unlocks.autoTP.canBeApplied || MasteryStudy(62).isBought);
   const teresa25 = !isInCelestialReality()
     && Ra.unlocks.unlockDilationStartingTP.canBeApplied;
   if ((teresa1 || teresa25) && !Pelle.isDoomed) {
@@ -1098,6 +1102,7 @@ function laitelaBeatText(disabledDim) {
 // This gives IP/EP/RM from the respective upgrades that reward the prestige currencies continuously
 function applyAutoprestige(diff) {
   Currency.infinityPoints.add(TimeStudy(181).effectOrDefault(0));
+  Currency.eternityPoints.add(MasteryStudy(61).effectOrDefault(0));
 
   if (TeresaUnlocks.epGen.canBeApplied) {
     Currency.eternityPoints.add(

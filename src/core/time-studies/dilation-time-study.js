@@ -61,8 +61,9 @@ export class DilationTimeStudyState extends TimeStudyState {
       TabNotification.dilationAfterUnlock.tryTrigger();
     } else if (this.id === 6) {
       if (!quiet) {
-        Tab.dimensions.meta.show();
+        Tab.dimensions.meta.show(true);
         Currency.metaAntimatter.bumpTo(10);
+        Achievement(141).unlock();
       }
     }
 

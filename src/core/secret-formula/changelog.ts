@@ -6,6 +6,55 @@ interface ChangelogTemplate {
 
 export const changelog: ChangelogTemplate[] = [
   {
+    date: [2025, 6, 26],
+    name: "Another already?",
+    info: `
+Yeah we already have another one.
+<br>
+Credits to Aarex Tiaokhiao and other contributors to the Antimatter Dimensions NG+3 mod for all of its features.
+<br>
+<br>
+<b>Updated things:</b>
+<br>
+<ul>
+  <li>Added post-paired challenge mastery studies up till the duplicants stage</li>
+  <li>Move QC6's reward to apply after the ^0.33 power to electrons</li>
+  <li>Strengthed QC5's nerf to Tachyon Galaxy threshold</li>
+  <li>Changed how the softcap for "Replicanti multiplier to TD" Dilation upgrade works (made it weaker)</li>
+  <li>Nerfed Remote Antimatter Galaxy scaling (1.005^x => 1.003^x)</li>
+</ul>
+<br>
+<b>Quality of Life changes:</b>
+<br>
+<ul>
+  <li>Antimatter Galaxies don't get discharged in Quantum Challenges</li>
+</ul>
+<br>
+<b>UI Changes:</b>
+<br>
+<ul>
+  <li>Buying the Meta Dimension dilation study moves you to the Meta Dimensions tab</li>
+  <li>Replicanti tab shows Time Study 101's effect to Antimatter Dimensions</li>
+</ul>
+<br>
+<b>Bugfixes:</b>
+<br>
+<ul>
+  <li>Fixed Mastery Study 52 from going NaN due to a missing +1 before the logarithm</li>
+  <li>Fixed the How to Play menu (does not implement NG+3 features)</li>
+  <li>Fixed Antimatter Galaxies bulk purchases being behind by 1 of how much you can actually get</li>
+  <li>Fixed QC1's reward from being a 0x multiplier when inside of the challenge itself</li>
+</ul>
+<br>
+<b>Backend changes:</b>
+<br>
+<ul>
+  <li>guardFromNaNValues() is always applied on the player state even in production</li>
+</ul>
+<br>
+`,
+  },
+  {
     date: [2025, 6, 25],
     name: "Converting Reality to NG+3",
     info: `
@@ -45,7 +94,7 @@ Credits to Aarex Tiaokhiao and other contributors to the Antimatter Dimensions N
 <b>Bugfixes:</b>
 <br>
 <ul>
-  <li><i>none... (i can think of)/i></li>
+  <li><i>none... (i can think of)</i></li>
 </ul>
 <br>
 <b>Backend changes:</b>

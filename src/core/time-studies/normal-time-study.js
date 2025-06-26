@@ -96,6 +96,9 @@ export class NormalTimeStudyState extends TimeStudyState {
       || this.path === TIME_STUDY_PATH.IDLE) && MasteryStudy(42).isBought) {
       return true;
     }
+    if (MasteryStudy(72).isBought) {
+      return true;
+    }
     return this.costsST()
       ? !Pelle.isDisabled("V") && (V.availableST >= this.STCost)
       : true;

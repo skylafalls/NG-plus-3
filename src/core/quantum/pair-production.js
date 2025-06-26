@@ -10,11 +10,12 @@ class ElectronsEffectState extends GameMechanicState {
   }
 
   get effectValue() {
-    let base = player.quantum.pair.electrons.timesEffectOf(
-      QuantumChallenge(6).reward,
-    );
+    let base = player.quantum.pair.electrons;
     let exp = new Decimal(0.35);
     let eff = base.plus(1).pow(exp);
+    eff = eff.timesEffectOf(
+      QuantumChallenge(6).reward,
+    );
     if (eff.gte(1e6)) {
       eff = eff.div(1e6).pow(0.7).mul(1e6);
     }

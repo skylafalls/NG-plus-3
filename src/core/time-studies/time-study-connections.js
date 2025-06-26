@@ -203,6 +203,16 @@ MasteryStudy.allConnections = (function () {
 
     [TimeStudy.quantumChallenges, MS(42)],
     [TimeStudy.pairedChallenges, TimeStudy.quantumChallenges],
+
+    [MS(61), TimeStudy.pairedChallenges],
+    [MS(62), TimeStudy.pairedChallenges],
+    [MS(71), MS(61)],
+    [MS(72), TimeStudy.pairedChallenges],
+    [MS(73), MS(62)],
+    [MS(81), MS(71)],
+    [MS(82), MS(73)],
+    [MS(91), MS(81)],
+    [MS(92), MS(82)],
   ].map(props => new TimeStudyConnection(props[0], props[1], props[2]));
 
   return connections;

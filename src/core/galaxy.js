@@ -61,7 +61,7 @@ export const Galaxy = {
       calculatedGalaxies = scale({
         baseResource: calculatedGalaxies,
         scaleStart: this.scalingStart[GALAXY_TYPE.REMOTE],
-        scalePower: Decimal.pow(1.005, this.scalingPower[GALAXY_TYPE.REMOTE]),
+        scalePower: Decimal.pow(1.003, this.scalingPower[GALAXY_TYPE.REMOTE]),
         scaleMode: SCALING_TYPES.EXPONENTIAL,
         isInverted: true,
       });
@@ -97,12 +97,12 @@ export const Galaxy = {
       });
     }
 
-    return calculatedGalaxies.floor().add(1);
+    return calculatedGalaxies.floor().add(1).max(minVal);
   },
 
   // The existing galaxy calculation was shit so i revamped it
   requirementAt(galaxies) {
-    let equivGal = new Decimal(galaxies).floor().plus(1);
+    let equivGal = new Decimal(galaxies).floor().add(1);
     const type = Galaxy.typeAt(galaxies);
 
     if (QuantumChallenge(5).isRunning) {
@@ -141,7 +141,7 @@ export const Galaxy = {
       equivGal = scale({
         baseResource: equivGal,
         scaleStart: this.scalingStart[GALAXY_TYPE.REMOTE],
-        scalePower: Decimal.pow(1.005, this.scalingPower[GALAXY_TYPE.REMOTE]),
+        scalePower: Decimal.pow(1.003, this.scalingPower[GALAXY_TYPE.REMOTE]),
         scaleMode: SCALING_TYPES.EXPONENTIAL,
       });
     }
@@ -176,6 +176,7 @@ export const Galaxy = {
       MasteryStudy(21),
       MasteryStudy(22),
       MasteryStudy(23),
+      MasteryStudy(71),
     ).min(obscureStart);
 
     let distantStart = DC.E2.plusEffectsOf(

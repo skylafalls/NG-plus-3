@@ -49,6 +49,9 @@ export default {
       if (this.achMultToTDS) {
         dimMultList.push("Time");
       }
+      if (this.achMultToMDS) {
+        dimMultList.push("Meta");
+      }
       boostList.push(`${makeEnumeration(dimMultList)} Dimensions: ${achievementPower}`);
 
       if (this.achMultToTP) {
@@ -94,6 +97,7 @@ export default {
       this.achMultBreak = BreakInfinityUpgrade.achievementMult.canBeApplied;
       this.achMultToIDS = Achievement(75).isUnlocked;
       this.achMultToTDS = EternityUpgrade.tdMultAchs.isBought;
+      this.achMultToMDS = Achievement(142).isUnlocked;
       this.achMultToTP = RealityUpgrade(8).isBought;
       this.achMultToBH = VUnlocks.achievementBH.canBeApplied;
       this.achMultToTT = Ra.unlocks.achievementTTMult.canBeApplied;

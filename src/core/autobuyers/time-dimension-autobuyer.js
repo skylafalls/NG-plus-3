@@ -46,9 +46,7 @@ export class TimeDimensionAutobuyerState extends IntervaledAutobuyerState {
     }
     super.tick();
     buyMaxTimeDimension(tier, 1, true);
-    for (let i = 0; i <= 10; i++) {
-      buySingleTimeDimension(tier, true);
-    }
+    buySingleTimeDimension(tier, true);
   }
 
   static get entryCount() {

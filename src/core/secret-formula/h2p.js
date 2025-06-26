@@ -25,7 +25,7 @@ Welcome to the How to Play!
 This modal (pop-up window) contains in-depth explanations and additional details for everything you will encounter
 as you progress through the game. As you unlock new features and mechanics, you will also gain access to additional
 pages here. If you ever feel lost or confused about how something in the game works, you may find a helpful
-explanation within the related entry in here. 
+explanation within the related entry in here.
 <br>
 <br>
 For now, opening the How to Play will always start you on this page. After you get your first Dimension Boost,
@@ -1243,7 +1243,7 @@ You get exactly ${formatInt(1)} Perk Point per Reality.
 <b>Hotkey: Y</b> will try to perform a Reality reset.
 `,
       isUnlocked: () =>
-        PlayerProgress.realityUnlocked() || TimeStudy.reality.isBought,
+        PlayerProgress.realityUnlocked() || false,
       tags: [
         "rm",
         "machines",
@@ -1317,7 +1317,7 @@ slightly shorter descriptions, making it more suitable for sharing with others. 
 in the Statistics page, your equipped Glyphs, and the Upcoming Glyph Selection this Reality.
 `,
       isUnlocked: () =>
-        PlayerProgress.realityUnlocked() || TimeStudy.reality.isBought,
+        PlayerProgress.realityUnlocked() || false,
       tags: ["reality", "sacrifice", "level", "endgame", "lategame"],
       tab: "reality/glyphs",
     },
@@ -1345,7 +1345,7 @@ diamond-shaped Perks give Automator Points in addition to their normal effect. D
 different colors, roughly indicating which part of the game they affect the most.
 `,
       isUnlocked: () =>
-        PlayerProgress.realityUnlocked() || TimeStudy.reality.isBought,
+        PlayerProgress.realityUnlocked() || false,
       tags: ["pp", "reality", "tree", "endgame", "lategame"],
       tab: "reality/perks",
     },

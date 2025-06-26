@@ -1434,13 +1434,13 @@ export const normalAchievements = [
   {
     id: 142,
     name: "And still no ninth dimension...",
-    description: "Buy an Eighth Meta Dimension..",
+    description: "Buy an Eighth Meta Dimension.",
     checkEvent: GAME_EVENT.ACHIEVEMENT_EVENT_OTHER,
     get reward() {
-      return `All Meta Dimensions are ${formatPercents(0.1, 0)} stronger
+      return `Meta Dimensions are affected by your Achievement bonus
         and start with ${format(100)} Meta-Antimatter on reset.`;
     },
-    effect: 1.1,
+    effect: 100,
   },
   {
     id: 143,
@@ -1456,10 +1456,14 @@ export const normalAchievements = [
     id: 144,
     name: "Meta-boosting to the max",
     get description() {
+      return "Buy 10 Meta-Dimension Boosts.";
+    },
+    get reward() {
       return `Meta-Dimension Boosts are ${formatPercents(0.01)} stronger.`;
     },
     checkRequirement: () => player.meta.boosts.gt(10),
     checkEvent: GAME_EVENT.META_DIMBOOST_AFTER,
+    effect: 1.01,
   },
   {
     id: 145,
@@ -1616,7 +1620,7 @@ export const normalAchievements = [
     id: 163,
     name: "この実績は存在しません 3",
     get description() {
-      return `Gain ${format("9e99999999")} Eternity Points.`;
+      return "Gain 9e99999999 Eternity Points.";
     },
     checkRequirement: () => Currency.eternityPoints.gte("9e99999999"),
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
@@ -1640,7 +1644,7 @@ export const normalAchievements = [
 
       return true;
     },
-    checkEvent: GAME_EVENT.QUANTUM_RESET_AFTER,
+    checkEvent: GAME_EVENT.QUANTUM_RESET_BEFORE,
     get reward() {
       return "3rd Red-green Gluon Upgrade is stronger based on Meta-Dimension Boosts.";
     },
@@ -1681,7 +1685,7 @@ export const normalAchievements = [
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     reward:
       "Eighth Antimatter Dimensions are stronger based on your Antimatter Galaxies.",
-    effect: () => Decimal.pow(player.galaxies, player.galaxies.pow(2)),
+    effect: () => Decimal.pow(player.galaxies.pow(5), player.galaxies.pow(2)),
     formatEffect: value => `${formatX(value, 2, 2)}`,
   },
   {

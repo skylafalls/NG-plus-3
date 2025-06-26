@@ -15,7 +15,7 @@ function updateGlyphs(glyph) {
   for (let i = 0; i < 32; i++) {
     if ((glyph.effects >> i) % 2 === 1) {
       effectList.push(
-        GlyphEffects.all.filter((e) => e.intID == intIDindex)[0].id,
+        GlyphEffects.all.filter(e => e.intID == intIDindex)[0].id,
       );
     }
     intIDindex += 1;
@@ -39,6 +39,7 @@ function raFix(player) {
   return array;
 }
 
+// oxlint-disable-next-line max-lines-per-function
 export function beMigration(player) {
   player.auto.annihilation.multiplier = D(player.auto.annihilation.multiplier);
   player.auto.dimBoost.galaxies = D(player.auto.dimBoost.galaxies);
@@ -187,7 +188,7 @@ export function beMigration(player) {
   delete player.celestials.ra.unlockBits;
 
   player.celestials.teresa.bestAMSet = player.celestials.teresa.bestAMSet.map(
-    (n) => updateGlyphs(n),
+    n => updateGlyphs(n),
   );
   player.celestials.teresa.lastRepeatediM = new Decimal();
   if (player.celestials.teresa.lastRepeatedMachines.gte("1e5000")) {
@@ -195,8 +196,8 @@ export function beMigration(player) {
     player.celestials.teresa.lastRepeatediM = player.celestials.teresa
       .lastRepeatedMachines.div("1e10000");
   }
-  player.celestials.v.runGlyphs = player.celestials.v.runGlyphs.map((n) =>
-    n.map((g) => updateGlyphs(g))
+  player.celestials.v.runGlyphs = player.celestials.v.runGlyphs.map(n =>
+    n.map(g => updateGlyphs(g)),
   );
   player.celestials.v.runRecords[1] = D(player.celestials.v.runRecords[1]);
   player.celestials.v.runRecords[2] = D(player.celestials.v.runRecords[2]);
@@ -210,10 +211,10 @@ export function beMigration(player) {
   player.chall8TotalSacrifice = D(player.chall8TotalSacrifice);
   player.chall9TickspeedCostBumps = D(player.chall9TickspeedCostBumps);
   player.challenge.infinity.bestTimes = player.challenge.infinity.bestTimes.map(
-    (n) => ((!(n instanceof Decimal) && n > 1.6e308) ? BEMAX : D(n)),
+    n => ((!(n instanceof Decimal) && n > 1.6e308) ? BEMAX : D(n)),
   );
   player.challenge.normal.bestTimes = player.challenge.normal.bestTimes.map(
-    (n) => ((!(n instanceof Decimal) && n > 1.6e308) ? BEMAX : D(n)),
+    n => ((!(n instanceof Decimal) && n > 1.6e308) ? BEMAX : D(n)),
   );
   player.dilation.baseTachyonGalaxies = D(player.dilation.baseTachyonGalaxies);
   player.dilation.nextThreshold = D(player.dilation.nextThreshold);
@@ -253,13 +254,14 @@ export function beMigration(player) {
   player.partSimulatedReality = D(player.partSimulatedReality);
   player.realities = D(player.realities);
   player.reality.achTimer = D(player.reality.achTimer);
-  player.reality.glyphs.active = player.reality.glyphs.active.map((n) =>
-    updateGlyphs(n)
+  player.reality.glyphs.active = player.reality.glyphs.active.map(n =>
+    updateGlyphs(n),
   );
-  player.reality.glyphs.inventory = player.reality.glyphs.inventory.map((n) =>
-    updateGlyphs(n)
+  player.reality.glyphs.inventory = player.reality.glyphs.inventory.map(n =>
+    updateGlyphs(n),
   );
   for (const item in player.reality.glyphs.filter.types) {
+    if (!Object.hasOwn(player.reality.glyphs.filter.types, item)) continue;
     player.reality.glyphs.filter.types[item].rarity = D(
       player.reality.glyphs.filter.types[item].rarity,
     );
@@ -270,7 +272,7 @@ export function beMigration(player) {
       if (
         (player.reality.glyphs.filter.types[item].specifiedMask >> i) % 2 === 1
       ) {
-        effectList.push(GlyphEffects.all.filter((e) => e.intID == i)[0].id);
+        effectList.push(GlyphEffects.all.filter(e => e.intID == i)[0].id);
       }
       if (i <= 26 && GlyphEffects.all[i].glyphTypes.includes(item)) {
         player.reality.glyphs.filter.types[item]
@@ -292,7 +294,7 @@ export function beMigration(player) {
   }
   for (let i = 0; i < 7; i++) {
     player.reality.glyphs.sets[i].glyphs = player.reality.glyphs.sets[i].glyphs
-      .map((n) => updateGlyphs(n));
+      .map(n => updateGlyphs(n));
   }
   player.reality.iMcap = D(player.reality.iMcap);
   player.reality.imaginaryMachines = D(player.reality.imaginaryMachines);
@@ -322,28 +324,28 @@ export function beMigration(player) {
     player.records.bestInfinity.time = BEMAX;
   }
   player.records.bestReality.RMSet = player.records.bestReality.RMSet?.map(
-    (n) => updateGlyphs(n),
+    n => updateGlyphs(n),
   );
   player.records.bestReality.RMminSet = player.records.bestReality.RMminSet
-    ?.map((n) => updateGlyphs(n));
+    ?.map(n => updateGlyphs(n));
   player.records.bestReality.glyphLevel = D(
     player.records.bestReality.glyphLevel,
   );
   player.records.bestReality.glyphLevelSet = player.records.bestReality
-    .glyphLevelSet?.map((n) => updateGlyphs(n));
+    .glyphLevelSet?.map(n => updateGlyphs(n));
   player.records.bestReality.glyphStrength = D(
     player.records.bestReality.glyphStrength,
   );
   player.records.bestReality.imCapSet = player.records.bestReality.imCapSet
-    ?.map((n) => updateGlyphs(n));
+    ?.map(n => updateGlyphs(n));
   player.records.bestReality.laitelaSet = player.records.bestReality.laitelaSet
-    ?.map((n) => updateGlyphs(n));
+    ?.map(n => updateGlyphs(n));
   player.records.bestReality.realTime = D(player.records.bestReality.realTime);
   if (player.records.bestReality.realTime.gt("e308")) {
     player.records.bestReality.realTime = BEMAX;
   }
   player.records.bestReality.speedSet = player.records.bestReality.speedSet
-    ?.map((n) => updateGlyphs(n));
+    ?.map(n => updateGlyphs(n));
   player.records.bestReality.time = D(player.records.bestReality.time);
   if (player.records.bestReality.time.gt("e308")) {
     player.records.bestReality.time = BEMAX;
@@ -356,8 +358,8 @@ export function beMigration(player) {
     player.records.recentEternities[i][6] = D(
       player.records.recentEternities[i][5],
     );
-    player.records.recentEternities[i][5] =
-      player.records.recentEternities[i][4];
+    player.records.recentEternities[i][5]
+      = player.records.recentEternities[i][4];
     player.records.recentEternities[i][4] = D(
       player.records.recentEternities[i][3],
     );
@@ -373,8 +375,8 @@ export function beMigration(player) {
     if (player.records.recentEternities[i][5] instanceof Decimal) {
       player.records.recentEternities[i][5] = "";
     }
-    player.records.recentInfinities[i][5] =
-      player.records.recentInfinities[i][4];
+    player.records.recentInfinities[i][5]
+      = player.records.recentInfinities[i][4];
     player.records.recentInfinities[i][4] = D(
       player.records.recentInfinities[i][3],
     );

@@ -9,14 +9,20 @@ export function metaDimensionCommonMultiplier() {
     DilationUpgrade.mdMultTickspeed,
     MasteryStudy(32),
     MasteryStudy(52),
+    MasteryStudy(73),
     GluonUpgrade.blueRed(5),
     QuantumChallenge(3).reward,
   );
+
+  if (Achievement(142).isUnlocked) {
+    multiplier = multiplier.times(Achievements.power);
+  }
 
   return multiplier;
 }
 
 function onBuyDimension(tier) {
+  if (tier === 8) Achievement(142).unlock();
   return tier;
 }
 
@@ -423,6 +429,7 @@ export const MetaDimensions = {
       boost = boost.timesEffectsOf(
         DilationUpgrade.mdBuffDT,
         QuantumChallenge(5).reward,
+        MasteryStudy(82),
       );
       if (QuantumChallenge(4).isRunning || QuantumChallenge(8).isRunning) {
         return DC.D1;
@@ -549,7 +556,10 @@ export const MetaDimensions = {
         targetResets.add(3),
         this.maxDimensionsUnlockable,
       ).toNumber();
-      const discount = new Decimal(0);
+      let discount = new Decimal(0);
+      if (MasteryStudy(82)) {
+        discount = discount.plus(1);
+      }
 
       amount = amount.add(
         targetResets.sub(5).max(0).mul(DC.D15.sub(discount)).round(),
@@ -580,6 +590,9 @@ export const MetaDimensions = {
       const tier = this.maxDimensionsUnlockable;
       let amount = DC.D20;
       let discount = DC.D0;
+      if (MasteryStudy(82)) {
+        discount = discount.plus(1);
+      }
       let multiplierPerDB = DC.D15.sub(discount);
 
       const ad = MetaDimension(tier).totalAmount;
