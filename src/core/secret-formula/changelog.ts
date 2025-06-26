@@ -1,13 +1,66 @@
-export const changelog = [
-  /**
-   * @template
-   * {
-   *  @property {Array: Number} date  Date of the release of the update, stored in order of year-month-date.
-   *  @property {String} name         Name of the update entry. Optional.
-   *  @property {Number} id           Unique ID for each entry (generated in-game, not explicitly stated)
-   *  @property {function: @return String} info  Text body of information for the entry.
-   * }
-   */
+interface ChangelogTemplate {
+  date: [number, number, number]
+  name?: string
+  info: string | (() => string)
+}
+
+export const changelog: ChangelogTemplate[] = [
+  {
+    date: [2025, 6, 25],
+    name: "Converting Reality to NG+3",
+    info: `
+It's been a few weeks since I started this side (mostly main now) project of mines, so I thought I'll highlight
+the changes from the existing reality update.
+<br>
+This isn't quite an exhaustive list since I forgot a lot of stuff
+<br>
+Credits to Aarex Tiaokhiao and other contributors to the Antimatter Dimensions NG+3 mod for all of its features.
+<br>
+<br>
+<b>Major things:</b>
+<br>
+<ul>
+  <li>Added Quantum prestige layer (with quarks, gluons, pair production, and quantum challenges)</li>
+  <li>Added a new dimension type: Meta Dimensions</li>
+  <li>Added second layer of Time Studies: Mastery Studies</li>
+  <li>Added 4 non-rebuyable and an additional rebuyable Time Dilation upgrade</li>
+  <li>Modified Achievement rows 14-17 to match NG+3's achievements</li>
+  <li>Laitela's continuum is enabled by default (temporary fix for AD autobuyer bug)</li>
+  <li>Antimatter Galaxies uses a completely different (stronger) scaling system</li>
+  <li><b>You can no longer access reality nor celestials.</b></li>
+</ul>
+<br>
+<b>Quality of Life changes:</b>
+<br>
+<ul>
+  <li>Infinity and Time Dimension autobuyers now purchase instantly instead of being per second</li>
+</ul>
+<br>
+<b>UI Changes:</b>
+<br>
+<ul>
+  <li>Changed the message needed to hard reset the savefile</li>
+</ul>
+<br>
+<b>Bugfixes:</b>
+<br>
+<ul>
+  <li><i>none... (i can think of)/i></li>
+</ul>
+<br>
+<b>Backend changes:</b>
+<br>
+<ul>
+  <li>Build system & dev server moved to vite.js instead of @vue/cli</li>
+  <li>Added oxlint, modified eslint config with stylistic plugin</li>
+  <li>Switched from Node.js and npm to bun.sh for JavaScript runtime</li>
+  <li>Uses tsconfig.json instead of jsconfig.json</li>
+  <li>Updated many dependenices to the latest version (switched from pako to fflate)</li>
+  <li>player.eternityChalls is moved to player.challenge.eternity.completions</li>
+</ul>
+<br>
+`,
+  },
   {
     date: [2024, 5, 2],
     name: "Celebrate Android Reality Update",
