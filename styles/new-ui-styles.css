@@ -883,6 +883,10 @@ body.t-s12 {
   color: var(--color-eternity);
 }
 
+.c-game-header__qk-amount {
+  color: var(--color-quantum);
+}
+
 .t-normal .c-game-header__antimatter,
 .t-s12 .c-game-header__antimatter {
   color: var(--color-accent);
