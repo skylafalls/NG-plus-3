@@ -529,6 +529,7 @@ export function trueTimeMechanics(trueDiff) {
     Enslaved.nextTickDiff = trueDiff;
   }
 
+  Autobuyers.tick();
   Tutorial.tutorialLoop();
 
   if (
@@ -566,11 +567,9 @@ export function realTimeMechanics(realDiff) {
     // Most autobuyers will only tick usefully on the very first tick, but this needs to be here in order to allow
     // the autobuyers unaffected by time storage to tick as well
     GameUI.update();
-    Autobuyers.tick();
     return true;
   }
 
-  Autobuyers.tick();
   BlackHoles.updatePhases(realDiff);
   return false;
 }
@@ -892,6 +891,16 @@ function updatePrestigeRates() {
     player.records.thisEternity.bestEPminVal = gainedEternityPoints();
   }
 
+  const currentQKmin = Quarks.gain.dividedBy(
+    Decimal.max(0.0005, Time.thisEternityRealTime.totalMinutes),
+  );
+  if (
+    currentQKmin.gt(player.records.thisQuantum.bestQKmin) && Player.canStudyQuantum
+  ) {
+    player.records.thisQuantum.bestQKmin = currentQKmin;
+    player.records.thisQuantum.bestQKminVal = Quarks.gain;
+  }
+
   const currentRSmin = Effarig.shardsGained.div(
     Decimal.max(0.0005, Time.thisRealityRealTime.totalMinutes),
   );
@@ -1191,6 +1200,8 @@ export function getTTPerSecond() {
       SingularityMilestone.theoremPowerFromSingularities.effectOrDefault(1),
     );
   }
+
+  finalTT = finalTT.powEffectOf(Achievement(158));
 
   return finalTT;
 }

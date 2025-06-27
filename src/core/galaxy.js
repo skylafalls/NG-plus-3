@@ -170,21 +170,21 @@ export const Galaxy = {
 
   get scalingStart() {
     let etherealStart = new Decimal(1e6);
-    let invisibleStart = new Decimal(3e5).min(etherealStart);
-    let obscureStart = new Decimal(50000).min(invisibleStart);
+    let invisibleStart = new Decimal(3e5);
+    let obscureStart = new Decimal(100000);
     let remoteStart = new Decimal(800).plusEffectsOf(
       MasteryStudy(21),
       MasteryStudy(22),
       MasteryStudy(23),
       MasteryStudy(71),
-    ).min(obscureStart);
+    );
 
     let distantStart = DC.E2.plusEffectsOf(
       TimeStudy(223),
       TimeStudy(224),
       TimeStudy(302),
       EternityChallenge(5).reward,
-    ).add(GlyphInfo.power.sacrificeInfo.effect()).min(remoteStart);
+    ).add(GlyphInfo.power.sacrificeInfo.effect());
 
     if (EternityChallenge(5).isRunning) {
       distantStart = new Decimal(0);

@@ -1,5 +1,5 @@
 import { DC } from "../../constants";
-import { DimensionState } from "../../dimensions/dimension";
+import { DimensionState } from "@/core/dimensions/dimension.js";
 
 /**
  * Constants for easily adjusting values
@@ -371,13 +371,23 @@ export class DarkMatterDimensionState extends DimensionState {
     this.data.realDiff = DC.D0;
     this.data.ascensionCount = DC.D0;
   }
+
+  static createAccessor() {
+    const index = Array.range(1, this.dimensionCount).map(tier =>
+      new this(tier),
+    );
+    index.unshift(null);
+    const accessor = (/** @type {number} */ tier) => {
+      if (index[tier] === undefined) throw new TypeError("Unknown Dimension referenced");
+      return index[tier];
+    };
+    Object.defineProperty(accessor, "index", {
+      value: index,
+    });
+    return accessor;
+  }
 }
 
-/**
- * @function
- * @param {number} tier
- * @return {DarkMatterDimensionState}
- */
 export const DarkMatterDimension = DarkMatterDimensionState.createAccessor();
 
 export const DarkMatterDimensions = {

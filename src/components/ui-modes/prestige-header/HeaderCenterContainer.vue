@@ -1,15 +1,16 @@
 <script>
-import ArmageddonButton from "../../tabs/celestial-pelle/ArmageddonButton";
-import RealityCurrencyHeader from "../../RealityCurrencyHeader";
+import ArmageddonButton from "../../tabs/celestial-pelle/ArmageddonButton.vue";
+import RealityCurrencyHeader from "../../RealityCurrencyHeader.vue";
 
-import HeaderTickspeedInfo from "../HeaderTickspeedInfo";
+import HeaderTickspeedInfo from "../HeaderTickspeedInfo.vue";
 
-import RealityButton from "./RealityButton";
+import RealityButton from "./RealityButton.vue";
+import { defineComponent } from "vue";
 
 // This component contains antimatter and antimatter rate at the start of the game, as well as some additional
 // information depending on the UI (tickspeed for Classic, game speed for Modern). Everything but antimatter is
 // removed once Reality is unlocked, to make room for the reality button
-export default {
+export default defineComponent({
   name: "HeaderCenterContainer",
   components: {
     HeaderTickspeedInfo,
@@ -43,7 +44,7 @@ export default {
       }
     },
   },
-};
+});
 </script>
 
 <template>

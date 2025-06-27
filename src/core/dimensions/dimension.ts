@@ -1,5 +1,14 @@
-export class DimensionState {
-  constructor(getData, tier) {
+// @ts-check
+
+export abstract class DimensionState<
+  DimensionParams extends { amount: Decimal, bought: Decimal } = { amount: Decimal, bought: Decimal }
+> {
+  private _getData: () => DimensionParams[];
+  private _tier: number;
+  private _displayName: string | null | undefined;
+  private _shortDisplayName: string | null | undefined;
+
+  constructor(getData: () => DimensionParams[], tier: number) {
     this._tier = tier;
     this._getData = getData;
     const DISPLAY_NAMES = [
@@ -44,19 +53,17 @@ export class DimensionState {
     return this._getData()[this.tier - 1];
   }
 
-  /** @returns {Decimal} */
   get amount() {
-    return this.data.amount;
+    return this.data?.amount;
   }
 
-  /** @param {Decimal} value */
   set amount(value) {
     this.data.amount = value;
   }
 
   /** @returns {Decimal} */
   get bought() {
-    return this.data.bought;
+    return this.data?.bought;
   }
 
   /** @param {Decimal} value */
@@ -64,24 +71,21 @@ export class DimensionState {
     this.data.bought = value;
   }
 
-  /** @abstract */
-  get productionPerSecond() {
-    throw new NotImplementedError();
-  }
+  abstract get productionPerSecond(): Decimal;
 
   get productionPerRealSecond() {
     return this.productionPerSecond.times(getGameSpeedupForDisplay());
   }
 
-  productionForDiff(diff) {
+  productionForDiff(diff: Decimal) {
     return this.productionPerSecond.times(diff.div(1000));
   }
 
-  produceCurrency(currency, diff) {
+  produceCurrency(currency: Decimal, diff: Decimal) {
     currency.add(this.productionForDiff(diff));
   }
 
-  produceDimensions(dimension, diff) {
+  produceDimensions(dimension: DimensionState, diff: Decimal) {
     dimension.amount = dimension.amount.plus(this.productionForDiff(diff));
   }
 
@@ -89,13 +93,8 @@ export class DimensionState {
     return 8;
   }
 
-  static createAccessor() {
-    const index = Array.range(1, this.dimensionCount).map((tier) =>
-      new this(tier)
-    );
-    index.unshift(null);
-    const accessor = (tier) => index[tier];
-    accessor.index = index;
-    return accessor;
-  }
+  abstract createAccessor(): {
+    (tier: number): DimensionState
+    index: Array<DimensionState>
+  };
 }

@@ -1,6 +1,5 @@
-import { DC } from "../constants";
-
-import { DimensionState } from "./dimension";
+import { DC } from "../constants.js";
+import { DimensionState } from "./dimension.js";
 
 // Multiplier applied to all Antimatter Dimensions, regardless of tier. This is cached using a Lazy
 // and invalidated every update.
@@ -406,11 +405,9 @@ export function buyMaxDimension(tier, bulk = Infinity) {
   }
   let buying = maxBought.quantity.min(bulkLeft);
   // For some reason it was adding 10x more purchases then it should so i fixed it
-  dimension.amount = dimension.amount.plus(buying).round();
+  dimension.amount = dimension.amount.plus(buying);
+  dimension.currencyAmount = dimension.currencyAmount.minus(dimension.cost).max(0);
   dimension.bought = dimension.bought.add(buying);
-  dimension.currencyAmount = dimension.currencyAmount.minus(
-    Decimal.pow10(maxBought.logPrice),
-  ).max(0);
 }
 
 class AntimatterDimensionState extends DimensionState {
@@ -793,13 +790,23 @@ class AntimatterDimensionState extends DimensionState {
     production = production.min(this.cappedProductionInNormalChallenges);
     return production;
   }
+
+  static createAccessor() {
+    const index = Array.range(1, this.dimensionCount).map(tier =>
+      new this(tier),
+    );
+    index.unshift(null);
+    const accessor = (/** @type {number} */ tier) => {
+      if (index[tier] === undefined) throw new TypeError("Unknown Dimension referenced");
+      return index[tier];
+    };
+    Object.defineProperty(accessor, "index", {
+      value: index,
+    });
+    return accessor;
+  }
 }
 
-/**
- * @function
- * @param {number} tier
- * @returns {AntimatterDimensionState}
- */
 export const AntimatterDimension = AntimatterDimensionState.createAccessor();
 
 export const AntimatterDimensions = {

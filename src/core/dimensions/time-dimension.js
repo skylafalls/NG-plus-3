@@ -1,6 +1,6 @@
-import { DC } from "../constants";
+import { DC } from "../constants.js";
 
-import { DimensionState } from "./dimension";
+import { DimensionState } from "./dimension.js";
 
 export function buySingleTimeDimension(tier, auto = false) {
   const dim = TimeDimension(tier);
@@ -448,6 +448,21 @@ class TimeDimensionState extends DimensionState {
       return;
     }
     TimeStudy.timeDimension(this._tier).purchase();
+  }
+
+  static createAccessor() {
+    const index = Array.range(1, this.dimensionCount).map(tier =>
+      new this(tier),
+    );
+    index.unshift(null);
+    const accessor = (/** @type {number} */ tier) => {
+      if (index[tier] === undefined) throw new TypeError("Unknown Dimension referenced");
+      return index[tier];
+    };
+    Object.defineProperty(accessor, "index", {
+      value: index,
+    });
+    return accessor;
   }
 }
 

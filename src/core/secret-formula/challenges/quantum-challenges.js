@@ -74,10 +74,8 @@ export const quantumChallenges = [
   {
     id: 6,
     description: () =>
-      `You are trapped in Infinity Challenges 2, 3, 6, 7, and 8 and you can't gain Dimension Boosts.
-      The Meta Dimension per-10 multiplier is buffed to compensate.`,
+      "You are trapped in Infinity Challenges 2, 3, 6, 7, and 8 and you can't gain Dimension Boosts.",
     goal: { am: new Decimal("e2.833e7"), ma: new Decimal("3.6e1877") },
-    effect: () => new Decimal(5),
     reward: {
       description: () => "Electrons are stronger based on Dimension Boosts.",
       effect: completions =>

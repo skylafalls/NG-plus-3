@@ -9,6 +9,7 @@ import FullScreenAnimationHandler from "./full-screen-animation-handler";
 export const dev = {};
 
 dev.speedUp = 1;
+dev.pairedQCs = [];
 
 dev.hardReset = function () {
   GameStorage.hardReset();

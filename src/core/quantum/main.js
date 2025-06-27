@@ -191,7 +191,7 @@ export function canPerformQuantumReset() {
     ) {
       return false;
     }
-  } else if (Currency.metaAntimatter.lt(Player.quantumGoal)) {
+  } else if (Currency.metaAntimatter.lt(Player.quantumGoal.ma)) {
     return false;
   }
 

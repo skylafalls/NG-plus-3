@@ -201,14 +201,14 @@ export const masteryStudies = [
     cost: new Decimal("1e116"),
     requirement: [81],
     reqType: TS_REQUIREMENT_TYPE.ALL,
-    description: () => `The multiplier per-10 Antimatter Dimensions is bumped up to a minimum of ${formatX(DC.E430)}.`,
-    effect: () => DC.E430,
+    description: () => `The multiplier per-10 Antimatter Dimensions is bumped up to ${formatX(DC.E33)} (in QC5/QC7).`,
+    effect: () => QuantumChallenge(5).isRunning || QuantumChallenge(7).isRunning ? DC.E33 : DC.D1,
   },
   {
     id: "M92",
     cost: new Decimal("1e116"),
     requirement: [82],
     reqType: TS_REQUIREMENT_TYPE.ALL,
-    description: () => "Time Study 101 uses a better formula and is not affected by Time Dilation.",
+    description: () => "Time Study 101 is no longer affected by Time Dilation.",
   },
 ];

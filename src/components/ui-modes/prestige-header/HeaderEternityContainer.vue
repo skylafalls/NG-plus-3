@@ -1,8 +1,9 @@
 <script>
-import EternityButton from "./EternityButton";
-import UnlockInfinityDimButton from "./UnlockInfinityDimButton";
+import { defineComponent } from "vue";
+import EternityButton from "./EternityButton.vue";
+import UnlockInfinityDimButton from "./UnlockInfinityDimButton.vue";
 
-export default {
+export default defineComponent({
   name: "HeaderEternityContainer",
   components: {
     EternityButton,
@@ -29,7 +30,7 @@ export default {
       }
     },
   },
-};
+});
 </script>
 
 <template>

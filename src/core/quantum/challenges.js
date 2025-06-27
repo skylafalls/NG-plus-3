@@ -40,7 +40,7 @@ class QuantumChallengeState extends GameMechanicState {
   }
 
   get isRunning() {
-    return player.challenge.quantum.current === this.id;
+    return player.challenge.quantum.current === this.id || dev.pairedQCs.includes(this.id);
   }
 
   requestStart() {
@@ -113,7 +113,7 @@ Object.defineProperty(QuantumChallenge, "current", {
 });
 
 Object.defineProperty(QuantumChallenge, "isRunning", {
-  get: () => QuantumChallenge.current !== undefined,
+  get: () => QuantumChallenge.current !== undefined || dev.pairedQCs.length > 0,
 });
 
 export const QuantumChallenges = {

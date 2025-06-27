@@ -1,11 +1,13 @@
 <script>
 import PrimaryButton from "@/components/PrimaryButton.vue";
 import { defineComponent } from "vue";
+import AutobuyerInput from "../../autobuyers/AutobuyerInput.vue";
 
 export default defineComponent({
   name: "QuarksRow",
   components: {
     PrimaryButton,
+    AutobuyerInput,
   },
   props: {
     color: {
@@ -26,6 +28,9 @@ export default defineComponent({
     quarkPower: new Decimal(0),
     powerEffect: new Decimal(0),
     powerGain: new Decimal(0),
+    fakeAutobuyer: {
+      assortingAmount: undefined,
+    },
   }),
   computed: {
     styling() {
@@ -66,17 +71,18 @@ export default defineComponent({
       }
     },
     assortQuarks() {
+      const assortAmount = this.fakeAutobuyer.assortingAmount.clampMax(Currency.quarks.value);
       switch (this.color) {
         case "red": {
-          console.log("red");
+          Quarks.assortTo(assortAmount, QUARK_TYPES.RED);
           break;
         }
         case "green": {
-          console.log("green");
+          Quarks.assortTo(assortAmount, QUARK_TYPES.GREEN);
           break;
         }
         case "blue": {
-          console.log("blue");
+          Quarks.assortTo(assortAmount, QUARK_TYPES.BLUE);
           break;
         }
         default: {
@@ -121,10 +127,11 @@ export default defineComponent({
             Assort
           </PrimaryButton>
           &nbsp;
-          <input
-            type="number"
-            @change.prevent=""
-          >
+          <AutobuyerInput
+            property="assortingAmount"
+            type="decimal"
+            :autobuyer="fakeAutobuyer"
+          />
         </td>
       </tr>
     </tbody>

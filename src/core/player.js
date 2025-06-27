@@ -412,6 +412,8 @@ window.player = {
       maxTP: DC.D0,
       bestAM: DC.D0,
       bestMA: DC.D0,
+      bestQKmin: DC.D0,
+      bestQKminVal: DC.D0,
     },
     bestQuantum: {
       time: DC.BEMAX,
@@ -1047,6 +1049,10 @@ window.player = {
       positronUpgrades: Array.repeat(DC.D0, 4),
       electronUpgrades: Array.repeat(DC.D0, 4),
     },
+    bigRip: {
+      active: false,
+      spaceShards: DC.D0,
+    },
   },
 };
 
@@ -1089,6 +1095,10 @@ export const Player = {
 
   get canEternity() {
     return player.records.thisEternity.maxIP.gte(Player.eternityGoal);
+  },
+
+  get canStudyQuantum() {
+    return player.records.thisQuantum.bestMA.gte(Player.quantumGoal.ma);
   },
 
   get bestRunIPPM() {

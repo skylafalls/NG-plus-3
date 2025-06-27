@@ -591,7 +591,7 @@ window.ExponentialCostScaling = class ExponentialCostScaling {
       param.purchasesBeforeScaling === undefined
       && param.scalingCostThreshold === undefined
     ) {
-      throw new Error(
+      throw new TypeError(
         "purchasesBeforeScaling or scalingCostThreshold must be defined",
       );
     }
@@ -599,7 +599,7 @@ window.ExponentialCostScaling = class ExponentialCostScaling {
       !(param.purchasesBeforeScaling instanceof Decimal
         || param.scalingCostThreshold instanceof Decimal)
     ) {
-      throw new Error(
+      throw new TypeError(
         "purchasesBeforeScaling or scalingCostThreshold must be Decimal",
       );
     }
@@ -627,7 +627,7 @@ window.ExponentialCostScaling = class ExponentialCostScaling {
       param.purchasesBeforeScaling === undefined
       && param.scalingCostThreshold === undefined
     ) {
-      throw new Error(
+      throw new TypeError(
         "purchasesBeforeScaling or scalingCostThreshold must be defined",
       );
     }
@@ -635,7 +635,7 @@ window.ExponentialCostScaling = class ExponentialCostScaling {
       !(param.purchasesBeforeScaling instanceof Decimal
         || param.scalingCostThreshold instanceof Decimal)
     ) {
-      throw new Error(
+      throw new TypeError(
         "purchasesBeforeScaling or scalingCostThreshold must be Decimal",
       );
     }

@@ -79,6 +79,7 @@ html {
   --color-eternity: #b341e0;
   --color-dilation: #64dd17;
   --color-quantum: #12ff26;
+  --color-big-rip: #12ff26;
   --color-reality: #0ba00e;
   --color-reality-light: #d5ffd7;
   --color-reality-dark: #0a790c;
@@ -2358,6 +2359,10 @@ br {
 }
 
 .c-game-header__ep-amount {
+  font-weight: bold;
+}
+
+.c-game-header__qk-amount {
   font-weight: bold;
 }
 

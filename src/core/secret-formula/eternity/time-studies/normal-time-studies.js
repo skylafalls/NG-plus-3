@@ -269,7 +269,7 @@ export const normalTimeStudies = [
     requirement: [91],
     reqType: TS_REQUIREMENT_TYPE.AT_LEAST_ONE,
     description: "Antimatter Dimension multiplier based on Replicanti amount",
-    effect: () => MasteryStudy(92).isBought ? Replicanti.amount.max(1).logPow(1.6) : Decimal.max(Replicanti.amount, 1),
+    effect: () => Decimal.max(Replicanti.amount, 1),
     formatEffect: value => formatX(value, 2, 1),
   },
   {

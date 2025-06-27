@@ -28,13 +28,13 @@ export function animateAndUndilate(callback) {
 
 export function startDilatedEternityRequest() {
   if (
-    !PlayerProgress.dilationUnlocked() ||
-    (Pelle.isDoomed && !Pelle.canDilateInPelle)
+    !PlayerProgress.dilationUnlocked()
+    || (Pelle.isDoomed && !Pelle.canDilateInPelle)
   ) {
     return;
   }
-  const playAnimation = player.options.animations.dilation &&
-    !FullScreenAnimationHandler.isDisplaying;
+  const playAnimation = player.options.animations.dilation
+    && !FullScreenAnimationHandler.isDisplaying;
   if (player.dilation.active) {
     if (player.options.confirmations.dilation) {
       Modal.exitDilation.show();
@@ -119,8 +119,8 @@ export function buyDilationUpgrade(id, bulk = 1) {
   } else {
     const upgAmount = player.dilation.rebuyables[id];
     if (
-      Currency.dilatedTime.lt(upgrade.cost) ||
-      upgAmount.gte(upgrade.config.purchaseCap)
+      Currency.dilatedTime.lt(upgrade.cost)
+      || upgAmount.gte(upgrade.config.purchaseCap)
     ) {
       return false;
     }
@@ -301,7 +301,12 @@ export function getBaseTP(antimatter, requireEternity) {
 
 // Returns the TP that would be gained this run
 export function getTP(antimatter, requireEternity) {
-  return getBaseTP(antimatter, requireEternity).times(tachyonGainMultiplier());
+  return softcap({
+    baseResource: getBaseTP(antimatter, requireEternity).times(tachyonGainMultiplier()),
+    softcapStart: DC.NUMMAX,
+    softcapPower: 1 / 3,
+    softcapType: SOFTCAP_MODES.POLYNOMIAL,
+  });
 }
 
 // Returns the amount of TP gained, subtracting out current TP; used for displaying gained TP, text on the
@@ -314,9 +319,8 @@ export function getTachyonGain(requireEternity) {
 
 // Returns the minimum antimatter needed in order to gain more TP; used only for display purposes
 export function getTachyonReq() {
-  let effectiveTP = Currency.tachyonParticles.value.dividedBy(
-    tachyonGainMultiplier(),
-  );
+  let effectiveTP = Currency.tachyonParticles.value
+    .dividedBy(tachyonGainMultiplier());
   return Decimal.pow10(
     effectiveTP
       .times(
@@ -325,10 +329,7 @@ export function getTachyonReq() {
           Decimal.add(1.5, DilationUpgrade.tachyonExponent.effectOrDefault(0)),
         ),
       )
-      .pow(
-        Decimal.add(1.5, DilationUpgrade.tachyonExponent.effectOrDefault(0))
-          .recip(),
-      ),
+      .pow(Decimal.add(1.5, DilationUpgrade.tachyonExponent.effectOrDefault(0)).recip()),
   );
 }
 
@@ -408,9 +409,7 @@ class RebuyableDilationUpgradeState extends RebuyableMechanicState {
 
 export const DilationUpgrade = mapGameDataToObject(
   GameDatabase.eternity.dilation,
-  (
-    config,
-  ) => (config.rebuyable
+  config => (config.rebuyable
     ? new RebuyableDilationUpgradeState(config)
     : new DilationUpgradeState(config)),
 );
@@ -421,5 +420,5 @@ export const DilationUpgrades = {
     DilationUpgrade.galaxyThreshold,
     DilationUpgrade.tachyonGain,
   ],
-  fromId: (id) => DilationUpgrade.all.find((x) => x.id === Number(id)),
+  fromId: id => DilationUpgrade.all.find(x => x.id === Number(id)),
 };

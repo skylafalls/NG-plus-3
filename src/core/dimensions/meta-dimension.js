@@ -1,5 +1,5 @@
-import { DC } from "../constants";
-import { DimensionState } from "./dimension";
+import { DC } from "../constants.js";
+import { DimensionState } from "./dimension.js";
 
 export function metaDimensionCommonMultiplier() {
   let multiplier = DC.D1;
@@ -162,7 +162,7 @@ class MetaDimensionState extends DimensionState {
   }
 
   /**
-   * @returns {number}
+   * @returns {Decimal}
    */
   get continuumValue() {
     if (!this.isAvailableForPurchase) {
@@ -179,7 +179,7 @@ class MetaDimensionState extends DimensionState {
   }
 
   /**
-   * @returns {number}
+   * @returns {Decimal}
    */
   get continuumAmount() {
     return DC.D0;
@@ -206,7 +206,11 @@ class MetaDimensionState extends DimensionState {
     return this.costUntil10.lte(this.currencyAmount);
   }
 
+  /** @returns {boolean} */
   get isAvailableForPurchase() {
+    if (QuantumSpeedrunMilestone(17).isReached) {
+      return true;
+    }
     if (MetaDimensions.boost.totalBoosts.add(4).lt(this.tier)) {
       return false;
     }
@@ -247,13 +251,30 @@ class MetaDimensionState extends DimensionState {
     let production = amount.times(this.multiplier);
     return production;
   }
-}
 
-/**
- * @function
- * @param {number} tier
- * @returns {MetaDimensionState}
- */
+  get maxBought() {
+    return this.costScale.getMaxBought(
+      Decimal.floor(this.bought.div(10)).add(this.costBumps),
+      this.currencyAmount,
+      DC.E1,
+    );
+  }
+
+  static createAccessor() {
+    const index = Array.range(1, this.dimensionCount).map(tier =>
+      new this(tier),
+    );
+    index.unshift(null);
+    const accessor = (/** @type {number} */ tier) => {
+      if (index[tier] === undefined) throw new TypeError("Unknown Dimension referenced");
+      return index[tier];
+    };
+    Object.defineProperty(accessor, "index", {
+      value: index,
+    });
+    return accessor;
+  }
+}
 export const MetaDimension = MetaDimensionState.createAccessor();
 
 class DimBoostRequirement {
@@ -308,7 +329,6 @@ export const MetaDimensions = {
   get buyTenMultiplier() {
     let mult = DC.D2;
     mult = mult.timesEffectOf(DilationUpgrade.mdBuffDT);
-    mult = mult.timesEffectOf(QuantumChallenge(6));
     return mult;
   },
 
@@ -380,7 +400,7 @@ export const MetaDimensions = {
 
   buyMax(tier, bulk = Infinity) {
     const dimension = MetaDimension(tier);
-    if (!dimension.isAvailableForPurchase || !dimension.isAffordableUntil10) {
+    if (!dimension.isAvailableForPurchase) {
       return;
     }
     const cost = dimension.costUntil10;
@@ -398,11 +418,7 @@ export const MetaDimensions = {
     }
 
     // This is the bulk-buy math, explicitly ignored if abnormal cost increases are active
-    const maxBought = dimension.costScale.getMaxBought(
-      Decimal.floor(dimension.bought.div(10)).add(dimension.costBumps),
-      dimension.currencyAmount,
-      DC.E1,
-    );
+    const maxBought = dimension.maxBought;
     if (maxBought === null) {
       return;
     }
@@ -411,15 +427,13 @@ export const MetaDimensions = {
       buying = new Decimal(bulkLeft);
     }
     dimension.amount = dimension.amount.plus(buying);
+    dimension.currencyAmount = dimension.currencyAmount.minus(dimension.cost).max(0);
     dimension.bought = dimension.bought.add(buying);
-    dimension.currencyAmount = dimension.currencyAmount.minus(
-      Decimal.pow10(maxBought.logPrice),
-    ).max(0);
   },
 
   maxAll() {
     for (let tier = 1; tier < 9; tier++) {
-      this.buyMax(tier);
+      this.buyMax(tier)
     }
   },
 

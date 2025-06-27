@@ -3,10 +3,10 @@ export enum SOFTCAP_MODES {
   POLYNOMIAL = 2,
   DILATION = 3,
   DILATION_TIER_2 = 4,
-  EXPONENTIAL = 5,
-  LOGARITHMIC = 6,
-  REPEATED_LOGARITHM = 7,
-  SUPER_LOGARITHMIC = 8,
+  LOGARITHMIC = 5,
+  REPEATED_LOGARITHM = 6,
+  SUPER_LOGARITHMIC = 7,
+  NONE = 8,
 };
 
 export enum SCALING_TYPES {
@@ -17,21 +17,22 @@ export enum SCALING_TYPES {
   DILATION_TIER_2 = 5,
   REPEATED_EXPONENTIATION = 6,
   TETRATION = 7,
+  NONE = 8,
 };
 
 interface SoftcapParameters {
-  baseResource: Decimal;
-  softcapStart: Decimal | number | string;
-  softcapPower: Decimal | number | string;
-  softcapType: SOFTCAP_MODES;
+  baseResource: Decimal
+  softcapStart: Decimal | number | string
+  softcapPower: Decimal | number | string
+  softcapType: SOFTCAP_MODES
 }
 
 interface ScaleParameters {
-  baseResource: Decimal;
-  scaleStart: Decimal | number | string;
-  scalePower: Decimal | number | string;
-  scaleMode: SCALING_TYPES;
-  isInverted?: boolean;
+  baseResource: Decimal
+  scaleStart: Decimal | number | string
+  scalePower: Decimal | number | string
+  scaleMode: SCALING_TYPES
+  isInverted?: boolean
 }
 
 export function softcap(parameters: SoftcapParameters) {

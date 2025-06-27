@@ -43,34 +43,42 @@ class QuarkMultUpgrade extends RebuyableMechanicState {
 
   purchase(amount = 1) {
     if (!this.canBeBought) {
-      return;
+      return false;
     }
     Currency.quarks.subtract(
-      Decimal.sumGeometricSeries(amount, this.cost, this.costIncrease, 0),
+      Decimal.sumGeometricSeries(amount, this.cost, DC.D5, 0),
     );
     player.quantum.multiplierUpgrades = player.quantum.multiplierUpgrades.add(
       amount,
     );
     GameUI.update();
+    return true;
   }
 
   buyMax() {
     if (!this.canBeBought) {
-      return;
+      return false;
     }
-    const availableQuarks = Currency.quarks.value.clampMax(this.config.costCap);
+    const availableQuarks = Currency.quarks.value;
     const purchases = Decimal.affordGeometricSeries(
       availableQuarks,
       this.cost,
-      this.costIncrease,
+      DC.D5,
       0,
     );
     if (purchases.lte(0)) {
-      return;
+      return false;
     }
     this.purchase(purchases);
+    return true;
   }
 }
+
+export const QUARK_TYPES = Object.freeze({
+  RED: "RED",
+  GREEN: "GREEN",
+  BLUE: "BLUE"
+})
 
 export const Quarks = {
   multiplierUpgrade: new QuarkMultUpgrade(),
@@ -116,7 +124,10 @@ export const Quarks = {
     let baseGain = player.meta.antimatter.plus(1).log10().div(logDivisor).max(
       0,
     );
-    baseGain = baseGain.timesEffectOf(this.multiplierUpgrade);
+    baseGain = baseGain.timesEffectsOf(
+      this.multiplierUpgrade,
+      Achievement(156),
+    );
     return baseGain.round();
   },
 
@@ -124,6 +135,27 @@ export const Quarks = {
     for (const color of ["red", "green", "blue"]) {
       player.quantum.quarkPowers[color] = player.quantum.quarkPowers[color]
         .add(this[color].gain().times(diff.div(1000)));
+    }
+  },
+
+  assortTo(amount, color) {
+    Currency.quarks.purchase(amount);
+    switch (color) {
+      case QUARK_TYPES.RED: {
+        player.quantum.colors.red = player.quantum.colors.red.plus(amount);
+        break;
+      }
+      case QUARK_TYPES.GREEN: {
+        player.quantum.colors.green = player.quantum.colors.green.plus(amount);
+        break;
+      }
+      case QUARK_TYPES.BLUE: {
+        player.quantum.colors.blue = player.quantum.colors.blue.plus(amount);
+        break;
+      }
+      default: {
+        throw new TypeError("Unrecongized Quark color");
+      }
     }
   },
 };

@@ -1,6 +1,6 @@
 import { DC } from "../constants";
 
-import { DimensionState } from "./dimension";
+import { DimensionState } from "./dimension.js";
 
 export function infinityDimensionCommonMultiplier() {
   let mult = new Decimal(1)
@@ -256,6 +256,9 @@ class InfinityDimensionState extends DimensionState {
     );
   }
 
+  /**
+   * @returns {boolean}
+   */
   get isCapped() {
     return this.purchases.gte(this.purchaseCap);
   }
@@ -322,6 +325,10 @@ class InfinityDimensionState extends DimensionState {
     return true;
   }
 
+  /**
+   * @param {boolean} auto
+   * @returns {boolean}
+   */
   buyMax(auto) {
     if (!this.isAvailableForPurchase) {
       return false;
@@ -367,13 +374,23 @@ class InfinityDimensionState extends DimensionState {
     }
     return true;
   }
+
+  static createAccessor() {
+    const index = Array.range(1, this.dimensionCount).map(tier =>
+      new this(tier),
+    );
+    index.unshift(null);
+    const accessor = (/** @type {number} */ tier) => {
+      if (index[tier] === undefined) throw new TypeError("Unknown Dimension referenced");
+      return index[tier];
+    };
+    Object.defineProperty(accessor, "index", {
+      value: index,
+    });
+    return accessor;
+  }
 }
 
-/**
- * @function
- * @param {number} tier
- * @return {InfinityDimensionState}
- */
 export const InfinityDimension = InfinityDimensionState.createAccessor();
 
 export const InfinityDimensions = {

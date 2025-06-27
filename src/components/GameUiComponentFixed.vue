@@ -12,8 +12,9 @@ import SaveTimer from "@/components/SaveTimer.vue";
 import SpectateGame from "@/components/SpectateGame.vue";
 import SpeedrunStatus from "@/components/SpeedrunStatus.vue";
 import TimeTheoremShop from "@/components/tabs/time-studies/tt-shop/TimeTheoremShop.vue";
+import { defineComponent } from "vue";
 
-export default {
+export default defineComponent({
   name: "GameUiComponentFixed",
   components: {
     HowToPlay,
@@ -50,7 +51,7 @@ export default {
       this.ending = GameEnd.endState >= END_STATE_MARKERS.FADE_AWAY && !GameEnd.creditsClosed;
     },
   },
-};
+});
 </script>
 
 <template>

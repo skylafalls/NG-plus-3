@@ -1,12 +1,13 @@
 <script>
-import HeaderBlackHole from "./HeaderBlackHole";
-import HeaderChallengeDisplay from "./HeaderChallengeDisplay";
-import HeaderChallengeEffects from "./HeaderChallengeEffects";
-import HeaderPrestigeGroup from "./HeaderPrestigeGroup";
+import { defineComponent } from "vue";
+import HeaderBlackHole from "./HeaderBlackHole.vue";
+import HeaderChallengeDisplay from "./HeaderChallengeDisplay.vue";
+import HeaderChallengeEffects from "./HeaderChallengeEffects.vue";
+import HeaderPrestigeGroup from "./HeaderPrestigeGroup.vue";
 
-import GameSpeedDisplay from "@/components/GameSpeedDisplay";
+import GameSpeedDisplay from "@/components/GameSpeedDisplay.vue";
 
-export default {
+export default defineComponent({
   name: "GameHeader",
   components: {
     HeaderChallengeDisplay,
@@ -25,7 +26,7 @@ export default {
       this.hasReality = PlayerProgress.realityUnlocked();
     },
   },
-};
+});
 </script>
 
 <template>
