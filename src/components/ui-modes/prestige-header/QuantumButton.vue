@@ -14,7 +14,7 @@ export default defineComponent({
       peakQKRate: new Decimal(0),
       currentSpaceShards: new Decimal(0),
       gainedSpaceShards: new Decimal(0),
-      canReset: true,
+      canReset: false,
       quantumGoal: {
         am: new Decimal(0),
         ma: new Decimal(0),
@@ -118,8 +118,9 @@ export default defineComponent({
       this.quantumGoal.am.copyFrom(Player.quantumGoal.am);
       this.quantumGoal.ma.copyFrom(Player.quantumGoal.ma);
       this.headerTextColored = player.options.headerTextColored;
+      this.canReset = canPerformQuantumReset() && this.canStudyQuantum;
 
-      if (!this.canStudyQuantum) {
+      if (!this.canReset) {
         this.type = QU_BUTTON_DISPLAY_TYPE.CANNOT_RESET;
         return;
       }
@@ -169,7 +170,7 @@ const QU_BUTTON_DISPLAY_TYPE = {
     v-if="isVisible"
     :class="buttonClassObject"
     class="o-prestige-button"
-    onclick="quantumReset(false)"
+    onclick="requestQuantumReset()"
     @mouseover="hover = true"
     @mouseleave="hover = false"
   >
@@ -187,10 +188,11 @@ const QU_BUTTON_DISPLAY_TYPE = {
 
     <!-- Normal -->
     <template v-else-if="type === 1">
-      Study for
+      <span v-if="showQKRate">Study for </span>
+      <span v-else>Study the Quantum layer for </span>
       <span :style="amountStyle">{{ format(gainedQK, 2) }}</span>
       <span v-if="showQKRate"> QK</span>
-      <span v-else> {{ pluralize("Quarks", gainedQK) }}</span>
+      <span v-else> {{ pluralize("Quark", gainedQK) }}</span>
       <br>
       <template v-if="showQKRate">
         Current: {{ format(currentQKRate, 2, 2) }} QK/min

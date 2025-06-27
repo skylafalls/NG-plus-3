@@ -127,6 +127,7 @@ export const Quarks = {
     baseGain = baseGain.timesEffectsOf(
       this.multiplierUpgrade,
       Achievement(156),
+      GluonUpgrade.redGreen(5),
     );
     return baseGain.round();
   },

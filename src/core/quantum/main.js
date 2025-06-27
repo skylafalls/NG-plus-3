@@ -146,7 +146,9 @@ function giveQuantumRewards() {
     player.records.thisReality.time,
     player.records.thisReality.realTime,
   );
-  Currency.quantums.add(1);
+  if (QuantumChallenge.isRunning) {
+    QuantumChallenge(player.challenge.quantum.current).complete();
+  }
 }
 
 /**
@@ -186,8 +188,8 @@ export function restorePreQuantumResources() {
 export function canPerformQuantumReset() {
   if (QuantumChallenge.isRunning) {
     if (
-      Currency.antimatter.lt(Player.infinityGoal)
-      && Currency.metaAntimatter.lt(Player.quantumGoal)
+      Currency.antimatter.lt(Player.quantumGoal.am)
+      && Currency.metaAntimatter.lt(Player.quantumGoal.ma)
     ) {
       return false;
     }
@@ -199,7 +201,7 @@ export function canPerformQuantumReset() {
 }
 
 /**
- * Perform a Quantum reset (known in the UI as "study the quantum physics"),
+ * Perform a Quantum reset (known in the UI as "study the quantum layer"),
  * giving the rewards as appropriate.
  * @param {boolean} force If this is true, then don't give rewards and skip to resetting everything.
  */
@@ -207,15 +209,26 @@ export function quantumReset(force = false) {
   if (!canPerformQuantumReset() && !force) {
     return;
   }
-  Currency.quantums.add(1);
   if (!force) {
     EventHub.dispatch(GAME_EVENT.QUANTUM_RESET_BEFORE);
     giveQuantumRewards();
   }
   Currency.quantums.add(1);
   resetPreQuantumResources();
+  player.challenge.quantum.current = 0;
   restorePreQuantumResources();
   EventHub.dispatch(GAME_EVENT.QUANTUM_RESET_AFTER);
+}
+
+/**
+ * This function is equivalent to manually pressing the Quantum button in the UI.
+ * @returns {boolean} Whether the reset was successful or failed/canceled.
+ */
+export function requestQuantumReset() {
+  if (!canPerformQuantumReset()) return false;
+  if (GameEnd.creditsEverClosed) return false;
+  quantumReset(false);
+  return true;
 }
 
 export function handleQuantumTick(diff) {
