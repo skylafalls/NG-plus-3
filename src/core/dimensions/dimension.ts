@@ -1,7 +1,7 @@
 // @ts-check
 
 export abstract class DimensionState<
-  DimensionParams extends { amount: Decimal, bought: Decimal } = { amount: Decimal, bought: Decimal }
+  DimensionParams extends { amount: Decimal, bought: Decimal } = { amount: Decimal, bought: Decimal },
 > {
   private _getData: () => DimensionParams[];
   private _tier: number;

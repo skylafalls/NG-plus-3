@@ -34,7 +34,7 @@ class LongPress {
     if (!Object.prototype.hasOwnProperty.call(handlers, "longPress")) {
       throw "Need to specify a longPress handler";
     }
-    const begin = (e) =>
+    const begin = e =>
       LongPress._pressBegin(
         timeout,
         handlers.longPress,
@@ -57,11 +57,11 @@ class LongPress {
     if (handlers.click) {
       obj.addEventListener(
         "click",
-        (e) => LongPress._handleClick(e, handlers.click),
+        e => LongPress._handleClick(e, handlers.click),
       );
       obj.addEventListener(
         "touchend",
-        (e) => LongPress._handleTouchEnd(e, handlers.click),
+        e => LongPress._handleTouchEnd(e, handlers.click),
       );
     } else {
       obj.addEventListener("click", LongPress._cancelCurrentPress);

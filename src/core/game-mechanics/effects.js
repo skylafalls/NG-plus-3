@@ -9,7 +9,7 @@ export const Effects = {
    */
   sum(...effectSources) {
     let result = DC.D0;
-    applyEffectsOf(effectSources, (v) => result = result.add(v));
+    applyEffectsOf(effectSources, v => result = result.add(v));
     return result;
   },
   /**
@@ -18,7 +18,7 @@ export const Effects = {
    */
   nSum(...effectSources) {
     let result = 0;
-    applyEffectsOf(effectSources, (v) => result += v);
+    applyEffectsOf(effectSources, v => result += v);
     return result;
   },
   /**
@@ -27,7 +27,7 @@ export const Effects = {
    */
   product(...effectSources) {
     let result = DC.D1;
-    applyEffectsOf(effectSources, (v) => result = result.times(v));
+    applyEffectsOf(effectSources, v => result = result.times(v));
     return result;
   },
   /**
@@ -42,7 +42,7 @@ export const Effects = {
     let result = defaultValue;
     let foundLast = false;
     const reversedSources = effectSources
-      .filter((s) => s !== null && s !== undefined)
+      .filter(s => s !== null && s !== undefined)
       .reverse();
     const reducer = (v) => {
       result = v;
@@ -66,7 +66,7 @@ export const Effects = {
       defaultValue = new Decimal(defaultValue);
     }
     let result = defaultValue;
-    applyEffectsOf(effectSources, (v) => result = Decimal.max(result, v));
+    applyEffectsOf(effectSources, v => result = Decimal.max(result, v));
     return result;
   },
   /**
@@ -76,7 +76,7 @@ export const Effects = {
    */
   nMax(defaultValue, ...effectSources) {
     let result = defaultValue;
-    applyEffectsOf(effectSources, (v) => result = Math.max(result, v));
+    applyEffectsOf(effectSources, v => result = Math.max(result, v));
     return result;
   },
   /**
@@ -89,7 +89,7 @@ export const Effects = {
       defaultValue = new Decimal(defaultValue);
     }
     let result = defaultValue;
-    applyEffectsOf(effectSources, (v) => result = Decimal.min(result, v));
+    applyEffectsOf(effectSources, v => result = Decimal.min(result, v));
     return result;
   },
   /**
@@ -99,7 +99,7 @@ export const Effects = {
    */
   nMin(defaultValue, ...effectSources) {
     let result = defaultValue;
-    applyEffectsOf(effectSources, (v) => result = Math.min(result, v));
+    applyEffectsOf(effectSources, v => result = Math.min(result, v));
     return result;
   },
 };
@@ -109,7 +109,7 @@ export const Effects = {
  */
 Decimal.prototype.plusEffectOf = function (effectSource) {
   let result = this;
-  effectSource.applyEffect((v) => result = result.plus(v));
+  effectSource.applyEffect(v => result = result.plus(v));
   return result;
 };
 
@@ -118,7 +118,7 @@ Decimal.prototype.plusEffectOf = function (effectSource) {
  */
 Decimal.prototype.plusEffectsOf = function (...effectSources) {
   let result = this;
-  applyEffectsOf(effectSources, (v) => result = result.plus(v));
+  applyEffectsOf(effectSources, v => result = result.plus(v));
   return result;
 };
 
@@ -127,7 +127,7 @@ Decimal.prototype.plusEffectsOf = function (...effectSources) {
  */
 Decimal.prototype.minusEffectOf = function (effectSource) {
   let result = this;
-  effectSource.applyEffect((v) => result = result.minus(v));
+  effectSource.applyEffect(v => result = result.minus(v));
   return result;
 };
 
@@ -136,7 +136,7 @@ Decimal.prototype.minusEffectOf = function (effectSource) {
  */
 Decimal.prototype.minusEffectsOf = function (...effectSources) {
   let result = this;
-  applyEffectsOf(effectSources, (v) => result = result.minus(v));
+  applyEffectsOf(effectSources, v => result = result.minus(v));
   return result;
 };
 
@@ -145,7 +145,7 @@ Decimal.prototype.minusEffectsOf = function (...effectSources) {
  */
 Decimal.prototype.timesEffectOf = function (effectSource) {
   let result = this;
-  effectSource.applyEffect((v) => result = result.times(v));
+  effectSource.applyEffect(v => result = result.times(v));
   return result;
 };
 
@@ -157,7 +157,7 @@ Decimal.prototype.timesEffectsOf = function (...effectSources) {
   // to get a big mantissa and then fix it at the end.
 
   let result = this;
-  applyEffectsOf(effectSources, (v) => result = result.times(v));
+  applyEffectsOf(effectSources, v => result = result.times(v));
   return result;
 };
 
@@ -166,7 +166,7 @@ Decimal.prototype.timesEffectsOf = function (...effectSources) {
  */
 Decimal.prototype.dividedByEffectOf = function (effectSource) {
   let result = this;
-  effectSource.applyEffect((v) => result = result.dividedBy(v));
+  effectSource.applyEffect(v => result = result.dividedBy(v));
   return result;
 };
 
@@ -175,7 +175,7 @@ Decimal.prototype.dividedByEffectOf = function (effectSource) {
  */
 Decimal.prototype.dividedByEffectsOf = function (...effectSources) {
   let result = this;
-  applyEffectsOf(effectSources, (v) => result = result.dividedBy(v));
+  applyEffectsOf(effectSources, v => result = result.dividedBy(v));
   return result;
 };
 
@@ -184,7 +184,7 @@ Decimal.prototype.dividedByEffectsOf = function (...effectSources) {
  */
 Decimal.prototype.powEffectOf = function (effectSource) {
   let result = this;
-  effectSource.applyEffect((v) => result = result.pow(v));
+  effectSource.applyEffect(v => result = result.pow(v));
   return result;
 };
 
@@ -193,7 +193,7 @@ Decimal.prototype.powEffectOf = function (effectSource) {
  */
 Decimal.prototype.powEffectsOf = function (...effectSources) {
   let result = this;
-  applyEffectsOf(effectSources, (v) => result = result.pow(v));
+  applyEffectsOf(effectSources, v => result = result.pow(v));
   return result;
 };
 

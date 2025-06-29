@@ -117,12 +117,8 @@ export function scale(parameters: ScaleParameters) {
     case SCALING_TYPES.DILATION: {
       const s10 = Decimal.log10(start);
       return parameters.isInverted
-        ? Decimal.pow10(
-            parameters.baseResource.log10().div(s10).root(power).mul(s10),
-          )
-        : Decimal.pow10(
-            parameters.baseResource.log10().div(s10).pow(power).mul(s10),
-          );
+        ? Decimal.pow10(parameters.baseResource.log10().div(s10).root(power).mul(s10))
+        : Decimal.pow10(parameters.baseResource.log10().div(s10).pow(power).mul(s10));
     }
 
     case SCALING_TYPES.DILATION_TIER_2: {
@@ -159,4 +155,15 @@ export function scale(parameters: ScaleParameters) {
       return parameters.baseResource;
     }
   }
+}
+
+export enum SCALE_LEVEL {
+  NONE = 0,
+  DISTANT = 1,
+  FURTHER = 2,
+  REMOTE = 3,
+  OBSCURE = 4,
+  INVISIBLE = 5,
+  GHOSTLY = 6,
+  ETHEREAL = 7,
 }

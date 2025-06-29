@@ -156,8 +156,8 @@ export class Modal {
 
   removeFromQueue() {
     EventHub.ui.offAll(this._component);
-    ui.view.modal.queue = ui.view.modal.queue.filter((m) =>
-      m._uniqueID !== this._uniqueID
+    ui.view.modal.queue = ui.view.modal.queue.filter(m =>
+      m._uniqueID !== this._uniqueID,
     );
     if (ui.view.modal.queue.length === 0) {
       ui.view.modal.current = undefined;

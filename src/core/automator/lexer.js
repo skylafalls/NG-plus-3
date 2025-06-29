@@ -4,7 +4,7 @@ import { createToken, Lexer } from "chevrotain";
 
 import { DC } from "../constants";
 
-const createCategory = (name) =>
+const createCategory = name =>
   createToken({ name, pattern: Lexer.NA, longer_alt: Identifier });
 
 // Shorthand for creating tokens and adding them to a list
@@ -496,10 +496,10 @@ for (const token of lexer.lexerDefinition) {
 }
 
 // We use this while building up the grammar
-export const tokenMap = automatorTokens.mapToObject((e) => e.name, (e) => e);
+export const tokenMap = automatorTokens.mapToObject(e => e.name, e => e);
 
 const automatorCurrencyNames = new Set(
-  tokenLists.AutomatorCurrency.map((i) => i.$autocomplete.toUpperCase()),
+  tokenLists.AutomatorCurrency.map(i => i.$autocomplete.toUpperCase()),
 );
 
 export const standardizeAutomatorValues = function (x) {
@@ -528,8 +528,8 @@ export const standardizeAutomatorValues = function (x) {
 // final resulting array. Note that this technically duplicates words present in multiple phrases (eg. "pending")
 const ignoredPatterns = new Set(["Identifier", "LCurly", "RCurly"]);
 export const forbiddenConstantPatterns = lexer.lexerDefinition
-  .filter((p) => !ignoredPatterns.has(p.name))
-  .map((p) => p.PATTERN.source)
+  .filter(p => !ignoredPatterns.has(p.name))
+  .map(p => p.PATTERN.source)
   .flatMap(
-    (p) => ((p.includes("(") || p.includes(")")) ? p : p.split("[ \\t]+")),
+    p => ((p.includes("(") || p.includes(")")) ? p : p.split("[ \\t]+")),
   );

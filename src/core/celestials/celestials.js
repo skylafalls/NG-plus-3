@@ -60,8 +60,8 @@ GameDatabase.celestials.descriptions = [
   {
     name: "V",
     effects() {
-      const vEffect =
-        `All Dimension multipliers, Eternity Point gain, Infinity Point gain, and Dilated Time gain\
+      const vEffect
+        = `All Dimension multipliers, Eternity Point gain, Infinity Point gain, and Dilated Time gain\
       per second are square-rooted. 
       The Replicanti interval is squared.`;
       const vEffectAdditional = `

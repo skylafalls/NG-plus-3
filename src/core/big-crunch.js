@@ -38,8 +38,8 @@ export function manualBigCrunchResetRequest() {
   // We show the modal under two conditions - on the first ever infinity (to explain the mechanic) and
   // post-break (to show total IP and infinities gained)
   if (
-    player.options.confirmations.bigCrunch &&
-    (!PlayerProgress.infinityUnlocked() || player.break)
+    player.options.confirmations.bigCrunch
+    && (!PlayerProgress.infinityUnlocked() || player.break)
   ) {
     Modal.bigCrunch.show();
   } else {
@@ -52,8 +52,8 @@ export function bigCrunchResetRequest(disableAnimation = false) {
     return;
   }
   if (
-    !disableAnimation && player.options.animations.bigCrunch &&
-    !FullScreenAnimationHandler.isDisplaying
+    !disableAnimation && player.options.animations.bigCrunch
+    && !FullScreenAnimationHandler.isDisplaying
   ) {
     bigCrunchAnimation();
     setTimeout(bigCrunchReset, 1000);
@@ -64,8 +64,8 @@ export function bigCrunchResetRequest(disableAnimation = false) {
 
 export function bigCrunchReset(
   forced = false,
-  enteringAntimatterChallenge = Player.isInAntimatterChallenge &&
-    player.options.retryChallenge,
+  enteringAntimatterChallenge = Player.isInAntimatterChallenge
+    && player.options.retryChallenge,
 ) {
   if (!forced && !Player.canCrunch) {
     return;

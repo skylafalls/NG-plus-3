@@ -16,8 +16,8 @@ export const GlyphSacrificeHandler = {
         type,
       ) => ((tot instanceof Decimal)
         ? tot.add(
-          Decimal.log10(Decimal.max(player.reality.glyphs.sac[type], 1), 0),
-        )
+            Decimal.log10(Decimal.max(player.reality.glyphs.sac[type], 1), 0),
+          )
         : (Decimal.log10(Decimal.max(player.reality.glyphs.sac[type], 1)), 0)),
     );
   },
@@ -25,8 +25,8 @@ export const GlyphSacrificeHandler = {
     return RealityUpgrade(19).isBought;
   },
   get isRefining() {
-    return Ra.unlocks.unlockGlyphAlchemy.canBeApplied &&
-      AutoGlyphProcessor.sacMode !== AUTO_GLYPH_REJECT.SACRIFICE;
+    return Ra.unlocks.unlockGlyphAlchemy.canBeApplied
+      && AutoGlyphProcessor.sacMode !== AUTO_GLYPH_REJECT.SACRIFICE;
   },
   handleSpecialGlyphTypes(glyph) {
     switch (glyph.type) {
@@ -93,8 +93,8 @@ export const GlyphSacrificeHandler = {
       return;
     }
     const toGain = this.glyphSacrificeGain(glyph);
-    const askConfirmation = !force &&
-      player.options.confirmations.glyphSacrifice;
+    const askConfirmation = !force
+      && player.options.confirmations.glyphSacrifice;
     if (askConfirmation) {
       Modal.glyphSacrifice.show({ idx: glyph.idx, gain: toGain });
       return;
@@ -127,8 +127,8 @@ export const GlyphSacrificeHandler = {
   },
   glyphRefinementGain(glyph) {
     if (
-      !Ra.unlocks.unlockGlyphAlchemy.canBeApplied ||
-      !generatedTypes.includes(glyph.type)
+      !Ra.unlocks.unlockGlyphAlchemy.canBeApplied
+      || !generatedTypes.includes(glyph.type)
     ) {
       return DC.D0;
     }
@@ -167,11 +167,11 @@ export const GlyphSacrificeHandler = {
     }
     const decoherence = AlchemyResource.decoherence.isUnlocked;
     if (
-      !Ra.unlocks.unlockGlyphAlchemy.canBeApplied ||
-      (this.glyphRefinementGain(glyph).eq(DC.D0) && !decoherence) ||
-      (decoherence &&
-        AlchemyResources.base.every((x) =>
-          x.data.amount.gte(Ra.alchemyResourceCap)
+      !Ra.unlocks.unlockGlyphAlchemy.canBeApplied
+      || (this.glyphRefinementGain(glyph).eq(DC.D0) && !decoherence)
+      || (decoherence
+        && AlchemyResources.base.every(x =>
+          x.data.amount.gte(Ra.alchemyResourceCap),
         ))
     ) {
       this.sacrificeGlyph(glyph, force);

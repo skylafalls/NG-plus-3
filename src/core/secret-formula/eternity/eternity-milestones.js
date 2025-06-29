@@ -177,10 +177,10 @@ export const eternityMilestones = {
 
       return `While offline, gain Eternities at ${
         formatPercents(0.5)
-      } the rate of your fastest${realTime} Eternity ` +
-        (eternities.gt(0)
-          ? `(Currently ${format(eternities, 2, 2)}/hour)`
-          : "(Inactive)");
+      } the rate of your fastest${realTime} Eternity `
+      + (eternities.gt(0)
+        ? `(Currently ${format(eternities, 2, 2)}/hour)`
+        : "(Inactive)");
     },
     activeCondition:
       () => (player.options.offlineProgress
@@ -202,8 +202,8 @@ export const eternityMilestones = {
       );
 
       return `While offline, gain Infinities equal to ${formatPercents(0.5)}
-        your best Infinities/hour this Eternity ` +
-        (infinities.gt(0)
+        your best Infinities/hour this Eternity `
+        + (infinities.gt(0)
           ? `(Currently ${format(infinities, 2, 2)}/hour)`
           : "(Inactive)");
     },
@@ -211,7 +211,7 @@ export const eternityMilestones = {
       () => (player.options.offlineProgress
         ? `Must be outside of Normal/Infinity Challenges and outside of EC4 and EC12,
         the Big Crunch Autobuyer must be turned on and set to time mode with ${
-          formatInt(5)
+        formatInt(5)
         } seconds or less,
         and the Eternity Autobuyer must be turned off.`
         : ""),

@@ -50,7 +50,12 @@ export const shortcuts = [
     name: "Max all",
     keys: ["m"],
     type: "bindRepeatableHotkey",
-    function: () => maxAll(),
+    function: () => {
+      maxAll();
+      if (TimeStudy.metaDimensions.isBought) {
+        MetaDimensions.maxAll();
+      }
+    },
     visible: true,
   },
   {
@@ -636,7 +641,7 @@ EventHub.logic.on(GAME_EVENT.ARROW_KEY_PRESSED, (direction) => {
   if (direction[0] === "up" || direction[0] === "down") {
     // Make an array of the keys of all the unlocked and visible tabs
     const tabs = Tabs.currentUIFormat.flatMap(
-      (i) => (i.isAvailable ? [i.key] : []),
+      i => (i.isAvailable ? [i.key] : []),
     );
     // Find the index of the tab we are on
     let top = tabs.indexOf(currentTab);
@@ -655,7 +660,7 @@ EventHub.logic.on(GAME_EVENT.ARROW_KEY_PRESSED, (direction) => {
     const currentSubtab = Tabs.current._currentSubtab.key;
     // Make an array of the keys of all the unlocked and visible subtabs
     const subtabs = Tabs.current.subtabs.flatMap(
-      (i) => (i.isAvailable ? [i.key] : []),
+      i => (i.isAvailable ? [i.key] : []),
     );
     // Find the index of the subtab we are on
     let sub = subtabs.indexOf(currentSubtab);

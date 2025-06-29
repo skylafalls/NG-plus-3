@@ -164,10 +164,10 @@ export function restorePreQuantumResources() {
   if (QuantumSpeedrunMilestone(3).isReached) {
     dev.beTests.completeChalleges.eternity();
   }
-  if (QuantumSpeedrunMilestone(4).isReached) {
+  if (QuantumSpeedrunMilestone(4).isReached && !player.dilation.studies.includes(1)) {
     player.dilation.studies.push(1);
   }
-  if (QuantumSpeedrunMilestone(17).isReached) {
+  if (QuantumSpeedrunMilestone(17).isReached && !player.dilation.studies.includes(6)) {
     player.dilation.studies.push(6);
   }
   if (QuantumSpeedrunMilestone(18).isReached) {
@@ -189,7 +189,7 @@ export function canPerformQuantumReset() {
   if (QuantumChallenge.isRunning) {
     if (
       Currency.antimatter.lt(Player.quantumGoal.am)
-      && Currency.metaAntimatter.lt(Player.quantumGoal.ma)
+      || Currency.metaAntimatter.lt(Player.quantumGoal.ma)
     ) {
       return false;
     }
@@ -206,7 +206,7 @@ export function canPerformQuantumReset() {
  * @param {boolean} force If this is true, then don't give rewards and skip to resetting everything.
  */
 export function quantumReset(force = false) {
-  if (!canPerformQuantumReset() && !force) {
+  if (!force || !canPerformQuantumReset()) {
     return;
   }
   if (!force) {
@@ -215,7 +215,7 @@ export function quantumReset(force = false) {
   }
   Currency.quantums.add(1);
   resetPreQuantumResources();
-  player.challenge.quantum.current = 0;
+  if (QuantumChallenge.isRunning) player.challenge.quantum.current = 0;
   restorePreQuantumResources();
   EventHub.dispatch(GAME_EVENT.QUANTUM_RESET_AFTER);
 }

@@ -291,15 +291,15 @@ export const automator = {
       isUnlocked: () => true,
       keyword: "NOTIFY",
       category: 3,
-      syntax: '<b>notify</b> "<u>text</u>"',
+      syntax: "<b>notify</b> \"<u>text</u>\"",
       description:
         `Takes the specified text and posts it in the top-right corner as
         a text notification, in the same spot and style as other notifications such as auto-save
         and achievement/upgrade unlocks. Can be useful for seeing automator status while
         on tabs other than the Automator tab.`,
       examples: [
-        'notify "Dilation reached"',
-        'notify "ECs completed"',
+        "notify \"Dilation reached\"",
+        "notify \"ECs completed\"",
       ],
     },
     {
@@ -651,8 +651,8 @@ export const automator = {
     {
       name: "Reality Count",
       automatorPoints: () =>
-        2 * Decimal.clampMax(Currency.realities.value, 50).mantissa *
-        (10 ** Decimal.clampMax(Currency.realities.value, 50).exponent),
+        2 * Decimal.clampMax(Currency.realities.value, 50).mantissa
+        * (10 ** Decimal.clampMax(Currency.realities.value, 50).exponent),
       shortDescription: () =>
         `+${formatInt(2)} per Reality, up to ${formatInt(50)} Realities`,
       symbol: "Ϟ",

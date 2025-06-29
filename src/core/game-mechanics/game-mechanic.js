@@ -16,8 +16,8 @@ export class GameMechanicState extends Effect {
         const nested = config.effects[key];
         let effect;
         if (
-          typeof nested === "number" || typeof nested === "function" ||
-          nested instanceof Decimal
+          typeof nested === "number" || typeof nested === "function"
+          || nested instanceof Decimal
         ) {
           effect = new Effect(nested);
         } else {
@@ -54,8 +54,8 @@ export class GameMechanicState extends Effect {
   }
 
   static createAccessor(gameData) {
-    const index = mapGameData(gameData, (config) => new this(config));
-    const accessor = (id) => index[id];
+    const index = mapGameData(gameData, config => new this(config));
+    const accessor = id => index[id];
     accessor.index = index;
     return accessor;
   }

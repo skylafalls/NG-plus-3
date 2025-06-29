@@ -24,8 +24,8 @@ export const Theme = function Theme(name, config) {
       return true;
     }
     // Note: match[0] gets the full string of a match, here the initial S and number in a theme name.
-    return player.secretUnlocks.themes.some((theme) =>
-      theme.match(/^S[0-9]*/u)[0] === name
+    return player.secretUnlocks.themes.some(theme =>
+      theme.match(/^S[0-9]*/u)[0] === name,
     );
   };
 
@@ -34,8 +34,8 @@ export const Theme = function Theme(name, config) {
       return name;
     }
     // Secret themes are stored as "S9Whatever", so we need to strip the SN part
-    return player.secretUnlocks.themes.find((theme) =>
-      theme.match(/^S[0-9]*/u)[0] === name
+    return player.secretUnlocks.themes.find(theme =>
+      theme.match(/^S[0-9]*/u)[0] === name,
     ).replace(/^S[0-9]*/u, "");
   };
 
@@ -111,7 +111,7 @@ Theme.isSecretTheme = function (name) {
 };
 
 Theme.animatedThemeUnlocked = function () {
-  return Themes.all.some((theme) => theme.isAvailable && theme.isAnimated);
+  return Themes.all.some(theme => theme.isAvailable && theme.isAnimated);
 };
 
 Theme.tryUnlock = function (name) {
@@ -185,11 +185,11 @@ export const Themes = {
 
   available() {
     return Themes.all
-      .filter((theme) => theme.isAvailable());
+      .filter(theme => theme.isAvailable());
   },
 
   find(name) {
     return Themes.all
-      .find((theme) => theme.name === name);
+      .find(theme => theme.name === name);
   },
 };

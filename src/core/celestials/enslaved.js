@@ -81,9 +81,9 @@ export const Enslaved = {
       .autoStoreReal;
   },
   get canModifyGameTimeStorage() {
-    return Enslaved.isUnlocked && !Pelle.isDoomed && !BlackHoles.arePaused &&
-      !EternityChallenge(12).isRunning &&
-      !Enslaved.isRunning && !Laitela.isRunning;
+    return Enslaved.isUnlocked && !Pelle.isDoomed && !BlackHoles.arePaused
+      && !EternityChallenge(12).isRunning
+      && !Enslaved.isRunning && !Laitela.isRunning;
   },
   get canModifyRealTimeStorage() {
     return Enslaved.isUnlocked && !Pelle.isDoomed;
@@ -95,12 +95,12 @@ export const Enslaved = {
   // where they have also been explicitly disabled via other game mechanics. This also reduces UI boilerplate code.
   // Note that we force time storage when auto-releasing, as not doing so caused a lot of poor usability issues
   get isStoringGameTime() {
-    return this.canModifyGameTimeStorage &&
-      (this.isAutoReleasing || player.celestials.enslaved.isStoring);
+    return this.canModifyGameTimeStorage
+      && (this.isAutoReleasing || player.celestials.enslaved.isStoring);
   },
   get isStoringRealTime() {
-    return this.canModifyRealTimeStorage &&
-      player.celestials.enslaved.isStoringReal;
+    return this.canModifyRealTimeStorage
+      && player.celestials.enslaved.isStoringReal;
   },
   get storedRealTimeEfficiency() {
     return 0.7;
@@ -111,8 +111,8 @@ export const Enslaved = {
     return new Decimal(3600 * 1000 * 8).add(addedCap);
   },
   get isAutoReleasing() {
-    return player.celestials.enslaved.isAutoReleasing &&
-      !BlackHoles.areNegative && !Pelle.isDisabled("blackhole");
+    return player.celestials.enslaved.isAutoReleasing
+      && !BlackHoles.areNegative && !Pelle.isDisabled("blackhole");
   },
   storeRealTime(diffVal) {
     if (Pelle.isDoomed) {
@@ -137,21 +137,21 @@ export const Enslaved = {
     player.lastUpdate = thisUpdate;
   },
   autoStoreRealTime(diffMs) {
-    const maxGain = this.storedRealTimeCap -
-      player.celestials.enslaved.storedReal;
+    const maxGain = this.storedRealTimeCap
+      - player.celestials.enslaved.storedReal;
     const used = Math.min(
       diffMs,
       Math.max(0, maxGain / this.storedRealTimeEfficiency),
     );
-    player.celestials.enslaved.storedReal += used *
-      this.storedRealTimeEfficiency;
+    player.celestials.enslaved.storedReal += used
+      * this.storedRealTimeEfficiency;
     player.lastUpdate += used;
     return diffMs - used;
   },
   canRelease(auto) {
-    return !Enslaved.isStoringRealTime && !EternityChallenge(12).isRunning &&
-      !Laitela.isRunning &&
-      !(Enslaved.isRunning && auto) && !Pelle.isDoomed;
+    return !Enslaved.isStoringRealTime && !EternityChallenge(12).isRunning
+      && !Laitela.isRunning
+      && !(Enslaved.isRunning && auto) && !Pelle.isDoomed;
   },
   // "autoRelease" should only be true when called with the Ra upgrade
   useStoredTime(autoRelease) {
@@ -199,8 +199,8 @@ export const Enslaved = {
     return player.celestials.enslaved.unlocks.includes(info.id);
   },
   canBuy(info) {
-    return player.celestials.enslaved.stored.gte(info.price) &&
-      info.secondaryRequirement() && !this.has(info);
+    return player.celestials.enslaved.stored.gte(info.price)
+      && info.secondaryRequirement() && !this.has(info);
   },
   buyUnlock(info) {
     if (!this.canBuy(info)) {
@@ -226,8 +226,8 @@ export const Enslaved = {
     // again (the other being Pelle entry, which just force-stops the automator entirely).
     AutomatorData.recalculateErrors();
     if (
-      AutomatorBackend.state.mode === AUTOMATOR_MODE.RUN &&
-      AutomatorData.currentErrors().length > 0
+      AutomatorBackend.state.mode === AUTOMATOR_MODE.RUN
+      && AutomatorData.currentErrors().length > 0
     ) {
       AutomatorBackend.stop();
       GameUI.notify.error(
@@ -248,8 +248,8 @@ export const Enslaved = {
     return player.celestials.enslaved.completed;
   },
   get canTickHintTimer() {
-    return !EnslavedProgress.hintsUnlocked.hasProgress &&
-      Enslaved.has(ENSLAVED_UNLOCKS.RUN) && !Enslaved.isCompleted;
+    return !EnslavedProgress.hintsUnlocked.hasProgress
+      && Enslaved.has(ENSLAVED_UNLOCKS.RUN) && !Enslaved.isCompleted;
   },
   get isUnlocked() {
     return EffarigUnlock.eternity.isUnlocked;
@@ -262,8 +262,8 @@ export const Enslaved = {
     );
   },
   get canAmplify() {
-    return this.realityBoostRatio.gt(1) && !Pelle.isDoomed &&
-      !isInCelestialReality();
+    return this.realityBoostRatio.gt(1) && !Pelle.isDoomed
+      && !isInCelestialReality();
   },
   storedTimeInsideEnslaved(stored) {
     if (stored.lte(1e3)) {
@@ -315,8 +315,8 @@ export const Enslaved = {
     }
     player.celestials.enslaved.stored -= this.nextHintCost;
     if (Enslaved.hintCostIncreases === 0) {
-      player.celestials.enslaved.zeroHintTime = Date.now() +
-        TimeSpan.fromDays(1).totalMilliseconds.toNumber();
+      player.celestials.enslaved.zeroHintTime = Date.now()
+        + TimeSpan.fromDays(1).totalMilliseconds.toNumber();
     } else {
       player.celestials.enslaved.zeroHintTime += TimeSpan.fromDays(1)
         .totalMilliseconds.toNumber();
@@ -374,8 +374,8 @@ class EnslavedProgressState extends BitUpgradeState {
   giveProgress() {
     // Bump the last hint time appropriately if the player found the hint
     if (this.hasHint && !this.hasProgress) {
-      player.celestials.enslaved.zeroHintTime -= Math.log(2) /
-        Math.log(3) * TimeSpan.fromDays(1).totalMilliseconds.toNumber();
+      player.celestials.enslaved.zeroHintTime -= Math.log(2)
+        / Math.log(3) * TimeSpan.fromDays(1).totalMilliseconds.toNumber();
       GameUI.notify.success(
         "You found a crack in The Nameless Ones' Reality!",
         10000,
@@ -387,7 +387,7 @@ class EnslavedProgressState extends BitUpgradeState {
 
 export const EnslavedProgress = mapGameDataToObject(
   GameDatabase.celestials.enslaved.progress,
-  (config) => new EnslavedProgressState(config),
+  config => new EnslavedProgressState(config),
 );
 
 export const Tesseracts = {
@@ -436,8 +436,8 @@ export const Tesseracts = {
   },
 
   get canBuyTesseract() {
-    return Enslaved.isCompleted &&
-      Currency.infinityPoints.gte(Tesseracts.nextCost);
+    return Enslaved.isCompleted
+      && Currency.infinityPoints.gte(Tesseracts.nextCost);
   },
 
   capIncrease(count = this.bought) {

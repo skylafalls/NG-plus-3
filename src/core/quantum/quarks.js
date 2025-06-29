@@ -77,8 +77,8 @@ class QuarkMultUpgrade extends RebuyableMechanicState {
 export const QUARK_TYPES = Object.freeze({
   RED: "RED",
   GREEN: "GREEN",
-  BLUE: "BLUE"
-})
+  BLUE: "BLUE",
+});
 
 export const Quarks = {
   multiplierUpgrade: new QuarkMultUpgrade(),
@@ -95,8 +95,12 @@ export const Quarks = {
     return {
       amount: player.quantum.colors.red,
       powers: player.quantum.quarkPowers.red,
-      effect: () =>
-        player.quantum.quarkPowers.red.plus(1).log10().sqrt().div(30).plus(1),
+      effect: () => softcap({
+        baseResource: player.quantum.quarkPowers.red.plus(1).log10().sqrt().div(30).plus(1),
+        softcapStart: 1.5,
+        softcapPower: 0.1,
+        softcapType: SOFTCAP_MODES.MULTIPLICATIVE,
+      }),
       gain: () => player.quantum.colors.red.pow(2.5),
     };
   },
@@ -105,7 +109,12 @@ export const Quarks = {
     return {
       amount: player.quantum.colors.green,
       powers: player.quantum.quarkPowers.green,
-      effect: () => player.quantum.quarkPowers.green.plus(1).log10().sqrt().plus(1),
+      effect: () => softcap({
+        baseResource: player.quantum.quarkPowers.green.plus(1).log10().sqrt().plus(1),
+        softcapStart: 10,
+        softcapPower: 0.5,
+        softcapType: SOFTCAP_MODES.POLYNOMIAL,
+      }),
       gain: () => player.quantum.colors.green.pow(0.9),
     };
   },
@@ -114,7 +123,12 @@ export const Quarks = {
     return {
       amount: player.quantum.colors.blue,
       powers: player.quantum.quarkPowers.blue,
-      effect: () => player.quantum.quarkPowers.blue.plus(1).logPow(0.75),
+      effect: () => scale({
+        baseResource: player.quantum.quarkPowers.blue.plus(1).logPow(0.75),
+        scaleStart: 1e15,
+        scalePower: 1.5,
+        scaleMode: SCALING_TYPES.DILATION,
+      }),
       gain: () => player.quantum.colors.blue.pow(0.6),
     };
   },

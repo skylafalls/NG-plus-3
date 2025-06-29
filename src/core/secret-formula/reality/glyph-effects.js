@@ -5,12 +5,12 @@ export const GlyphCombiner = Object.freeze({
    * @param {Decimal[]} x
    * @returns {Decimal}
    */
-  add: (x) => x.reduce(Decimal.sumReducer, 0),
+  add: x => x.reduce(Decimal.sumReducer, 0),
   /**
    * @param {Decimal[]} x
    * @returns {Decimal}
    */
-  multiply: (x) => x.reduce(Decimal.prodReducer, 1),
+  multiply: x => x.reduce(Decimal.prodReducer, 1),
   /**
    * For exponents, the base value is 1, so when we add two exponents a and b we want to get a + b - 1,
    * so that if a and b are both close to 1 so is their sum. In general, when we add a list x of exponents,
@@ -19,12 +19,12 @@ export const GlyphCombiner = Object.freeze({
    * @param {Decimal[]} x
    * @returns {Decimal}
    */
-  addExponents: (x) => x.reduce(Decimal.sumReducer, 1 - x.length),
+  addExponents: x => x.reduce(Decimal.sumReducer, 1 - x.length),
   /**
    * @param {Decimal[]} x
    * @returns {Decimal}
    */
-  multiplyDecimal: (x) => x.reduce(Decimal.prodReducer, DC.D1),
+  multiplyDecimal: x => x.reduce(Decimal.prodReducer, DC.D1),
 });
 
 // Make sure to add your effects to glyph-core.js orderedEffectList
@@ -40,8 +40,8 @@ export const glyphEffects = {
       Decimal.pow(level, 0.32).times(Decimal.pow(strength, 0.45).div(75)).add(
         1.01,
       ),
-    formatEffect: (x) => format(x, 3, 3),
-    formatSingleEffect: (x) => format(x.sub(1), 3, 3),
+    formatEffect: x => format(x, 3, 3),
+    formatSingleEffect: x => format(x.sub(1), 3, 3),
     combine: GlyphCombiner.addExponents,
     enabledInDoomed: true,
   },
@@ -58,7 +58,7 @@ export const glyphEffects = {
         ? Decimal.pow(level, 0.35).add(1)
         : Decimal.pow(level, 0.3).times(Decimal.pow(strength, 0.65)).div(20))
         .add(1),
-    formatEffect: (x) => format(x, 3, 3),
+    formatEffect: x => format(x, 3, 3),
     combine: GlyphCombiner.multiply,
     alteredColor: () => GlyphAlteration.getEmpowermentColor("time"),
     alterationType: ALTERATION_TYPE.EMPOWER,
@@ -75,7 +75,7 @@ export const glyphEffects = {
     effect: (level, strength) =>
       Decimal.pow((strength.add(3)).times(level), 0.9)
         .times(Decimal.pow(3, GlyphAlteration.sacrificeBoost("time"))),
-    formatEffect: (x) => format(x, 2, 2),
+    formatEffect: x => format(x, 2, 2),
     combine: GlyphCombiner.multiply,
     alteredColor: () => GlyphAlteration.getBoostColor("time"),
     alterationType: ALTERATION_TYPE.BOOST,
@@ -102,10 +102,10 @@ export const glyphEffects = {
         : "EP ×{value}"),
     effect: (level, strength) =>
       Decimal.pow(level.times(strength), 3).times(100),
-    formatEffect: (x) => format(x, 2, 3),
+    formatEffect: x => format(x, 2, 3),
     combine: GlyphCombiner.multiply,
-    conversion: (x) => Decimal.log10(x).div(1000).add(1),
-    formatSecondaryEffect: (x) => format(x, 4, 4),
+    conversion: x => Decimal.log10(x).div(1000).add(1),
+    formatSecondaryEffect: x => format(x, 4, 4),
     alteredColor: () => GlyphAlteration.getAdditionColor("time"),
     alterationType: ALTERATION_TYPE.ADDITION,
   },
@@ -122,7 +122,7 @@ export const glyphEffects = {
     ) => (GlyphAlteration.isEmpowered("dilation")
       ? DC.D1_005.pow(level).times(15)
       : Decimal.pow(level.times(strength), 1.5).times(2)),
-    formatEffect: (x) => format(x, 2, 1),
+    formatEffect: x => format(x, 2, 1),
     combine: GlyphCombiner.multiplyDecimal,
     alteredColor: () => GlyphAlteration.getEmpowermentColor("dilation"),
     alterationType: ALTERATION_TYPE.EMPOWER,
@@ -137,16 +137,16 @@ export const glyphEffects = {
     effect: (level, strength) =>
       Decimal.pow(level, 0.17).times(Decimal.pow(strength, 0.35)).div(100)
         .add(GlyphAlteration.sacrificeBoost("dilation").div(50)).neg().add(1),
-    formatEffect: (x) => format(x, 3, 3),
+    formatEffect: x => format(x, 3, 3),
     alteredColor: () => GlyphAlteration.getBoostColor("dilation"),
     alterationType: ALTERATION_TYPE.BOOST,
     combine: (effects) => {
       const prod = effects.reduce(Decimal.prodReducer, DC.D1);
       return prod.lt(0.4)
         ? {
-          value: Decimal.pow(prod.neg().add(0.4), 1.7).neg().add(0.4),
-          capped: true,
-        }
+            value: Decimal.pow(prod.neg().add(0.4), 1.7).neg().add(0.4),
+            capped: true,
+          }
         : { value: prod, capped: false };
     },
     enabledInDoomed: true,
@@ -175,10 +175,10 @@ export const glyphEffects = {
     effect: (level, strength) =>
       Decimal.pow(level.times(strength), 0.5).div(10000),
     /** @type {function(number): string} */
-    formatEffect: (x) => format(x.times(3600), 2, 2),
+    formatEffect: x => format(x.times(3600), 2, 2),
     combine: GlyphCombiner.add,
-    conversion: (x) => Decimal.max(Decimal.pow(x.times(10000), 1.6), 1),
-    formatSecondaryEffect: (x) => format(x, 2, 2),
+    conversion: x => Decimal.max(Decimal.pow(x.times(10000), 1.6), 1),
+    formatSecondaryEffect: x => format(x, 2, 2),
     alteredColor: () => GlyphAlteration.getAdditionColor("dilation"),
     alterationType: ALTERATION_TYPE.ADDITION,
   },
@@ -194,8 +194,8 @@ export const glyphEffects = {
       Decimal.pow(level, 0.7).times(Decimal.pow(strength, 0.7)).div(25).add(
         1.1,
       ),
-    formatEffect: (x) => format(x, 2, 2),
-    formatSingleEffect: (x) => format(x.sub(1), 2, 2),
+    formatEffect: x => format(x, 2, 2),
+    formatSingleEffect: x => format(x.sub(1), 2, 2),
     combine: GlyphCombiner.addExponents,
     enabledInDoomed: true,
   },
@@ -213,7 +213,7 @@ export const glyphEffects = {
     ) => (GlyphAlteration.isEmpowered("replication")
       ? DC.D1_007.pow(level).times(10)
       : Decimal.times(level, strength).times(3)),
-    formatEffect: (x) => format(x, 2, 1),
+    formatEffect: x => format(x, 2, 1),
     combine: GlyphCombiner.multiplyDecimal,
     alteredColor: () => GlyphAlteration.getEmpowermentColor("replication"),
     alterationType: ALTERATION_TYPE.EMPOWER,
@@ -228,8 +228,8 @@ export const glyphEffects = {
     effect: (level, strength) =>
       Decimal.pow(level, 0.5).times(strength).div(25)
         .add(GlyphAlteration.sacrificeBoost("replication").times(3)).add(1.1),
-    formatEffect: (x) => format(x, 2, 2),
-    formatSingleEffect: (x) => format(x.sub(1), 2, 2),
+    formatEffect: x => format(x, 2, 2),
+    formatSingleEffect: x => format(x.sub(1), 2, 2),
     combine: GlyphCombiner.addExponents,
     alteredColor: () => GlyphAlteration.getBoostColor("replication"),
     alterationType: ALTERATION_TYPE.BOOST,
@@ -265,22 +265,24 @@ export const glyphEffects = {
         : `×DT by +{value} per ${format(DC.E10000)} replicanti`),
     effect: (level, strength) =>
       Decimal.pow(level, 0.3).times(Decimal.pow(strength, 0.65)).times(0.0003),
-    formatEffect: (x) => format(x.times(10000), 2, 2),
-    formatSingleEffect: (x) => format(x.times(10000), 2, 2),
+    formatEffect: x => format(x.times(10000), 2, 2),
+    formatSingleEffect: x => format(x.times(10000), 2, 2),
     // It's bad to stack this one additively (N glyphs acts as a DT mult of N) or multiplicatively (the raw number is
     // less than 1), so instead we do a multiplicative stacking relative to the "base" effect of a level 1, 0% glyph.
     // We also introduce a 3x mult per glyph after the first, so that stacking level 1, 0% glyphs still has an effect.
     // This is still just a flat DT mult when stacking multiple glyphs, but at least it's bigger than 2 or 3.
-    combine: (effects) => ({
-      value: effects.length === 0 ? DC.D0 : effects.reduce(
-        Decimal.prodReducer,
-        Decimal.pow(0.0001, 1 - effects.length),
-      ),
+    combine: effects => ({
+      value: effects.length === 0
+        ? DC.D0
+        : effects.reduce(
+            Decimal.prodReducer,
+            Decimal.pow(0.0001, 1 - effects.length),
+          ),
       capped: false,
     }),
-    conversion: (x) => x,
-    formatSecondaryEffect: (x) => format(x, 2, 3),
-    formatSingleSecondaryEffect: (x) => format(x, 5, 5),
+    conversion: x => x,
+    formatSecondaryEffect: x => format(x, 2, 3),
+    formatSingleSecondaryEffect: x => format(x, 5, 5),
     alteredColor: () => GlyphAlteration.getAdditionColor("replication"),
     alterationType: ALTERATION_TYPE.ADDITION,
   },
@@ -299,7 +301,7 @@ export const glyphEffects = {
     effect: (level, strength) =>
       Decimal.pow(Decimal.pow(level, 0.25).mul(Decimal.pow(strength, 0.4)), 0.5)
         .div(50),
-    formatEffect: (x) => format(x, 3, 3),
+    formatEffect: x => format(x, 3, 3),
     combine: (effects) => {
       let sum = effects.reduce(Decimal.sumReducer, DC.D0);
       if (effects.length > 2) {
@@ -321,8 +323,8 @@ export const glyphEffects = {
     effect: (level, strength) =>
       Decimal.pow(level, 0.21).times(Decimal.pow(strength, 0.4)).div(75)
         .add(GlyphAlteration.sacrificeBoost("infinity").div(50)).add(1.007),
-    formatEffect: (x) => format(x, 3, 3),
-    formatSingleEffect: (x) => format(x.sub(1), 3, 3),
+    formatEffect: x => format(x, 3, 3),
+    formatSingleEffect: x => format(x.sub(1), 3, 3),
     combine: GlyphCombiner.addExponents,
     alteredColor: () => GlyphAlteration.getBoostColor("infinity"),
     alterationType: ALTERATION_TYPE.BOOST,
@@ -342,7 +344,7 @@ export const glyphEffects = {
     shortDesc: "Infinity Power conversion +{value}",
     effect: (level, strength) =>
       Decimal.pow(level, 0.2).times(Decimal.pow(strength, 0.4)).div(25),
-    formatEffect: (x) => format(x, 2, 2),
+    formatEffect: x => format(x, 2, 2),
     combine: GlyphCombiner.add,
     enabledInDoomed: true,
   },
@@ -368,16 +370,14 @@ export const glyphEffects = {
         : "IP ×{value}"),
     effect: (level, strength) =>
       Decimal.pow(level.times(strength.add(1)), 6).times(1e4),
-    formatEffect: (x) => format(x, 2, 3),
+    formatEffect: x => format(x, 2, 3),
     combine: GlyphCombiner.multiply,
 
-    softcap: (
-      value,
-    ) => ((Effarig.eternityCap !== undefined)
+    softcap: value => ((Effarig.eternityCap !== undefined)
       ? Decimal.min(value, Effarig.eternityCap)
       : value),
-    conversion: (x) => Decimal.log10(x).div(1800).add(1),
-    formatSecondaryEffect: (x) => format(x, 4, 4),
+    conversion: x => Decimal.log10(x).div(1800).add(1),
+    formatSecondaryEffect: x => format(x, 4, 4),
     alteredColor: () => GlyphAlteration.getAdditionColor("infinity"),
     alterationType: ALTERATION_TYPE.ADDITION,
   },
@@ -395,7 +395,7 @@ export const glyphEffects = {
     ) => (GlyphAlteration.isEmpowered("infinity")
       ? DC.D1_02.pow(level)
       : Decimal.pow(level.times(strength), 1.5).times(2)),
-    formatEffect: (x) => format(x, 2, 1),
+    formatEffect: x => format(x, 2, 1),
     combine: GlyphCombiner.multiplyDecimal,
     alteredColor: () => GlyphAlteration.getEmpowermentColor("infinity"),
     alterationType: ALTERATION_TYPE.EMPOWER,
@@ -424,11 +424,11 @@ export const glyphEffects = {
       Decimal.pow(level, 0.2).times(Decimal.pow(strength, 0.4)).div(75).add(
         1.015,
       ),
-    formatEffect: (x) => format(x, 3, 3),
-    formatSingleEffect: (x) => format(x.sub(1), 3, 3),
+    formatEffect: x => format(x, 3, 3),
+    formatSingleEffect: x => format(x.sub(1), 3, 3),
     combine: GlyphCombiner.addExponents,
-    conversion: (x) => DC.D2.div(x.add(1)),
-    formatSecondaryEffect: (x) => format(x, 3, 3),
+    conversion: x => DC.D2.div(x.add(1)),
+    formatSecondaryEffect: x => format(x, 3, 3),
     alteredColor: () => GlyphAlteration.getAdditionColor("power"),
     alterationType: ALTERATION_TYPE.ADDITION,
     enabledInDoomed: true,
@@ -445,7 +445,7 @@ export const glyphEffects = {
     ) => (GlyphAlteration.isEmpowered("power")
       ? DC.D11111.pow(level.times(220))
       : Decimal.tetrate(level.times(strength).times(10), 2)),
-    formatEffect: (x) => formatPostBreak(x, 2, 0),
+    formatEffect: x => formatPostBreak(x, 2, 0),
     combine: GlyphCombiner.multiplyDecimal,
     alteredColor: () => GlyphAlteration.getEmpowermentColor("power"),
     alterationType: ALTERATION_TYPE.EMPOWER,
@@ -461,7 +461,7 @@ export const glyphEffects = {
     effect: (level, strength) =>
       Decimal.pow(level.times(strength), 0.5)
         .times(Decimal.pow(GlyphAlteration.sacrificeBoost("power").add(1), 3)),
-    formatEffect: (x) => format(x, 2, 2),
+    formatEffect: x => format(x, 2, 2),
     combine: GlyphCombiner.multiply,
     alteredColor: () => GlyphAlteration.getBoostColor("power"),
     alterationType: ALTERATION_TYPE.BOOST,
@@ -479,7 +479,7 @@ export const glyphEffects = {
     genericDesc: () => `"Buy ${formatInt(10)}" bonus increase`,
     shortDesc: () => `AD "Buy ${formatInt(10)}" mult. ×{value}`,
     effect: (level, strength) => level.times(strength).div(12).add(1),
-    formatEffect: (x) => format(x, 2, 2),
+    formatEffect: x => format(x, 2, 2),
     combine: GlyphCombiner.addExponents,
     enabledInDoomed: true,
   },
@@ -496,7 +496,7 @@ export const glyphEffects = {
     ) => (GlyphAlteration.isEmpowered("effarig")
       ? Decimal.pow(level, 1.5)
       : Decimal.pow(level, 0.6).times(strength)),
-    formatEffect: (x) => format(x, 2, 2),
+    formatEffect: x => format(x, 2, 2),
     combine: GlyphCombiner.multiply,
     alteredColor: () => GlyphAlteration.getEmpowermentColor("effarig"),
     alterationType: ALTERATION_TYPE.EMPOWER,
@@ -510,7 +510,7 @@ export const glyphEffects = {
     shortDesc: "Instability delay +{value}",
     effect: (level, strength) =>
       Decimal.floor(Decimal.pow(level.times(strength), 0.5).times(10)),
-    formatEffect: (x) => formatInt(x),
+    formatEffect: x => formatInt(x),
     combine: GlyphCombiner.add,
   },
   effarigblackhole: {
@@ -523,8 +523,8 @@ export const glyphEffects = {
     shortDesc: "Game speed power +{value}",
     effect: (level, strength) =>
       Decimal.pow(level, 0.25).times(Decimal.pow(strength, 0.4)).div(75).add(1),
-    formatEffect: (x) => format(x, 3, 3),
-    formatSingleEffect: (x) => format(x.sub(1), 3, 3),
+    formatEffect: x => format(x, 3, 3),
+    formatSingleEffect: x => format(x.sub(1), 3, 3),
     combine: GlyphCombiner.addExponents,
   },
   effarigachievement: {
@@ -538,8 +538,8 @@ export const glyphEffects = {
     effect: (level, strength) =>
       Decimal.pow(level, 0.4).times(Decimal.pow(strength, 0.6)).div(60)
         .add(GlyphAlteration.sacrificeBoost("effarig").div(10)).add(1),
-    formatEffect: (x) => format(x, 3, 3),
-    formatSingleEffect: (x) => format(x.sub(1), 3, 3),
+    formatEffect: x => format(x, 3, 3),
+    formatSingleEffect: x => format(x.sub(1), 3, 3),
     combine: GlyphCombiner.addExponents,
     alteredColor: () => GlyphAlteration.getBoostColor("effarig"),
     alterationType: ALTERATION_TYPE.BOOST,
@@ -571,10 +571,10 @@ export const glyphEffects = {
     effect: (level, strength) =>
       DC.D2.times(Decimal.pow(level, 0.25)).times(Decimal.pow(strength, 0.4))
         .add(1),
-    formatEffect: (x) => format(x, 2, 2),
+    formatEffect: x => format(x, 2, 2),
     combine: GlyphCombiner.multiply,
-    conversion: (x) => Decimal.pow(x, 0.4),
-    formatSecondaryEffect: (x) => format(x, 2, 2),
+    conversion: x => Decimal.pow(x, 0.4),
+    formatSecondaryEffect: x => format(x, 2, 2),
     alteredColor: () => GlyphAlteration.getAdditionColor("effarig"),
     alterationType: ALTERATION_TYPE.ADDITION,
   },
@@ -590,8 +590,8 @@ export const glyphEffects = {
       Decimal.pow(level, 0.25).times(Decimal.pow(strength, 0.4)).div(500).add(
         1,
       ),
-    formatEffect: (x) => format(x, 3, 3),
-    formatSingleEffect: (x) => format(x.sub(1), 3, 3),
+    formatEffect: x => format(x, 3, 3),
+    formatSingleEffect: x => format(x.sub(1), 3, 3),
     combine: GlyphCombiner.addExponents,
   },
   effarigantimatter: {
@@ -608,7 +608,7 @@ export const glyphEffects = {
       Decimal.pow(level, 0.25).times(Decimal.pow(strength, 0.4)).div(5000).add(
         1,
       ),
-    formatEffect: (x) => format(x, 4, 4),
+    formatEffect: x => format(x, 4, 4),
     combine: GlyphCombiner.multiply,
   },
   timeshardpow: {
@@ -622,8 +622,8 @@ export const glyphEffects = {
     shortDesc: "Time Shard power +{value}",
     effect: (level, strength) =>
       (strength.div(3.5)).times(Decimal.pow(level, 0.35)).div(400).add(1),
-    formatEffect: (x) => format(x, 3, 3),
-    formatSingleEffect: (x) => format(x.sub(1), 3, 3),
+    formatEffect: x => format(x, 3, 3),
+    formatSingleEffect: x => format(x.sub(1), 3, 3),
     combine: GlyphCombiner.addExponents,
     enabledInDoomed: true,
   },
@@ -635,8 +635,8 @@ export const glyphEffects = {
     totalDesc: "All Galaxy strength -{value}",
     shortDesc: "Galaxy Strength -{value}",
     // Multiplies by 0.768 per glyph
-    effect: (level) => Decimal.pow(level, 0.03).recip(),
-    formatEffect: (x) => formatPercents(x.neg().add(1), 2),
+    effect: level => Decimal.pow(level, 0.03).recip(),
+    formatEffect: x => formatPercents(x.neg().add(1), 2),
     combine: GlyphCombiner.multiply,
   },
   curseddimensions: {
@@ -646,8 +646,8 @@ export const glyphEffects = {
     singleDesc: "All Dimension multipliers ^{value}",
     shortDesc: "All Dimensions ^{value}",
     // Multiplies by 0.734 per glyph
-    effect: (level) => Decimal.pow(level, 0.035).recip(),
-    formatEffect: (x) => format(x, 3, 3),
+    effect: level => Decimal.pow(level, 0.035).recip(),
+    formatEffect: x => format(x, 3, 3),
     combine: GlyphCombiner.multiply,
   },
   cursedtickspeed: {
@@ -660,8 +660,8 @@ export const glyphEffects = {
       "The threshold for Tickspeed Upgrades from Time Dimensions is increased by ×{value}",
     shortDesc: "TD Tickspeed threshold ×{value}",
     // Additive 3.82 per glyph
-    effect: (level) => Decimal.max(Decimal.log10(level), 1),
-    formatEffect: (x) => format(x, 3, 3),
+    effect: level => Decimal.max(Decimal.log10(level), 1),
+    formatEffect: x => format(x, 3, 3),
     combine: GlyphCombiner.add,
   },
   cursedEP: {
@@ -672,8 +672,8 @@ export const glyphEffects = {
     totalDesc: "Eternity Point gain / {value}",
     shortDesc: "EP / {value}",
     // Divides e666.6 per glyph
-    effect: (level) => Decimal.pow10(level.div(10).neg()),
-    formatEffect: (x) => format(x.reciprocal()),
+    effect: level => Decimal.pow10(level.div(10).neg()),
+    formatEffect: x => format(x.reciprocal()),
     combine: GlyphCombiner.multiplyDecimal,
   },
   realityglyphlevel: {
@@ -684,8 +684,8 @@ export const glyphEffects = {
       "Increase the effective level of equipped basic Glyphs by {value}",
     totalDesc: "Equipped basic Glyph level +{value}",
     shortDesc: "Basic Glyph Level +{value}",
-    effect: (level) => Decimal.floor(Decimal.sqrt(Decimal.mul(level, 90))),
-    formatEffect: (x) => formatInt(x),
+    effect: level => Decimal.floor(Decimal.sqrt(Decimal.mul(level, 90))),
+    formatEffect: x => formatInt(x),
     combine: GlyphCombiner.add,
   },
   realitygalaxies: {
@@ -695,8 +695,8 @@ export const glyphEffects = {
     singleDesc: "All Galaxies are {value} stronger",
     totalDesc: "All Galaxy strength +{value}",
     shortDesc: "Galaxy Strength +{value}",
-    effect: (level) => Decimal.pow(level.div(100000), 0.5).add(1),
-    formatEffect: (x) => formatPercents(x.sub(1), 2),
+    effect: level => Decimal.pow(level.div(100000), 0.5).add(1),
+    formatEffect: x => formatPercents(x.sub(1), 2),
     combine: GlyphCombiner.multiply,
   },
   realityrow1pow: {
@@ -706,8 +706,8 @@ export const glyphEffects = {
     singleDesc: "Multiplier from Reality Upgrade Amplifiers ^{value}",
     totalDesc: "Reality Upgrade Amplifier multiplier ^{value}",
     shortDesc: "Amplifier Multiplier ^{value}",
-    effect: (level) => level.div(1.25e5).add(1),
-    formatEffect: (x) => format(x, 3, 3),
+    effect: level => level.div(1.25e5).add(1),
+    formatEffect: x => format(x, 3, 3),
     combine: GlyphCombiner.addExponents,
   },
   realityDTglyph: {
@@ -723,8 +723,8 @@ export const glyphEffects = {
     genericDesc: "Dilated Time factor for Glyph level",
     shortDesc: "DT pow. for level +{value}",
     // You can only get this effect on level 25000 reality glyphs anyway, might as well make it look nice
-    effect: (level) => Decimal.sqrt(level.div(10)).div(500),
-    formatEffect: (x) => format(x, 2, 2),
+    effect: level => Decimal.sqrt(level.div(10)).div(500),
+    formatEffect: x => format(x, 2, 2),
     combine: GlyphCombiner.add,
   },
   companiondescription: {
@@ -732,21 +732,21 @@ export const glyphEffects = {
     intID: 36,
     glyphTypes: [() => "companion"],
     singleDesc:
-      "It does nothing but sit there and cutely smile at you, whisper into your dreams politely, " +
-      "and plot the demise of all who stand against you. This one-of-a-kind Glyph will never leave you.",
+      "It does nothing but sit there and cutely smile at you, whisper into your dreams politely, "
+      + "and plot the demise of all who stand against you. This one-of-a-kind Glyph will never leave you.",
     totalDesc: "+{value} happiness",
     shortDesc: "Doesn't want to hurt you",
     effect: () => {
       if (Enslaved.isRunning) {
         return 0;
       }
-      const cursedCount = Glyphs.active.countWhere((g) => g?.type === "cursed");
+      const cursedCount = Glyphs.active.countWhere(g => g?.type === "cursed");
       if (cursedCount > 0) {
         return Math.pow(0.2 + 0.2 * Math.random(), cursedCount);
       }
       return 0.4 + 0.6 * Math.random();
     },
-    formatEffect: (x) => formatPercents(x, 2, 2),
+    formatEffect: x => formatPercents(x, 2, 2),
     combine: GlyphCombiner.add,
     enabledInDoomed: true,
   },
@@ -757,8 +757,8 @@ export const glyphEffects = {
     singleDesc:
       "Thanks for your dedication for the game! You reached {value} Eternity Points on your first Reality.",
     shortDesc: "It loves you very, very much",
-    totalDesc: () => ((Enslaved.isRunning ||
-        Glyphs.active.countWhere((g) => g?.type === "cursed"))
+    totalDesc: () => ((Enslaved.isRunning
+      || Glyphs.active.countWhere(g => g?.type === "cursed"))
       ? "Help me"
       : "Yay!"),
     // The EP value for this is entirely encoded in rarity, but level needs to be present to
@@ -766,7 +766,7 @@ export const glyphEffects = {
 
     effect: (level, strength) =>
       Decimal.pow10(DC.E6.times(strengthToRarity(strength))),
-    formatEffect: (x) => formatPostBreak(x, 2),
+    formatEffect: x => formatPostBreak(x, 2),
     combine: GlyphCombiner.multiplyDecimal,
     enabledInDoomed: true,
   },

@@ -108,7 +108,7 @@ export const discordRichPresence = {
       resource: () => `${format(player.antimatter, 2, 1)} AM`,
     },
     {
-      name: (token) => `EC ${token}`,
+      name: token => `EC ${token}`,
       // This results in "EC 3x3" (for example) when there are remaining completions, and just "EC 3" if not
       activityToken: () => {
         if (!player.challenge.eternity.current) {
@@ -121,12 +121,12 @@ export const discordRichPresence = {
       resource: () => `${format(player.infinityPoints, 2)} IP`,
     },
     {
-      name: (token) => `IC ${token}`,
+      name: token => `IC ${token}`,
       activityToken: () => player.challenge.infinity.current,
       resource: () => `${format(player.antimatter, 2, 1)} AM`,
     },
     {
-      name: (token) => `NC ${token}`,
+      name: token => `NC ${token}`,
       activityToken: () => player.challenge.normal.current,
       resource: () => `${format(player.antimatter, 2, 1)} AM`,
     },
@@ -282,7 +282,7 @@ export const discordRichPresence = {
       resourceList: [
         () => `Best GL: ${formatInt(player.records.bestReality.glyphLevel)}`,
         () =>
-          `Ra Levels: ${Ra.pets.all.map((p) => formatInt(p.level)).join("/")}`,
+          `Ra Levels: ${Ra.pets.all.map(p => formatInt(p.level)).join("/")}`,
       ],
     },
     {
@@ -299,7 +299,7 @@ export const discordRichPresence = {
       resourceList: [
         () => `Best GL: ${formatInt(player.records.bestReality.glyphLevel)}`,
         () =>
-          `Ra Levels: ${Ra.pets.all.map((p) => formatInt(p.level)).join("/")}`,
+          `Ra Levels: ${Ra.pets.all.map(p => formatInt(p.level)).join("/")}`,
       ],
     },
     {

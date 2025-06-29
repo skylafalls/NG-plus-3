@@ -57,7 +57,7 @@ function getGlyphTypes() {
 export const generatedTypes = Object.keys(getGlyphTypes());
 
 export const GlyphEffectOrder = orderedEffectList.mapToObject(
-  (e) => e,
+  e => e,
   (e, idx) => idx,
 );
 
@@ -82,31 +82,29 @@ export const Glyphs = {
   },
   get sortedInventoryList() {
     return this.inventoryList.sort((a, b) =>
-      Decimal.compare(a.level.mul(a.strength), b.level.mul(b.strength))
+      Decimal.compare(a.level.mul(a.strength), b.level.mul(b.strength)),
     );
   },
   get activeList() {
     return player.reality.glyphs.active;
   },
   get activeWithoutCompanion() {
-    return this.activeList.filter((g) => g.type !== "companion");
+    return this.activeList.filter(g => g.type !== "companion");
   },
   get allGlyphs() {
     return this.inventoryList.concat(this.activeList);
   },
   // Returns an array of inventory indices of all glyphs, with all null entries filtered out
   get glyphIndexArray() {
-    return this.inventory.filter((g) => g).map((g) => g.idx);
+    return this.inventory.filter(g => g).map(g => g.idx);
   },
   findFreeIndex(useProtectedSlots) {
     this.validate();
-    const isUsableIndex = (
-      index,
-    ) => (useProtectedSlots
+    const isUsableIndex = index => (useProtectedSlots
       ? index < this.protectedSlots
       : index >= this.protectedSlots);
     return this.inventory.findIndex((slot, index) =>
-      slot === null && isUsableIndex(index)
+      slot === null && isUsableIndex(index),
     );
   },
   // This is stored in GameCache and only invalidated if glyphs change; we check for free inventory space often in
@@ -114,7 +112,7 @@ export const Glyphs = {
   get freeInventorySpace() {
     this.validate();
     return this.inventory.filter((e, idx) =>
-      e === null && idx >= this.protectedSlots
+      e === null && idx >= this.protectedSlots,
     ).length;
   },
   get activeSlotCount() {
@@ -164,8 +162,8 @@ export const Glyphs = {
         // Check if the topmost unprotected row is free. This isn't necessarily guaranteed because it could come from
         // merging lower rows, which means the empty row isn't in the right spot
         if (
-          !this.glyphIndexArray.some((idx) =>
-            Math.floor(idx / 10) === this.protectedSlots / 10
+          !this.glyphIndexArray.some(idx =>
+            Math.floor(idx / 10) === this.protectedSlots / 10,
           )
         ) {
           rowsMoved++;
@@ -188,8 +186,8 @@ export const Glyphs = {
           break;
         }
         if (
-          !this.glyphIndexArray.some((idx) =>
-            Math.floor(idx / 10) === this.protectedSlots / 10 - 1
+          !this.glyphIndexArray.some(idx =>
+            Math.floor(idx / 10) === this.protectedSlots / 10 - 1,
           )
         ) {
           rowsMoved++;
@@ -218,12 +216,12 @@ export const Glyphs = {
     if (orig >= this.totalSlots / 10 || dest >= this.totalSlots / 10) {
       return false;
     }
-    if (this.glyphIndexArray.some((idx) => Math.floor(idx / 10) === dest)) {
+    if (this.glyphIndexArray.some(idx => Math.floor(idx / 10) === dest)) {
       // Destination row has some glyphs, attempt to merge the rows
       const hasOverlap = [...Array(10).keys()]
-        .some((col) =>
-          this.inventory[10 * orig + col] !== null &&
-          this.inventory[10 * dest + col] !== null
+        .some(col =>
+          this.inventory[10 * orig + col] !== null
+          && this.inventory[10 * dest + col] !== null,
         );
       if (hasOverlap) {
         return false;
@@ -362,10 +360,10 @@ export const Glyphs = {
 
     // Sort by increasing gap, then discard the value as it's not directly used anywhere else
     allMatches.sort((a, b) => Decimal.compare(a.gap, b.gap));
-    return allMatches.map((m) => m.glyph);
+    return allMatches.map(m => m.glyph);
   },
   findById(id) {
-    return player.reality.glyphs.inventory.find((glyph) => glyph.id === id);
+    return player.reality.glyphs.inventory.find(glyph => glyph.id === id);
   },
   findByInventoryIndex(inventoryIndex) {
     return this.inventory[inventoryIndex];
@@ -374,8 +372,8 @@ export const Glyphs = {
     return this.active[activeIndex];
   },
   equip(glyph, targetSlot) {
-    const forbiddenByPelle = Pelle.isDisabled("glyphs") ||
-      ["effarig", "reality", "cursed"].includes(glyph.type);
+    const forbiddenByPelle = Pelle.isDisabled("glyphs")
+      || ["effarig", "reality", "cursed"].includes(glyph.type);
     if (Pelle.isDoomed && forbiddenByPelle) {
       return;
     }
@@ -399,15 +397,15 @@ export const Glyphs = {
         }
       }
       if (
-        RealityUpgrade(24).isLockingMechanics &&
-        this.activeWithoutCompanion.length === 0
+        RealityUpgrade(24).isLockingMechanics
+        && this.activeWithoutCompanion.length === 0
       ) {
         RealityUpgrade(24).tryShowWarningModal();
         return;
       }
       if (
-        ImaginaryUpgrade(25).isLockingMechanics &&
-        this.activeWithoutCompanion.length === 1
+        ImaginaryUpgrade(25).isLockingMechanics
+        && this.activeWithoutCompanion.length === 1
       ) {
         ImaginaryUpgrade(25).tryShowWarningModal();
         return;
@@ -420,8 +418,8 @@ export const Glyphs = {
     }
     let sameSpecialTypeIndex = -1;
     if (["effarig", "reality"].includes(glyph.type)) {
-      sameSpecialTypeIndex = this.active.findIndex((x) =>
-        x && x.type === glyph.type
+      sameSpecialTypeIndex = this.active.findIndex(x =>
+        x && x.type === glyph.type,
       );
     }
     if (this.active[targetSlot] === null) {
@@ -490,8 +488,8 @@ export const Glyphs = {
       const target = player.options.respecIntoProtected
         ? "Protected slots"
         : "Main Inventory";
-      const hasOther =
-        this.findFreeIndex(!player.options.respecIntoProtected) !== -1;
+      const hasOther
+        = this.findFreeIndex(!player.options.respecIntoProtected) !== -1;
       setTimeout(
         () =>
           Modal.message.show(
@@ -499,8 +497,8 @@ export const Glyphs = {
               quantifyInt("Glyph", stillEquipped)
             } could not be unequipped due to lack
         of space. Free up some space in your ${target}${
-              hasOther ? " or switch where you are unequipping to" : ""
-            }
+          hasOther ? " or switch where you are unequipping to" : ""
+        }
         in order to unequip ${stillEquipped === 1 ? "it" : "them"}.`,
             { closeEvent: GAME_EVENT.GLYPHS_CHANGED },
           ),
@@ -516,8 +514,8 @@ export const Glyphs = {
     if (this.active[activeIndex] === null) {
       return;
     }
-    const storedIndex = player.reality.glyphs.active.findIndex((glyph) =>
-      glyph.idx === activeIndex
+    const storedIndex = player.reality.glyphs.active.findIndex(glyph =>
+      glyph.idx === activeIndex,
     );
     if (storedIndex < 0) {
       return;
@@ -532,8 +530,8 @@ export const Glyphs = {
   },
   updateRealityGlyphEffects() {
     // There should only be one reality glyph; this picks one pseudo-randomly if multiple are cheated/glitched in
-    const realityGlyph =
-      player.reality.glyphs.active.filter((g) => g.type === "reality")[0];
+    const realityGlyph
+      = player.reality.glyphs.active.filter(g => g.type === "reality")[0];
     if (realityGlyph === undefined) {
       this.levelBoost = DC.D0;
       return;
@@ -659,8 +657,8 @@ export const Glyphs = {
     }
   },
   sort(sortFunction) {
-    const glyphsToSort = player.reality.glyphs.inventory.filter((g) =>
-      g.idx >= this.protectedSlots
+    const glyphsToSort = player.reality.glyphs.inventory.filter(g =>
+      g.idx >= this.protectedSlots,
     );
     const freeSpace = GameCache.glyphInventorySpace.value;
     const sortOrder = [
@@ -675,7 +673,7 @@ export const Glyphs = {
       "companion",
     ];
     const byType = sortOrder.mapToObject(
-      (g) => g,
+      g => g,
       () => ({ glyphs: [], padding: 0 }),
     );
     for (const g of glyphsToSort) {
@@ -721,7 +719,7 @@ export const Glyphs = {
   },
   sortByPower() {
     this.sort((a, b) =>
-      Decimal.compare(a.level.mul(a.strength), b.level.mul(b.strength))
+      Decimal.compare(a.level.mul(a.strength), b.level.mul(b.strength)),
     );
   },
   sortByScore() {
@@ -729,7 +727,7 @@ export const Glyphs = {
       Decimal.compare(
         AutoGlyphProcessor.filterValue(b),
         AutoGlyphProcessor.filterValue(a),
-      )
+      ),
     );
   },
   sortByEffect() {
@@ -740,7 +738,7 @@ export const Glyphs = {
     // The bitwise reversal is so that the effects with the LOWER id are valued higher in the sorting.
     // This primarily meant for effarig glyph effect sorting, which makes it prioritize timespeed pow highest.
     this.sort((a, b) =>
-      reverseBitstring(b.effects) - reverseBitstring(a.effects)
+      reverseBitstring(b.effects) - reverseBitstring(a.effects),
     );
   },
   // If there are enough glyphs that are better than the specified glyph, in every way, then
@@ -765,12 +763,12 @@ export const Glyphs = {
       return false;
     }
     const toCompare = (inventoryIn ?? this.inventory).concat(this.active)
-      .filter((g) =>
-        g !== null &&
-        g.type === glyph.type &&
-        g.id !== glyph.id &&
-        (g.level.gte(glyph.level) || g.strength.gte(glyph.strength)) &&
-        (glyph.effects.every((el) => g.effects.includes(el)))
+      .filter(g =>
+        g !== null
+        && g.type === glyph.type
+        && g.id !== glyph.id
+        && (g.level.gte(glyph.level) || g.strength.gte(glyph.strength))
+        && (glyph.effects.every(el => g.effects.includes(el))),
       );
     let compareThreshold = ["effarig", "reality"].includes(glyph.type) ? 1 : 5;
     compareThreshold = Math.clampMax(compareThreshold, threshold);
@@ -778,10 +776,10 @@ export const Glyphs = {
       return false;
     }
     const comparedEffects = getGlyphEffectsFromArray(glyph.effects).filter(
-      (x) => x.id.startsWith(glyph.type),
+      x => x.id.startsWith(glyph.type),
     );
-    const betterCount = toCompare.countWhere((other) =>
-      !hasSomeBetterEffects(glyph, other, comparedEffects)
+    const betterCount = toCompare.countWhere(other =>
+      !hasSomeBetterEffects(glyph, other, comparedEffects),
     );
     return betterCount >= compareThreshold;
   },
@@ -806,22 +804,22 @@ export const Glyphs = {
       const glyph = (inventoryCopy ?? this.inventory)[inventoryIndex];
       // Never clean companion, and only clean cursed if we choose to sacrifice all
       if (
-        glyph === null || ["companion"].includes(glyph.type) ||
-        (glyph.type === "cursed" && threshold !== 0)
+        glyph === null || ["companion"].includes(glyph.type)
+        || (glyph.type === "cursed" && threshold !== 0)
       ) {
         continue;
       }
       // Don't auto-clean individually customized glyphs (eg. music glyphs) unless it's harsh or delete all
-      const isCustomGlyph = glyph.color !== undefined ||
-        glyph.symbol !== undefined;
+      const isCustomGlyph = glyph.color !== undefined
+        || glyph.symbol !== undefined;
       if (isCustomGlyph && !isHarsh) {
         continue;
       }
       // If the threshold for better glyphs needed is zero, the glyph is definitely getting deleted
       // no matter what (well, unless it can't be gotten rid of in current glyph removal mode).
       if (
-        threshold === 0 ||
-        this.isObjectivelyUseless(glyph, threshold, inventoryCopy)
+        threshold === 0
+        || this.isObjectivelyUseless(glyph, threshold, inventoryCopy)
       ) {
         if (deleteGlyphs) {
           AutoGlyphProcessor.getRidOfGlyph(glyph);
@@ -839,15 +837,17 @@ export const Glyphs = {
   // Similar to copyForRecords, except that it also preserves null entries, passes on the IDs, and doesn't
   // sort the glyphs; these are all necessary for the purge logic to work correctly
   fakePurgeInventory() {
-    return this.inventory.map((g) => (g === null ? null : {
-      id: g.id,
-      type: g.type,
-      level: g.level,
-      strength: g.strength,
-      effects: g.effects,
-      color: g.color,
-      symbol: g.symbol,
-    }));
+    return this.inventory.map(g => (g === null
+      ? null
+      : {
+          id: g.id,
+          type: g.type,
+          level: g.level,
+          strength: g.strength,
+          effects: g.effects,
+          color: g.color,
+          symbol: g.symbol,
+        }));
   },
   harshAutoClean() {
     this.autoClean(1);
@@ -859,8 +859,8 @@ export const Glyphs = {
     let toBeDeleted = 0;
     for (const glyph of Glyphs.inventory) {
       if (
-        glyph !== null && glyph.idx >= this.protectedSlots &&
-        !AutoGlyphProcessor.wouldKeep(glyph)
+        glyph !== null && glyph.idx >= this.protectedSlots
+        && !AutoGlyphProcessor.wouldKeep(glyph)
       ) {
         if (deleteGlyphs) {
           AutoGlyphProcessor.getRidOfGlyph(glyph);
@@ -875,7 +875,7 @@ export const Glyphs = {
   },
   collapseEmptySlots() {
     const unprotectedGlyphs = player.reality.glyphs.inventory
-      .filter((g) => g.idx >= this.protectedSlots)
+      .filter(g => g.idx >= this.protectedSlots)
       .sort((a, b) => a.idx - b.idx);
     for (let index = 0; index < unprotectedGlyphs.length; index++) {
       this.moveToSlot(unprotectedGlyphs[index], this.protectedSlots + index);
@@ -938,7 +938,7 @@ export const Glyphs = {
       ip: new Decimal(Currency.infinityPoints.value),
       ep: new Decimal(Currency.eternityPoints.value),
       tt: Currency.timeTheorems.max.minus(TimeTheorems.totalPurchased()),
-      ecs: EternityChallenges.all.map((e) => e.completions),
+      ecs: EternityChallenges.all.map(e => e.completions),
       thisInfinityTime: player.records.thisInfinity.time,
       thisInfinityRealTime: player.records.thisInfinity.realTime,
       thisEternityTime: player.records.thisEternity.time,
@@ -949,8 +949,8 @@ export const Glyphs = {
       dilationStudies: player.dilation.studies.toBitmask(),
       dilationUpgrades: player.dilation.upgrades.toBitmask(),
       dilationRebuyables: DilationUpgrades.rebuyable.mapToObject(
-        (d) => d.id,
-        (d) => d.boughtAmount,
+        d => d.id,
+        d => d.boughtAmount,
       ),
       tp: new Decimal(Currency.tachyonParticles.value),
       dt: new Decimal(Currency.dilatedTime.value),
@@ -979,7 +979,7 @@ export const Glyphs = {
     Currency.eternityPoints.value = new Decimal(undoData.ep);
     Currency.timeTheorems.value = new Decimal(undoData.tt);
     EternityChallenges.all.map((ec, ecIndex) =>
-      ec.completions = undoData.ecs[ecIndex]
+      ec.completions = undoData.ecs[ecIndex],
     );
     player.records.thisInfinity.time = undoData.thisInfinityTime;
     player.records.thisInfinity.realTime = undoData.thisInfinityRealTime;
@@ -994,8 +994,8 @@ export const Glyphs = {
         Array.fromBitmask(undoData.dilationUpgrades),
       );
       for (const id of Object.keys(undoData.dilationRebuyables)) {
-        DilationUpgrades.fromId(id).boughtAmount =
-          undoData.dilationRebuyables[id];
+        DilationUpgrades.fromId(id).boughtAmount
+          = undoData.dilationRebuyables[id];
       }
       Currency.tachyonParticles.value = new Decimal(undoData.tp);
       Currency.dilatedTime.value = new Decimal(undoData.dt);
@@ -1013,12 +1013,12 @@ export const Glyphs = {
       return !(Array.isArray(val.effects))
         ? val.effects
         : val.effects.toSorted((c, d) =>
-          getIntIDFromEffect(c) - getIntIDFromEffect(d)
+          getIntIDFromEffect(c) - getIntIDFromEffect(d),
         )[0];
     }
-    const getIntIDFromEffect = (value) =>
-      GlyphEffects.all.filter((e) => e.id === value)[0].intID;
-    const newList = glyphList.map((g) => ({
+    const getIntIDFromEffect = value =>
+      GlyphEffects.all.filter(e => e.id === value)[0].intID;
+    const newList = glyphList.map(g => ({
       type: g.type,
       level: g.level,
       strength: g.strength,
@@ -1033,8 +1033,8 @@ export const Glyphs = {
   // still contribute to the length of the active list. Note that it only ever decreases if startingReality is true.
   updateMaxGlyphCount(startingReality = false) {
     const activeGlyphList = this.activeWithoutCompanion;
-    const currCount = activeGlyphList.length -
-      4 * activeGlyphList.filter((x) => x && x.type === "cursed").length;
+    const currCount = activeGlyphList.length
+      - 4 * activeGlyphList.filter(x => x && x.type === "cursed").length;
     if (startingReality) {
       player.requirementChecks.reality.maxGlyphs = currCount;
     }
@@ -1079,7 +1079,7 @@ export const Glyphs = {
     let hash = DC.D1;
     for (const glyph of glyphSet) {
       const singleGlyphHash = glyph.level.pow(2).mul(glyph.strength.pow(4))
-        .mul(glyph.effects.map((x) => GlyphEffects[x].intID).max()).mul(
+        .mul(glyph.effects.map(x => GlyphEffects[x].intID).max()).mul(
           glyph.type.codePointAt(0),
         );
       hash = hash.mul(singleGlyphHash);
@@ -1094,8 +1094,8 @@ export const Glyphs = {
       );
       return;
     }
-    const cursedCount =
-      this.allGlyphs.filter((g) => g !== null && g.type === "cursed").length;
+    const cursedCount
+      = this.allGlyphs.filter(g => g !== null && g.type === "cursed").length;
     if (cursedCount >= Glyphs.activeSlotCount) {
       GameUI.notify.error(
         `You don't need more than ${
@@ -1115,7 +1115,7 @@ export function recalculateAllGlyphs() {
   }
   // Delete any glyphs that are in overflow spots:
   player.reality.glyphs.inventory = player.reality.glyphs.inventory.filter(
-    (glyph) => glyph.idx < Glyphs.totalSlots,
+    glyph => glyph.idx < Glyphs.totalSlots,
   );
   for (let i = 0; i < player.reality.glyphs.inventory.length; i++) {
     calculateGlyph(player.reality.glyphs.inventory[i]);
@@ -1134,8 +1134,8 @@ export function calculateGlyph(glyph) {
       glyph.rawLevel = glyph.level.lt(1000)
         ? glyph.level
         : (Decimal.pow(glyph.level.times(0.004).min(3), 2) - 1).times(125).add(
-          1000,
-        );
+            1000,
+          );
     }
     // Used to randomly generate strength in this case; I don't think we actually care.
     // TODO: make glyph.strength and glyph.level decimals by default and not strings/numbers
@@ -1147,7 +1147,7 @@ export function calculateGlyph(glyph) {
 }
 
 export function getRarity(x) {
-  return GlyphInfo.rarities.find((e) => Decimal.gte(x, e.minStrength));
+  return GlyphInfo.rarities.find(e => Decimal.gte(x, e.minStrength));
 }
 
 export function getAdjustedGlyphLevel(

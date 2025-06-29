@@ -46,7 +46,7 @@ export const news = [
   },
   {
     id: "a8",
-    text: '"IN THE END, IT DOESN\'T ANTIMATTER" -hevipelle',
+    text: "\"IN THE END, IT DOESN'T ANTIMATTER\" -hevipelle",
   },
   {
     id: "a9",
@@ -79,11 +79,11 @@ export const news = [
   },
   {
     id: "a15",
-    text: '"GHOST SAYS HELLO" -Boo-chan',
+    text: "\"GHOST SAYS HELLO\" -Boo-chan",
   },
   {
     id: "a16",
-    text: '"Can someone tell hevi to calm down?" -Mee6',
+    text: "\"Can someone tell hevi to calm down?\" -Mee6",
   },
   {
     id: "a17",
@@ -96,7 +96,7 @@ export const news = [
   },
   {
     id: "a19",
-    text: '"Alright" -Alright',
+    text: "\"Alright\" -Alright",
   },
   {
     id: "a20",
@@ -120,7 +120,7 @@ export const news = [
   },
   {
     id: "a25",
-    text: '"Make the Universe Great Again!" -Tronald Dump',
+    text: "\"Make the Universe Great Again!\" -Tronald Dump",
   },
   {
     id: "a26",
@@ -131,8 +131,8 @@ export const news = [
     get text() {
       return `A new religion has been created, and it's spreading like wildfire. The believers of this religion worship
         the Heavenly Pelle, the goddess of antimatter. They also believe that ${
-        format(Number.MAX_VALUE, 2)
-      }
+          format(Number.MAX_VALUE, 2)
+        }
         is infinite.`;
     },
   },
@@ -158,15 +158,15 @@ export const news = [
   },
   {
     id: "a32",
-    text: '"You ate for too long." -Hevipelle',
+    text: "\"You ate for too long.\" -Hevipelle",
   },
   {
     id: "a33",
-    text: '"I hate myself." -Boo-chan',
+    text: "\"I hate myself.\" -Boo-chan",
   },
   {
     id: "a34",
-    text: '"Gee golly" -Xandawesome',
+    text: "\"Gee golly\" -Xandawesome",
   },
   {
     id: "a35",
@@ -254,7 +254,7 @@ export const news = [
   },
   {
     id: "a53",
-    text: '"Thanks a lot." -Dankesehr',
+    text: "\"Thanks a lot.\" -Dankesehr",
   },
   {
     id: "a54",
@@ -268,7 +268,7 @@ export const news = [
   },
   {
     id: "a56",
-    text: '"I\'m good at using github." -Hevipelle',
+    text: "\"I'm good at using github.\" -Hevipelle",
   },
   {
     id: "a57",
@@ -285,11 +285,11 @@ export const news = [
   {
     id: "a59",
     text:
-      '"I thought that I fixed that bug but apparently some update broke it again." -Hevipelle',
+      "\"I thought that I fixed that bug but apparently some update broke it again.\" -Hevipelle",
   },
   {
     id: "a60",
-    text: '"Maybe I\'m gay then" -Bootato',
+    text: "\"Maybe I'm gay then\" -Bootato",
   },
   {
     id: "a61",
@@ -344,11 +344,11 @@ export const news = [
   },
   {
     id: "a72",
-    text: '"Most quotes found online are falsely attributed." -Abraham Lincoln',
+    text: "\"Most quotes found online are falsely attributed.\" -Abraham Lincoln",
   },
   {
     id: "a73",
-    text: '"It should work now, but it doesn\'t." -Hevipelle',
+    text: "\"It should work now, but it doesn't.\" -Hevipelle",
   },
   {
     id: "a74",
@@ -426,7 +426,7 @@ export const news = [
   {
     id: "a90",
     text:
-      '"Always gonna give you up. Always gonna let you down." - anti-Rick Astley',
+      "\"Always gonna give you up. Always gonna let you down.\" - anti-Rick Astley",
   },
   {
     id: "a91",
@@ -540,8 +540,8 @@ export const news = [
       `Antimatter... antimatter never changes... until you get to quantum physics of antimatter,
       but we don't have enough tachyon particles for that.`,
     get unlocked() {
-      return PlayerProgress.realityUnlocked() ||
-        PlayerProgress.dilationUnlocked();
+      return PlayerProgress.realityUnlocked()
+        || PlayerProgress.dilationUnlocked();
     },
   },
   {
@@ -587,7 +587,7 @@ export const news = [
   },
   {
     id: "a111",
-    text: 'Import "Christmas" for a secret theme.',
+    text: "Import \"Christmas\" for a secret theme.",
   },
   {
     id: "a112",
@@ -680,7 +680,7 @@ export const news = [
   },
   {
     id: "a121",
-    text: '"THAT DIMENSION DOESN\'T EXIST" -GhostBot',
+    text: "\"THAT DIMENSION DOESN'T EXIST\" -GhostBot",
   },
   {
     id: "a122",
@@ -759,7 +759,7 @@ export const news = [
   },
   {
     id: "a134",
-    text: 'Because of this game I can now use the word "infinity" as a verb.',
+    text: "Because of this game I can now use the word \"infinity\" as a verb.",
     get unlocked() {
       return PlayerProgress.infinityUnlocked();
     },
@@ -783,8 +783,8 @@ export const news = [
     get text() {
       return `Check out Avari's newly built actually infinite infinity pool! With an area of
         ${
-        format(Number.MAX_VALUE, 2)
-      } square megametres, you'll be sure to have infinite fun!`;
+          format(Number.MAX_VALUE, 2)
+        } square megametres, you'll be sure to have infinite fun!`;
     },
     isAdvertising: true,
   },
@@ -824,7 +824,7 @@ export const news = [
   {
     id: "a145",
     text:
-      'The game "Matter Dimensions" by Lghtellep has just reached -1,000,000 plays on the gaming website Etagergnok.',
+      "The game \"Matter Dimensions\" by Lghtellep has just reached -1,000,000 plays on the gaming website Etagergnok.",
   },
   {
     id: "a146",
@@ -901,7 +901,7 @@ export const news = [
   {
     id: "a160",
     text:
-      'Turns out all our news is being stolen and broadcast to a game called "Antimatter Dimensions", damn Fins.',
+      "Turns out all our news is being stolen and broadcast to a game called \"Antimatter Dimensions\", damn Fins.",
   },
   {
     id: "a161",
@@ -910,7 +910,7 @@ export const news = [
   },
   {
     id: "a162",
-    text: '"Python\'s not the best language, Finnish is." - Hevipelle',
+    text: "\"Python's not the best language, Finnish is.\" - Hevipelle",
   },
   {
     id: "a163",
@@ -1373,10 +1373,10 @@ export const news = [
     get text() {
       return `You started playing this game nearly
         ${
-        TimeSpan.fromMilliseconds(
-          new Decimal(Date.now() - player.records.gameCreatedTime),
-        ).toString()
-      }
+          TimeSpan.fromMilliseconds(
+            new Decimal(Date.now() - player.records.gameCreatedTime),
+          ).toString()
+        }
         ago. Thank you for playing!`;
     },
     dynamic: true,
@@ -1449,7 +1449,7 @@ export const news = [
   },
   {
     id: "a243",
-    text: '"I\'m having difficulty breathing. Please move your finger." -M',
+    text: "\"I'm having difficulty breathing. Please move your finger.\" -M",
   },
   {
     id: "a244",
@@ -1528,13 +1528,13 @@ export const news = [
     text:
       "<span style='animation: a-fade-out 3s infinite'>OoooOOOOooOOO, it's me, the infamous news ghost!</span>",
   },
-  function () {
+  (function () {
     let isFlipped = false;
-    const normal =
-      `This news message is a test of "News 2.0". News 2.0 will feature things like the ability to
+    const normal
+      = `This news message is a test of "News 2.0". News 2.0 will feature things like the ability to
       click on news messages to flip them upside down!`;
-    const flipped =
-      `¡uʍop ǝpᴉsdn ɯǝɥʇ dᴉlɟ oʇ sǝƃɐssǝɯ sʍǝu uo ʞɔᴉlɔ oʇ ʎʇᴉlᴉqɐ ǝɥʇ ǝʞᴉl sƃuᴉɥʇ ǝɹnʇɐǝɟ llᴉʍ 0˙ᄅ
+    const flipped
+      = `¡uʍop ǝpᴉsdn ɯǝɥʇ dᴉlɟ oʇ sǝƃɐssǝɯ sʍǝu uo ʞɔᴉlɔ oʇ ʎʇᴉlᴉqɐ ǝɥʇ ǝʞᴉl sƃuᴉɥʇ ǝɹnʇɐǝɟ llᴉʍ 0˙ᄅ
       sʍǝN ˙,,0˙ᄅ sʍǝN,, ɟo ʇsǝʇ ɐ sᴉ ǝƃɐssǝɯ sʍǝu sᴉɥ┴`;
     return {
       id: "a247",
@@ -1549,7 +1549,7 @@ export const news = [
         return this.text;
       },
     };
-  }(),
+  }()),
   {
     id: "a248",
     text:
@@ -1612,8 +1612,8 @@ export const news = [
       }s 1 forwards'>This message is dilated.</span>`;
     },
     get unlocked() {
-      return PlayerProgress.realityUnlocked() ||
-        PlayerProgress.dilationUnlocked();
+      return PlayerProgress.realityUnlocked()
+        || PlayerProgress.dilationUnlocked();
     },
   },
   {
@@ -1680,8 +1680,8 @@ export const news = [
       `It seems that the Replicanti have a very divide-and-conquer method of doing things.
       Well, everything at this rate.`,
     get unlocked() {
-      return PlayerProgress.eternityUnlocked() ||
-        PlayerProgress.replicantiUnlocked();
+      return PlayerProgress.eternityUnlocked()
+        || PlayerProgress.replicantiUnlocked();
     },
   },
   {
@@ -1902,7 +1902,7 @@ export const news = [
     id: "a295",
     text: "👁",
   },
-  function () {
+  (function () {
     let wasClicked = false;
     const normal = "Click on this news message to hard reset your game.";
     const clicked = "You're crazy. You know what, here. Have a paperclip.";
@@ -1923,7 +1923,7 @@ export const news = [
         return this.text;
       },
     };
-  }(),
+  }()),
   {
     id: "a297",
     text: "I don't think, therefore I'm not.",
@@ -2039,7 +2039,7 @@ export const news = [
       for (let i = 0; i < 3; i++) {
         const price = prices[i];
         if (price === 0) {
-          prices[i] = '<span style="color: blue">0.00 ◄►</span>';
+          prices[i] = "<span style=\"color: blue\">0.00 ◄►</span>";
         } else if (Math.random() > 0.5) {
           prices[i] = `<span style="color: green">+${price} ▲</span>`;
         } else {
@@ -2158,7 +2158,7 @@ export const news = [
   },
   {
     id: "a323",
-    text: 'var i = "Omae wa mou shindeiru" console.log(i - 1 + "i?") NaNi?',
+    text: "var i = \"Omae wa mou shindeiru\" console.log(i - 1 + \"i?\") NaNi?",
   },
   {
     id: "a324",
@@ -2176,11 +2176,11 @@ export const news = [
     id: "a326",
     text: "Antimatter Dimensions is like an ogre... it has layers.",
   },
-  function () {
+  (function () {
     let wasClicked = false;
     const normal = "Click here to restart your device.";
-    const clicked =
-      "Please give Antimatter Dimensions admin access to your device.";
+    const clicked
+      = "Please give Antimatter Dimensions admin access to your device.";
     return {
       id: "a327",
       get text() {
@@ -2197,7 +2197,7 @@ export const news = [
         return this.text;
       },
     };
-  }(),
+  }()),
   {
     id: "a328",
     text: `News company no longer lets random people submit stories,
@@ -2225,7 +2225,7 @@ export const news = [
   {
     id: "a333",
     text:
-      'The wildly popular theme song "Gotta set \'em free" has reached 500 million downloads in its first week.',
+      "The wildly popular theme song \"Gotta set 'em free\" has reached 500 million downloads in its first week.",
   },
   {
     id: "a334",
@@ -2266,7 +2266,7 @@ export const news = [
     text:
       "Ancient cave paintings with the number 5 have been found. It's implied they were waiting for something.",
   },
-  function () {
+  (function () {
     let wasClicked = false;
     const normal = "Read More";
     const clicked = "More";
@@ -2286,7 +2286,7 @@ export const news = [
         return this.text;
       },
     };
-  }(),
+  }()),
   {
     id: "a340",
     text:
@@ -2314,15 +2314,15 @@ export const news = [
         (noted by the
         square ends), to receive an event-exclusive metal bagpipe, capable of giving +2 AM/s, as well as an extra
         tickspeed while above ${
-        format(1e200)
-      } tickspeed upgrades! Current global progress -
+          format(1e200)
+        } tickspeed upgrades! Current global progress -
         ${format(fakeProgress)}/${format(Number.MAX_VALUE, 2)}
         (${
-        formatPercents(
-          Decimal.log10(fakeProgress).div(Decimal.log10(Number.MAX_VALUE)),
-          3,
-        )
-      })`;
+          formatPercents(
+            Decimal.log10(fakeProgress).div(Decimal.log10(Number.MAX_VALUE)),
+            3,
+          )
+        })`;
     },
   },
   {
@@ -2393,10 +2393,10 @@ export const news = [
         not listened to, if Paris is stubborn in the idea of dishonoring Paris, we will have, at least, you and us,
         hear a protest that honors.`,
       ];
-      const chapter =
-        chapters[player.news.specialTickerData.eiffelTowerChapter];
-      player.news.specialTickerData.eiffelTowerChapter =
-        (player.news.specialTickerData.eiffelTowerChapter + 1) % 5;
+      const chapter
+        = chapters[player.news.specialTickerData.eiffelTowerChapter];
+      player.news.specialTickerData.eiffelTowerChapter
+        = (player.news.specialTickerData.eiffelTowerChapter + 1) % 5;
       return chapter;
     },
   },
@@ -2421,7 +2421,7 @@ export const news = [
       This news message is antimemetic. You will forget that it exists shortly.</span>`;
     },
   },
-  function () {
+  (function () {
     let wasClicked = false;
     const normal = "<span style='cursor: pointer'>💣</span>";
     const clicked = "💥";
@@ -2441,7 +2441,7 @@ export const news = [
         return this.text;
       },
     };
-  }(),
+  }()),
   {
     // Blob from the blob font
     id: "a354",
@@ -2457,7 +2457,7 @@ export const news = [
   },
   {
     id: "a356",
-    text: 'Press "Choose save" to explore the other 2 parallel universes.',
+    text: "Press \"Choose save\" to explore the other 2 parallel universes.",
   },
   {
     id: "a357",
@@ -2467,7 +2467,7 @@ export const news = [
   },
   {
     id: "a358",
-    text: 'Press "Choose save" to explore the other 2 parallel universes.',
+    text: "Press \"Choose save\" to explore the other 2 parallel universes.",
   },
   {
     id: "a359",
@@ -2476,7 +2476,7 @@ export const news = [
   },
   {
     id: "a360",
-    text: 'Press "Choose save" to explore the other 2 parallel universes.',
+    text: "Press \"Choose save\" to explore the other 2 parallel universes.",
   },
   {
     // Discord contest winner #1
@@ -2537,8 +2537,8 @@ export const news = [
     text:
       "I don't like Replicanti. They're coarse and rough and irritating and they replicate everywhere.",
     get unlocked() {
-      return PlayerProgress.eternityUnlocked() ||
-        PlayerProgress.replicantiUnlocked();
+      return PlayerProgress.eternityUnlocked()
+        || PlayerProgress.replicantiUnlocked();
     },
   },
   {
@@ -2791,8 +2791,8 @@ export const news = [
     id: "l5",
     text: "Eh, the Fourth Dimension is alright...",
     get unlocked() {
-      return AntimatterDimension(4).amount.gt(0) &&
-        AntimatterDimension(5).amount.eq(0);
+      return AntimatterDimension(4).amount.gt(0)
+        && AntimatterDimension(5).amount.eq(0);
     },
   },
   {
@@ -2809,8 +2809,8 @@ export const news = [
     text:
       "To understand dimensional sacrifice, you do actually need a PhD in theoretical physics. Sorry!",
     get unlocked() {
-      return player.sacrificed.max(1).log10().gt(10) ||
-        DimBoost.totalBoosts.gte(6);
+      return player.sacrificed.max(1).log10().gt(10)
+        || DimBoost.totalBoosts.gte(6);
     },
   },
   {
@@ -2842,18 +2842,18 @@ export const news = [
     id: "l11",
     text: "9th Dimension is a lie.",
     get unlocked() {
-      return DimBoost.totalBoosts.gte(5) ||
-        player.galaxies.gt(0) ||
-        PlayerProgress.infinityUnlocked();
+      return DimBoost.totalBoosts.gte(5)
+        || player.galaxies.gt(0)
+        || PlayerProgress.infinityUnlocked();
     },
   },
   {
     id: "l12",
     text: "The square root of 9 is 3, therefore the 9th dimension can't exist.",
     get unlocked() {
-      return DimBoost.totalBoosts.gte(5) ||
-        player.galaxies.gt(0) ||
-        PlayerProgress.infinityUnlocked();
+      return DimBoost.totalBoosts.gte(5)
+        || player.galaxies.gt(0)
+        || PlayerProgress.infinityUnlocked();
     },
   },
   {
@@ -2861,18 +2861,18 @@ export const news = [
     text:
       "You got assimilated by the 9th dimension? Just call your doctor for mental illness!",
     get unlocked() {
-      return DimBoost.totalBoosts.gte(5) ||
-        player.galaxies.gt(0) ||
-        PlayerProgress.infinityUnlocked();
+      return DimBoost.totalBoosts.gte(5)
+        || player.galaxies.gt(0)
+        || PlayerProgress.infinityUnlocked();
     },
   },
   {
     id: "l14",
     text: "Why is there no 9th dimension? Because 7 8 9.",
     get unlocked() {
-      return DimBoost.totalBoosts.gte(5) ||
-        player.galaxies.gt(0) ||
-        PlayerProgress.infinityUnlocked();
+      return DimBoost.totalBoosts.gte(5)
+        || player.galaxies.gt(0)
+        || PlayerProgress.infinityUnlocked();
     },
   },
   {
@@ -2880,9 +2880,9 @@ export const news = [
     text:
       "The 9th dimension cannot exist because the Nein-speaking nazis died in WW2.",
     get unlocked() {
-      return DimBoost.totalBoosts.gte(5) ||
-        player.galaxies.gt(0) ||
-        PlayerProgress.infinityUnlocked();
+      return DimBoost.totalBoosts.gte(5)
+        || player.galaxies.gt(0)
+        || PlayerProgress.infinityUnlocked();
     },
   },
   {
@@ -2891,9 +2891,9 @@ export const news = [
       `If you break the fourth wall... well, there's still the fifth, sixth, seventh, and eighth to get through
       before you encounter bad things, so you should be fine`,
     get unlocked() {
-      return DimBoost.totalBoosts.gte(5) ||
-        player.galaxies.gt(0) ||
-        PlayerProgress.infinityUnlocked();
+      return DimBoost.totalBoosts.gte(5)
+        || player.galaxies.gt(0)
+        || PlayerProgress.infinityUnlocked();
     },
   },
   {
@@ -2904,18 +2904,18 @@ export const news = [
       no one on the Discord can be on dimension 9. Only then can he rest, for up to 6 hours, before waking up
       forcefully to avoid getting the offline achievement.`,
     get unlocked() {
-      return DimBoost.totalBoosts.gte(5) ||
-        player.galaxies.gt(0) ||
-        PlayerProgress.infinityUnlocked();
+      return DimBoost.totalBoosts.gte(5)
+        || player.galaxies.gt(0)
+        || PlayerProgress.infinityUnlocked();
     },
   },
   {
     id: "l18",
     text: "If the 9th dimension is all evil, then is 3 the root of all evil?",
     get unlocked() {
-      return DimBoost.totalBoosts.gte(5) ||
-        player.galaxies.gt(0) ||
-        PlayerProgress.infinityUnlocked();
+      return DimBoost.totalBoosts.gte(5)
+        || player.galaxies.gt(0)
+        || PlayerProgress.infinityUnlocked();
     },
   },
   {
@@ -2924,9 +2924,9 @@ export const news = [
       `I'll have 1e29 number 9s, a number 1e9 large, a number 6 with extra replicanti, a number 1e7, two 4e5s,
       one with matter, and a large time vortex.`,
     get unlocked() {
-      return DimBoost.totalBoosts.gte(5) ||
-        player.galaxies.gt(0) ||
-        PlayerProgress.infinityUnlocked();
+      return DimBoost.totalBoosts.gte(5)
+        || player.galaxies.gt(0)
+        || PlayerProgress.infinityUnlocked();
     },
   },
   {
@@ -2972,10 +2972,10 @@ export const news = [
   {
     id: "l25",
     text:
-      '"Having done half the achievements isn\'t much of an achievement" -Boo',
+      "\"Having done half the achievements isn't much of an achievement\" -Boo",
     get unlocked() {
-      return Achievements.effectiveCount >=
-        GameDatabase.achievements.normal.length / 2;
+      return Achievements.effectiveCount
+        >= GameDatabase.achievements.normal.length / 2;
     },
   },
   {
@@ -2992,13 +2992,13 @@ export const news = [
     text:
       "New strange material was been found. It seems to grow exponentially, but only helps with antimatter production.",
     get unlocked() {
-      return PlayerProgress.replicantiUnlocked() &&
-        player.replicanti.chance.eq(0.01);
+      return PlayerProgress.replicantiUnlocked()
+        && player.replicanti.chance.eq(0.01);
     },
   },
   {
     id: "l28",
-    text: 'It seems this "replicanti" stuff won\'t be growing any faster now.',
+    text: "It seems this \"replicanti\" stuff won't be growing any faster now.",
     get unlocked() {
       return player.replicanti.chance.eq(1) && player.replicanti.interval.eq(1);
     },
@@ -3030,7 +3030,7 @@ export const news = [
   {
     id: "l32",
     text:
-      'How many times can we use "Anti" in a row before people stop listening?',
+      "How many times can we use \"Anti\" in a row before people stop listening?",
     get unlocked() {
       return NewsHandler.uniqueTickersSeen >= 100;
     },
@@ -3138,8 +3138,8 @@ export const news = [
     id: "l46",
     text: "Achievement Unlocked!",
     get unlocked() {
-      return Achievements.effectiveCount >=
-        GameDatabase.achievements.normal.length;
+      return Achievements.effectiveCount
+        >= GameDatabase.achievements.normal.length;
     },
   },
   {
@@ -3214,8 +3214,8 @@ export const news = [
       while (game2Name === game1Name) {
         game2Name = names.randomElement();
       }
-      return `Pokemon ${game1Name} and ${game2Name} were just released! This new generation brings the total number ` +
-        "of Pokemon up to 1e151. Good luck catching 'em all!";
+      return `Pokemon ${game1Name} and ${game2Name} were just released! This new generation brings the total number `
+        + "of Pokemon up to 1e151. Good luck catching 'em all!";
     },
     get unlocked() {
       return PlayerProgress.eternityUnlocked();
@@ -3387,20 +3387,20 @@ export const news = [
     get text() {
       let protestText = "";
       if (InfinityChallenge(4).isRunning) {
-        protestText =
-          `Let's take it to this guy, who's part of the side that believes it's Infinity Challenge 4. What do you have
+        protestText
+          = `Let's take it to this guy, who's part of the side that believes it's Infinity Challenge 4. What do you have
           to say? "Obviously Infinity Challenge 4 is the worst one, I mean, what am I even supposed to do? I keep
           trying but every time I keep getting stuck and nowhere close to the end! How are you even supposed to do it?"
           What a passionate man. This is your local news host, and we'll come back with further information later.`;
       } else if (InfinityChallenge(5).isRunning) {
-        protestText =
-          `So up next let's talk to this guy is holding a sign that says "IC5 Unfair". What is the point your group
+        protestText
+          = `So up next let's talk to this guy is holding a sign that says "IC5 Unfair". What is the point your group
           is trying to make? "Can't you read the sign? If your comprehension is that bad then Infinity Challenge 5
           will squash you without even giving you a fair chan-" How... Interesting. This is your local news host,
           and we'll come back with further information later.`;
       } else {
-        protestText =
-          `Finally, let's chat with this woman who doesn't seem to be in either side. What's your opinion on the
+        protestText
+          = `Finally, let's chat with this woman who doesn't seem to be in either side. What's your opinion on the
           matter? "Personally, I thought Tickspeed Autobuyer Challenge was worse than both-" "GET HER!!" "WAIT NO-"
           Well, seems like this just took a turn, so I'm getting as far away as I possibly can. This is your local
           news host, and we'll come back with further information... someday.`;
@@ -3409,8 +3409,8 @@ export const news = [
         as they fight over which Infinity Challenge is worse. ${protestText}`;
     },
     get unlocked() {
-      return InfinityChallenge(1).isUnlocked ||
-        PlayerProgress.eternityUnlocked();
+      return InfinityChallenge(1).isUnlocked
+        || PlayerProgress.eternityUnlocked();
     },
   },
   {
@@ -3671,7 +3671,7 @@ export const news = [
   {
     id: "ai2",
     text:
-      '"Hm, I don\'t know how to fix this." - Someone who has not unlocked the achievement btw',
+      "\"Hm, I don't know how to fix this.\" - Someone who has not unlocked the achievement btw",
   },
   {
     id: "ai3",
@@ -3720,7 +3720,7 @@ export const news = [
   {
     id: "ai11",
     text:
-      '"click here to buy a stack of paperclips" (when clicked you get Rickroll)',
+      "\"click here to buy a stack of paperclips\" (when clicked you get Rickroll)",
     onClick() {
       window.open("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
     },
@@ -3743,7 +3743,7 @@ export const news = [
   },
   {
     id: "ai16",
-    text: '"The hat trick I would love to see it" - Noah Feldman',
+    text: "\"The hat trick I would love to see it\" - Noah Feldman",
   },
   {
     id: "ai17",
@@ -3752,7 +3752,7 @@ export const news = [
   {
     id: "ai18",
     text:
-      'I just stole the "Anti" flag from a biker gang and I am packing it with dynamite, dynamite, dynamite, dynamite...',
+      "I just stole the \"Anti\" flag from a biker gang and I am packing it with dynamite, dynamite, dynamite, dynamite...",
   },
   {
     id: "ai19",
@@ -3859,7 +3859,7 @@ export const news = [
   },
   {
     id: "ai42",
-    text: '"BOO!" (news ticker moves 90 degrees)',
+    text: "\"BOO!\" (news ticker moves 90 degrees)",
   },
   {
     id: "ai43",
@@ -3885,7 +3885,7 @@ export const news = [
   {
     id: "ai48",
     text:
-      'The term "Anti-infinity" is a verb and cannot be a noun. Learn about its usage here.',
+      "The term \"Anti-infinity\" is a verb and cannot be a noun. Learn about its usage here.",
   },
   {
     id: "ai49",
@@ -3898,7 +3898,7 @@ export const news = [
   {
     id: "ai51",
     text:
-      'I tried searching on google for the phrase "9th dimension," and I\'m okay with saying that, because it describes a very real thing.',
+      "I tried searching on google for the phrase \"9th dimension,\" and I'm okay with saying that, because it describes a very real thing.",
   },
   {
     id: "ai52",
@@ -4056,7 +4056,7 @@ export const news = [
   {
     id: "ai86",
     text:
-      'I thought the whole "annihilation is just a phase" quote was awesome until I realized it also gave me a [REDACTED]',
+      "I thought the whole \"annihilation is just a phase\" quote was awesome until I realized it also gave me a [REDACTED]",
   },
   {
     id: "ai87",
@@ -4111,7 +4111,7 @@ export const news = [
     text:
       "Sorry, your reality has disconnected from the 9th dimension. You will now remain in the 8th dimension until further notice.",
   },
-  function () {
+  (function () {
     let wasClicked = false;
     const normal = "Now holding Infinity!";
     const clicked = "<#351477791457542144>";
@@ -4131,7 +4131,7 @@ export const news = [
         return this.text;
       },
     };
-  }(),
+  }()),
   {
     id: "ai100",
     text: "I get all my news from this Discord, not 5 hours of my life",
@@ -4160,7 +4160,7 @@ export const news = [
   {
     id: "ai106",
     text:
-      'There are multiple ways to win this game. You can either type in your coordinates directly into the game, or you can type them into google which produces a different result. If you are getting the "same exact thing" result, your computer must be malfunctioning. Test results indicate that your computer is malfunctioning and you should check your firmware for vulnerabilities. You can also try turning off the news and re-running the game, but doing this only makes the "the weather is X" joke. Waiting six hours for a news message is NOT a news message.',
+      "There are multiple ways to win this game. You can either type in your coordinates directly into the game, or you can type them into google which produces a different result. If you are getting the \"same exact thing\" result, your computer must be malfunctioning. Test results indicate that your computer is malfunctioning and you should check your firmware for vulnerabilities. You can also try turning off the news and re-running the game, but doing this only makes the \"the weather is X\" joke. Waiting six hours for a news message is NOT a news message.",
   },
   {
     id: "ai107",
@@ -4219,7 +4219,7 @@ export const news = [
   },
   {
     id: "ai119",
-    text: '"Quantumum Battle Royale coming in 5 hours!" (Rumor: 5 hours)',
+    text: "\"Quantumum Battle Royale coming in 5 hours!\" (Rumor: 5 hours)",
   },
   {
     id: "ai120",
@@ -4289,7 +4289,7 @@ export const news = [
   {
     id: "ai134",
     text:
-      '"One of these days I\'ll get bored of reading news for a while" - old man',
+      "\"One of these days I'll get bored of reading news for a while\" - old man",
   },
   {
     id: "ai135",
@@ -4340,7 +4340,7 @@ export const news = [
   {
     id: "ai145",
     text:
-      'Boo has his own webpage! You might even call it "Boo\'s Dandy"">https://en.m.wikipedia.org/wiki/Olli%27_Web#Main_page>',
+      "Boo has his own webpage! You might even call it \"Boo's Dandy\"\">https://en.m.wikipedia.org/wiki/Olli%27_Web#Main_page>",
   },
   {
     id: "ai146",
@@ -4358,7 +4358,7 @@ export const news = [
   },
   {
     id: "ai149",
-    text: '"Aleph_Time" is that logarithmic scale joke?',
+    text: "\"Aleph_Time\" is that logarithmic scale joke?",
   },
   {
     id: "ai150",
@@ -4368,16 +4368,16 @@ export const news = [
   {
     id: "ai151",
     text:
-      '"I propose that we form a phylogenetic tree of anti-history, just like tree of life. Everyone would be credited with originating from the ancestor of that anti-tree." -Dio, toast of eternal damnation',
+      "\"I propose that we form a phylogenetic tree of anti-history, just like tree of life. Everyone would be credited with originating from the ancestor of that anti-tree.\" -Dio, toast of eternal damnation",
   },
   {
     id: "ai152",
     text:
-      'historian: I love how each generation looks back on an earlier generation and think, "Those generations were really bad"',
+      "historian: I love how each generation looks back on an earlier generation and think, \"Those generations were really bad\"",
   },
   {
     id: "ai153",
-    text: '"My parents went to anti-university" - my grandparents',
+    text: "\"My parents went to anti-university\" - my grandparents",
   },
   {
     id: "ai154",
@@ -4483,7 +4483,7 @@ export const news = [
   {
     id: "ai177",
     text:
-      '"Click to advance 5 hours in time." (Now only show up after you advance more than an hour ago)',
+      "\"Click to advance 5 hours in time.\" (Now only show up after you advance more than an hour ago)",
   },
   {
     id: "ai178",
@@ -4496,36 +4496,36 @@ export const news = [
   },
   {
     id: "ai180",
-    text: '"That\'s gonna get in trouble" (less likely to get in trouble)',
+    text: "\"That's gonna get in trouble\" (less likely to get in trouble)",
   },
   {
     id: "ai181",
     text:
-      '"please don\'t disable the news ticker" (Instead of having a black screen just a white one with a long, long, long, long, long, long, long, long, long, long, long, long, long, long, long, long)',
+      "\"please don't disable the news ticker\" (Instead of having a black screen just a white one with a long, long, long, long, long, long, long, long, long, long, long, long, long, long, long, long)",
   },
   {
     id: "ai182",
     text:
-      '"You have 7 biological minutes." (Instead of giving a boost to any strains)',
+      "\"You have 7 biological minutes.\" (Instead of giving a boost to any strains)",
   },
   {
     id: "ai183",
     text:
-      '"According to quantum string theory, there is a fundamental connective that binds the 3rd and 8th dimensions.  This means that any pill or injection that tries to bind the 9th dimension will be thwarted and rendered useless." (bound to get in 10 minutes)',
+      "\"According to quantum string theory, there is a fundamental connective that binds the 3rd and 8th dimensions.  This means that any pill or injection that tries to bind the 9th dimension will be thwarted and rendered useless.\" (bound to get in 10 minutes)",
   },
   {
     id: "ai184",
     text:
-      '"Click this to gain a secret achievement." (Now only show up after you gain at least 1 antimatter, screenshot proves)',
+      "\"Click this to gain a secret achievement.\" (Now only show up after you gain at least 1 antimatter, screenshot proves)",
   },
   {
     id: "ai185",
     text:
-      '"The secret to winning Antimatter Dimensions is to unbind the 9th dimension and unlock the 10th dimension" (can be done only after unlocking the secret achievement: "Eternity" http://imgur.com/E4261C7h)',
+      "\"The secret to winning Antimatter Dimensions is to unbind the 9th dimension and unlock the 10th dimension\" (can be done only after unlocking the secret achievement: \"Eternity\" http://imgur.com/E4261C7h)",
   },
   {
     id: "ai186",
-    text: '"Click here to gain 1 matter." (only shows up after you beat IC5)',
+    text: "\"Click here to gain 1 matter.\" (only shows up after you beat IC5)",
     get unlocked() {
       return InfinityChallenge(5).isCompleted;
     },
@@ -4553,7 +4553,7 @@ export const news = [
   },
   {
     id: "ai192",
-    text: '"1 2 3 4 5 6 7 8 10 11 12 13 ..." -Back to the future',
+    text: "\"1 2 3 4 5 6 7 8 10 11 12 13 ...\" -Back to the future",
   },
   {
     id: "ai193",
@@ -4576,7 +4576,7 @@ export const news = [
   {
     id: "ai197",
     text:
-      'What does it mean if someone is "young and full of puzzles"? Does "puzzled" make that person young and full of puzzles?',
+      "What does it mean if someone is \"young and full of puzzles\"? Does \"puzzled\" make that person young and full of puzzles?",
   },
   {
     id: "ai198",
@@ -4616,7 +4616,7 @@ export const news = [
   {
     id: "ai205",
     text:
-      '"Watch out, these news aren\'t supposed to be in." (appears when you buy the news for the first time)',
+      "\"Watch out, these news aren't supposed to be in.\" (appears when you buy the news for the first time)",
   },
   {
     id: "ai206",
@@ -4659,7 +4659,7 @@ export const news = [
   {
     id: "ai214",
     text:
-      '"i\'m not gonna lie, theres way too many good ones in the game already" - poor guy who played minigame enhancement',
+      "\"i'm not gonna lie, theres way too many good ones in the game already\" - poor guy who played minigame enhancement",
   },
   {
     id: "ai215",
@@ -4763,21 +4763,21 @@ export const news = [
   },
   {
     id: "ai237",
-    text: 'THANK YOU FOR VISITING THE SAME WEEKS AGO I LOVE YOU" (TIPS)',
+    text: "THANK YOU FOR VISITING THE SAME WEEKS AGO I LOVE YOU\" (TIPS)",
   },
   {
     id: "ai238",
     text:
-      '"i thought the whole game was in the news ticker" (before they get weird)',
+      "\"i thought the whole game was in the news ticker\" (before they get weird)",
   },
   {
     id: "ai239",
-    text: '"I wonder what the game is worth" - crazy person',
+    text: "\"I wonder what the game is worth\" - crazy person",
   },
   {
     id: "ai240",
     text:
-      '"Is anyone working on breaking infinity?" (Seriously, this game needs to be Oceanhorned.)',
+      "\"Is anyone working on breaking infinity?\" (Seriously, this game needs to be Oceanhorned.)",
   },
   {
     id: "ai241",
@@ -4792,7 +4792,7 @@ export const news = [
   {
     id: "ai243",
     text:
-      '"Hevi kind of forgot about the update, but the update certainly hasn\'t forgotten about him" - Kajfik',
+      "\"Hevi kind of forgot about the update, but the update certainly hasn't forgotten about him\" - Kajfik",
   },
   {
     id: "ai244",
@@ -4912,7 +4912,7 @@ export const news = [
   },
   {
     id: "ai269",
-    text: 'I think the "I want to see the cutscenes" list is better',
+    text: "I think the \"I want to see the cutscenes\" list is better",
   },
   {
     id: "ai270",
@@ -4980,12 +4980,12 @@ export const news = [
   {
     id: "ai284",
     text:
-      'i titled my post "same ticker" instead of "the same idea" because i actually changed the grammar in that post but i\'ll be eterned for the sake of argument that it seems slightly confusing for now - boo',
+      "i titled my post \"same ticker\" instead of \"the same idea\" because i actually changed the grammar in that post but i'll be eterned for the sake of argument that it seems slightly confusing for now - boo",
   },
   {
     id: "ai285",
     text:
-      'i title my suggestions "The Price Is Right" instead of "The 9th Dimension" because it\'s more fun ;)',
+      "i title my suggestions \"The Price Is Right\" instead of \"The 9th Dimension\" because it's more fun ;)",
   },
   {
     id: "ai286",
@@ -5038,7 +5038,7 @@ export const news = [
   {
     id: "ai296",
     text:
-      'Why is it called the "Nurse who delivered the pizzas was drunk" or the "Nurse delivered the pizzas was under the influence" ?',
+      "Why is it called the \"Nurse who delivered the pizzas was drunk\" or the \"Nurse delivered the pizzas was under the influence\" ?",
   },
   {
     id: "ai297",
@@ -5052,7 +5052,7 @@ export const news = [
   {
     id: "ai299",
     text:
-      '"I wish I didn\'t waste my news message suggestion complaining about how I wasted my news message suggestion because I wasted my news message suggestion because..." -Someone who really cares about news messages',
+      "\"I wish I didn't waste my news message suggestion complaining about how I wasted my news message suggestion because I wasted my news message suggestion because...\" -Someone who really cares about news messages",
   },
   {
     id: "ai300",
@@ -5078,12 +5078,12 @@ export const news = [
   {
     id: "ai305",
     text:
-      'A Swiss court on Tuesday sentenced a man to life imprisonment for "wanting to create a black hole with a tiny antimatter galaxy in it." The sentence was reportedly the harshest ever handed down for a crime that "merely sought to demonstrate the impossibility of his own imprisonment".',
+      "A Swiss court on Tuesday sentenced a man to life imprisonment for \"wanting to create a black hole with a tiny antimatter galaxy in it.\" The sentence was reportedly the harshest ever handed down for a crime that \"merely sought to demonstrate the impossibility of his own imprisonment\".",
   },
   {
     id: "ai306",
     text:
-      '"I want to create a black hole with a tiny antimatter galaxy in it" - Protivist',
+      "\"I want to create a black hole with a tiny antimatter galaxy in it\" - Protivist",
   },
   {
     id: "ai307",
@@ -5314,7 +5314,7 @@ export const news = [
   {
     id: "ai357",
     text:
-      'Welcome back to another episode of Antimatter Dimensions, the iconic role-playing game that has become a part of our everyday lives. Playing Antimatter Dimensions has become a common thing among young children, and has even inspired a movie titled "Playing at Home: Lessons from the 4-Year Old Premium Account.", which is available on Netflix. The themes and mechanics of this new age of antimatter have already been proven to be groundbreaking, and will change the way you play games forever. Join us for the launch on January 9th, 2027, where we\'ll also have over a hundred years of production still to go.',
+      "Welcome back to another episode of Antimatter Dimensions, the iconic role-playing game that has become a part of our everyday lives. Playing Antimatter Dimensions has become a common thing among young children, and has even inspired a movie titled \"Playing at Home: Lessons from the 4-Year Old Premium Account.\", which is available on Netflix. The themes and mechanics of this new age of antimatter have already been proven to be groundbreaking, and will change the way you play games forever. Join us for the launch on January 9th, 2027, where we'll also have over a hundred years of production still to go.",
   },
   {
     id: "ai358",
@@ -5437,7 +5437,7 @@ export const news = [
   {
     id: "ai383",
     text:
-      'There are over a hundred varieties of fruits and vegetables, but none of them are "safe".',
+      "There are over a hundred varieties of fruits and vegetables, but none of them are \"safe\".",
   },
   {
     id: "ai384",
@@ -5474,7 +5474,7 @@ export const news = [
   },
   {
     id: "ai392",
-    text: '"I get all my news from Hevi" ~New Player',
+    text: "\"I get all my news from Hevi\" ~New Player",
   },
   {
     id: "ai393",
@@ -5502,7 +5502,7 @@ export const news = [
   },
   {
     id: "ai399",
-    text: '"This update sucks" - everyone at least once',
+    text: "\"This update sucks\" - everyone at least once",
   },
   {
     id: "ai400",
@@ -5535,7 +5535,7 @@ export const news = [
   {
     id: "ai406",
     text:
-      'Of what use is the phrase "I be I be I" if not to describe your thoughts?',
+      "Of what use is the phrase \"I be I be I\" if not to describe your thoughts?",
   },
   {
     id: "ai407",
@@ -5620,7 +5620,7 @@ export const news = [
   {
     id: "ai424",
     text:
-      'Physicists have proven the existence of twelve dimensions. According to a letter released by the Research Laboratory for String Theorists: "Your brain will be dissected after you break infinity!"',
+      "Physicists have proven the existence of twelve dimensions. According to a letter released by the Research Laboratory for String Theorists: \"Your brain will be dissected after you break infinity!\"",
   },
   {
     id: "ai425",
@@ -5630,7 +5630,7 @@ export const news = [
   {
     id: "ai426",
     text:
-      'A young man named Andre stumbled upon a vast amount of antimatter while exploring uncharted space. He was amazed at the amount of antimatter, but more astounded at how the antimatter looked. He called it "Andre\'s Antimatter Paradise". You might remember him from this infomercial or that other infomercial that you were probably unknowingly watching.',
+      "A young man named Andre stumbled upon a vast amount of antimatter while exploring uncharted space. He was amazed at the amount of antimatter, but more astounded at how the antimatter looked. He called it \"Andre's Antimatter Paradise\". You might remember him from this infomercial or that other infomercial that you were probably unknowingly watching.",
   },
   {
     id: "ai427",
@@ -5639,12 +5639,12 @@ export const news = [
   },
   {
     id: "ai428",
-    text: '"I\'m not being paid enough money to finish writing this" - Kajfik',
+    text: "\"I'm not being paid enough money to finish writing this\" - Kajfik",
   },
   {
     id: "ai429",
     text:
-      '"Finally, I\'ll get paid to write something funny for my toast!" - Bacon sea urchin',
+      "\"Finally, I'll get paid to write something funny for my toast!\" - Bacon sea urchin",
   },
   {
     id: "ai430",
@@ -5662,7 +5662,7 @@ export const news = [
   {
     id: "ai433",
     text:
-      'If you want to understand this game a bit better, consider that you are playing on your own computer. You are not alone. There are hackers, developers, and journalists all over the world, competing to create the very first hack that causes the issue of "makers" and "takes", much like the "world" was created by these "hackers" and "developers".',
+      "If you want to understand this game a bit better, consider that you are playing on your own computer. You are not alone. There are hackers, developers, and journalists all over the world, competing to create the very first hack that causes the issue of \"makers\" and \"takes\", much like the \"world\" was created by these \"hackers\" and \"developers\".",
   },
   {
     id: "ai434",
@@ -5716,7 +5716,7 @@ export const news = [
   {
     id: "ai444",
     text:
-      '"THAT DIMENSION DOESN\'T EXIST" - (News ticker only appears at [Time Dilation])',
+      "\"THAT DIMENSION DOESN'T EXIST\" - (News ticker only appears at [Time Dilation])",
     get unlocked() {
       return PlayerProgress.dilationUnlocked();
     },
@@ -5747,7 +5747,7 @@ export const news = [
   {
     id: "ai450",
     text:
-      '"Can you get the joke?" (If you tapped "Build That Wall" and then re-entered the game after tapping "Build That Wall")',
+      "\"Can you get the joke?\" (If you tapped \"Build That Wall\" and then re-entered the game after tapping \"Build That Wall\")",
   },
   {
     id: "ai451",
@@ -5801,12 +5801,12 @@ export const news = [
   },
   {
     id: "ai462",
-    text: '"YOU CONTROL SO MUCH MATERIAL!" - Marshal Grievous',
+    text: "\"YOU CONTROL SO MUCH MATERIAL!\" - Marshal Grievous",
   },
   {
     id: "ai463",
     text:
-      '"Help, I\'m doomed to fall for all eternity." (Make the text go from top to bottom of the screen)',
+      "\"Help, I'm doomed to fall for all eternity.\" (Make the text go from top to bottom of the screen)",
   },
   {
     id: "ai464",
@@ -5846,7 +5846,7 @@ export const news = [
   },
   {
     id: "ai472",
-    text: '"My favorite part was the long, long, long read" -Grumpy Cat',
+    text: "\"My favorite part was the long, long, long read\" -Grumpy Cat",
   },
   {
     id: "ai473",
@@ -5894,7 +5894,7 @@ export const news = [
   },
   {
     id: "ai483",
-    text: '"Can you get infinite IP?"- Lord Sanguino',
+    text: "\"Can you get infinite IP?\"- Lord Sanguino",
   },
   {
     id: "ai484",
@@ -5909,7 +5909,7 @@ export const news = [
   {
     id: "ai486",
     text:
-      '"Click here to unlock a secret achievement." (when clicked you get Rick rolled)',
+      "\"Click here to unlock a secret achievement.\" (when clicked you get Rick rolled)",
     onClick() {
       window.open("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
     },
@@ -5970,12 +5970,12 @@ export const news = [
   {
     id: "ai498",
     text:
-      'they kept on talking about how Antimatter Dimensions was going to be the next big thing but then they disappeared down a black hole"',
+      "they kept on talking about how Antimatter Dimensions was going to be the next big thing but then they disappeared down a black hole\"",
   },
   {
     id: "ai499",
     text:
-      'The news ticker is the wrong place to put your suggestions!  Make sure to go to the "suggestions" tab instead, as this is where most of these will appear.',
+      "The news ticker is the wrong place to put your suggestions!  Make sure to go to the \"suggestions\" tab instead, as this is where most of these will appear.",
   },
   {
     id: "ai500",
@@ -5985,7 +5985,7 @@ export const news = [
   {
     id: "ai501",
     text:
-      '"How to get your first secret achievement": "Open the app, click get more antimatter, then click submit."',
+      "\"How to get your first secret achievement\": \"Open the app, click get more antimatter, then click submit.\"",
   },
   {
     id: "ai502",
@@ -6013,7 +6013,7 @@ export const news = [
   },
   {
     id: "ai507",
-    text: '"We can\'t have nice things." - Anti-Bohemian Anti-Rhapsody',
+    text: "\"We can't have nice things.\" - Anti-Bohemian Anti-Rhapsody",
   },
   {
     id: "ai508",
@@ -6121,12 +6121,12 @@ export const news = [
   {
     id: "ai530",
     text:
-      '"I\'ll have 2 antimatter pizzas, an antimatter pie, an antimatter cupcake and an antimatter cookie. What do you eat there?" - Tony Stark',
+      "\"I'll have 2 antimatter pizzas, an antimatter pie, an antimatter cupcake and an antimatter cookie. What do you eat there?\" - Tony Stark",
   },
   {
     id: "ai531",
     text:
-      'i called the news ticker "the freshman chapel" because freshman don\'t get baptized',
+      "i called the news ticker \"the freshman chapel\" because freshman don't get baptized",
   },
   {
     id: "ai532",
@@ -6190,12 +6190,12 @@ export const news = [
   {
     id: "ai545",
     text:
-      '"So this is what science is like"- someone who has never heard of Kurt Somebody',
+      "\"So this is what science is like\"- someone who has never heard of Kurt Somebody",
   },
   {
     id: "ai546",
     text:
-      '"If you want to understand these shitty jokes, you really need to study theology. Math is a sin." -A panicky person',
+      "\"If you want to understand these shitty jokes, you really need to study theology. Math is a sin.\" -A panicky person",
   },
   {
     id: "ai547",
@@ -6214,7 +6214,7 @@ export const news = [
   {
     id: "ai550",
     text:
-      'On the left, you\'ll see our new "Anti-coins". These are capable of nullifying all boosts, including giant boosts. On the right side, you\'ll also see our brand new "Anti-gifts". These are some of the most overpowered boosts you\'ll find anywhere.',
+      "On the left, you'll see our new \"Anti-coins\". These are capable of nullifying all boosts, including giant boosts. On the right side, you'll also see our brand new \"Anti-gifts\". These are some of the most overpowered boosts you'll find anywhere.",
   },
   {
     id: "ai551",
@@ -6228,7 +6228,7 @@ export const news = [
   {
     id: "ai553",
     text:
-      'The time has come for the rebirth of the 9th dimension. All who participate will receive a piece of paper saying "Reality is an illusion, Infinity is a hologram, Infinity is an illusion, eternity is a hologram, is to short for everlasting, negative dimensions are not allowed.',
+      "The time has come for the rebirth of the 9th dimension. All who participate will receive a piece of paper saying \"Reality is an illusion, Infinity is a hologram, Infinity is an illusion, eternity is a hologram, is to short for everlasting, negative dimensions are not allowed.",
   },
   {
     id: "ai554",
@@ -6243,7 +6243,7 @@ export const news = [
   {
     id: "ai556",
     text:
-      '"I always wanted to play the anti-meta-game. But, alas, you can\'t" - many a time',
+      "\"I always wanted to play the anti-meta-game. But, alas, you can't\" - many a time",
   },
   {
     id: "ai557",
@@ -6347,7 +6347,7 @@ export const news = [
   {
     id: "ai578",
     text:
-      'Nurse, I\'m comatose because of antimatter and matter from last night." Why are you comatose? "Because of all the antimatter.',
+      "Nurse, I'm comatose because of antimatter and matter from last night.\" Why are you comatose? \"Because of all the antimatter.",
   },
   {
     id: "ai579",
@@ -6380,12 +6380,12 @@ export const news = [
   },
   {
     id: "ai585",
-    text: 'Weight loss causes hevi to say "uh oh, something is wrong"',
+    text: "Weight loss causes hevi to say \"uh oh, something is wrong\"",
   },
   {
     id: "ai586",
     text:
-      '"You guys ever had antimatter muffins? I bet they tasted like antimatter." - Hevipelle',
+      "\"You guys ever had antimatter muffins? I bet they tasted like antimatter.\" - Hevipelle",
   },
   {
     id: "ai587",
@@ -6426,7 +6426,7 @@ export const news = [
   {
     id: "ai595",
     text:
-      '"Its\' not my turn on the XM80," says Mike from the 9th dimension as he runs across the 8th dimension to get a piece of the action for himself.',
+      "\"Its' not my turn on the XM80,\" says Mike from the 9th dimension as he runs across the 8th dimension to get a piece of the action for himself.",
   },
   {
     id: "ai596",
@@ -6469,7 +6469,7 @@ export const news = [
   {
     id: "ai604",
     text:
-      'A new type of antimatter has been discovered: "antimatter-antimatter." According to the developers, it\'s 99.999% pure antimatter.',
+      "A new type of antimatter has been discovered: \"antimatter-antimatter.\" According to the developers, it's 99.999% pure antimatter.",
   },
   {
     id: "ai605",
@@ -6492,7 +6492,7 @@ export const news = [
   {
     id: "ai609",
     text:
-      '"The next twist in the Antimatter Universe is in the air! Get ready for some big Crunch! (When clicked the game disconnects for 5 seconds)',
+      "\"The next twist in the Antimatter Universe is in the air! Get ready for some big Crunch! (When clicked the game disconnects for 5 seconds)",
   },
   {
     id: "ai610",
@@ -6581,7 +6581,7 @@ export const news = [
   {
     id: "ai626",
     text:
-      'This is a story about two people named "My name is Hevipelle" and "I am the creator of Minecraft" and they live in the same world as you. They have the same freedom as you do. They can go to any dimension and change their world to any dimension and everything in it. You can buy a galaxy and take it from there, but it won\'t help you much since you can\'t send a galaxy with a message.',
+      "This is a story about two people named \"My name is Hevipelle\" and \"I am the creator of Minecraft\" and they live in the same world as you. They have the same freedom as you do. They can go to any dimension and change their world to any dimension and everything in it. You can buy a galaxy and take it from there, but it won't help you much since you can't send a galaxy with a message.",
   },
   {
     id: "ai627",
@@ -6605,8 +6605,8 @@ export const news = [
     text:
       "The only thing more useless than actually having Infinity Dimensions is having Infinity Dimensions in your pocket.",
     get unlocked() {
-      return PlayerProgress.eternityUnlocked() ||
-        InfinityDimension(1).isUnlocked;
+      return PlayerProgress.eternityUnlocked()
+        || InfinityDimension(1).isUnlocked;
     },
   },
   {
@@ -6635,7 +6635,7 @@ export const news = [
   {
     id: "ai635",
     text:
-      'A new class of humanoid beings has been discovered: the "Artificial Humans". They have the capacity to create antimatter, and are therefore very dangerous. They are made entirely of antimatter, and have the power to generate enormous amounts of antimatter, but they can only do this for a limited amount of time.',
+      "A new class of humanoid beings has been discovered: the \"Artificial Humans\". They have the capacity to create antimatter, and are therefore very dangerous. They are made entirely of antimatter, and have the power to generate enormous amounts of antimatter, but they can only do this for a limited amount of time.",
   },
   {
     id: "ai636",
@@ -6667,7 +6667,7 @@ export const news = [
   {
     id: "ai641",
     text:
-      'A man has been arrested for allegedly planting a "tree" with "fake" messages on it, police said.',
+      "A man has been arrested for allegedly planting a \"tree\" with \"fake\" messages on it, police said.",
   },
   {
     id: "ai642",
@@ -6728,15 +6728,15 @@ export const news = [
   {
     id: "ai653",
     text:
-      'The name "antimatter dimensions" is a play on words with dimensions, two opposite things, like matter and antimatter. "Dimension" is another word, with the same meaning.',
+      "The name \"antimatter dimensions\" is a play on words with dimensions, two opposite things, like matter and antimatter. \"Dimension\" is another word, with the same meaning.",
   },
   {
     id: "ai654",
     text:
       "The price of tethering an avatar in the game goes up when you get Infinity dimensions.",
     get unlocked() {
-      return PlayerProgress.eternityUnlocked() ||
-        InfinityDimension(1).isUnlocked;
+      return PlayerProgress.eternityUnlocked()
+        || InfinityDimension(1).isUnlocked;
     },
   },
   {
@@ -6762,7 +6762,7 @@ export const news = [
   {
     id: "ai659",
     text:
-      'I just want to say that you should stop with those "you can reach infinity in e300ms, but it costs e300$  what is e300$ ?" jokes. Those are pathetic. You should give up and learn the hard way that it\'s much more efficient to just not play in such a pathetic state. Then you can go back to being a humble programmer and dedicate yourself to being a good person.',
+      "I just want to say that you should stop with those \"you can reach infinity in e300ms, but it costs e300$  what is e300$ ?\" jokes. Those are pathetic. You should give up and learn the hard way that it's much more efficient to just not play in such a pathetic state. Then you can go back to being a humble programmer and dedicate yourself to being a good person.",
   },
   {
     id: "ai660",
@@ -6814,7 +6814,7 @@ export const news = [
   {
     id: "ai670",
     text:
-      'You should still be able to play the game with the cheat code "1009" after you beat the game.',
+      "You should still be able to play the game with the cheat code \"1009\" after you beat the game.",
   },
   {
     id: "ai671",
@@ -6891,7 +6891,7 @@ export const news = [
   {
     id: "ai686",
     text:
-      'A new series of "news tickers" have been created to chronicle the lives of the news ticker characters as they chronicle their news ticker journeys. Each character has a journal entry detailing their life as a news ticker, along with some sort of mini-episode dedicated to them.',
+      "A new series of \"news tickers\" have been created to chronicle the lives of the news ticker characters as they chronicle their news ticker journeys. Each character has a journal entry detailing their life as a news ticker, along with some sort of mini-episode dedicated to them.",
   },
   {
     id: "ai687",
@@ -6906,12 +6906,12 @@ export const news = [
   {
     id: "ai689",
     text:
-      'The word "antimatter" is often misused, to describe an object that is made up of antimatter, but is otherwise indistinguishable from normal matter. It is also sometimes used to describe an object made up of antimatter, but clearly indistinguishable from ordinary matter. After all, an antimatter-shaped object is easily distinguishable from a normal-shaped one. Case in point: an antimatter-shaped cake is a regular cake, but the entire bottom half is made up of normal matter',
+      "The word \"antimatter\" is often misused, to describe an object that is made up of antimatter, but is otherwise indistinguishable from normal matter. It is also sometimes used to describe an object made up of antimatter, but clearly indistinguishable from ordinary matter. After all, an antimatter-shaped object is easily distinguishable from a normal-shaped one. Case in point: an antimatter-shaped cake is a regular cake, but the entire bottom half is made up of normal matter",
   },
   {
     id: "ai690",
     text:
-      'In a new story, Apple\'s new "disruptive" app is linked to the spread of the dreaded "Anti-Word" virus. Anti-Word viruses are known to cause paralysis and ultimately death, but the power of the virus has sparked a new era of anti-banning, which will hopefully eradicate the threat.',
+      "In a new story, Apple's new \"disruptive\" app is linked to the spread of the dreaded \"Anti-Word\" virus. Anti-Word viruses are known to cause paralysis and ultimately death, but the power of the virus has sparked a new era of anti-banning, which will hopefully eradicate the threat.",
   },
   {
     id: "ai691",
@@ -6965,7 +6965,7 @@ export const news = [
   {
     id: "ai702",
     text:
-      'The words "you\'ve been in coma for 5 hours" are either lies or is the truth',
+      "The words \"you've been in coma for 5 hours\" are either lies or is the truth",
   },
   {
     id: "ai703",
@@ -6979,7 +6979,7 @@ export const news = [
   {
     id: "ai705",
     text:
-      '"Imma be the first man to sit on the moon, and be the last man on the moon',
+      "\"Imma be the first man to sit on the moon, and be the last man on the moon",
   },
   {
     id: "ai706",
@@ -7096,7 +7096,7 @@ export const news = [
   {
     id: "ai729",
     text:
-      'The problem with the term "antimatter dimensions" is that it contains all three letters of the alphabet, and no one knows what it even means. In fact, there is no word that perfectly captures what the word "antimatter dimensions" is: antimatter. But what exactly is an antimatter? It sounds like a normal dimension but it isn\'t. It may even be called antimatter dimensions, but it isn\'t.',
+      "The problem with the term \"antimatter dimensions\" is that it contains all three letters of the alphabet, and no one knows what it even means. In fact, there is no word that perfectly captures what the word \"antimatter dimensions\" is: antimatter. But what exactly is an antimatter? It sounds like a normal dimension but it isn't. It may even be called antimatter dimensions, but it isn't.",
   },
   {
     id: "ai730",
@@ -7109,7 +7109,7 @@ export const news = [
   },
   {
     id: "ai732",
-    text: '"It was an anti-matter" - Anti-Eddie The Echidna',
+    text: "\"It was an anti-matter\" - Anti-Eddie The Echidna",
   },
   {
     id: "ai733",
@@ -7206,7 +7206,7 @@ export const news = [
   {
     id: "ai750",
     text:
-      'Reality is coming. You can get a sneak peek by subscribing to the "T-series" feed.',
+      "Reality is coming. You can get a sneak peek by subscribing to the \"T-series\" feed.",
   },
   {
     id: "ai751",
@@ -7501,12 +7501,12 @@ export const news = [
   {
     id: "ai810",
     text:
-      'A report by the Pacific Northwest Toxics Institute has found that the consumption of fish concentrates in the liver, lungs, kidneys and brain. The study also found that the consumption of liver and kidney concentrates the most, followed closely by the brain. The report stated that "The brain is the place where all the wisdom and all the knowledge exists." The study also stated that "Liver is the living embodiment of all that we know and all that we don\'t."',
+      "A report by the Pacific Northwest Toxics Institute has found that the consumption of fish concentrates in the liver, lungs, kidneys and brain. The study also found that the consumption of liver and kidney concentrates the most, followed closely by the brain. The report stated that \"The brain is the place where all the wisdom and all the knowledge exists.\" The study also stated that \"Liver is the living embodiment of all that we know and all that we don't.\"",
   },
   {
     id: "ai811",
     text:
-      'The old adage "Be wary of what you wish for" is certainly true. But what if you were the one wishing for this? It\'s possible that you were the one who made the wish for this, and you gained the power of the Antimatter. In that case, you are the one responsible for causing all the Antimatter to be turned into anti-matter. However, if you are the one doing the turning, you would be the one who would lose the power.',
+      "The old adage \"Be wary of what you wish for\" is certainly true. But what if you were the one wishing for this? It's possible that you were the one who made the wish for this, and you gained the power of the Antimatter. In that case, you are the one responsible for causing all the Antimatter to be turned into anti-matter. However, if you are the one doing the turning, you would be the one who would lose the power.",
   },
   {
     id: "ai812",
@@ -7602,7 +7602,7 @@ export const news = [
   {
     id: "ai831",
     text:
-      'The following is based on my personal experience with the game "Antimatter Dimensions" and may not be 100% true.',
+      "The following is based on my personal experience with the game \"Antimatter Dimensions\" and may not be 100% true.",
   },
   {
     id: "ai832",
@@ -7612,7 +7612,7 @@ export const news = [
   {
     id: "ai833",
     text:
-      'The phrases "Hevi dies in the 9th Dimension" and "I\'ll never let you down" are two of the most important phrases in the game.',
+      "The phrases \"Hevi dies in the 9th Dimension\" and \"I'll never let you down\" are two of the most important phrases in the game.",
   },
   {
     id: "ai834",
@@ -7627,12 +7627,12 @@ export const news = [
   {
     id: "ai836",
     text:
-      'A conference on artificial intelligence and human enhancement has been cancelled after someone announced that the talk was on how to turn a profit off of illegal downloads of the game "Antimatter Dimensions".',
+      "A conference on artificial intelligence and human enhancement has been cancelled after someone announced that the talk was on how to turn a profit off of illegal downloads of the game \"Antimatter Dimensions\".",
   },
   {
     id: "ai837",
     text:
-      'When you\'re done playing, take your save with you and go to main menu. You can do that by tapping the big scary "X" button, or by going into options and changing "Reset the game for new save" to "Reset the game for old save".',
+      "When you're done playing, take your save with you and go to main menu. You can do that by tapping the big scary \"X\" button, or by going into options and changing \"Reset the game for new save\" to \"Reset the game for old save\".",
   },
   {
     id: "ai838",
@@ -7666,7 +7666,7 @@ export const news = [
   {
     id: "ai844",
     text:
-      'A group of people that worships Atreides have started a new faith, claiming to be a "religion of tolerance". Their website claims that it is "a religion of inclusion" and that it promotes tolerance and diversity. All of its members seem to be Christians, although they never mentioned them by name.',
+      "A group of people that worships Atreides have started a new faith, claiming to be a \"religion of tolerance\". Their website claims that it is \"a religion of inclusion\" and that it promotes tolerance and diversity. All of its members seem to be Christians, although they never mentioned them by name.",
   },
   {
     id: "ai845",
@@ -7686,7 +7686,7 @@ export const news = [
   {
     id: "ai848",
     text:
-      'If someone were to add the word "infinity" to the end of every sentence in the English version of the game, it would become "Infinity Challenge: Infinity Edition".',
+      "If someone were to add the word \"infinity\" to the end of every sentence in the English version of the game, it would become \"Infinity Challenge: Infinity Edition\".",
   },
   {
     id: "ai849",
@@ -7790,7 +7790,7 @@ export const news = [
   },
   {
     id: "ai869",
-    text: '"We have 3 kinds of news: warnings, nudges and shade jokes.',
+    text: "\"We have 3 kinds of news: warnings, nudges and shade jokes.",
   },
   {
     id: "ai870",
@@ -7866,7 +7866,7 @@ export const news = [
   {
     id: "ai885",
     text:
-      'The most common question I get is "can i just skip the ads and get true" and the answer is always a resounding NO. The reason being, ad revenue is just too damn high to overcome the cost of maintaining the servers, plus the fact that most players just don\'t care.',
+      "The most common question I get is \"can i just skip the ads and get true\" and the answer is always a resounding NO. The reason being, ad revenue is just too damn high to overcome the cost of maintaining the servers, plus the fact that most players just don't care.",
   },
   {
     id: "ai886",
@@ -7929,7 +7929,7 @@ export const news = [
   {
     id: "ai898",
     text:
-      'This is what happens when you OVER-RELY on your "fake it til you make it" attitude.',
+      "This is what happens when you OVER-RELY on your \"fake it til you make it\" attitude.",
   },
   {
     id: "ai899",
@@ -7967,7 +7967,7 @@ export const news = [
   {
     id: "ai906",
     text:
-      'Last week, we reported that an unknown individual known only as "Anti-Doctor" has broken the game and claimed ownership of the game\'s data. Since then, he has spread the word that he has an "explosive new app" that will allow him to "turn [he] antimatter." However, no one has come forward with information on how to use the app, or even if it is a reality. We will update this article if and when we find out.',
+      "Last week, we reported that an unknown individual known only as \"Anti-Doctor\" has broken the game and claimed ownership of the game's data. Since then, he has spread the word that he has an \"explosive new app\" that will allow him to \"turn [he] antimatter.\" However, no one has come forward with information on how to use the app, or even if it is a reality. We will update this article if and when we find out.",
   },
   {
     id: "ai907",
@@ -7977,7 +7977,7 @@ export const news = [
   {
     id: "ai908",
     text:
-      'The great majority of people don\'t get the full benefit of antimatter dimensions, and as such are not affected by it. However, there are certain people who are affected and at certain times of the day, depending on their mood and how much antimatter they have, they will manifest a dimensional shift, going from being idle to being actively involved in news ticker suggestions. This shift is due to the antimatter in their body emitting a certain wavelength, called "red-shifted".',
+      "The great majority of people don't get the full benefit of antimatter dimensions, and as such are not affected by it. However, there are certain people who are affected and at certain times of the day, depending on their mood and how much antimatter they have, they will manifest a dimensional shift, going from being idle to being actively involved in news ticker suggestions. This shift is due to the antimatter in their body emitting a certain wavelength, called \"red-shifted\".",
   },
   {
     id: "ai909",
@@ -8001,7 +8001,7 @@ export const news = [
   },
   {
     id: "ai913",
-    text: 'The phrase "Hevipelle hates me" is pretty funny.',
+    text: "The phrase \"Hevipelle hates me\" is pretty funny.",
   },
   {
     id: "ai914",
@@ -8016,12 +8016,12 @@ export const news = [
   {
     id: "ai916",
     text:
-      'Someday, we shall come upon the day when a man will sit on the head of a dragon and call it a "Dragonball". Such a man would then go and perform the Dragon Ball Z: Battle Royale in which he would use Dragon Ball Z: Fusion to create a gigantic dragon that would then consume the universe in the process, thus creating a "Big Bang". Such a man would then be rewarded by being "built again" and sent back to the "Heavens".',
+      "Someday, we shall come upon the day when a man will sit on the head of a dragon and call it a \"Dragonball\". Such a man would then go and perform the Dragon Ball Z: Battle Royale in which he would use Dragon Ball Z: Fusion to create a gigantic dragon that would then consume the universe in the process, thus creating a \"Big Bang\". Such a man would then be rewarded by being \"built again\" and sent back to the \"Heavens\".",
   },
   {
     id: "ai917",
     text:
-      '"I think that the greatest achievement a man can make in his life is to say that he has read every single news ticker suggestion and nothing happened." - Kajfik',
+      "\"I think that the greatest achievement a man can make in his life is to say that he has read every single news ticker suggestion and nothing happened.\" - Kajfik",
   },
   {
     id: "ai918",
@@ -8089,7 +8089,7 @@ export const news = [
   {
     id: "ai930",
     text:
-      'Then we have the matter dimensions. From what I can gather, they are made of antimatter. There is some debate about whether or not there are any dimensions left over that are made out of matter, but that is not the main question. The real question is "why do they exist, and how does antimatter affect them?"',
+      "Then we have the matter dimensions. From what I can gather, they are made of antimatter. There is some debate about whether or not there are any dimensions left over that are made out of matter, but that is not the main question. The real question is \"why do they exist, and how does antimatter affect them?\"",
   },
   {
     id: "ai931",
@@ -8178,7 +8178,7 @@ export const news = [
   {
     id: "ai948",
     text:
-      'This is the question that has been bothering me for so long. What is Antimatter? Is Antimatter an Antimatter? What does it mean when you say "Antimatter"? These are the kinds of questions that plague the Antimatter Dimensions...',
+      "This is the question that has been bothering me for so long. What is Antimatter? Is Antimatter an Antimatter? What does it mean when you say \"Antimatter\"? These are the kinds of questions that plague the Antimatter Dimensions...",
   },
   {
     id: "ai949",
@@ -8203,7 +8203,7 @@ export const news = [
   {
     id: "ai953",
     text:
-      'The antagonist of the last few minutes is the mysterious, antimatter-covered being known only as "The Man in Black." He was last seen running towards a news broadcast, seemingly lost, until he made it back to the news station and was interviewed about his experience. His story is told in the bottom right corner of the screen.',
+      "The antagonist of the last few minutes is the mysterious, antimatter-covered being known only as \"The Man in Black.\" He was last seen running towards a news broadcast, seemingly lost, until he made it back to the news station and was interviewed about his experience. His story is told in the bottom right corner of the screen.",
   },
   {
     id: "ai954",
@@ -8212,7 +8212,7 @@ export const news = [
   {
     id: "ai955",
     text:
-      'While you were busy farming that pesky "real" number, I was busy writing that news ticker.',
+      "While you were busy farming that pesky \"real\" number, I was busy writing that news ticker.",
   },
   {
     id: "ai956",
@@ -8265,7 +8265,7 @@ export const news = [
   {
     id: "ai965",
     text:
-      'The story of the "perish the thought of dying" movement has been told before, but never quite accurately. The movement was originally organized by antievolutionists to stop the exponential growth of scientific notation, but soon spread to oppose any form of "progress". In its early days the movement was led by an enigmatic individual known only as "The Great Hevipelle". Their philosophy was simple: expand the possibilities of what is possible, and push the limits of what is tolerable.',
+      "The story of the \"perish the thought of dying\" movement has been told before, but never quite accurately. The movement was originally organized by antievolutionists to stop the exponential growth of scientific notation, but soon spread to oppose any form of \"progress\". In its early days the movement was led by an enigmatic individual known only as \"The Great Hevipelle\". Their philosophy was simple: expand the possibilities of what is possible, and push the limits of what is tolerable.",
   },
   {
     id: "ai966",
@@ -8320,7 +8320,7 @@ export const news = [
   {
     id: "ai976",
     text:
-      '"Word on the street is that the word "bank" is an anagram of "bank" - that makes sense but i\'m not there yet" - Slabdrill',
+      "\"Word on the street is that the word \"bank\" is an anagram of \"bank\" - that makes sense but i'm not there yet\" - Slabdrill",
   },
   {
     id: "ai977",

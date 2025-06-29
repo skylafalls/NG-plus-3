@@ -142,7 +142,7 @@ export const Speedrun = {
 class SpeedrunMilestone extends GameMechanicState {
   constructor(config) {
     super(config);
-    this.registerEvents(config.checkEvent, (args) => this.tryComplete(args));
+    this.registerEvents(config.checkEvent, args => this.tryComplete(args));
   }
 
   get name() {

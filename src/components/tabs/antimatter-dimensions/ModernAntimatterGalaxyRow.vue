@@ -101,13 +101,13 @@ export default {
         { type: "remote", function: "exponential", amount: this.scalingStart.remote },
       ];
 
-      if (this.type === GALAXY_TYPE.OBSCURE) {
+      if (this.type >= GALAXY_TYPE.OBSCURE) {
         scalings.push({ type: "obscure", function: "polynomial", amount: this.scalingStart.obscure });
       }
-      if (this.type === GALAXY_TYPE.INVISIBLE) {
+      if (this.type >= GALAXY_TYPE.INVISIBLE) {
         scalings.push({ type: "invisible", function: "dilative", amount: this.scalingStart.invisible });
       }
-      if (this.type === GALAXY_TYPE.ETHEREAL) {
+      if (this.type >= GALAXY_TYPE.ETHEREAL) {
         scalings.push({ type: "ethereal", function: "exponential", amount: this.scalingStart.ethereal });
       }
 

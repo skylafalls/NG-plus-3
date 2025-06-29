@@ -98,8 +98,8 @@ export class EternityChallengeState extends GameMechanicState {
     }
     let completions = this.completions;
     while (
-      completions < this.maxCompletions &&
-      this.isWithinRestrictionAtCompletions(completions)
+      completions < this.maxCompletions
+      && this.isWithinRestrictionAtCompletions(completions)
     ) {
       completions++;
     }
@@ -133,8 +133,8 @@ export class EternityChallengeState extends GameMechanicState {
     }
     status.totalCompletions = totalCompletions;
     status.gainedCompletions = totalCompletions - this.completions;
-    status.hasMoreCompletions =
-      this.completions + status.gainedCompletions < this.maxCompletions;
+    status.hasMoreCompletions
+      = this.completions + status.gainedCompletions < this.maxCompletions;
     status.nextGoalAt = this.goalAtCompletions(status.totalCompletions);
     return status;
   }
@@ -168,8 +168,8 @@ export class EternityChallengeState extends GameMechanicState {
   goalAtCompletions(completions) {
     return completions > 0
       ? this.initialGoal.times(
-        this.goalIncrease.pow(Math.min(completions, this.maxCompletions - 1)),
-      )
+          this.goalIncrease.pow(Math.min(completions, this.maxCompletions - 1)),
+        )
       : this.initialGoal;
   }
 
@@ -222,8 +222,8 @@ export class EternityChallengeState extends GameMechanicState {
     }
     const maxInversion = player.requirementChecks.reality.slowestBH.lte(1e-300);
     if (
-      this.id === 12 && ImaginaryUpgrade(24).isLockingMechanics &&
-      Ra.isRunning && maxInversion
+      this.id === 12 && ImaginaryUpgrade(24).isLockingMechanics
+      && Ra.isRunning && maxInversion
     ) {
       if (!auto) {
         ImaginaryUpgrade(24).tryShowWarningModal("enter Eternity Challenge 12");
@@ -231,8 +231,8 @@ export class EternityChallengeState extends GameMechanicState {
       return false;
     }
     if (
-      this.id === 7 && ImaginaryUpgrade(15).isLockingMechanics &&
-      TimeDimension(1).amount.gt(0)
+      this.id === 7 && ImaginaryUpgrade(15).isLockingMechanics
+      && TimeDimension(1).amount.gt(0)
     ) {
       if (!auto) {
         ImaginaryUpgrade(15).tryShowWarningModal("enter Eternity Challenge 7");
@@ -275,8 +275,8 @@ export class EternityChallengeState extends GameMechanicState {
   }
 
   isWithinRestrictionAtCompletions(completions) {
-    return this.config.restriction === undefined ||
-      this.config.checkRestriction(this.config.restriction(completions));
+    return this.config.restriction === undefined
+      || this.config.checkRestriction(this.config.restriction(completions));
   }
 
   exit(isRestarting) {
@@ -295,36 +295,36 @@ export class EternityChallengeState extends GameMechanicState {
     let reason;
     if (auto) {
       if (this.id === 4) {
-        reason = (restriction) =>
-          "Auto Eternity Challenge completion completed " +
-          `Eternity Challenge ${this.id} and made the next tier ` +
-          `require having less Infinities (${
+        reason = restriction =>
+          "Auto Eternity Challenge completion completed "
+          + `Eternity Challenge ${this.id} and made the next tier `
+          + `require having less Infinities (${
             quantifyInt("Infinity", restriction)
-          } ` +
-          "or less) than you had";
+          } `
+          + "or less) than you had";
       } else if (this.id === 12) {
-        reason = (restriction) =>
-          "Auto Eternity Challenge completion completed " +
-          `Eternity Challenge ${this.id} and made the next tier ` +
-          `require spending less time in it (${
+        reason = restriction =>
+          "Auto Eternity Challenge completion completed "
+          + `Eternity Challenge ${this.id} and made the next tier `
+          + `require spending less time in it (${
             quantify("in-game second", restriction, 0, 1)
-          } ` +
-          "or less) than you had spent";
+          } `
+          + "or less) than you had spent";
       }
     } else if (this.id === 4) {
-      reason = (restriction) =>
-        `You failed Eternity Challenge ${this.id} due to ` +
-        `having more than ${quantifyInt("Infinity", restriction)}`;
+      reason = restriction =>
+        `You failed Eternity Challenge ${this.id} due to `
+        + `having more than ${quantifyInt("Infinity", restriction)}`;
     } else if (this.id === 12) {
-      reason = (restriction) =>
-        `You failed Eternity Challenge ${this.id} due to ` +
-        `spending more than ${
+      reason = restriction =>
+        `You failed Eternity Challenge ${this.id} due to `
+        + `spending more than ${
           quantify("in-game second", restriction, 0, 1)
         } in it`;
     }
     Modal.message.show(
-      `${reason(this.config.restriction(this.completions))}, ` +
-        "which has caused you to exit it.",
+      `${reason(this.config.restriction(this.completions))}, `
+      + "which has caused you to exit it.",
       { closeEvent: GAME_EVENT.REALITY_RESET_AFTER },
       1,
     );
@@ -368,29 +368,29 @@ export const EternityChallenges = {
 
   get completions() {
     return EternityChallenges.all
-      .map((ec) => ec.completions)
+      .map(ec => ec.completions)
       .nSum();
   },
 
   get maxCompletions() {
     return EternityChallenges.all
-      .map((ec) => ec.maxCompletions)
+      .map(ec => ec.maxCompletions)
       .nSum();
   },
 
   get remainingCompletions() {
     return EternityChallenges.all
-      .map((ec) => ec.remainingCompletions)
+      .map(ec => ec.remainingCompletions)
       .nSum();
   },
 
   autoComplete: {
     tick() {
       const shouldPreventEC7 = TimeDimension(1).amount.gt(0);
-      const hasUpgradeLock = RealityUpgrade(12).isLockingMechanics ||
-        (ImaginaryUpgrade(15).isLockingMechanics && shouldPreventEC7 &&
-          !Array.range(1, 6).some((ec) =>
-            !EternityChallenge(ec).isFullyCompleted
+      const hasUpgradeLock = RealityUpgrade(12).isLockingMechanics
+        || (ImaginaryUpgrade(15).isLockingMechanics && shouldPreventEC7
+          && !Array.range(1, 6).some(ec =>
+            !EternityChallenge(ec).isFullyCompleted,
           ));
       if (
         !player.reality.autoEC || Pelle.isDisabled("autoec") || hasUpgradeLock
@@ -409,8 +409,8 @@ export const EternityChallenges = {
           }
           next = this.nextChallenge;
           if (
-            ImaginaryUpgrade(15).isLockingMechanics && next?.id === 7 &&
-            shouldPreventEC7
+            ImaginaryUpgrade(15).isLockingMechanics && next?.id === 7
+            && shouldPreventEC7
           ) {
             break;
           }
@@ -430,7 +430,7 @@ export const EternityChallenges = {
     },
 
     get nextChallenge() {
-      return EternityChallenges.all.find((ec) => !ec.isFullyCompleted);
+      return EternityChallenges.all.find(ec => !ec.isFullyCompleted);
     },
 
     get interval() {

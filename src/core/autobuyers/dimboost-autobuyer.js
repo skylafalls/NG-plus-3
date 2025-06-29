@@ -79,13 +79,13 @@ export class DimBoostAutobuyerState extends UpgradeableAutobuyerState {
   get interval() {
     return this.isBuyMaxUnlocked
       ? TimeSpan.fromSeconds(new Decimal(this.buyMaxInterval)).totalMilliseconds
-        .toNumber()
+          .toNumber()
       : super.interval;
   }
 
   get canTick() {
-    return DimBoost.canBeBought && DimBoost.requirement.isSatisfied &&
-      super.canTick;
+    return DimBoost.canBeBought && DimBoost.requirement.isSatisfied
+      && super.canTick;
   }
 
   get resetTickOn() {
@@ -105,8 +105,8 @@ export class DimBoostAutobuyerState extends UpgradeableAutobuyerState {
 
   tick() {
     if (this.isBuyMaxUnlocked) {
-      const galaxyCondition = !this.limitUntilGalaxies ||
-        player.galaxies.gte(this.galaxies);
+      const galaxyCondition = !this.limitUntilGalaxies
+        || player.galaxies.gte(this.galaxies);
       if (!DimBoost.canUnlockNewDimension && !galaxyCondition) {
         return;
       }
@@ -115,10 +115,10 @@ export class DimBoostAutobuyerState extends UpgradeableAutobuyerState {
       return;
     }
 
-    const limitCondition = !this.limitDimBoosts ||
-      DimBoost.purchasedBoosts.lt(this.maxDimBoosts);
-    const galaxyCondition = this.limitUntilGalaxies &&
-      player.galaxies.gte(this.galaxies);
+    const limitCondition = !this.limitDimBoosts
+      || DimBoost.purchasedBoosts.lt(this.maxDimBoosts);
+    const galaxyCondition = this.limitUntilGalaxies
+      && player.galaxies.gte(this.galaxies);
     if (limitCondition || galaxyCondition) {
       requestDimensionBoost(false);
       super.tick();

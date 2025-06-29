@@ -1,8 +1,8 @@
 import { CELESTIAL_NAV_DRAW_ORDER } from "../navigation";
 
 function sigilProgress() {
-  const riftProgress = PelleRifts.all.map((r) =>
-    Math.clamp(r.realPercentage, 0, 1)
+  const riftProgress = PelleRifts.all.map(r =>
+    Math.clamp(r.realPercentage, 0, 1),
   ).min().clampMax(1e100).toNumber();
   const generatorProgress = Math.log10(
     1 + GalaxyGenerator.generatedGalaxies.clampMax(1e100).toNumber(),
@@ -14,7 +14,7 @@ function sigilProgress() {
 // keeping the sigil within internal coordinates of ±1 will keep the sigil within a ±size box of the center coordinates
 const SigilAttributes = {
   visible: () =>
-    PelleRifts.all.map((r) => Math.clamp(r.realPercentage, 0, 1)).min().gt(0),
+    PelleRifts.all.map(r => Math.clamp(r.realPercentage, 0, 1)).min().gt(0),
   center: new Vector(400, 300),
   size: 400,
   color: "#00ffff",
@@ -257,4 +257,4 @@ for (let arcIndex = 0; arcIndex < arcSegments; arcIndex++) {
 }
 
 export const finalSigil = Object.values(Shapes)
-  .mapToObject((key, idx) => `final-sigil-${idx}`, (val) => val);
+  .mapToObject((key, idx) => `final-sigil-${idx}`, val => val);

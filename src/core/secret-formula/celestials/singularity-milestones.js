@@ -13,8 +13,8 @@ export const singularityMilestones = {
     increaseThreshold: 20,
     limit: Infinity,
     description: "Continuum percentage multiplier",
-    effect: (completions) => Decimal.mul(completions, 0.03),
-    effectFormat: (x) => formatX(x.add(1), 2, 2),
+    effect: completions => Decimal.mul(completions, 0.03),
+    effectFormat: x => formatX(x.add(1), 2, 2),
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.BOOSTS_MAIN,
   },
   darkMatterMult: {
@@ -23,8 +23,8 @@ export const singularityMilestones = {
     increaseThreshold: 30,
     limit: Infinity,
     description: "Dark Matter production multiplier",
-    effect: (completions) => Decimal.pow(1.5, completions),
-    effectFormat: (x) => formatX(x, 2, 2),
+    effect: completions => Decimal.pow(1.5, completions),
+    effectFormat: x => formatX(x, 2, 2),
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.SELF_BOOST,
   },
   darkEnergyMult: {
@@ -33,8 +33,8 @@ export const singularityMilestones = {
     increaseThreshold: 10,
     limit: Infinity,
     description: "Dark Energy production multiplier",
-    effect: (completions) => Decimal.pow(2, completions),
-    effectFormat: (x) => formatX(x, 2),
+    effect: completions => Decimal.pow(2, completions),
+    effectFormat: x => formatX(x, 2),
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.SELF_BOOST,
   },
   darkDimensionCostReduction: {
@@ -43,8 +43,8 @@ export const singularityMilestones = {
     increaseThreshold: 25,
     limit: Infinity,
     description: "Dark Matter Dimension upgrades are cheaper",
-    effect: (completions) => Decimal.pow(0.4, completions),
-    effectFormat: (x) => `/ ${format(x.recip(), 2, 2)}`,
+    effect: completions => Decimal.pow(0.4, completions),
+    effectFormat: x => `/ ${format(x.recip(), 2, 2)}`,
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.SELF_BOOST,
   },
   singularityMult: {
@@ -54,8 +54,8 @@ export const singularityMilestones = {
     increaseThreshold: 5,
     limit: Infinity,
     description: "Singularity gain multiplier",
-    effect: (completions) => Decimal.pow(2, completions),
-    effectFormat: (x) => formatX(x, 2, 0),
+    effect: completions => Decimal.pow(2, completions),
+    effectFormat: x => formatX(x, 2, 0),
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.SELF_BOOST,
   },
   darkDimensionIntervalReduction: {
@@ -64,8 +64,8 @@ export const singularityMilestones = {
     increaseThreshold: 20,
     limit: Infinity,
     description: "Dark Matter Dimension interval decrease",
-    effect: (completions) => Decimal.pow(0.6, completions),
-    effectFormat: (x) => `/ ${format(x.recip(), 2, 2)}`,
+    effect: completions => Decimal.pow(0.6, completions),
+    effectFormat: x => `/ ${format(x.recip(), 2, 2)}`,
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.SELF_BOOST,
   },
   improvedAscensionDM: {
@@ -74,8 +74,8 @@ export const singularityMilestones = {
     increaseThreshold: 15,
     limit: Infinity,
     description: "Ascension affects Dark Matter production more",
-    effect: (completions) => completions.times(100),
-    effectFormat: (x) => formatX(POWER_DM_PER_ASCENSION.add(x), 1, 0),
+    effect: completions => completions.times(100),
+    effectFormat: x => formatX(POWER_DM_PER_ASCENSION.add(x), 1, 0),
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.SELF_BOOST,
   },
   // Limited
@@ -84,8 +84,8 @@ export const singularityMilestones = {
     repeat: 2400,
     limit: 8,
     description: "Dark Matter Dimensions Ascension increases the interval less",
-    effect: (completions) => completions.mul(50).neg().add(1200),
-    effectFormat: (x) => `×${formatInt(x)}`,
+    effect: completions => completions.mul(50).neg().add(1200),
+    effectFormat: x => `×${formatInt(x)}`,
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.SELF_BOOST,
   },
   autoCondense: {
@@ -94,7 +94,7 @@ export const singularityMilestones = {
     limit: 8,
     description:
       "Automatically condense Singularities when reaching a threshold above the cap",
-    effect: (completions) =>
+    effect: completions =>
       [
         Infinity,
         1.3,
@@ -106,7 +106,7 @@ export const singularityMilestones = {
         1.01,
         1,
       ][completions.toNumber()],
-    effectFormat: (x) => `Cap ${formatX(x, 2, 2)}`,
+    effectFormat: x => `Cap ${formatX(x, 2, 2)}`,
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.SELF_BOOST,
   },
   darkDimensionAutobuyers: {
@@ -114,10 +114,8 @@ export const singularityMilestones = {
     repeat: 170,
     limit: 4,
     description: "Dark Matter Dimension Autobuyers",
-    effect: (completions) => completions.toNumber(),
-    effectFormat: (
-      x,
-    ) => ((x === 0)
+    effect: completions => completions.toNumber(),
+    effectFormat: x => ((x === 0)
       ? "No autobuyers"
       : `Autobuy up to the ${["1st", "2nd", "3rd", "4th"][x - 1]} DMD`),
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.SELF_BOOST,
@@ -127,10 +125,8 @@ export const singularityMilestones = {
     repeat: 140,
     limit: 4,
     description: "DMD Ascension Autobuyers",
-    effect: (completions) => completions.toNumber(),
-    effectFormat: (
-      x,
-    ) => ((x === 0)
+    effect: completions => completions.toNumber(),
+    effectFormat: x => ((x === 0)
       ? "No autobuyers"
       : `Ascend up to the ${["1st", "2nd", "3rd", "4th"][x - 1]} DMD`),
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.SELF_BOOST,
@@ -140,9 +136,9 @@ export const singularityMilestones = {
     repeat: 650,
     limit: 8,
     description: "Autobuyer speed for all DMD Autobuyers",
-    effect: (completions) =>
+    effect: completions =>
       [30, 20, 15, 10, 5, 3, 2, 1, 0][completions.toNumber()],
-    effectFormat: (x) => (x === 0 ? "Instant" : `${formatInt(x)}s`),
+    effectFormat: x => (x === 0 ? "Instant" : `${formatInt(x)}s`),
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.SELF_BOOST,
   },
   realityDEMultiplier: {
@@ -151,9 +147,9 @@ export const singularityMilestones = {
     limit: 6,
     description:
       "Dark Energy multiplier based on disabled Dimension count within Lai'tela",
-    effect: (completions) =>
+    effect: completions =>
       Decimal.pow(completions.div(20).add(1), Laitela.difficultyTier),
-    effectFormat: (x) => formatX(x, 2, 2),
+    effectFormat: x => formatX(x, 2, 2),
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.SELF_BOOST,
   },
   improvedSingularityCap: {
@@ -161,8 +157,8 @@ export const singularityMilestones = {
     repeat: 10000,
     limit: 4,
     description: "Increased Singularity gain per cap increase",
-    effect: (completions) => completions.add(11),
-    effectFormat: (x) => `${formatX(x)}`,
+    effect: completions => completions.add(11),
+    effectFormat: x => `${formatX(x)}`,
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.SELF_BOOST,
   },
   intervalCostScalingReduction: {
@@ -170,8 +166,8 @@ export const singularityMilestones = {
     repeat: 50000,
     limit: 5,
     description: "DMD Interval cost scaling is better",
-    effect: (completions) => completions.mul(0.03).sub(1).neg(),
-    effectFormat: (x) => `${formatPow(x, 2, 2)}`,
+    effect: completions => completions.mul(0.03).sub(1).neg(),
+    effectFormat: x => `${formatPow(x, 2, 2)}`,
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.SELF_BOOST,
   },
   // Unique
@@ -181,7 +177,7 @@ export const singularityMilestones = {
     limit: 1,
     description: "Tesseracts boost Dark Matter and Dark Energy production",
     effect: () => Decimal.pow(1.1, Tesseracts.effectiveCount),
-    effectFormat: (x) => formatX(x, 2, 2),
+    effectFormat: x => formatX(x, 2, 2),
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.BOOSTS_LAITELA,
   },
   multFromInfinitied: {
@@ -194,7 +190,7 @@ export const singularityMilestones = {
         Currency.infinitiesTotal.value.max(1).log10().div(1000),
         1,
       ),
-    effectFormat: (x) => formatX(x, 2, 2),
+    effectFormat: x => formatX(x, 2, 2),
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.BOOSTS_LAITELA,
   },
   dilatedTimeFromSingularities: {
@@ -209,7 +205,7 @@ export const singularityMilestones = {
         Currency.singularities.value.max(1).log10().div(100),
         0.35,
       ).add(1),
-    effectFormat: (x) =>
+    effectFormat: x =>
       `${formatX(2)} ➜ ${formatX(Decimal.clampMin(x, 1).mul(2), 2, 2)}`,
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.BOOSTS_MAIN,
   },
@@ -227,7 +223,7 @@ export const singularityMilestones = {
         ),
         0.5,
       ),
-    effectFormat: (x) => formatX(x, 2, 2),
+    effectFormat: x => formatX(x, 2, 2),
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.BOOSTS_LAITELA,
   },
   gamespeedFromSingularities: {
@@ -240,7 +236,7 @@ export const singularityMilestones = {
         Decimal.pow(Currency.singularities.value.max(1).log10(), 3),
         1,
       ),
-    effectFormat: (x) => formatX(x, 2, 2),
+    effectFormat: x => formatX(x, 2, 2),
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.BOOSTS_MAIN,
   },
   darkFromTheorems: {
@@ -253,7 +249,7 @@ export const singularityMilestones = {
         Currency.timeTheorems.value.max(1).log10().sub(1000).div(50),
         1,
       ).sqrt(),
-    effectFormat: (x) => formatX(x, 2, 2),
+    effectFormat: x => formatX(x, 2, 2),
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.BOOSTS_LAITELA,
   },
   dim4Generation: {
@@ -263,7 +259,7 @@ export const singularityMilestones = {
     description:
       "Annihilation mult. generates 4th DMD when Annihilation is available",
     effect: () => cloneDeep(Laitela.darkMatterMult),
-    effectFormat: (x) => `${format(x, 2, 1)}/s`,
+    effectFormat: x => `${format(x, 2, 1)}/s`,
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.SELF_BOOST,
   },
   darkFromDM4: {
@@ -273,7 +269,7 @@ export const singularityMilestones = {
     description:
       "4th Dark Matter Dimension amount boosts Dark Matter and Dark Energy gain",
     effect: () => Decimal.clampMin(DarkMatterDimension(4).amount.pow(0.03), 1),
-    effectFormat: (x) => formatX(x, 2, 2),
+    effectFormat: x => formatX(x, 2, 2),
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.SELF_BOOST,
   },
   annihilationAutobuyer: {
@@ -281,8 +277,8 @@ export const singularityMilestones = {
     repeat: 0,
     limit: 1,
     description: "Unlock an Autobuyer for Annihilation",
-    effect: (completions) => completions,
-    effectFormat: (x) => (x === 1 ? "Unlocked" : "Locked"),
+    effect: completions => completions,
+    effectFormat: x => (x === 1 ? "Unlocked" : "Locked"),
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.SELF_BOOST,
   },
   theoremPowerFromSingularities: {
@@ -292,7 +288,7 @@ export const singularityMilestones = {
     description: "Singularities give a power effect to Time Theorem gain",
     effect: () =>
       Decimal.log10(Currency.singularities.value.add(1)).div(70).add(1),
-    effectFormat: (x) => formatPow(x, 2, 3),
+    effectFormat: x => formatPow(x, 2, 3),
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.BOOSTS_MAIN,
   },
   darkFromGamespeed: {
@@ -305,7 +301,7 @@ export const singularityMilestones = {
         Decimal.log10(getGameSpeedupFactor().div(1e120)).div(40),
         1,
       ),
-    effectFormat: (x) => formatX(x, 2, 2),
+    effectFormat: x => formatX(x, 2, 2),
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.BOOSTS_LAITELA,
   },
   glyphLevelFromSingularities: {
@@ -318,7 +314,7 @@ export const singularityMilestones = {
         Currency.singularities.value.max(1).log10().sub(20).div(30),
         0,
       ).add(1),
-    effectFormat: (x) => formatX(Decimal.clampMin(x, 1), 2, 2),
+    effectFormat: x => formatX(Decimal.clampMin(x, 1), 2, 2),
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.BOOSTS_MAIN,
   },
   darkFromDilatedTime: {
@@ -328,7 +324,7 @@ export const singularityMilestones = {
     description: "Dilated Time boosts Dark Matter production",
     effect: () =>
       Decimal.pow(1.6, Currency.dilatedTime.value.max(1).log10().div(1000)),
-    effectFormat: (x) => formatX(x, 2, 2),
+    effectFormat: x => formatX(x, 2, 2),
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.BOOSTS_LAITELA,
   },
   infinitiedPow: {
@@ -337,7 +333,7 @@ export const singularityMilestones = {
     limit: 1,
     description: "Infinities gain a power effect based on Singularities",
     effect: () => Currency.singularities.value.max(1).log10().div(300).add(1),
-    effectFormat: (x) => formatPow(x, 2, 3),
+    effectFormat: x => formatPow(x, 2, 3),
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.BOOSTS_MAIN,
   },
   tesseractMultFromSingularities: {
@@ -346,7 +342,7 @@ export const singularityMilestones = {
     limit: 1,
     description: "Singularities increase effective Tesseract count",
     effect: () => Currency.singularities.value.max(1).log10().div(80).add(1),
-    effectFormat: (x) => formatX(Decimal.clampMin(x, 1), 2, 2),
+    effectFormat: x => formatX(Decimal.clampMin(x, 1), 2, 2),
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.BOOSTS_MAIN,
   },
 };

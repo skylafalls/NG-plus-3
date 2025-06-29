@@ -22,7 +22,7 @@ export class TimeDimensionAutobuyerState extends IntervaledAutobuyerState {
   }
 
   get isUnlocked() {
-    return Achievement(157).isUnlocked;
+    return Achievement(147).isUnlocked;
   }
 
   get resetTickOn() {
@@ -46,7 +46,6 @@ export class TimeDimensionAutobuyerState extends IntervaledAutobuyerState {
     }
     super.tick();
     buyMaxTimeDimension(tier, 1, true);
-    buySingleTimeDimension(tier, true);
   }
 
   static get entryCount() {

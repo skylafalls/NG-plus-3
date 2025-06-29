@@ -56,8 +56,8 @@ export const AutoGlyphProcessor = {
     switch (this.scoreMode) {
       case AUTO_GLYPH_SCORE.LOWEST_SACRIFICE: {
         return player.reality.glyphs.sac[glyph.type].gte(
-            GlyphInfo[glyph.type].sacrificeInfo.cap,
-          )
+          GlyphInfo[glyph.type].sacrificeInfo.cap,
+        )
           ? new Decimal(-Infinity)
           : player.reality.glyphs.sac[glyph.type].mul(-1);
       }
@@ -92,7 +92,7 @@ export const AutoGlyphProcessor = {
         // there in typical glyph generation. Ra-Nameless 25 is the only case where this happens, but this also has the
         // side-effect of making altered glyph generation in mods less likely to crash the game as well
         const effectScore = effectList
-          .map((e) => (typeCfg.effectScores[e] ? typeCfg.effectScores[e] : 0))
+          .map(e => (typeCfg.effectScores[e] ? typeCfg.effectScores[e] : 0))
           .sum();
         return strengthToRarity(glyph.strength).add(effectScore);
       }
@@ -161,7 +161,7 @@ export const AutoGlyphProcessor = {
     };
 
     return glyphs
-      .map((g) => ({ glyph: g, score: glyphScore(g) }))
+      .map(g => ({ glyph: g, score: glyphScore(g) }))
       .reduce((x, y) => (x.score.gt(y.score) ? x : y))
       .glyph;
   },
@@ -197,8 +197,8 @@ export const AutoGlyphProcessor = {
   // Generally only used for UI in order to notify the player that they might end up retroactively getting rid of
   // some glyphs they otherwise want to keep
   hasNegativeEffectScore() {
-    return this.scoreMode === AUTO_GLYPH_SCORE.EFFECT_SCORE &&
-      Object.values(this.types).map((t) => t.effectScores.min()).min() < 0;
+    return this.scoreMode === AUTO_GLYPH_SCORE.EFFECT_SCORE
+      && Object.values(this.types).map(t => t.effectScores.min()).min() < 0;
   },
 
   // These are here because they're used in multiple UI components
@@ -250,10 +250,10 @@ export const AutoGlyphProcessor = {
 
 export function autoAdjustGlyphWeights() {
   const sources = getGlyphLevelSources();
-  const f = (x) =>
+  const f = x =>
     Decimal.pow(Decimal.clampMin(1, Decimal.log10(x.mul(5))), 3 / 2);
-  const totalWeight = Object.values(sources).map((s) => f(s.value)).sum();
-  const scaledWeight = (key) =>
+  const totalWeight = Object.values(sources).map(s => f(s.value)).sum();
+  const scaledWeight = key =>
     f(sources[key].value).div(totalWeight).mul(100).clampMax(100).toNumber();
 
   // Adjust all weights to be integer, while maintaining that they must sum to 100. We ensure it's within 1 on the
@@ -268,16 +268,16 @@ export function autoAdjustGlyphWeights() {
       percent: scaledWeight(key),
     });
   }
-  const fracPart = (x) => x - Math.floor(x);
+  const fracPart = x => x - Math.floor(x);
   const priority = weights.sort((a, b) =>
-    fracPart(b.percent) - fracPart(a.percent)
-  ).map((w) => w.key);
-  const missingPercent = 100 -
-    weights.map((w) => Math.floor(w.percent)).reduce((a, b) => a + b);
+    fracPart(b.percent) - fracPart(a.percent),
+  ).map(w => w.key);
+  const missingPercent = 100
+    - weights.map(w => Math.floor(w.percent)).reduce((a, b) => a + b);
   for (let i = 0; i < weightKeys.length; i++) {
     const key = priority[i];
-    player.celestials.effarig.glyphWeights[key] =
-      Math.floor(scaledWeight(key)) + (i < missingPercent ? 1 : 0);
+    player.celestials.effarig.glyphWeights[key]
+      = Math.floor(scaledWeight(key)) + (i < missingPercent ? 1 : 0);
   }
 }
 
@@ -449,14 +449,14 @@ export function staticGlyphWeights() {
   const perkShop = PerkShopUpgrade.glyphLevel.effectOrDefault(DC.D1);
   const instability = Glyphs.instabilityThreshold;
   const hyperInstability = Glyphs.hyperInstabilityThreshold;
-  const realityUpgrades =
-    [Array.range(1, 5).every((x) => RealityUpgrade(x).boughtAmount.gt(0))]
+  const realityUpgrades
+    = [Array.range(1, 5).every(x => RealityUpgrade(x).boughtAmount.gt(0))]
       .concat(
-        Array.range(1, 4).map((x) =>
-          Array.range(1, 5).every((y) => RealityUpgrade(5 * x + y).isBought)
+        Array.range(1, 4).map(x =>
+          Array.range(1, 5).every(y => RealityUpgrade(5 * x + y).isBought),
         ),
       )
-      .filter((x) => x)
+      .filter(x => x)
       .length;
   const achievements = Effects.sum(Achievement(148), Achievement(166));
   return {

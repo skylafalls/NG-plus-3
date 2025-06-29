@@ -48,13 +48,13 @@ export default {
       return v;
     }
 
-    const maxWordLen = Math.max(...list.map((x) => x.length));
+    const maxWordLen = Math.max(...list.map(x => x.length));
     const bufferSpace = (maxWordLen - v.length) / 2;
 
     // Buffer the result with ALT+255 on either side to prevent the ui from twitching.
     // Spaces do not work due to being automatically collapsed, and css fixing this causes other issues.
-    return " ".repeat(Math.ceil(bufferSpace)) + v +
-      " ".repeat(Math.floor(bufferSpace));
+    return " ".repeat(Math.ceil(bufferSpace)) + v
+      + " ".repeat(Math.floor(bufferSpace));
   },
   // Note that while frac may appear to specify the proportion of letters randomized, it may end up being slightly less
   // depending on the specific string length and random output sometimes giving outputs which aren't coprime
@@ -65,8 +65,8 @@ export default {
     const x = [...str];
     for (let i = 0; i < x.length * frac; i++) {
       const randomIndex = Math.floor(
-        predictableRandom(Math.floor(Date.now() / 500) % 964372 + 1.618 * i) *
-          x.length,
+        predictableRandom(Math.floor(Date.now() / 500) % 964372 + 1.618 * i)
+        * x.length,
       );
       x[randomIndex] = randomSymbol();
     }
@@ -82,7 +82,7 @@ export default {
     if (param >= 1) {
       return second;
     }
-    return first.slice(0, first.length * (1 - param)) +
-      second.slice(second.length * (1 - param));
+    return first.slice(0, first.length * (1 - param))
+      + second.slice(second.length * (1 - param));
   },
 };

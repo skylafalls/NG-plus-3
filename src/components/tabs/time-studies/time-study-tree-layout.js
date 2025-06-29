@@ -48,8 +48,8 @@ export class TimeStudyTreeLayout {
     const normalRow = (...items) => new TimeStudyRow(normalRowLayout, items);
     const wideRow = (...items) => new TimeStudyRow(wideRowLayout, items, true);
 
-    const TS = (id) => (TimeStudy(id).isUnlocked ? TimeStudy(id) : null);
-    const EC = (id) => TimeStudy.eternityChallenge(id);
+    const TS = id => (TimeStudy(id).isUnlocked ? TimeStudy(id) : null);
+    const EC = id => TimeStudy.eternityChallenge(id);
 
     /**
      * @type {TimeStudyRow[]}
@@ -62,9 +62,9 @@ export class TimeStudyTreeLayout {
     ];
 
     if (
-      type === STUDY_TREE_LAYOUT_TYPE.ALTERNATIVE_62 ||
-      type === STUDY_TREE_LAYOUT_TYPE.ALTERNATIVE_62_181 ||
-      type === STUDY_TREE_LAYOUT_TYPE.ALTERNATIVE_TRIAD_STUDIES
+      type === STUDY_TREE_LAYOUT_TYPE.ALTERNATIVE_62
+      || type === STUDY_TREE_LAYOUT_TYPE.ALTERNATIVE_62_181
+      || type === STUDY_TREE_LAYOUT_TYPE.ALTERNATIVE_TRIAD_STUDIES
     ) {
       this.rows.push(
         normalRow(null, TS(41), TS(42), EC(5)),
@@ -92,9 +92,9 @@ export class TimeStudyTreeLayout {
     );
 
     if (
-      type === STUDY_TREE_LAYOUT_TYPE.ALTERNATIVE_181 ||
-      type === STUDY_TREE_LAYOUT_TYPE.ALTERNATIVE_62_181 ||
-      type === STUDY_TREE_LAYOUT_TYPE.ALTERNATIVE_TRIAD_STUDIES
+      type === STUDY_TREE_LAYOUT_TYPE.ALTERNATIVE_181
+      || type === STUDY_TREE_LAYOUT_TYPE.ALTERNATIVE_62_181
+      || type === STUDY_TREE_LAYOUT_TYPE.ALTERNATIVE_TRIAD_STUDIES
     ) {
       this.rows.push(
         normalRow(null, TS(171), EC(2)),
@@ -126,8 +126,8 @@ export class TimeStudyTreeLayout {
     );
 
     if (
-      type === STUDY_TREE_LAYOUT_TYPE.ALTERNATIVE_TRIAD_STUDIES &&
-      !Pelle.isDoomed
+      type === STUDY_TREE_LAYOUT_TYPE.ALTERNATIVE_TRIAD_STUDIES
+      && !Pelle.isDoomed
     ) {
       this.rows.push(
         normalRow(TS(301), TS(302), TS(303), TS(304)),
@@ -184,7 +184,7 @@ export class TimeStudyTreeLayout {
      * @type {TimeStudyConnectionSetup[]}
      */
     this.connections = TimeStudy.allConnections
-      .map((c) => new TimeStudyConnectionSetup(c));
+      .map(c => new TimeStudyConnectionSetup(c));
     this.secretStudyConnection = new TimeStudyConnectionSetup(
       new TimeStudyConnection(TS(11), secretStudy),
     );
@@ -192,8 +192,8 @@ export class TimeStudyTreeLayout {
       new TimeStudyConnection(TS(11), enslavedStudy),
     );
 
-    this.width = this.rows.map((row) => row.width).nMax();
-    const heightNoSpacing = this.rows.map((r) => r.layout.itemHeight).nSum();
+    this.width = this.rows.map(row => row.width).nMax();
+    const heightNoSpacing = this.rows.map(r => r.layout.itemHeight).nSum();
     this.height = heightNoSpacing + (this.rows.length - 1) * this.spacing;
 
     for (const study of this.studies) {
@@ -219,7 +219,7 @@ export class TimeStudyTreeLayout {
 
   itemPosition(row) {
     const rows = this.rows.slice(0, row);
-    const heightNoSpacing = rows.map((r) => r.layout.itemHeight).nSum();
+    const heightNoSpacing = rows.map(r => r.layout.itemHeight).nSum();
     return heightNoSpacing + rows.length * this.spacing;
   }
 
@@ -241,8 +241,8 @@ export const STUDY_TREE_LAYOUT_TYPE = {
   ALTERNATIVE_TRIAD_STUDIES: 4,
   get current() {
     const alt62 = Perk.bypassEC5Lock.isBought;
-    const alt181 = Perk.bypassEC1Lock.isBought && Perk.bypassEC2Lock.isBought &&
-      Perk.bypassEC3Lock.isBought;
+    const alt181 = Perk.bypassEC1Lock.isBought && Perk.bypassEC2Lock.isBought
+      && Perk.bypassEC3Lock.isBought;
     if (Ra.canBuyTriad) {
       return this.ALTERNATIVE_TRIAD_STUDIES;
     }

@@ -15,7 +15,7 @@ export const eternityUpgrades = {
     id: 2,
     cost: 10,
     description: () => `Infinity Dimension multiplier based on Eternities
-      ((x/${formatInt(200)})^log4(${formatInt(2)}x)${Achievement(145).isUnlocked ? "." : ", softcap at ${format(1e5)} Eternities)"}`,
+      ((x/${formatInt(200)})^log4(${formatInt(2)}x)${Achievement(145).isUnlocked ? "." : `, softcap at ${format(1e5)} Eternities)`}`,
     effect() {
       if (Achievement(145).isUnlocked) {
         return Decimal.pow(

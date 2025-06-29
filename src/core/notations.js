@@ -3,7 +3,7 @@ import * as ADNotations from "@antimatter-dimensions/notations-small";
 
 import { DC } from "./constants";
 
-export const Notation = function () {
+export const Notation = (function () {
   const N = ADNotations;
   const notation = (type) => {
     const n = new type();
@@ -41,9 +41,9 @@ export const Notation = function () {
     blobs: painful(notation(N.BlobsNotation)),
     all: painful(notation(N.AllNotation)),
   };
-}();
+}());
 
-export const LNotation = function () {
+export const LNotation = (function () {
   const N = ADLNotations;
   const notation = (type) => {
     const n = new type();
@@ -61,7 +61,7 @@ export const LNotation = function () {
     tetrational: notation(N.TetrationalNotation),
     trueTetrational: notation(N.TrueTetrationalNotation),
   };
-}();
+}());
 
 Notation.emoji.setAsCurrent = (silent = false) => {
   player.options.notation = Notation.emoji.name;
@@ -83,7 +83,7 @@ export const LNotations = {
     LNotation.trueTetrational,
   ],
   find: (name) => {
-    const notation = LNotations.all.find((n) => n.name === name);
+    const notation = LNotations.all.find(n => n.name === name);
     return notation === undefined ? LNotation.extendedScientific : notation;
   },
   get current() {
@@ -119,7 +119,7 @@ export const Notations = {
     Notation.all,
   ],
   find: (name) => {
-    const notation = Notations.all.find((n) => n.name === name);
+    const notation = Notations.all.find(n => n.name === name);
     return notation === undefined ? Notation.mixedScientific : notation;
   },
   get current() {
@@ -127,10 +127,10 @@ export const Notations = {
   },
 };
 
-ADNotations.Settings.isInfinite = (decimal) =>
+ADNotations.Settings.isInfinite = decimal =>
   ui.formatPreBreak && decimal.gte(DC.NUMMAX);
 
 EventHub.logic.on(GAME_EVENT.GAME_TICK_AFTER, () => {
-  ui.formatPreBreak = !PlayerProgress.hasBroken() ||
-    (NormalChallenge.isRunning && !Enslaved.isRunning);
+  ui.formatPreBreak = !PlayerProgress.hasBroken()
+    || (NormalChallenge.isRunning && !Enslaved.isRunning);
 });

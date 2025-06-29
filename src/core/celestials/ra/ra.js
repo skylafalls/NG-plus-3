@@ -38,7 +38,7 @@ class RaUnlockState extends GameMechanicState {
 
   get displayIcon() {
     return this.disabledByPelle
-      ? '<span class="fas fa-ban"></span>'
+      ? "<span class=\"fas fa-ban\"></span>"
       : this.config.displayIcon;
   }
 
@@ -68,7 +68,7 @@ class RaUnlockState extends GameMechanicState {
 
 const unlocks = mapGameDataToObject(
   GameDatabase.celestials.ra.unlocks,
-  (config) => new RaUnlockState(config),
+  config => new RaUnlockState(config),
 );
 
 class RaPetState extends GameMechanicState {
@@ -229,7 +229,7 @@ class RaPetState extends GameMechanicState {
 
   get unlocks() {
     return Ra.unlocks.all
-      .filter((x) => x.pet === this)
+      .filter(x => x.pet === this)
       .sort((a, b) => a.level - b.level);
   }
 
@@ -259,7 +259,7 @@ class RaPetState extends GameMechanicState {
 
 const pets = mapGameDataToObject(
   GameDatabase.celestials.ra.pets,
-  (config) => new RaPetState(config),
+  config => new RaPetState(config),
 );
 
 export const Ra = {
@@ -348,8 +348,8 @@ export const Ra = {
     const a = Enslaved.isStoringRealTime
       ? DC.D0
       : Ra.productionPerMemoryChunk.mul(pet.memoryUpgradeCurrentMult).mul(
-        pet.memoryChunksPerSecond,
-      ).div(2);
+          pet.memoryChunksPerSecond,
+        ).div(2);
     const b = Ra.productionPerMemoryChunk.mul(pet.memoryUpgradeCurrentMult).mul(
       pet.memoryChunks,
     );
@@ -365,7 +365,7 @@ export const Ra = {
     return "";
   },
   get totalPetLevel() {
-    return this.pets.all.map((pet) => (pet.isUnlocked ? pet.level : 0)).nSum();
+    return this.pets.all.map(pet => (pet.isUnlocked ? pet.level : 0)).nSum();
   },
   get levelCap() {
     return 25;
@@ -457,8 +457,8 @@ export const Ra = {
     return 25000;
   },
   get momentumValue() {
-    const hoursFromUnlock =
-      TimeSpan.fromMilliseconds(player.celestials.ra.momentumTime).totalHours;
+    const hoursFromUnlock
+      = TimeSpan.fromMilliseconds(player.celestials.ra.momentumTime).totalHours;
     return Decimal.min(
       hoursFromUnlock.times(0.005).add(1),
       AlchemyResource.momentum.effectValue,
@@ -498,16 +498,16 @@ export const GlyphAlteration = {
     return Ra.unlocks.alteredGlyphs.canBeApplied;
   },
   isAdded(type) {
-    return this.isUnlocked &&
-      this.getSacrificePower(type).gte(this.additionThreshold);
+    return this.isUnlocked
+      && this.getSacrificePower(type).gte(this.additionThreshold);
   },
   isEmpowered(type) {
-    return this.isUnlocked &&
-      this.getSacrificePower(type).gte(this.empowermentThreshold);
+    return this.isUnlocked
+      && this.getSacrificePower(type).gte(this.empowermentThreshold);
   },
   isBoosted(type) {
-    return this.isUnlocked &&
-      this.getSacrificePower(type).gte(this.boostingThreshold);
+    return this.isUnlocked
+      && this.getSacrificePower(type).gte(this.boostingThreshold);
   },
   sacrificeBoost(type) {
     const capped = this.getSacrificePower(type).clampMax(

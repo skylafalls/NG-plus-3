@@ -124,7 +124,7 @@ declare global {
     UPDATE = "UPDATE",
     TAB_CHANGED = "TAB_CHANGED",
     CLOSE_MODAL = "CLOSE_MODAL",
-  };
+  }
 
   interface Window {
     Decimal: typeof DecimalBE

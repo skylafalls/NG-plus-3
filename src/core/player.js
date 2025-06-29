@@ -406,8 +406,8 @@ window.player = {
       laitelaSet: [],
     },
     thisQuantum: {
-      time: DC.BEMAX,
-      realTime: DC.BEMAX,
+      time: DC.D0,
+      realTime: DC.D0,
       trueTime: 0,
       maxTP: DC.D0,
       bestAM: DC.D0,

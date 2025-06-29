@@ -101,8 +101,8 @@ export class TickspeedAutobuyerState extends UpgradeableAutobuyerState {
   reset() {
     super.reset();
     if (
-      EternityMilestone.keepAutobuyers.isReached ||
-      PelleUpgrade.keepAutobuyers.canBeApplied
+      EternityMilestone.keepAutobuyers.isReached
+      || PelleUpgrade.keepAutobuyers.canBeApplied
     ) {
       return;
     }

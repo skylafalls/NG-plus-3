@@ -47,112 +47,101 @@ export const Galaxy = {
       return currency.sub(base).div(costMult).log(1.05).floor().add(1);
     }
 
-    if (this.typeAt(calculatedGalaxies) >= GALAXY_TYPE.DISTANT) {
-      calculatedGalaxies = scale({
-        baseResource: unscaledGalaxies,
-        scaleStart: this.scalingStart[GALAXY_TYPE.DISTANT],
-        scalePower: Decimal.pow(2, this.scalingPower[GALAXY_TYPE.DISTANT]),
-        scaleMode: SCALING_TYPES.POLYNOMIAL,
-        isInverted: true,
-      });
-    }
+    calculatedGalaxies = scale({
+      baseResource: unscaledGalaxies,
+      scaleStart: this.scalingStart[GALAXY_TYPE.DISTANT],
+      scalePower: Decimal.pow(1.8, this.scalingPower[GALAXY_TYPE.DISTANT]),
+      scaleMode: SCALING_TYPES.POLYNOMIAL,
+      isInverted: true,
+    });
 
-    if (this.typeAt(calculatedGalaxies) >= GALAXY_TYPE.REMOTE) {
-      calculatedGalaxies = scale({
-        baseResource: calculatedGalaxies,
-        scaleStart: this.scalingStart[GALAXY_TYPE.REMOTE],
-        scalePower: Decimal.pow(1.003, this.scalingPower[GALAXY_TYPE.REMOTE]),
-        scaleMode: SCALING_TYPES.EXPONENTIAL,
-        isInverted: true,
-      });
-    }
+    calculatedGalaxies = scale({
+      baseResource: calculatedGalaxies,
+      scaleStart: this.scalingStart[GALAXY_TYPE.REMOTE],
+      scalePower: Decimal.pow(1.01, this.scalingPower[GALAXY_TYPE.REMOTE]),
+      scaleMode: SCALING_TYPES.EXPONENTIAL,
+      isInverted: true,
+    });
 
-    if (this.typeAt(calculatedGalaxies) >= GALAXY_TYPE.OBSCURE) {
-      calculatedGalaxies = scale({
-        baseResource: calculatedGalaxies,
-        scaleStart: this.scalingStart[GALAXY_TYPE.OBSCURE],
-        scalePower: Decimal.pow(5, this.scalingPower[GALAXY_TYPE.OBSCURE]),
-        scaleMode: SCALING_TYPES.POLYNOMIAL,
-        isInverted: true,
-      });
-    }
+    calculatedGalaxies = scale({
+      baseResource: calculatedGalaxies,
+      scaleStart: this.scalingStart[GALAXY_TYPE.OBSCURE],
+      scalePower: Decimal.pow(3, this.scalingPower[GALAXY_TYPE.OBSCURE]),
+      scaleMode: SCALING_TYPES.POLYNOMIAL,
+      isInverted: true,
+    });
 
-    if (this.typeAt(calculatedGalaxies) >= GALAXY_TYPE.INVISIBLE) {
-      calculatedGalaxies = scale({
-        baseResource: calculatedGalaxies,
-        scaleStart: this.scalingStart[GALAXY_TYPE.INVISIBLE],
-        scalePower: Decimal.pow(3, this.scalingPower[GALAXY_TYPE.INVISIBLE]),
-        scaleMode: SCALING_TYPES.DILATION,
-        isInverted: true,
-      });
-    }
+    calculatedGalaxies = scale({
+      baseResource: calculatedGalaxies,
+      scaleStart: this.scalingStart[GALAXY_TYPE.INVISIBLE],
+      scalePower: Decimal.pow(1.5, this.scalingPower[GALAXY_TYPE.INVISIBLE]),
+      scaleMode: SCALING_TYPES.DILATION,
+      isInverted: true,
+    });
 
-    if (this.typeAt(calculatedGalaxies) >= GALAXY_TYPE.ETHEREAL) {
-      calculatedGalaxies = scale({
-        baseResource: calculatedGalaxies,
-        scaleStart: this.scalingStart[GALAXY_TYPE.ETHEREAL],
-        scalePower: Decimal.pow(1.5, this.scalingPower[GALAXY_TYPE.ETHEREAL]),
-        scaleMode: SCALING_TYPES.EXPONENTIAL,
-        isInverted: true,
-      });
-    }
+    calculatedGalaxies = scale({
+      baseResource: calculatedGalaxies,
+      scaleStart: this.scalingStart[GALAXY_TYPE.ETHEREAL],
+      scalePower: Decimal.pow(2, this.scalingPower[GALAXY_TYPE.ETHEREAL]),
+      scaleMode: SCALING_TYPES.EXPONENTIAL,
+      isInverted: true,
+    });
 
     return calculatedGalaxies.floor().add(1).max(minVal);
   },
 
   // The existing galaxy calculation was shit so i revamped it
   requirementAt(galaxies) {
-    let equivGal = new Decimal(galaxies).floor().add(1);
-    const type = Galaxy.typeAt(galaxies);
+    let equivGal = new Decimal(galaxies).add(1);
 
     if (QuantumChallenge(5).isRunning) {
       return new GalaxyRequirement(this.requiredTier, this.baseCost
         .add(Decimal.pow(1.05, equivGal).times(this.costMult)));
     }
 
-    if (type >= GALAXY_TYPE.ETHEREAL) {
+    if (this.typeAt(equivGal) >= GALAXY_TYPE.ETHEREAL) {
       equivGal = scale({
         baseResource: equivGal,
         scaleStart: this.scalingStart[GALAXY_TYPE.ETHEREAL],
-        scalePower: Decimal.pow(1.5, this.scalingPower[GALAXY_TYPE.ETHEREAL]),
+        scalePower: Decimal.pow(1.8, this.scalingPower[GALAXY_TYPE.ETHEREAL]),
         scaleMode: SCALING_TYPES.EXPONENTIAL,
       });
     }
 
-    if (type >= GALAXY_TYPE.INVISIBLE) {
+    if (this.typeAt(equivGal) >= GALAXY_TYPE.INVISIBLE) {
       equivGal = scale({
         baseResource: equivGal,
         scaleStart: this.scalingStart[GALAXY_TYPE.INVISIBLE],
-        scalePower: Decimal.pow(3, this.scalingPower[GALAXY_TYPE.INVISIBLE]),
+        scalePower: Decimal.pow(1.5, this.scalingPower[GALAXY_TYPE.INVISIBLE]),
         scaleMode: SCALING_TYPES.DILATION,
       });
     }
 
-    if (type >= GALAXY_TYPE.OBSCURE) {
+    if (this.typeAt(equivGal) >= GALAXY_TYPE.OBSCURE) {
       equivGal = scale({
         baseResource: equivGal,
         scaleStart: this.scalingStart[GALAXY_TYPE.OBSCURE],
-        scalePower: Decimal.pow(5, this.scalingPower[GALAXY_TYPE.OBSCURE]),
+        scalePower: Decimal.pow(3, this.scalingPower[GALAXY_TYPE.OBSCURE]),
         scaleMode: SCALING_TYPES.POLYNOMIAL,
       });
     }
 
-    if (type >= GALAXY_TYPE.REMOTE) {
+    if (this.typeAt(equivGal) >= GALAXY_TYPE.REMOTE) {
       equivGal = scale({
         baseResource: equivGal,
         scaleStart: this.scalingStart[GALAXY_TYPE.REMOTE],
-        scalePower: Decimal.pow(1.003, this.scalingPower[GALAXY_TYPE.REMOTE]),
+        scalePower: Decimal.pow(1.01, this.scalingPower[GALAXY_TYPE.REMOTE]),
         scaleMode: SCALING_TYPES.EXPONENTIAL,
       });
     }
 
-    if (type >= GALAXY_TYPE.DISTANT) {
+    if (this.typeAt(equivGal) >= GALAXY_TYPE.DISTANT) {
       const distantStart = this.scalingStart[GALAXY_TYPE.DISTANT];
       const distantPower = this.scalingPower[GALAXY_TYPE.DISTANT];
       equivGal = scale({
         baseResource: equivGal,
         scaleStart: distantStart,
-        scalePower: Decimal.pow(2, distantPower),
+        scalePower: Decimal.pow(1.8, distantPower),
         scaleMode: SCALING_TYPES.POLYNOMIAL,
       });
     }
@@ -176,13 +165,13 @@ export const Galaxy = {
       MasteryStudy(21),
       MasteryStudy(22),
       MasteryStudy(23),
-      MasteryStudy(71),
     );
 
     let distantStart = DC.E2.plusEffectsOf(
       TimeStudy(223),
       TimeStudy(224),
       TimeStudy(302),
+      MasteryStudy(71),
       EternityChallenge(5).reward,
     ).add(GlyphInfo.power.sacrificeInfo.effect());
 

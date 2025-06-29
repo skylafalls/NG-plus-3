@@ -1341,7 +1341,7 @@ export const normalAchievements = [
     reward:
       "Gain a multiplier to Tachyon Particle and Dilated Time gain based on Antimatter Galaxies.",
     effect: () =>
-      Decimal.max(Decimal.pow(player.galaxies, 0.04), 1).times(1.22),
+      Decimal.max(player.galaxies, 1).times(1.22),
     formatEffect: value => `${formatX(value, 2, 2)}`,
   },
   {
@@ -1349,9 +1349,7 @@ export const normalAchievements = [
     name: "I never liked this infinity stuff anyway",
     get description() {
       return `Reach ${formatPostBreak(DC.E200000)} Infinity Points without
-      buying any Infinity Dimensions or the ${
-        formatX(2)
-      } Infinity Point multiplier.`;
+      buying any Infinity Dimensions or the ${formatX(2)} Infinity Point multiplier.`;
     },
     checkRequirement: () =>
       Array.dimensionTiers.map(InfinityDimension).every(dim =>
@@ -1372,9 +1370,7 @@ export const normalAchievements = [
     checkRequirement: () => Replicanti.amount.gte(DC.E18000),
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     get reward() {
-      return `You gain Replicanti ${formatInt(2)} times faster under ${
-        format(replicantiCap(), 1)
-      } Replicanti.`;
+      return `You gain Replicanti ${formatInt(2)} times faster under ${format(replicantiCap(), 1)} Replicanti.`;
     },
   },
   {
@@ -1405,9 +1401,9 @@ export const normalAchievements = [
       && player.dilation.active,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     get reward() {
-      return `Gain ${formatX(2)} Dilated Time and Time Theorems while Dilated.`;
+      return `Gain ${formatX(50)} Dilated Time and Time Theorems.`;
     },
-    effect: () => (player.dilation.active ? 2 : 1),
+    effect: () => 50,
   },
   {
     id: 138,
@@ -1568,7 +1564,7 @@ export const normalAchievements = [
     get reward() {
       return "Eternity Points multiply your Quarks gain.";
     },
-    effect: () => Currency.eternityPoints.value.plus(1).log10().powEffectOf(Achievement(168)),
+    effect: () => Currency.eternityPoints.value.plus(1).log10().plus(1).powEffectOf(Achievement(168)),
     formatEffect: value => formatX(value, 2, 2),
   },
   {

@@ -238,6 +238,9 @@ export function getDilationGainPerSecond() {
         ? Currency.eternities.value.clampMin(1).pow(0.15)
         : 1,
     );
+  if (PlayerProgress.quantumUnlocked()) {
+    dtRate = dtRate.times(Quarks.blue.effect());
+  }
   dtRate = dtRate.times(getAdjustedGlyphEffect("dilationDT"));
   dtRate = dtRate.times(
     Decimal.clampMin(
@@ -290,7 +293,7 @@ export function getBaseTP(antimatter, requireEternity) {
   const am = (isInCelestialReality() || Pelle.isDoomed)
     ? antimatter
     : Ra.unlocks.unlockDilationStartingTP.effectOrDefault(antimatter);
-  let baseTP = am.max(1).log10().div(400).pow(
+  let baseTP = am.max(1).log10().div(Math.log10(Number.MAX_VALUE)).pow(
     Decimal.add(1.5, DilationUpgrade.tachyonExponent.effectOrDefault(0)),
   );
   if (Enslaved.isRunning) {

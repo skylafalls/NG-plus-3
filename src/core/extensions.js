@@ -98,7 +98,7 @@ Decimal.prototype.logRoot = function (decimal) {
   return Decimal.pow10(value);
 };
 
-window.copyToClipboard = function () {
+window.copyToClipboard = (function () {
   const el = document.createElement("textarea");
   document.body.append(el);
   el.style.position = "absolute";
@@ -114,7 +114,7 @@ window.copyToClipboard = function () {
       return false;
     }
   };
-}();
+}());
 
 window.safeCall = function safeCall(fn) {
   if (fn) {
@@ -123,12 +123,12 @@ window.safeCall = function safeCall(fn) {
 };
 
 String.prototype.capitalize = function () {
-  return this.toLowerCase().replace(/^\w/u, (c) => c.toUpperCase());
+  return this.toLowerCase().replace(/^\w/u, c => c.toUpperCase());
 };
 
 String.prototype.splice = function (start, delCount, newSubStr) {
-  return this.slice(0, start) + newSubStr +
-    this.slice(start + Math.abs(delCount));
+  return this.slice(0, start) + newSubStr
+    + this.slice(start + Math.abs(delCount));
 };
 
 /**
@@ -137,7 +137,7 @@ String.prototype.splice = function (start, delCount, newSubStr) {
  * @returns {number[]}
  */
 Array.range = function (start, count) {
-  return [...Array(count).keys()].map((i) => i + start);
+  return [...Array(count).keys()].map(i => i + start);
 };
 
 /**
@@ -344,7 +344,7 @@ Set.prototype.every = function (predicate) {
 };
 
 Array.prototype.compact = function () {
-  return this.filter((x) => x !== undefined && x !== null);
+  return this.filter(x => x !== undefined && x !== null);
 };
 
 Array.prototype.toBitmask = function () {

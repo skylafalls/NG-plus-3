@@ -60,7 +60,7 @@ export const ra = {
         "Tachyon Particles are given immediately when Time Dilation is active",
       pet: "teresa",
       level: 1,
-      displayIcon: '<span class="fas fa-atom"></span>',
+      displayIcon: "<span class=\"fas fa-atom\"></span>",
       disabledByPelle: true,
     },
     chargedInfinityUpgrades: {
@@ -71,7 +71,7 @@ export const ra = {
       effect: () => Math.min(12, Math.floor(Ra.pets.teresa.level / 2)),
       pet: "teresa",
       level: 2,
-      displayIcon: '<span class="fas fa-infinity"></span>',
+      displayIcon: "<span class=\"fas fa-infinity\"></span>",
       disabledByPelle: true,
     },
     teresaXP: {
@@ -93,7 +93,7 @@ export const ra = {
         "Unlock Altered Glyphs, which grant new effects to Glyphs based on Glyph Sacrifice",
       pet: "teresa",
       level: 10,
-      displayIcon: '<span class="fas fa-bolt"></span>',
+      displayIcon: "<span class=\"fas fa-bolt\"></span>",
       disabledByPelle: true,
     },
     effarigUnlock: {
@@ -108,7 +108,7 @@ export const ra = {
       reward: "Purchase caps are raised in Teresa's Perk Point Shop",
       pet: "teresa",
       level: 15,
-      displayIcon: '<span class="fas fa-project-diagram"></span>',
+      displayIcon: "<span class=\"fas fa-project-diagram\"></span>",
     },
     unlockDilationStartingTP: {
       id: 6,
@@ -118,7 +118,7 @@ export const ra = {
       effect: () => player.records.totalAntimatter.pow(0.5),
       pet: "teresa",
       level: 25,
-      displayIcon: '<i class="far fa-dot-circle"></i>',
+      displayIcon: "<i class=\"far fa-dot-circle\"></i>",
     },
     extraGlyphChoicesAndRelicShardRarityAlwaysMax: {
       id: 7,
@@ -130,7 +130,7 @@ export const ra = {
       effect: 2,
       pet: "effarig",
       level: 1,
-      displayIcon: '<i class="fas fa-grip-horizontal"></i>',
+      displayIcon: "<i class=\"fas fa-grip-horizontal\"></i>",
     },
     unlockGlyphAlchemy: {
       id: 8,
@@ -139,7 +139,7 @@ export const ra = {
         more resources through Effarig levels. Access through a new Reality tab.`,
       pet: "effarig",
       level: 2,
-      displayIcon: '<span class="fas fa-vial"></span>',
+      displayIcon: "<span class=\"fas fa-vial\"></span>",
     },
     effarigXP: {
       id: 9,
@@ -148,7 +148,7 @@ export const ra = {
       effect: () => player.records.bestReality.glyphLevel.div(7000).add(1),
       pet: "effarig",
       level: 5,
-      displayIcon: '<span class="fas fa-clone"></span>',
+      displayIcon: "<span class=\"fas fa-clone\"></span>",
     },
     glyphEffectCount: {
       id: 10,
@@ -158,7 +158,7 @@ export const ra = {
         } effects, and Effarig Glyphs can now have up to ${formatInt(7)}`,
       pet: "effarig",
       level: 10,
-      displayIcon: '<span class="fas fa-braille"></span>',
+      displayIcon: "<span class=\"fas fa-braille\"></span>",
     },
     enslavedUnlock: {
       id: 11,
@@ -166,7 +166,7 @@ export const ra = {
       pet: "effarig",
       level: 8,
       displayIcon:
-        '<span class="c-ra-pet-milestones-effarig-link">\uF0C1</span>',
+        "<span class=\"c-ra-pet-milestones-effarig-link\">\uF0C1</span>",
     },
     relicShardGlyphLevelBoost: {
       id: 12,
@@ -177,7 +177,7 @@ export const ra = {
         ),
       pet: "effarig",
       level: 15,
-      displayIcon: '<span class="fas fa-fire"></span>',
+      displayIcon: "<span class=\"fas fa-fire\"></span>",
     },
     maxGlyphRarityAndShardSacrificeBoost: {
       id: 13,
@@ -187,14 +187,14 @@ export const ra = {
       effect: () => Effarig.maxRarityBoost.div(100).add(1),
       pet: "effarig",
       level: 25,
-      displayIcon: '<i class="fas fa-ankh"></i>',
+      displayIcon: "<i class=\"fas fa-ankh\"></i>",
     },
     blackHolePowerAutobuyers: {
       id: 14,
       reward: "Unlock Black Hole power upgrade autobuyers",
       pet: "enslaved",
       level: 1,
-      displayIcon: '<span class="fas fa-circle"></span>',
+      displayIcon: "<span class=\"fas fa-circle\"></span>",
       disabledByPelle: true,
     },
     improvedStoredTime: {
@@ -208,7 +208,7 @@ export const ra = {
       },
       pet: "enslaved",
       level: 2,
-      displayIcon: '<span class="fas fa-history"></span>',
+      displayIcon: "<span class=\"fas fa-history\"></span>",
       disabledByPelle: true,
     },
     enslavedXP: {
@@ -219,7 +219,7 @@ export const ra = {
         Decimal.log10(player.records.totalTimePlayed).div(200).add(1),
       pet: "enslaved",
       level: 5,
-      displayIcon: '<span class="fas fa-stopwatch"></span>',
+      displayIcon: "<span class=\"fas fa-stopwatch\"></span>",
     },
     autoPulseTime: {
       id: 17,
@@ -232,7 +232,7 @@ export const ra = {
         } of your stored game time every ${formatInt(5)} ticks.`,
       pet: "enslaved",
       level: 10,
-      displayIcon: '<span class="fas fa-expand-arrows-alt"></span>',
+      displayIcon: "<span class=\"fas fa-expand-arrows-alt\"></span>",
       disabledByPelle: true,
     },
     vUnlock: {
@@ -255,7 +255,7 @@ export const ra = {
         ),
       pet: "enslaved",
       level: 15,
-      displayIcon: '<span class="fas fa-tachometer-alt"></span>',
+      displayIcon: "<span class=\"fas fa-tachometer-alt\"></span>",
       disabledByPelle: true,
     },
     allGamespeedGlyphs: {
@@ -265,7 +265,7 @@ export const ra = {
         and Time Glyphs gain an additional effect`,
       pet: "enslaved",
       level: 25,
-      displayIcon: '<span class="fas fa-clock"></span>',
+      displayIcon: "<span class=\"fas fa-clock\"></span>",
       onUnlock: () => {
         const allGlyphs = player.reality.glyphs.active.concat(
           player.reality.glyphs.inventory,
@@ -281,7 +281,7 @@ export const ra = {
         "Rebuyable Reality upgrades are bought automatically and Auto-Eternity Challenges happen instantly",
       pet: "v",
       level: 1,
-      displayIcon: '<span class="fas fa-sync-alt"></span>',
+      displayIcon: "<span class=\"fas fa-sync-alt\"></span>",
       disabledByPelle: true,
     },
     autoUnlockDilation: {
@@ -293,7 +293,7 @@ export const ra = {
         } Time Theorems`,
       pet: "v",
       level: 2,
-      displayIcon: '<span class="fas fa-fast-forward"></span>',
+      displayIcon: "<span class=\"fas fa-fast-forward\"></span>",
     },
     vXP: {
       id: 23,
@@ -302,7 +302,7 @@ export const ra = {
       effect: () => new Decimal(1 + Ra.totalPetLevel / 50),
       pet: "v",
       level: 5,
-      displayIcon: '<span class="fas fa-book"></span>',
+      displayIcon: "<span class=\"fas fa-book\"></span>",
     },
     unlockHardV: {
       id: 24,
@@ -314,7 +314,7 @@ export const ra = {
       effect: () => Math.floor(Ra.pets.v.level / 6),
       pet: "v",
       level: 6,
-      displayIcon: '<span class="fas fa-trophy"></span>',
+      displayIcon: "<span class=\"fas fa-trophy\"></span>",
       disabledByPelle: true,
     },
     continuousTTBoost: {
@@ -333,7 +333,7 @@ export const ra = {
       },
       pet: "v",
       level: 10,
-      displayIcon: '<span class="fas fa-university"></span>',
+      displayIcon: "<span class=\"fas fa-university\"></span>",
       disabledByPelle: true,
     },
     achievementTTMult: {
@@ -342,7 +342,7 @@ export const ra = {
       effect: () => Achievements.power,
       pet: "v",
       level: 15,
-      displayIcon: '<span class="fas fa-graduation-cap"></span>',
+      displayIcon: "<span class=\"fas fa-graduation-cap\"></span>",
       disabledByPelle: true,
     },
     achievementPower: {
@@ -351,7 +351,7 @@ export const ra = {
       effect: 1.5,
       pet: "v",
       level: 25,
-      displayIcon: '<i class="fab fa-buffer"></i>',
+      displayIcon: "<i class=\"fab fa-buffer\"></i>",
       disabledByPelle: true,
     },
   },

@@ -624,7 +624,6 @@ export function gameLoop(passedDiff, options = {}) {
     return;
   }
 
-
   if (diff === undefined || Enslaved.isReleaseTick) {
     diff = new Decimal(Enslaved.nextTickDiff);
   }
@@ -1438,6 +1437,12 @@ export function browserCheck() {
   return supportedBrowsers.test(navigator.userAgent);
 }
 
+function achievementFix() {
+  for (const achievement of [11, 12, 13, 14, 15, 16, 17, 18, 43, 35, 76]) {
+    Achievement(achievement).unlock();
+  }
+}
+
 export function init() {
   console.log("🌌 Antimatter Dimensions: Reality Update 🌌");
   if (DEV) {
@@ -1447,9 +1452,7 @@ export function init() {
   SteamRuntime.initialize();
   Cloud.init();
   GameStorage.load();
-  if (true) {
-    Modal.ngPlusMode.show();
-  }
+  achievementFix();
   Tabs.all.find(t => t.config.id === player.options.lastOpenTab).show(true);
 }
 

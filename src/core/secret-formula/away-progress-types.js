@@ -67,7 +67,7 @@ export const awayProgressTypes = [
   {
     name: "achievementAmount",
     reference: ["achievementBits"],
-    applyFn: (x) => x.map((b) => countValuesFromBitmask(b)).sum(),
+    applyFn: x => x.map(b => countValuesFromBitmask(b)).sum(),
     isUnlocked: () => PlayerProgress.realityUnlocked(),
   },
   {

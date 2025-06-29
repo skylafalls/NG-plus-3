@@ -66,7 +66,7 @@ export default defineComponent({
           if (Replicanti.chance.gt("e1e6")) {
             return;
           }
-          return `+${formatPercents(0.01)} Costs: ${format(cost)} IP`
+          return `+${formatPercents(0.01)} Costs: ${format(cost)} IP`;
         },
       );
     },

@@ -10,7 +10,7 @@ const flashCelestial = [
   ["pelle", 0.8],
 ];
 /** @param {string} cel */
-const primaryBackground = (cel) => [["pelle", 1.5], [cel, 1.5]];
+const primaryBackground = cel => [["pelle", 1.5], [cel, 1.5]];
 
 const destroyer = ["False", "Deity", "Destroyer"];
 const eternal = ["Eternal", "Deity", "Monarch"];
@@ -78,7 +78,7 @@ export const pelleQuotes = {
         1: unseen,
       },
       {
-        text: '"Fabrication" of your own "ideology" just to fulfill your $1.',
+        text: "\"Fabrication\" of your own \"ideology\" just to fulfill your $1.",
         1: mandate,
       },
       { text: "$1.", 1: confusing },

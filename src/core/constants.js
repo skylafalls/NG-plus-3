@@ -31,7 +31,6 @@ export const DC = deepFreeze({
   // C: Calculation. D - .div, P - .pow
   // There are special values
 
-  /* eslint-disable @stylistic/key-spacing */
   DM1: new Decimal("-1"),
   D0: new Decimal("0"),
 
@@ -425,7 +424,7 @@ window.SPEEDRUN_SEED_STATE = {
 };
 
 // We're just going to use cloneDeep from lodash, since its better
-window.cloneDeep = (value) => cloneDeep(value);
+window.cloneDeep = value => cloneDeep(value);
 
 //
 // window.cloneDeep = function cloneDeep(obj) {

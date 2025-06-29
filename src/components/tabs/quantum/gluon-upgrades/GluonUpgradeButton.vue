@@ -62,7 +62,7 @@ export default defineComponent({
     },
     gluonCurrency() {
       return `${this.type} gluons`;
-    }
+    },
   },
   methods: {
     update() {

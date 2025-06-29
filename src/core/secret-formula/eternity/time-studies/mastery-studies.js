@@ -161,7 +161,7 @@ export const masteryStudies = [
     cost: new Decimal("1e110"),
     requirement: [61],
     reqType: TS_REQUIREMENT_TYPE.AT_LEAST_ONE,
-    description: () => `Remote Antimatter Galaxy scaling starts later per ${formatFloat(4.15, 2)} extra Replicated Galaxies.`,
+    description: () => `Distant Antimatter Galaxy scaling starts later per ${formatFloat(4.15, 2)} extra Replicated Galaxies.`,
     effect: () => Replicanti.galaxies.extra.div(4.15).floor(),
     formatEffect: value => `${formatPlus(value, 2, 0)} later`,
   },

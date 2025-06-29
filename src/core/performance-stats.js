@@ -66,8 +66,8 @@ export const PerformanceStats = {
         const block = rootBlock[blockName];
         const records = block.records;
         while (
-          records.length > 1 &&
-          records.last().timestamp - records.first().timestamp > samplePeriod
+          records.length > 1
+          && records.last().timestamp - records.first().timestamp > samplePeriod
         ) {
           records.shift();
         }

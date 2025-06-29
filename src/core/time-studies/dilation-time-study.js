@@ -51,8 +51,8 @@ export class DilationTimeStudyState extends TimeStudyState {
         Currency.tachyonParticles.bumpTo(Perk.startTP.effectOrDefault(0));
       }
       if (
-        Ra.unlocks.unlockDilationStartingTP.canBeApplied &&
-        !isInCelestialReality() && !Pelle.isDoomed
+        Ra.unlocks.unlockDilationStartingTP.canBeApplied
+        && !isInCelestialReality() && !Pelle.isDoomed
       ) {
         Currency.tachyonParticles.bumpTo(
           getTP(Ra.unlocks.unlockDilationStartingTP.effectOrDefault(0), false),
@@ -75,7 +75,7 @@ export class DilationTimeStudyState extends TimeStudyState {
 
 DilationTimeStudyState.studies = mapGameData(
   GameDatabase.eternity.timeStudies.dilation,
-  (config) => new DilationTimeStudyState(config),
+  config => new DilationTimeStudyState(config),
 );
 
 /**
@@ -114,7 +114,7 @@ TimeStudy.quantumChallenges = DilationTimeStudyState.studies[9];
 TimeStudy.pairedChallenges = DilationTimeStudyState.studies[10];
 
 TimeStudy.boughtDilationTS = function () {
-  return player.dilation.studies.map((id) =>
-    DilationTimeStudyState.studies[id]
+  return player.dilation.studies.map(id =>
+    DilationTimeStudyState.studies[id],
   );
 };

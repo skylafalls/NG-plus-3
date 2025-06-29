@@ -117,7 +117,7 @@ function append8(key) {
 
 // Helper method to create very long lists of entries in the tree; format is "RESOURCE_SOURCE_DIMENSION"
 function getProps(resource, tier) {
-  const props = propList[resource].map((s) => `${resource}_${s}`);
+  const props = propList[resource].map(s => `${resource}_${s}`);
   if (!tier) {
     return props;
   }
@@ -201,11 +201,11 @@ export const multiplierTabTree = {
 // Gamespeed's two alternate displays are current and average gamespeed, distinguished by which of two
 // mutually-exclusive entries appear in the list. We explicity modify props here as needed
 const allGamespeed = multiplierTabTree.gamespeed_total[0];
-multiplierTabTree.gamespeed_total[0] = [...allGamespeed].filter((key) =>
-  key !== "gamespeed_blackHoleAvg"
+multiplierTabTree.gamespeed_total[0] = [...allGamespeed].filter(key =>
+  key !== "gamespeed_blackHoleAvg",
 );
-multiplierTabTree.gamespeed_total[1] = [...allGamespeed].filter((key) =>
-  key !== "gamespeed_blackHoleCurr"
+multiplierTabTree.gamespeed_total[1] = [...allGamespeed].filter(key =>
+  key !== "gamespeed_blackHoleCurr",
 );
 
 // DT doesn't explicitly have an entry to TP, due to it being its own total entry, so we link them together
@@ -312,7 +312,7 @@ const removedRegexes = [
   ".._pelle",
 ];
 const removedProps = Object.keys(multiplierTabTree)
-  .filter((key) => removedRegexes.some((regex) => key.match(regex)));
+  .filter(key => removedRegexes.some(regex => key.match(regex)));
 for (const prop of removedProps) {
   multiplierTabTree[prop] = undefined;
 }

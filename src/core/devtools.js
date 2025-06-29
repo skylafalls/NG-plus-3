@@ -26,15 +26,14 @@ dev.giveAllAchievements = function () {
 dev.doubleEverything = function () {
   Object.keys(player).forEach((key) => {
     if (typeof player[key] === "number") player[key] *= 2;
-    if (typeof player[key] === "object" && player[key].constructor !== Object) {
+    if (typeof player[key] === "object" && player[key] instanceof Decimal) {
       player[key] = player[key].times(2);
     }
     if (typeof player[key] === "object" && !isFinite(player[key])) {
       Object.keys(player[key]).forEach((key2) => {
         if (typeof player[key][key2] === "number") player[key][key2] *= 2;
         if (
-          typeof player[key][key2] === "object" &&
-          player[key][key2].constructor !== Object
+          typeof player[key][key2] === "object" && player[key][key2] instanceof Decimal
         ) {
           player[key][key2] = player[key][key2].times(2);
         }
@@ -46,15 +45,14 @@ dev.doubleEverything = function () {
 dev.tripleEverything = function () {
   Object.keys(player).forEach((key) => {
     if (typeof player[key] === "number") player[key] *= 3;
-    if (typeof player[key] === "object" && player[key].constructor !== Object) {
+    if (typeof player[key] === "object" && player[key] instanceof Decimal) {
       player[key] = player[key].times(3);
     }
     if (typeof player[key] === "object" && !isFinite(player[key])) {
       Object.keys(player[key]).forEach((key3) => {
         if (typeof player[key][key3] === "number") player[key][key3] *= 3;
         if (
-          typeof player[key][key3] === "object" &&
-          player[key][key3].constructor !== Object
+          typeof player[key][key3] === "object" && player[key][key3] instanceof Decimal
         ) {
           player[key][key3] = player[key][key3].times(3);
         }
@@ -86,7 +84,7 @@ dev.cancerize = function () {
 
 dev.fixSave = function () {
   const save = JSON.stringify(player, GameSaveSerializer.jsonConverter);
-  const fixed = save.replace(/NaN/gui, "10");
+  const fixed = save.replace(/NaN/gui, "1").replace(/Infinity/gui, "1");
   const saveData = JSON.parse(fixed);
   if (!saveData || GameStorage.checkPlayerObject(saveData) !== "") {
     Modal.message.show("Could not fix the save.");
@@ -720,3 +718,7 @@ dev.breakInfinity = function () {
   );
   GameUI.update();
 };
+
+dev.applyNGPlus = function () {
+  dev.breakInfinity()
+}

@@ -326,8 +326,8 @@ Currency.antimatter = new class extends DecimalCurrency {
       InfinityChallenges.notifyICUnlock(value);
     }
     if (
-      GameCache.cheapestAntimatterAutobuyer.value &&
-      value.gte(GameCache.cheapestAntimatterAutobuyer.value)
+      GameCache.cheapestAntimatterAutobuyer.value
+      && value.gte(GameCache.cheapestAntimatterAutobuyer.value)
     ) {
       // Clicking into the automation tab clears the trigger and prevents it from retriggering as long as the player
       // stays on the tab; leaving the tab with an available autobuyer will immediately force it to trigger again
@@ -364,8 +364,8 @@ Currency.antimatter = new class extends DecimalCurrency {
   get productionPerSecond() {
     return NormalChallenge(12).isRunning
       ? AntimatterDimension(1).productionPerRealSecond.plus(
-        AntimatterDimension(2).productionPerRealSecond,
-      )
+          AntimatterDimension(2).productionPerRealSecond,
+        )
       : AntimatterDimension(1).productionPerRealSecond;
   }
 
@@ -506,7 +506,7 @@ Currency.eternityPoints = new class extends DecimalCurrency {
     if (player.records.bestReality.bestEP.lt(value)) {
       player.records.bestReality.bestEP = value;
       player.records.bestReality.bestEPSet = Glyphs.copyForRecords(
-        Glyphs.active.filter((g) => g !== null),
+        Glyphs.active.filter(g => g !== null),
       );
     }
 
@@ -621,7 +621,7 @@ Currency.realityMachines = new class extends DecimalCurrency {
     if (player.records.bestReality.RM.lt(addedThisReality)) {
       player.records.bestReality.RM = addedThisReality;
       player.records.bestReality.RMSet = Glyphs.copyForRecords(
-        Glyphs.active.filter((g) => g !== null),
+        Glyphs.active.filter(g => g !== null),
       );
     }
   }
@@ -692,7 +692,7 @@ Currency.darkEnergy = new class extends DecimalCurrency {
 
   get productionPerSecond() {
     return DarkMatterDimensions.all
-      .map((d) => d.productionPerSecond)
+      .map(d => d.productionPerSecond)
       .sum();
   }
 }();

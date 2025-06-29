@@ -31,7 +31,7 @@ export const brGluonUpgrades = [
     id: 5,
     cost: () => new Decimal(7e15),
     description: () => "Meta Dimensions are boosted by BR Gluons.",
-    effect: () => player.quantum.gluons.br.plus(1).logPow(0.15),
+    effect: () => player.quantum.gluons.br.plus(1).pow(0.6),
     formatEffect: value => formatX(value, 2, 2),
   },
   {

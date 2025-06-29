@@ -33,8 +33,8 @@ class Validator extends BaseVisitor {
     this.addLexerErrors(lexResult.errors);
     this.addParserErrors(parser.errors, tokens);
     this.modifyErrorMessages();
-    this.errorCount = lexResult.errors.length + this.errors.length +
-      parser.errors.length;
+    this.errorCount = lexResult.errors.length + this.errors.length
+      + parser.errors.length;
   }
 
   addLexerErrors(errors) {
@@ -69,8 +69,8 @@ class Validator extends BaseVisitor {
       );
       // In some cases, at the end of the script we don't get any useful tokens out of the parse error
       if (
-        parseError.token.tokenType.name === "EOF" &&
-        parseError.previousToken.tokenType.name === "EOF"
+        parseError.token.tokenType.name === "EOF"
+        && parseError.previousToken.tokenType.name === "EOF"
       ) {
         err = Validator.combinePositionRanges(
           err,
@@ -79,8 +79,8 @@ class Validator extends BaseVisitor {
       }
       // Deal with literal EOL in error message:
       err.info = parseError.message.replace(/'\n\s*'/ui, "End of line");
-      const isEndToken = parseError.token.tokenType.name === "EOF" ||
-        parseError.token.tokenType.name === "EOL";
+      const isEndToken = parseError.token.tokenType.name === "EOF"
+        || parseError.token.tokenType.name === "EOL";
       if (parseError.name === "NoViableAltException") {
         if (!isEndToken) {
           err.info = `Unexpected input ${parseError.token.image}`;
@@ -154,8 +154,8 @@ class Validator extends BaseVisitor {
     // but that means that in many cases a lot of endgame values are never cleared. Therefore we shortcut the whole
     // function if the automator isn't unlocked or it attempts to error-check an empty script
     if (
-      !Player.automatorUnlocked ||
-      AutomatorData.currentScriptText() === undefined
+      !Player.automatorUnlocked
+      || AutomatorData.currentScriptText() === undefined
     ) {
       return;
     }
@@ -186,18 +186,18 @@ class Validator extends BaseVisitor {
 
       if (/EOF but found.*\}/gu.test(err.info)) {
         err.info = err.info.replaceAll("--> ", "[").replaceAll(" <--", "]");
-        err.tip =
-          "Remove }. Parser halted at this line and may miss errors farther down the script.";
+        err.tip
+          = "Remove }. Parser halted at this line and may miss errors farther down the script.";
       } else if (/found.*\}/gu.test(err.info)) {
         err.info = err.info.replaceAll("--> ", "[").replaceAll(" <--", "]");
         err.tip = "Remove }";
       } else if (/Expecting/gu.test(err.info)) {
         err.info = err.info.replaceAll("--> ", "[").replaceAll(" <--", "]");
-        err.tip =
-          "Use the appropriate type of data in the command as specified in the command help";
+        err.tip
+          = "Use the appropriate type of data in the command as specified in the command help";
       } else if (/End of line/gu.test(err.info)) {
-        err.tip =
-          "Provide the remaining arguments to complete the incomplete command";
+        err.tip
+          = "Provide the remaining arguments to complete the incomplete command";
       } else if (/EOF but found:/gu.test(err.info)) {
         err.tip = "Remove extra command argument";
       } else {
@@ -258,7 +258,7 @@ class Validator extends BaseVisitor {
       case AUTOMATOR_VAR_TYPES.STUDIES: {
         tree = new TimeStudyTree(value);
         varInfo.value = {
-          normal: tree.selectedStudies.map((ts) => ts.id),
+          normal: tree.selectedStudies.map(ts => ts.id),
           ec: tree.ec,
           startEC: tree.startEC,
         };
@@ -316,8 +316,8 @@ class Validator extends BaseVisitor {
       );
       return;
     }
-    const value = parseFloat(ctx.NumberLiteral[0].image) *
-      ctx.TimeUnit[0].tokenType.$scale;
+    const value = parseFloat(ctx.NumberLiteral[0].image)
+      * ctx.TimeUnit[0].tokenType.$scale;
     if (isNaN(value)) {
       this.addError(
         ctx,
@@ -364,8 +364,8 @@ class Validator extends BaseVisitor {
 
   studyRange(ctx, studiesOut) {
     if (
-      !ctx.firstStudy || ctx.firstStudy[0].isInsertedInRecovery ||
-      !ctx.lastStudy || ctx.lastStudy[0].isInsertedInRecovery
+      !ctx.firstStudy || ctx.firstStudy[0].isInsertedInRecovery
+      || !ctx.lastStudy || ctx.lastStudy[0].isInsertedInRecovery
     ) {
       this.addError(
         ctx,
@@ -485,8 +485,8 @@ class Validator extends BaseVisitor {
   comparison(ctx) {
     super.comparison(ctx);
     if (
-      !ctx.compareValue || ctx.compareValue[0].recoveredNode ||
-      ctx.compareValue.length !== 2 || ctx.compareValue[1].recoveredNode
+      !ctx.compareValue || ctx.compareValue[0].recoveredNode
+      || ctx.compareValue.length !== 2 || ctx.compareValue[1].recoveredNode
     ) {
       this.addError(
         ctx,
@@ -505,8 +505,8 @@ class Validator extends BaseVisitor {
       return;
     }
     if (
-      ctx.ComparisonOperator[0].tokenType === T.OpEQ ||
-      ctx.ComparisonOperator[0].tokenType === T.EqualSign
+      ctx.ComparisonOperator[0].tokenType === T.OpEQ
+      || ctx.ComparisonOperator[0].tokenType === T.EqualSign
     ) {
       this.addError(
         ctx,
@@ -758,10 +758,10 @@ export function blockifyTextAutomator(input) {
       const nestedBlock = commandDepth[key][0]?.children?.block;
       const nestedCommands = nestedBlock ? nestedBlock[0].children.command : [];
       foundChildren += nestedCommands
-        ? nestedCommands.map((c) => validatedCount(c) + 1).reduce(
-          (sum, val) => sum + val,
-          0,
-        )
+        ? nestedCommands.map(c => validatedCount(c) + 1).reduce(
+            (sum, val) => sum + val,
+            0,
+          )
         : 0;
 
       // Trailing newlines get turned into a command with a single EOF argument; we return -1 because one level up
@@ -776,15 +776,15 @@ export function blockifyTextAutomator(input) {
     if (!block.nest) {
       return 1;
     }
-    return 1 +
-      block.nest.map((b) => visitedCount(b)).reduce((sum, val) => sum + val, 0);
+    return 1
+      + block.nest.map(b => visitedCount(b)).reduce((sum, val) => sum + val, 0);
   };
   // Note: top-level structure is slightly different than the nesting structure
   const validatedBlocks = validator.parseResult.children.block[0].children
     .command
-    .map((c) => validatedCount(c) + 1)
+    .map(c => validatedCount(c) + 1)
     .reduce((sum, val) => sum + val, 0);
-  const visitedBlocks = blocks.map((b) => visitedCount(b)).reduce(
+  const visitedBlocks = blocks.map(b => visitedCount(b)).reduce(
     (sum, val) => sum + val,
     0,
   );

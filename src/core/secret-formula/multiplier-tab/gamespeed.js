@@ -28,7 +28,7 @@ export const gamespeed = {
     isActive: () => PlayerProgress.seenAlteredSpeed(),
     dilationEffect: () => (Effarig.isRunning ? Effarig.multDilation : 1),
     isDilated: true,
-    overlay: ["Δ", '<i class="fas fa-clock" />', '<i class="fas fa-circle" />'],
+    overlay: ["Δ", "<i class=\"fas fa-clock\" />", "<i class=\"fas fa-circle\" />"],
   },
   glyph: {
     name: "Equipped Glyphs",
@@ -42,16 +42,16 @@ export const gamespeed = {
     name: "Current Black Hole Speedup",
     multValue: () => MultiplierTabHelper.blackHoleSpeeds().current,
     isActive: () =>
-      BlackHole(1).isUnlocked && !BlackHoles.arePaused &&
-      !EternityChallenge(12).isRunning,
+      BlackHole(1).isUnlocked && !BlackHoles.arePaused
+      && !EternityChallenge(12).isRunning,
     icon: MultiplierTabIcons.BLACK_HOLE,
   },
   blackHoleAvg: {
     name: "Average Black Hole Speedup",
     multValue: () => MultiplierTabHelper.blackHoleSpeeds().average,
     isActive: () =>
-      BlackHole(1).isUnlocked && !BlackHoles.arePaused &&
-      !EternityChallenge(12).isRunning,
+      BlackHole(1).isUnlocked && !BlackHoles.arePaused
+      && !EternityChallenge(12).isRunning,
     icon: MultiplierTabIcons.BLACK_HOLE,
   },
   achievementMult: {
@@ -59,11 +59,11 @@ export const gamespeed = {
     multValue: () =>
       Math.pow(
         VUnlocks.achievementBH.effectOrDefault(1),
-        BlackHoles.list.countWhere((bh) => bh.isUnlocked),
+        BlackHoles.list.countWhere(bh => bh.isUnlocked),
       ),
     isActive: () =>
-      !BlackHoles.arePaused && VUnlocks.achievementBH.canBeApplied &&
-      !EternityChallenge(12).isRunning,
+      !BlackHoles.arePaused && VUnlocks.achievementBH.canBeApplied
+      && !EternityChallenge(12).isRunning,
     icon: MultiplierTabIcons.ACHIEVEMENT,
   },
   pulsing: {
@@ -73,8 +73,8 @@ export const gamespeed = {
         ? Math.max(Enslaved.autoReleaseSpeed / getGameSpeedupFactor(), 1)
         : getGameSpeedupFactor()),
     isActive: () =>
-      Enslaved.canRelease() && Enslaved.isAutoReleasing &&
-      !EternityChallenge(12).isRunning,
+      Enslaved.canRelease() && Enslaved.isAutoReleasing
+      && !EternityChallenge(12).isRunning,
     icon: MultiplierTabIcons.BH_PULSE,
   },
   singularity: {
@@ -82,8 +82,8 @@ export const gamespeed = {
     multValue: () =>
       SingularityMilestone.gamespeedFromSingularities.effectOrDefault(1),
     isActive: () =>
-      SingularityMilestone.gamespeedFromSingularities.canBeApplied &&
-      !EternityChallenge(12).isRunning,
+      SingularityMilestone.gamespeedFromSingularities.canBeApplied
+      && !EternityChallenge(12).isRunning,
     icon: MultiplierTabIcons.SINGULARITY,
   },
   pelle: {

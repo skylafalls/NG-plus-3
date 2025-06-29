@@ -87,12 +87,12 @@ export class RealityAutobuyerState extends AutobuyerState {
       AUTO_GLYPH_SCORE.LOWEST_ALCHEMY,
       AUTO_GLYPH_SCORE.ALCHEMY_VALUE,
     ];
-    const shouldCheckFilter = EffarigUnlock.glyphFilter.isUnlocked &&
-      !player.reality.hasCheckedFilter &&
-      !dontCheckModes.includes(AutoGlyphProcessor.scoreMode);
+    const shouldCheckFilter = EffarigUnlock.glyphFilter.isUnlocked
+      && !player.reality.hasCheckedFilter
+      && !dontCheckModes.includes(AutoGlyphProcessor.scoreMode);
     if (
-      isRealityAvailable() && player.options.autoRealityForFilter &&
-      shouldCheckFilter
+      isRealityAvailable() && player.options.autoRealityForFilter
+      && shouldCheckFilter
     ) {
       const gainedLevel = gainedGlyphLevel();
       const checkModes = [
@@ -102,9 +102,9 @@ export class RealityAutobuyerState extends AutobuyerState {
       ];
       const levelToCheck = checkModes.includes(this.mode)
         ? {
-          actualLevel: Decimal.min(this.glyph, Glyphs.levelCap),
-          rawLevel: DC.D1,
-        }
+            actualLevel: Decimal.min(this.glyph, Glyphs.levelCap),
+            rawLevel: DC.D1,
+          }
         : gainedLevel;
       const choices = GlyphSelection.glyphList(
         GlyphSelection.choiceCount,

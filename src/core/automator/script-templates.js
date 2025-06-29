@@ -83,8 +83,8 @@ export class ScriptTemplate {
         id: i + 1,
       }))
         .find(
-          (p) => (p.name === params.treePreset ||
-            p.id === Number(params.treePreset)),
+          p => (p.name === params.treePreset
+            || p.id === Number(params.treePreset)),
         );
       const preset = presetObj.name
         ? `name ${presetObj.name}`
@@ -99,15 +99,15 @@ export class ScriptTemplate {
       this.warnings.push("Tree contains invalid Study IDs");
     }
     if (
-      this.storedTreeObj.purchasedStudies.length <
-        this.storedTreeObj.selectedStudies.length
+      this.storedTreeObj.purchasedStudies.length
+      < this.storedTreeObj.selectedStudies.length
     ) {
       this.warnings.push(
         "Tree structure results in some unbought studies when imported with an empty tree",
       );
       if (!params.treeNowait) {
         this.warnings.push(
-          'Automator may possibly get stuck with "Keep buying Studies" setting',
+          "Automator may possibly get stuck with \"Keep buying Studies\" setting",
         );
       }
     }
@@ -191,8 +191,8 @@ export class ScriptTemplate {
     // We give it a bit of an extra "safety factor" of 5x in order to make sure it doesn't end up repeatedly going
     // to something like 1.6e308 due to poor rounding. The startingValue may fluctuate based on achievements, but
     // this can be a significant time save that we want to actually give the player if they have the e130 perk
-    const gapToEternity = Number.MAX_VALUE /
-      Currency.infinityPoints.startingValue.toNumber() * 5;
+    const gapToEternity = Number.MAX_VALUE
+      / Currency.infinityPoints.startingValue.toNumber() * 5;
     this.lines.push(`auto infinity ${
       this.format(
         Decimal.pow(gapToEternity, 1 / params.crunchesPerEternity),
@@ -317,11 +317,11 @@ export class ScriptTemplate {
    */
   templateUnlockDilation(params) {
     this.lines.push("// Template: Unlock Dilation");
-    this.lines.push('notify "Running Template Unlock Dilation"');
+    this.lines.push("notify \"Running Template Unlock Dilation\"");
     this.storeTreeData(params);
     if (
-      ![231, 232, 233, 234].some((s) =>
-        this.storedTreeObj.purchasedStudies.includes(TimeStudy(s))
+      ![231, 232, 233, 234].some(s =>
+        this.storedTreeObj.purchasedStudies.includes(TimeStudy(s)),
       )
     ) {
       this.warnings.push("Specified Study Tree cannot reach Dilation");

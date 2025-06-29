@@ -29,9 +29,9 @@ class VRunUnlockState extends GameMechanicState {
   }
 
   get canBeReduced() {
-    return this.completions < this.config.values.length &&
-      this.completions !== 0 &&
-      new Decimal(this.reduction).neq(
+    return this.completions < this.config.values.length
+      && this.completions !== 0
+      && new Decimal(this.reduction).neq(
         this.config.maxShardReduction(this.conditionBaseValue),
       );
   }
@@ -50,8 +50,8 @@ class VRunUnlockState extends GameMechanicState {
     if (this.config.isHard) {
       // The numbers come from inside of nextHardReductionCost, this is an effective bulk-buy factor
       const modifiedStepCount = (Math.pow(1.15, stepCount) - 1) / 0.15;
-      return modifiedStepCount *
-        V.nextHardReductionCost(
+      return modifiedStepCount
+        * V.nextHardReductionCost(
           player.celestials.v.goalReductionSteps[this.id],
         );
     }
@@ -96,18 +96,18 @@ class VRunUnlockState extends GameMechanicState {
     const playerData = player.celestials.v;
     const value = this.config.currentValue();
     if (
-      this.config.condition() &&
-      Decimal.gte(value, playerData.runRecords[this.id])
+      this.config.condition()
+      && Decimal.gte(value, playerData.runRecords[this.id])
     ) {
       playerData.runRecords[this.id] = value;
       playerData.runGlyphs[this.id] = Glyphs.copyForRecords(
-        Glyphs.active.filter((g) => g !== null),
+        Glyphs.active.filter(g => g !== null),
       );
     }
 
     while (
-      this.completions < this.config.values.length &&
-      Decimal.gte(playerData.runRecords[this.id], this.conditionValue)
+      this.completions < this.config.values.length
+      && Decimal.gte(playerData.runRecords[this.id], this.conditionValue)
     ) {
       if (!V.isFlipped && this.config.isHard) {
         continue;
@@ -191,7 +191,7 @@ export const VRunUnlocks = {
 
 export const VUnlocks = mapGameDataToObject(
   GameDatabase.celestials.v.unlocks,
-  (config) => new VUnlockState(config),
+  config => new VUnlockState(config),
 );
 
 export const V = {

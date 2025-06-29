@@ -117,8 +117,8 @@ export const Pelle = {
     AutomatorBackend.stop();
 
     // Force-unhide all tabs except for the shop tab, for which we retain the hide state instead
-    const shopTab = ~1 &
-      (1 << GameDatabase.tabs.find((t) => t.key === "shop").id);
+    const shopTab = ~1
+      & (1 << GameDatabase.tabs.find(t => t.key === "shop").id);
     player.options.hiddenTabBits &= shopTab;
 
     // Force unhide MOST subtabs, although some of the tabs get ignored since they don't contain any
@@ -130,7 +130,7 @@ export const Pelle = {
       "celestials",
     ]);
     const ignoredIDs = new Set(
-      GameDatabase.tabs.filter((t) => tabsToIgnore.has(t.key)).map((t) => t.id),
+      GameDatabase.tabs.filter(t => tabsToIgnore.has(t.key)).map(t => t.id),
     );
     for (let tabIndex = 0; tabIndex < GameDatabase.tabs.length; tabIndex++) {
       player.options.hiddenSubtabBits[tabIndex] &= ignoredIDs.has(tabIndex)
@@ -203,7 +203,7 @@ export const Pelle = {
       Currency.realityShards.add(
         this.realityShardGainPerSecond.times(diff).div(1000),
       );
-      PelleRifts.all.forEach((r) => r.fill(diff));
+      PelleRifts.all.forEach(r => r.fill(diff));
     }
   },
 
@@ -325,12 +325,12 @@ export const Pelle = {
   },
 
   get specialGlyphEffect() {
-    const isUnlocked = this.isDoomed &&
-      PelleRifts.chaos.milestones[1].canBeApplied;
+    const isUnlocked = this.isDoomed
+      && PelleRifts.chaos.milestones[1].canBeApplied;
     const description = this.getSpecialGlyphEffectDescription(
       this.activeGlyphType,
     );
-    const isActive = (type) => isUnlocked && this.activeGlyphType === type;
+    const isActive = type => isUnlocked && this.activeGlyphType === type;
     return {
       isUnlocked,
       description,
@@ -484,8 +484,8 @@ export const Pelle = {
   // Transition text from "from" to "to", stage is 0-1, 0 is fully "from" and 1 is fully "to"
   // Also adds more zalgo the bigger the stage
   transitionText(from, to, stage = 0) {
-    const len =
-      Math.round((from.length * (1 - stage) + to.length * stage) * 1e8) / 1e8;
+    const len
+      = Math.round((from.length * (1 - stage) + to.length * stage) * 1e8) / 1e8;
     const toInterval = len * (1 - stage);
     let req = toInterval;
     let str = "";
@@ -656,15 +656,13 @@ export class PelleUpgradeState extends SetPurchasableMechanicState {
 
 export const PelleUpgrade = mapGameDataToObject(
   GameDatabase.celestials.pelle.upgrades,
-  (
-    config,
-  ) => (config.rebuyable
+  config => (config.rebuyable
     ? new RebuyablePelleUpgradeState(config)
     : new PelleUpgradeState(config)),
 );
 
-PelleUpgrade.rebuyables = PelleUpgrade.all.filter((u) => u.isRebuyable);
-PelleUpgrade.singles = PelleUpgrade.all.filter((u) => !u.isRebuyable).sort((
+PelleUpgrade.rebuyables = PelleUpgrade.all.filter(u => u.isRebuyable);
+PelleUpgrade.singles = PelleUpgrade.all.filter(u => !u.isRebuyable).sort((
   a,
   b,
 ) => a.cost - b.cost);

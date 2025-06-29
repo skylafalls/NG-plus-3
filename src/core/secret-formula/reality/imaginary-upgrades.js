@@ -13,9 +13,9 @@ const rebuyable = (props) => {
       player.reality.imaginaryRebuyables[props.id].times(effect);
   }
   if (!props.formatEffect) {
-    props.formatEffect = (value) => `+${format(value, 2, 2)}`;
+    props.formatEffect = value => `+${format(value, 2, 2)}`;
   }
-  props.formatCost = (value) => format(value, 2, 0);
+  props.formatCost = value => format(value, 2, 0);
   return props;
 };
 
@@ -72,7 +72,7 @@ export const imaginaryUpgrades = [
     costMult: 500,
     description: () => `Increase the Reality Machine cap by ${formatX(1e100)}`,
     effect: 1e100,
-    formatEffect: (value) => `${formatX(value)}`,
+    formatEffect: value => `${formatX(value)}`,
     isDecimal: true,
   }),
   rebuyable({
@@ -83,7 +83,7 @@ export const imaginaryUpgrades = [
     description: () =>
       `Delay Glyph Instability starting level by ${formatInt(200)}`,
     effect: 200,
-    formatEffect: (value) => `+${formatInt(value)} levels`,
+    formatEffect: value => `+${formatInt(value)} levels`,
   }),
   rebuyable({
     name: "Hyperbolic Apeirogon",
@@ -92,7 +92,7 @@ export const imaginaryUpgrades = [
     costMult: 800,
     description: () => `Multiply Infinity Dimensions by ${format("1e100000")}`,
     effect: DC.E100000,
-    formatEffect: (value) => `${formatX(value)}`,
+    formatEffect: value => `${formatX(value)}`,
     isDecimal: true,
   }),
   rebuyable({
@@ -102,7 +102,7 @@ export const imaginaryUpgrades = [
     costMult: 1000,
     description: () => "Increase Galaxy strength",
     effect: 0.03,
-    formatEffect: (value) => `+${formatPercents(value)}`,
+    formatEffect: value => `+${formatPercents(value)}`,
   }),
   rebuyable({
     name: "Entropic Condensing",
@@ -111,7 +111,7 @@ export const imaginaryUpgrades = [
     costMult: 2000,
     description: () => "Increase Singularity gain",
     effect: 1,
-    formatEffect: (value) => `${formatX(value.add(1), 2)}`,
+    formatEffect: value => `${formatX(value.add(1), 2)}`,
   }),
   {
     name: "Suspicion of Interference",
@@ -128,7 +128,7 @@ export const imaginaryUpgrades = [
       player.records.totalAntimatter.max(1).log10().max(1).log10().div(100).add(
         1,
       ),
-    formatEffect: (value) => `${formatPow(value, 0, 4)}`,
+    formatEffect: value => `${formatPow(value, 0, 4)}`,
     isDisabledInDoomed: true,
   },
   {
@@ -142,14 +142,14 @@ export const imaginaryUpgrades = [
     ${formatInt(100)}`,
     hasFailed: () => false,
     checkRequirement: () =>
-      Object.values(player.celestials.effarig.glyphWeights).some((w) =>
-        w === 100
-      ) &&
-      gainedGlyphLevel().actualLevel.gte(9000),
+      Object.values(player.celestials.effarig.glyphWeights).some(w =>
+        w === 100,
+      )
+      && gainedGlyphLevel().actualLevel.gte(9000),
     checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
     description: "Gain free Dimboosts based on Imaginary rebuyable count",
     effect: () => ImaginaryUpgrades.totalRebuyables.mul(2e4),
-    formatEffect: (value) => `${format(value, 1)}`,
+    formatEffect: value => `${format(value, 1)}`,
     isDisabledInDoomed: true,
   },
   {
@@ -162,8 +162,8 @@ export const imaginaryUpgrades = [
     hasFailed: () => !Enslaved.isRunning,
     // This is for consistency with the UI, which displays an amplified "projected RM" value on the reality button
     checkRequirement: () =>
-      Enslaved.isRunning &&
-      MachineHandler.uncappedRM.times(simulatedRealityCount(false).add(1)).gte(
+      Enslaved.isRunning
+      && MachineHandler.uncappedRM.times(simulatedRealityCount(false).add(1)).gte(
         Number.MAX_VALUE,
       ),
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
@@ -173,22 +173,22 @@ export const imaginaryUpgrades = [
       ImaginaryUpgrades.totalRebuyables.div(20).add(1).add(
         ImaginaryUpgrades.totalSinglePurchase / 2,
       ),
-    formatEffect: (value) => `${formatX(value, 2, 1)}`,
+    formatEffect: value => `${formatX(value, 2, 1)}`,
     isDisabledInDoomed: true,
   },
   {
     name: "Recollection of Intrusion",
     id: 14,
     cost: 3.5e8,
-    formatCost: (x) => format(x, 1),
+    formatCost: x => format(x, 1),
     requirement: () =>
       `Reach a tickspeed of ${
         format("1e75000000000")
       } / sec within Eternity Challenge 5`,
     hasFailed: () => false,
     checkRequirement: () =>
-      EternityChallenge(5).isRunning &&
-      Tickspeed.perSecond.add(1).log(10).gte(7.5e10),
+      EternityChallenge(5).isRunning
+      && Tickspeed.perSecond.add(1).log(10).gte(7.5e10),
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     description: () =>
       `Raise all Dimension per-purchase multipliers to ${formatPow(1.5, 0, 1)}`,
@@ -204,8 +204,8 @@ export const imaginaryUpgrades = [
       ever having any 1st Infinity Dimensions`,
     hasFailed: () => player.requirementChecks.reality.maxID1.gt(0),
     checkRequirement: () =>
-      player.requirementChecks.reality.maxID1.eq(0) &&
-      player.antimatter.add(1).log10().gte(1.5e12),
+      player.requirementChecks.reality.maxID1.eq(0)
+      && player.antimatter.add(1).log10().gte(1.5e12),
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     canLock: true,
     // This upgrade lock acts in multiple different conditions, but isn't 100% foolproof and also blocks a few edge
@@ -224,7 +224,7 @@ export const imaginaryUpgrades = [
     name: "Massless Momentum",
     id: 16,
     cost: 3.5e9,
-    formatCost: (x) => format(x, 1),
+    formatCost: x => format(x, 1),
     requirement: () =>
       `Destabilize Lai'tela's Reality in under ${formatInt(30)} seconds twice`,
     hasFailed: () => false,
@@ -240,8 +240,8 @@ export const imaginaryUpgrades = [
       `Automatically condense at least ${formatInt(20)} Singularities at once`,
     hasFailed: () => false,
     checkRequirement: () =>
-      Singularity.singularitiesGained.gte(20) &&
-      Currency.darkEnergy.gte(
+      Singularity.singularitiesGained.gte(20)
+      && Currency.darkEnergy.gte(
         Singularity.cap.mul(
           SingularityMilestone.autoCondense.effectOrDefault(Infinity),
         ),
@@ -253,7 +253,7 @@ export const imaginaryUpgrades = [
     name: "Dimensional Symmetry",
     id: 18,
     cost: 1.5e10,
-    formatCost: (x) => format(x, 1),
+    formatCost: x => format(x, 1),
     requirement: () => `Have ${format(80000)} total Galaxies`,
     hasFailed: () => false,
     checkRequirement: () =>
@@ -266,7 +266,7 @@ export const imaginaryUpgrades = [
     name: "Deterministic Radiation",
     id: 19,
     cost: 2.8e10,
-    formatCost: (x) => format(x, 1),
+    formatCost: x => format(x, 1),
     requirement: () =>
       `Reach ${
         formatInt(3.85e6)
@@ -274,8 +274,8 @@ export const imaginaryUpgrades = [
       ${formatInt(8)} Time Studies in this Reality`,
     hasFailed: () => player.requirementChecks.reality.maxStudies > 8,
     checkRequirement: () =>
-      player.requirementChecks.reality.maxStudies <= 8 &&
-      Tickspeed.continuumValue.gte(3.85e6),
+      player.requirementChecks.reality.maxStudies <= 8
+      && Tickspeed.continuumValue.gte(3.85e6),
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     canLock: true,
     lockEvent: () => `purchase more than ${formatInt(8)} Time Studies`,
@@ -306,8 +306,8 @@ export const imaginaryUpgrades = [
       } antimatter with Continuum disabled for the entire Reality`,
     hasFailed: () => !player.requirementChecks.reality.noContinuum,
     checkRequirement: () =>
-      player.requirementChecks.reality.noContinuum &&
-      Currency.antimatter.value.max(1).log10().gte(7.4e12),
+      player.requirementChecks.reality.noContinuum
+      && Currency.antimatter.value.max(1).log10().gte(7.4e12),
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     canLock: true,
     lockEvent: "enable Continuum",
@@ -318,14 +318,14 @@ export const imaginaryUpgrades = [
         Decimal.pow(Decimal.log10(Currency.imaginaryMachines.value).sub(10), 3),
         1,
       ),
-    formatEffect: (value) => `${formatX(value, 2, 1)}`,
+    formatEffect: value => `${formatX(value, 2, 1)}`,
     isDisabledInDoomed: true,
   },
   {
     name: "Total Termination",
     id: 22,
     cost: 1.5e14,
-    formatCost: (x) => format(x, 1),
+    formatCost: x => format(x, 1),
     requirement: () =>
       `Reach ${format("1e150000000000")} antimatter in Effarig's Reality with
       at least ${formatInt(4)} Cursed Glyphs equipped`,
@@ -333,8 +333,8 @@ export const imaginaryUpgrades = [
     hasFailed: () =>
       !Effarig.isRunning || player.requirementChecks.reality.maxGlyphs > -10,
     checkRequirement: () =>
-      Effarig.isRunning && player.requirementChecks.reality.maxGlyphs < -10 &&
-      Currency.antimatter.value.add(1).log10().gte(1.5e11),
+      Effarig.isRunning && player.requirementChecks.reality.maxGlyphs < -10
+      && Currency.antimatter.value.add(1).log10().gte(1.5e11),
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     description: () =>
       `All Glyph Sacrifice totals are increased to ${format(1e100)}`,
@@ -351,12 +351,12 @@ export const imaginaryUpgrades = [
     hasFailed: () =>
       !Ra.isRunning || player.requirementChecks.reality.maxGlyphs > 0,
     checkRequirement: () =>
-      Ra.isRunning && player.requirementChecks.reality.maxGlyphs <= 0 &&
-      gainedGlyphLevel().actualLevel.gte(20000),
+      Ra.isRunning && player.requirementChecks.reality.maxGlyphs <= 0
+      && gainedGlyphLevel().actualLevel.gte(20000),
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     description: "Increase free Dimboost count based on Tesseract count",
     effect: () => Tesseracts.effectiveCount.pow(2).div(4).floor(),
-    formatEffect: (value) => `${formatX(value)}`,
+    formatEffect: value => `${formatX(value)}`,
     isDisabledInDoomed: true,
   },
   {
@@ -372,30 +372,30 @@ export const imaginaryUpgrades = [
     hasFailed: () =>
       !Ra.isRunning || player.requirementChecks.reality.slowestBH.gt(1e-300),
     checkRequirement: () =>
-      Ra.isRunning && player.requirementChecks.reality.slowestBH.lte(1e-300) &&
-      player.galaxies.gte(13000),
+      Ra.isRunning && player.requirementChecks.reality.slowestBH.lte(1e-300)
+      && player.galaxies.gte(13000),
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     canLock: true,
     // Three locking events: uninvert, discharge, and entering (but not auto-completing) EC12
     description: "Increase free Dimboost strength based on Singularity count",
     effect: () => Decimal.pow(player.celestials.laitela.singularities, 300),
-    formatEffect: (value) => `${formatX(value, 2, 1)}`,
+    formatEffect: value => `${formatX(value, 2, 1)}`,
     isDisabledInDoomed: true,
   },
   {
     name: "Omnipresent Obliteration",
     id: 25,
     cost: 1.6e15,
-    formatCost: (x) => format(x, 1),
+    formatCost: x => format(x, 1),
     requirement: () =>
       `Reach Reality in Lai'tela's Reality with all Dimensions disabled and
       at least ${formatInt(4)} empty Glyph slots`,
     hasFailed: () =>
-      !Laitela.isRunning || Laitela.maxAllowedDimension !== 0 ||
-      Glyphs.activeWithoutCompanion.length > 1,
+      !Laitela.isRunning || Laitela.maxAllowedDimension !== 0
+      || Glyphs.activeWithoutCompanion.length > 1,
     checkRequirement: () =>
-      Laitela.isRunning && Laitela.maxAllowedDimension === 0 &&
-      Glyphs.activeWithoutCompanion.length <= 1 && TimeStudy.reality.isBought,
+      Laitela.isRunning && Laitela.maxAllowedDimension === 0
+      && Glyphs.activeWithoutCompanion.length <= 1 && TimeStudy.reality.isBought,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     canLock: true,
     lockEvent: "equip another non-Companion Glyph",

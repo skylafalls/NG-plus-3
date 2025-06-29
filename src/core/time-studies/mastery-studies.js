@@ -15,15 +15,13 @@ export class MasteryStudyState extends TimeStudyState {
   }
 
   checkRequirement() {
-    const check = (
-      req,
-    ) => (typeof req === "number" ? MasteryStudy(req).isBought : req());
+    const check = req => (typeof req === "number" ? MasteryStudy(req).isBought : req());
     switch (this.config.reqType) {
       case TS_REQUIREMENT_TYPE.AT_LEAST_ONE: {
-        return this.config.requirement.some((r) => check(r));
+        return this.config.requirement.some(r => check(r));
       }
       case TS_REQUIREMENT_TYPE.ALL: {
-        return this.config.requirement.every((r) => check(r));
+        return this.config.requirement.every(r => check(r));
       }
       default: {
         throw Error(`Unrecognized TS requirement type: ${this.reqType}`);
@@ -55,11 +53,11 @@ export class MasteryStudyState extends TimeStudyState {
 
 MasteryStudyState.studies = mapGameData(
   GameDatabase.eternity.timeStudies.mastery,
-  (config) => new MasteryStudyState(config),
+  config => new MasteryStudyState(config),
 );
 
-MasteryStudyState.all = MasteryStudyState.studies.filter((e) =>
-  e !== undefined
+MasteryStudyState.all = MasteryStudyState.studies.filter(e =>
+  e !== undefined,
 );
 
 /**

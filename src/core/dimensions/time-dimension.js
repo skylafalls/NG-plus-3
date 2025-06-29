@@ -9,8 +9,8 @@ export function buySingleTimeDimension(tier, auto = false) {
       return false;
     }
     if (
-      RealityUpgrade(13).isLockingMechanics &&
-      Currency.eternityPoints.gte(dim.cost)
+      RealityUpgrade(13).isLockingMechanics
+      && Currency.eternityPoints.gte(dim.cost)
     ) {
       if (!auto) {
         RealityUpgrade(13).tryShowWarningModal();
@@ -25,8 +25,8 @@ export function buySingleTimeDimension(tier, auto = false) {
     return false;
   }
   if (
-    ImaginaryUpgrade(15).isLockingMechanics &&
-    EternityChallenge(7).completions > 0
+    ImaginaryUpgrade(15).isLockingMechanics
+    && EternityChallenge(7).completions > 0
   ) {
     if (!auto) {
       ImaginaryUpgrade(15).tryShowWarningModal(`purchase a Time Dimension,
@@ -129,8 +129,8 @@ export function buyMaxTimeDimension(
     }
   }
   if (
-    ImaginaryUpgrade(15).isLockingMechanics &&
-    EternityChallenge(7).completions > 0
+    ImaginaryUpgrade(15).isLockingMechanics
+    && EternityChallenge(7).completions > 0
   ) {
     if (!isMaxAll) {
       ImaginaryUpgrade(15).tryShowWarningModal(`purchase a Time Dimension,
@@ -167,11 +167,9 @@ export function maxAllTimeDimensions() {
   }
 
   // Loop buying the cheapest dimension possible; explicit infinite loops make me nervous
-  const tierCheck = (
-    tier,
-  ) => (RealityUpgrade(13).isLockingMechanics ? tier < 5 : true);
-  const purchasableDimensions = TimeDimensions.all.filter((d) =>
-    d.isUnlocked && tierCheck(d.tier)
+  const tierCheck = tier => (RealityUpgrade(13).isLockingMechanics ? tier < 5 : true);
+  const purchasableDimensions = TimeDimensions.all.filter(d =>
+    d.isUnlocked && tierCheck(d.tier),
   );
   for (let stop = 0; stop < 1000; stop++) {
     const cheapestDim = purchasableDimensions.reduce((
@@ -248,7 +246,7 @@ class TimeDimensionState extends DimensionState {
     ];
     this._baseCost = BASE_COSTS[tier];
     const COST_MULTS = [null, 3, 9, 27, 81, 24300, 72900, 218700, 656100].map(
-      (e) => (e ? new Decimal(e) : null),
+      e => (e ? new Decimal(e) : null),
     );
     this._costMultiplier = COST_MULTS[tier];
 
@@ -262,7 +260,7 @@ class TimeDimensionState extends DimensionState {
       689,
       562,
       456,
-    ].map((e) => (e ? new Decimal(e) : null));
+    ].map(e => (e ? new Decimal(e) : null));
     this._e6000ScalingAmount = E6000_SCALING_AMOUNTS[tier];
     const COST_THRESHOLDS = [DC.NUMMAX, DC.E1300, DC.E6000];
     this._costIncreaseThresholds = COST_THRESHOLDS;
@@ -368,9 +366,9 @@ class TimeDimensionState extends DimensionState {
 
   get productionPerSecond() {
     if (
-      EternityChallenge(1).isRunning || EternityChallenge(10).isRunning ||
-      QuantumChallenge(8).isRunning ||
-      (Laitela.isRunning && this.tier > Laitela.maxAllowedDimension)
+      EternityChallenge(1).isRunning || EternityChallenge(10).isRunning
+      || QuantumChallenge(8).isRunning
+      || (Laitela.isRunning && this.tier > Laitela.maxAllowedDimension)
     ) {
       return DC.D0;
     }
@@ -401,9 +399,9 @@ class TimeDimensionState extends DimensionState {
   get isProducing() {
     const tier = this.tier;
     if (
-      EternityChallenge(1).isRunning ||
-      EternityChallenge(10).isRunning ||
-      (Laitela.isRunning && tier > Laitela.maxAllowedDimension)
+      EternityChallenge(1).isRunning
+      || EternityChallenge(10).isRunning
+      || (Laitela.isRunning && tier > Laitela.maxAllowedDimension)
     ) {
       return false;
     }
@@ -438,9 +436,9 @@ class TimeDimensionState extends DimensionState {
   }
 
   get requirementReached() {
-    return this._tier < 5 ||
-      (TimeStudy.timeDimension(this._tier).isAffordable &&
-        TimeStudy.timeDimension(this._tier - 1).isBought);
+    return this._tier < 5
+      || (TimeStudy.timeDimension(this._tier).isAffordable
+        && TimeStudy.timeDimension(this._tier - 1).isBought);
   }
 
   tryUnlock() {

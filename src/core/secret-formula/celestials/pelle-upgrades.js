@@ -1,4 +1,4 @@
-const formatCost = (c) => format(c, 2);
+const formatCost = c => format(c, 2);
 
 const expWithIncreasedScale = (base1, base2, incScale, coeff, x) =>
   Decimal.pow(base1, x).times(Decimal.pow(base2, x.sub(incScale)).max(1)).times(
@@ -25,40 +25,40 @@ export const pelleUpgrades = {
     id: "antimatterDimensionMult",
     description: "Gain a multiplier to Antimatter Dimensions",
     cost: [10, 1e3, 41, 100],
-    effect: (x) => Pelle.antimatterDimensionMult(x),
-    formatEffect: (x) => formatX(x, 2, 2),
+    effect: x => Pelle.antimatterDimensionMult(x),
+    formatEffect: x => formatX(x, 2, 2),
     cap: 44,
   }),
   timeSpeedMult: rebuyable({
     id: "timeSpeedMult",
     description: "Gain a multiplier to game speed",
     cost: [20, 1e3, 30, 1e5],
-    effect: (x) => Decimal.pow(1.3, x),
-    formatEffect: (x) => formatX(x, 2, 2),
+    effect: x => Decimal.pow(1.3, x),
+    formatEffect: x => formatX(x, 2, 2),
     cap: 35,
   }),
   glyphLevels: rebuyable({
     id: "glyphLevels",
     description: "Increase the Glyph level allowed in Pelle",
     cost: [30, 1e3, 25, 1e15],
-    effect: (x) => Decimal.floor((x.add(1).mul(3).sub(2)).pow(1.6)),
-    formatEffect: (x) => formatInt(x),
+    effect: x => Decimal.floor((x.add(1).mul(3).sub(2)).pow(1.6)),
+    formatEffect: x => formatInt(x),
     cap: 26,
   }),
   infConversion: rebuyable({
     id: "infConversion",
     description: "Increase Infinity Power conversion rate",
     cost: [40, 1e3, 20, 1e18],
-    effect: (x) => x.mul(3.5).pow(0.37),
-    formatEffect: (x) => `+${format(x, 2, 2)}`,
+    effect: x => x.mul(3.5).pow(0.37),
+    formatEffect: x => `+${format(x, 2, 2)}`,
     cap: 21,
   }),
   galaxyPower: rebuyable({
     id: "galaxyPower",
     description: "Multiply Galaxy power",
     cost: [1000, 1e3, 10, 1e30],
-    effect: (x) => x.div(50).add(1),
-    formatEffect: (x) => formatX(x, 2, 2),
+    effect: x => x.div(50).add(1),
+    formatEffect: x => formatX(x, 2, 2),
     cap: 9,
   }),
   antimatterDimAutobuyers1: {

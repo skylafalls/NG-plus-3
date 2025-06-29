@@ -40,8 +40,8 @@ function compileConditionLoop(evalComparison, commands, ctx, isUntil) {
         AutomatorData.logCommandEvent(
           `Checked ${parseConditionalIntoText(ctx)} (${isUntil}),
           exiting loop at line ${
-            AutomatorBackend.translateLineNumber(ctx.RCurly[0].startLine + 1) -
-            1
+            AutomatorBackend.translateLineNumber(ctx.RCurly[0].startLine + 1)
+            - 1
           }
           (end of ${loopStr} loop)`,
           ctx.startLine,
@@ -106,7 +106,7 @@ function findLastPrestigeRecord(layer) {
 export const AutomatorCommands = [
   {
     id: "auto",
-    rule: ($) => () => {
+    rule: $ => () => {
       $.CONSUME(T.Auto);
       $.CONSUME(T.PrestigeEvent);
       $.OR([
@@ -127,8 +127,8 @@ export const AutomatorCommands = [
       ctx.startLine = ctx.Auto[0].startLine;
       if (ctx.PrestigeEvent && ctx.currencyAmount) {
         const desired$ = ctx.PrestigeEvent[0].tokenType.$prestigeCurrency;
-        const specified$ =
-          ctx.currencyAmount[0].children.AutomatorCurrency[0].tokenType.name;
+        const specified$
+          = ctx.currencyAmount[0].children.AutomatorCurrency[0].tokenType.name;
         if (desired$ !== specified$) {
           V.addError(
             ctx.currencyAmount,
@@ -227,10 +227,10 @@ export const AutomatorCommands = [
       const fixedAmount = ctx.currencyAmount
         ? ctx.currencyAmount[0].children.$value
         : undefined;
-      const durationMode =
-        ctx.PrestigeEvent[0].tokenType.$autobuyerDurationMode;
-      const xHighestMode =
-        ctx.PrestigeEvent[0].tokenType.$autobuyerXHighestMode;
+      const durationMode
+        = ctx.PrestigeEvent[0].tokenType.$autobuyerDurationMode;
+      const xHighestMode
+        = ctx.PrestigeEvent[0].tokenType.$autobuyerXHighestMode;
       const fixedMode = ctx.PrestigeEvent[0].tokenType.$autobuyerCurrencyMode;
       const autobuyer = ctx.PrestigeEvent[0].tokenType.$autobuyer();
       return () => {
@@ -284,11 +284,11 @@ export const AutomatorCommands = [
         ? ctx.xHighest[0].children.$value
         : undefined;
       const fixedAmount = ctx.currencyAmount
-        ? `${ctx.currencyAmount[0].children.NumberLiteral[0].image}` +
-          ` ${
-            ctx.currencyAmount[0].children.AutomatorCurrency[0].image
-              .toUpperCase()
-          }`
+        ? `${ctx.currencyAmount[0].children.NumberLiteral[0].image}`
+        + ` ${
+          ctx.currencyAmount[0].children.AutomatorCurrency[0].image
+            .toUpperCase()
+        }`
         : undefined;
       const on = Boolean(ctx.On);
       let input = "";
@@ -312,7 +312,7 @@ export const AutomatorCommands = [
   },
   {
     id: "blackHole",
-    rule: ($) => () => {
+    rule: $ => () => {
       $.CONSUME(T.BlackHole);
       $.OR([
         { ALT: () => $.CONSUME(T.On) },
@@ -333,24 +333,24 @@ export const AutomatorCommands = [
         if (BlackHole(1).isUnlocked) {
           blackHoleEvent = `Black Holes toggled ${ctx.On ? "ON" : "OFF"}`;
         } else if (Enslaved.isRunning || Pelle.isDisabled("blackhole")) {
-          blackHoleEvent =
-            "Black Hole command ignored because BH is disabled in your current Reality";
+          blackHoleEvent
+            = "Black Hole command ignored because BH is disabled in your current Reality";
         } else {
-          blackHoleEvent =
-            "Black Hole command ignored because BH is not unlocked";
+          blackHoleEvent
+            = "Black Hole command ignored because BH is not unlocked";
         }
         AutomatorData.logCommandEvent(blackHoleEvent, ctx.startLine);
         return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
       };
     },
-    blockify: (ctx) => ({
+    blockify: ctx => ({
       singleSelectionInput: ctx.On ? "ON" : "OFF",
       ...automatorBlocksMap["BLACK HOLE"],
     }),
   },
   {
     id: "blob",
-    rule: ($) => () => {
+    rule: $ => () => {
       $.CONSUME(T.Blob);
     },
     validate: (ctx) => {
@@ -365,7 +365,7 @@ export const AutomatorCommands = [
   },
   {
     id: "comment",
-    rule: ($) => () => {
+    rule: $ => () => {
       $.CONSUME(T.Comment);
     },
     validate: (ctx) => {
@@ -374,14 +374,14 @@ export const AutomatorCommands = [
     },
     // Comments should be no-ops
     compile: () => () => AUTOMATOR_COMMAND_STATUS.SKIP_INSTRUCTION,
-    blockify: (ctx) => ({
+    blockify: ctx => ({
       ...automatorBlocksMap.COMMENT,
       singleTextInput: ctx.Comment[0].image.replace(/(#|\/\/)\s?/u, ""),
     }),
   },
   {
     id: "ifBlock",
-    rule: ($) => () => {
+    rule: $ => () => {
       $.CONSUME(T.If);
       $.SUBRULE($.comparison);
       $.CONSUME(T.LCurly);
@@ -445,7 +445,7 @@ export const AutomatorCommands = [
   },
   {
     id: "notify",
-    rule: ($) => () => {
+    rule: $ => () => {
       $.CONSUME(T.Notify);
       $.OR([
         { ALT: () => $.CONSUME(T.StringLiteral) },
@@ -467,7 +467,7 @@ export const AutomatorCommands = [
         return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
       };
     },
-    blockify: (ctx) => ({
+    blockify: ctx => ({
       ...automatorBlocksMap.NOTIFY,
       singleTextInput:
         (ctx.StringLiteral || ctx.StringLiteralSingleQuote)[0].image,
@@ -476,7 +476,7 @@ export const AutomatorCommands = [
   {
     // Note: this has to appear before pause
     id: "pauseTime",
-    rule: ($) => () => {
+    rule: $ => () => {
       $.CONSUME(T.Pause);
       $.OR([
         { ALT: () => $.SUBRULE($.duration) },
@@ -563,7 +563,7 @@ export const AutomatorCommands = [
   },
   {
     id: "prestige",
-    rule: ($) => () => {
+    rule: $ => () => {
       $.CONSUME(T.PrestigeEvent);
       $.OPTION(() => $.CONSUME(T.Nowait));
       $.OPTION1(() => $.CONSUME(T.Respec));
@@ -572,8 +572,8 @@ export const AutomatorCommands = [
       ctx.startLine = ctx.PrestigeEvent[0].startLine;
 
       if (
-        ctx.PrestigeEvent && ctx.PrestigeEvent[0].tokenType === T.Eternity &&
-        !EternityMilestone.autobuyerEternity.isReached
+        ctx.PrestigeEvent && ctx.PrestigeEvent[0].tokenType === T.Eternity
+        && !EternityMilestone.autobuyerEternity.isReached
       ) {
         V.addError(
           ctx.PrestigeEvent,
@@ -590,8 +590,8 @@ export const AutomatorCommands = [
       }
 
       if (
-        ctx.PrestigeEvent && ctx.PrestigeEvent[0].tokenType === T.Reality &&
-        !RealityUpgrade(25).isBought
+        ctx.PrestigeEvent && ctx.PrestigeEvent[0].tokenType === T.Reality
+        && !RealityUpgrade(25).isBought
       ) {
         V.addError(
           ctx.PrestigeEvent,
@@ -602,8 +602,8 @@ export const AutomatorCommands = [
       }
 
       if (
-        ctx.PrestigeEvent && ctx.PrestigeEvent[0].tokenType === T.Infinity &&
-        ctx.Respec
+        ctx.PrestigeEvent && ctx.PrestigeEvent[0].tokenType === T.Infinity
+        && ctx.Respec
       ) {
         V.addError(
           ctx.Respec,
@@ -641,13 +641,13 @@ export const AutomatorCommands = [
         // In the prestigeToken.$prestige() line above, performing a reality reset has code internal to the call
         // which makes the automator restart. However, in that case we also need to update the execution state here,
         // or else the restarted automator will immediately advance lines and always skip the first command
-        return (prestigeName === "REALITY" &&
-            AutomatorBackend.state.forceRestart)
+        return (prestigeName === "REALITY"
+          && AutomatorBackend.state.forceRestart)
           ? AUTOMATOR_COMMAND_STATUS.RESTART
           : AUTOMATOR_COMMAND_STATUS.NEXT_TICK_NEXT_INSTRUCTION;
       };
     },
-    blockify: (ctx) => ({
+    blockify: ctx => ({
       ...automatorBlocksMap[
         ctx.PrestigeEvent[0].tokenType.name.toUpperCase()
       ],
@@ -657,7 +657,7 @@ export const AutomatorCommands = [
   },
   {
     id: "startDilation",
-    rule: ($) => () => {
+    rule: $ => () => {
       $.CONSUME(T.Start);
       $.CONSUME(T.Dilation);
     },
@@ -665,7 +665,7 @@ export const AutomatorCommands = [
       ctx.startLine = ctx.Start[0].startLine;
       return true;
     },
-    compile: (ctx) => () => {
+    compile: ctx => () => {
       if (player.dilation.active) {
         AutomatorData.logCommandEvent(
           "Start Dilation encountered but ignored due to already being dilated",
@@ -686,7 +686,7 @@ export const AutomatorCommands = [
   },
   {
     id: "startEC",
-    rule: ($) => () => {
+    rule: $ => () => {
       $.CONSUME(T.Start);
       $.SUBRULE($.eternityChallenge);
     },
@@ -720,7 +720,7 @@ export const AutomatorCommands = [
         return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION;
       };
     },
-    blockify: (ctx) => ({
+    blockify: ctx => ({
       singleSelectionInput: "EC",
       singleTextInput: ctx.eternityChallenge[0].children.$ecNumber,
       ...automatorBlocksMap.START,
@@ -728,7 +728,7 @@ export const AutomatorCommands = [
   },
   {
     id: "storeGameTime",
-    rule: ($) => () => {
+    rule: $ => () => {
       $.CONSUME(T.StoreGameTime);
       $.OR([
         { ALT: () => $.CONSUME(T.On) },
@@ -778,14 +778,14 @@ export const AutomatorCommands = [
         return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
       };
     },
-    blockify: (ctx) => ({
+    blockify: ctx => ({
       singleSelectionInput: ctx.Use ? "USE" : (ctx.On ? "ON" : "OFF"),
       ...automatorBlocksMap["STORE GAME TIME"],
     }),
   },
   {
     id: "studiesBuy",
-    rule: ($) => () => {
+    rule: $ => () => {
       $.CONSUME(T.Studies);
       $.OPTION(() => $.CONSUME(T.Nowait));
       $.CONSUME(T.Purchase);
@@ -908,7 +908,7 @@ export const AutomatorCommands = [
         return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
       };
     },
-    blockify: (ctx) => ({
+    blockify: ctx => ({
       singleTextInput: ctx.$studies.image,
       nowait: ctx.Nowait !== undefined,
       ...automatorBlocksMap["STUDIES PURCHASE"],
@@ -916,7 +916,7 @@ export const AutomatorCommands = [
   },
   {
     id: "studiesLoad",
-    rule: ($) => () => {
+    rule: $ => () => {
       $.CONSUME(T.Studies);
       $.OPTION(() => $.CONSUME(T.Nowait));
       $.CONSUME(T.Load);
@@ -966,8 +966,8 @@ export const AutomatorCommands = [
         }
 
         // If it's a name, we check to make sure it exists:
-        const presetIndex = player.timestudy.presets.findIndex((e) =>
-          e.name === split[1]
+        const presetIndex = player.timestudy.presets.findIndex(e =>
+          e.name === split[1],
         ) + 1;
         if (presetIndex === 0) {
           V.addError(
@@ -990,20 +990,20 @@ export const AutomatorCommands = [
         const imported = new TimeStudyTree(
           player.timestudy.presets[presetIndex - 1].studies,
         );
-        const beforeCount =
-          GameCache.currentStudyTree.value.purchasedStudies.length;
+        const beforeCount
+          = GameCache.currentStudyTree.value.purchasedStudies.length;
         TimeStudyTree.commitToGameState(
           imported.purchasedStudies,
           true,
           imported.startEC,
         );
-        const afterCount =
-          GameCache.currentStudyTree.value.purchasedStudies.length;
+        const afterCount
+          = GameCache.currentStudyTree.value.purchasedStudies.length;
         // Check if there are still any unbought studies from the preset after attempting to commit it all;
         // if there are then we keep trying on this line until there aren't, unless we are given nowait
         const missingStudyCount = imported.purchasedStudies
-          .filter((s) =>
-            !GameCache.currentStudyTree.value.purchasedStudies.includes(s)
+          .filter(s =>
+            !GameCache.currentStudyTree.value.purchasedStudies.includes(s),
           ).length;
 
         const presetRepresentation = ctx.Name
@@ -1027,7 +1027,7 @@ export const AutomatorCommands = [
           : AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION;
       };
     },
-    blockify: (ctx) => ({
+    blockify: ctx => ({
       singleSelectionInput: ctx.Name ? "NAME" : "ID",
       singleTextInput: ctx.Name
         ? player.timestudy.presets[ctx.$presetIndex - 1].name
@@ -1038,7 +1038,7 @@ export const AutomatorCommands = [
   },
   {
     id: "studiesRespec",
-    rule: ($) => () => {
+    rule: $ => () => {
       $.CONSUME(T.Studies);
       $.CONSUME(T.Respec);
     },
@@ -1046,7 +1046,7 @@ export const AutomatorCommands = [
       ctx.startLine = ctx.Studies[0].startLine;
       return true;
     },
-    compile: (ctx) => () => {
+    compile: ctx => () => {
       player.respec = true;
       AutomatorData.logCommandEvent("Turned study respec ON", ctx.startLine);
       return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
@@ -1055,7 +1055,7 @@ export const AutomatorCommands = [
   },
   {
     id: "unlockDilation",
-    rule: ($) => () => {
+    rule: $ => () => {
       $.CONSUME(T.Unlock);
       $.OPTION(() => $.CONSUME(T.Nowait));
       $.CONSUME(T.Dilation);
@@ -1089,7 +1089,7 @@ export const AutomatorCommands = [
         return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION;
       };
     },
-    blockify: (ctx) => ({
+    blockify: ctx => ({
       singleSelectionInput: "DILATION",
       nowait: ctx.Nowait !== undefined,
       ...automatorBlocksMap.UNLOCK,
@@ -1097,7 +1097,7 @@ export const AutomatorCommands = [
   },
   {
     id: "unlockEC",
-    rule: ($) => () => {
+    rule: $ => () => {
       $.CONSUME(T.Unlock);
       $.OPTION(() => $.CONSUME(T.Nowait));
       $.SUBRULE($.eternityChallenge);
@@ -1135,7 +1135,7 @@ export const AutomatorCommands = [
         return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION;
       };
     },
-    blockify: (ctx) => ({
+    blockify: ctx => ({
       singleSelectionInput: "EC",
       singleTextInput: ctx.eternityChallenge[0].children.$ecNumber,
       nowait: ctx.Nowait !== undefined,
@@ -1144,7 +1144,7 @@ export const AutomatorCommands = [
   },
   {
     id: "untilLoop",
-    rule: ($) => () => {
+    rule: $ => () => {
       $.CONSUME(T.Until);
       $.OR([
         { ALT: () => $.SUBRULE($.comparison) },
@@ -1236,7 +1236,7 @@ export const AutomatorCommands = [
   },
   {
     id: "waitCondition",
-    rule: ($) => () => {
+    rule: $ => () => {
       $.CONSUME(T.Wait);
       $.SUBRULE($.comparison);
     },
@@ -1291,7 +1291,7 @@ export const AutomatorCommands = [
   },
   {
     id: "waitEvent",
-    rule: ($) => () => {
+    rule: $ => () => {
       $.CONSUME(T.Wait);
       $.CONSUME(T.PrestigeEvent);
     },
@@ -1330,14 +1330,14 @@ export const AutomatorCommands = [
         return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION;
       };
     },
-    blockify: (ctx) => ({
+    blockify: ctx => ({
       genericInput1: ctx.PrestigeEvent[0].tokenType.name.toUpperCase(),
       ...automatorBlocksMap.WAIT,
     }),
   },
   {
     id: "waitBlackHole",
-    rule: ($) => () => {
+    rule: $ => () => {
       $.CONSUME(T.Wait);
       $.CONSUME(T.BlackHole);
       $.OR([
@@ -1349,7 +1349,7 @@ export const AutomatorCommands = [
       ctx.startLine = ctx.Wait[0].startLine;
       return true;
     },
-    compile: (ctx) => () => {
+    compile: ctx => () => {
       const off = Boolean(ctx.Off);
       // This input has the format "bh#"
       const holeID = ctx.BlackHoleStr
@@ -1380,7 +1380,7 @@ export const AutomatorCommands = [
       AutomatorData.isWaiting = true;
       return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION;
     },
-    blockify: (ctx) => ({
+    blockify: ctx => ({
       genericInput1: "BLACK HOLE",
       // Note: In this particular case we aren't actually storing a comparison operator. This is still okay
       // because internally this is just the variable for the second slot and has no special treatment beyond that
@@ -1392,7 +1392,7 @@ export const AutomatorCommands = [
   },
   {
     id: "whileLoop",
-    rule: ($) => () => {
+    rule: $ => () => {
       $.CONSUME(T.While);
       $.SUBRULE($.comparison);
       $.CONSUME(T.LCurly);
@@ -1426,14 +1426,14 @@ export const AutomatorCommands = [
   },
   {
     id: "stop",
-    rule: ($) => () => {
+    rule: $ => () => {
       $.CONSUME(T.Stop);
     },
     validate: (ctx) => {
       ctx.startLine = ctx.Stop[0].startLine;
       return true;
     },
-    compile: (ctx) => () => {
+    compile: ctx => () => {
       AutomatorData.logCommandEvent(
         "Automator execution stopped with STOP command",
         ctx.startLine,

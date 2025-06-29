@@ -24,9 +24,9 @@ class SubtabState {
     if (Enslaved.isRunning || Pelle.hasGalaxyGenerator) {
       return false;
     }
-    return ((player.options.hiddenSubtabBits[this._parent.id] &
-      (1 << this.id)) !== 0) &&
-      this.hidable;
+    return ((player.options.hiddenSubtabBits[this._parent.id]
+      & (1 << this.id)) !== 0)
+    && this.hidable;
   }
 
   get isUnlocked() {
@@ -34,8 +34,8 @@ class SubtabState {
   }
 
   get isAvailable() {
-    return !this.isPermanentlyHidden &&
-      (this.isOpen || !this.isHidden && this.isUnlocked);
+    return !this.isPermanentlyHidden
+      && (this.isOpen || !this.isHidden && this.isUnlocked);
   }
 
   get hasNotification() {
@@ -61,8 +61,8 @@ class SubtabState {
 
   toggleVisibility() {
     if (
-      this._parent.id === Tabs.current.id &&
-      this.id === Tabs.current._currentSubtab.id
+      this._parent.id === Tabs.current.id
+      && this.id === Tabs.current._currentSubtab.id
     ) {
       return;
     }
@@ -77,12 +77,12 @@ class SubtabState {
 }
 
 function findLastOpenSubtab(tabId, subtabs) {
-  return subtabs.find((s) => s.id === player.options.lastOpenSubtab[tabId]) ??
-    subtabs[0];
+  return subtabs.find(s => s.id === player.options.lastOpenSubtab[tabId])
+    ?? subtabs[0];
 }
 
 function cycleThroughSubtabs(subtabs, currentSubtab) {
-  const availableTabs = subtabs.filter((tab) => tab.isAvailable);
+  const availableTabs = subtabs.filter(tab => tab.isAvailable);
   const currentIndex = availableTabs.indexOf(currentSubtab);
   const direction = ui.view.shiftDown ? -1 : 1;
   let newIndex = currentIndex + direction;
@@ -129,9 +129,9 @@ class TabState {
     if (Enslaved.isRunning || Pelle.hasGalaxyGenerator) {
       return false;
     }
-    const hasVisibleSubtab = this.subtabs.some((t) => t.isAvailable);
-    return (((player.options.hiddenTabBits & (1 << this.id)) !== 0) ||
-      !hasVisibleSubtab) && this.hidable;
+    const hasVisibleSubtab = this.subtabs.some(t => t.isAvailable);
+    return (((player.options.hiddenTabBits & (1 << this.id)) !== 0)
+      || !hasVisibleSubtab) && this.hidable;
   }
 
   get isUnlocked() {
@@ -139,8 +139,8 @@ class TabState {
   }
 
   get isAvailable() {
-    return !this.isPermanentlyHidden &&
-      (this.isOpen || !this.isHidden && this.isUnlocked);
+    return !this.isPermanentlyHidden
+      && (this.isOpen || !this.isHidden && this.isUnlocked);
   }
 
   get isOpen() {
@@ -148,7 +148,7 @@ class TabState {
   }
 
   get hasNotification() {
-    return this.subtabs.some((tab) => tab.hasNotification);
+    return this.subtabs.some(tab => tab.hasNotification);
   }
 
   show(manual, subtab) {
@@ -203,7 +203,7 @@ class TabState {
   }
 
   resetToAvailable() {
-    this._currentSubtab = this.subtabs.find((tab) => tab.isAvailable);
+    this._currentSubtab = this.subtabs.find(tab => tab.isAvailable);
     if (this._currentSubtab === undefined) {
       this._currentSubtab = this.subtabs[0];
       this._currentSubtab.unhideTab();
@@ -211,20 +211,20 @@ class TabState {
   }
 
   resetToUnlocked() {
-    this._currentSubtab = this.subtabs.find((tab) => tab.isUnlocked);
+    this._currentSubtab = this.subtabs.find(tab => tab.isUnlocked);
   }
 }
 
 export const Tab = GameDatabase.tabs.mapToObject(
-  (config) => config.key,
-  (config) => new TabState(config),
+  config => config.key,
+  config => new TabState(config),
 );
 
-export const Tabs = function () {
+export const Tabs = (function () {
   return {
     all: Object.values(Tab),
     get current() {
-      return Tabs.all.find((tab) => tab.isOpen);
+      return Tabs.all.find(tab => tab.isOpen);
     },
     oldUI: [
       Tab.dimensions,
@@ -256,12 +256,12 @@ export const Tabs = function () {
       return ui.view.newUI ? this.newUI : this.oldUI;
     },
   };
-}();
+}());
 
 const checkTabVisibilityForSecretAchievement = () => {
   // Checks if every unlocked tab that is hidable is hidden
   if (
-    Tabs.all.filter((t) => t.isUnlocked && t.hidable).every((t) => t.isHidden)
+    Tabs.all.filter(t => t.isUnlocked && t.hidable).every(t => t.isHidden)
   ) {
     SecretAchievement(47).unlock();
   }

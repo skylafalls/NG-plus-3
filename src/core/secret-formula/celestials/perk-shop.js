@@ -5,8 +5,8 @@ function rebuyableCost(initialCost, increment, id) {
   );
 }
 function rebuyable(config) {
-  const { id, otherReq, cap, costCap, description, formatEffect, formatCost } =
-    config;
+  const { id, otherReq, cap, costCap, description, formatEffect, formatCost }
+    = config;
   return {
     id,
     cost:
@@ -31,9 +31,9 @@ export const perkShop = {
     increment: 2,
     description: () =>
       `Increase pre-instability Glyph levels by ${formatPercents(0.05)}`,
-    effect: (bought) => Decimal.pow(1.05, bought),
-    formatEffect: (value) => formatX(value, 2, 2),
-    formatCost: (value) => format(value, 2),
+    effect: bought => Decimal.pow(1.05, bought),
+    formatEffect: value => formatX(value, 2, 2),
+    formatCost: value => format(value, 2),
     costCap: () => (Ra.unlocks.perkShopIncrease.canBeApplied ? 1048576 : 2048),
     cap: () => (Ra.unlocks.perkShopIncrease.canBeApplied
       ? Decimal.pow(1.05, 20)
@@ -44,9 +44,9 @@ export const perkShop = {
     initialCost: 1,
     increment: 2,
     description: "Double Reality Machine gain",
-    effect: (bought) => Decimal.pow(2, bought),
-    formatEffect: (value) => formatX(value, 2),
-    formatCost: (value) => format(value, 2),
+    effect: bought => Decimal.pow(2, bought),
+    formatEffect: value => formatX(value, 2),
+    formatCost: value => format(value, 2),
     costCap: () => (Ra.unlocks.perkShopIncrease.canBeApplied ? 1048576 : 2048),
     cap: () => (Ra.unlocks.perkShopIncrease.canBeApplied ? 1048576 : 2048),
   }),
@@ -56,9 +56,9 @@ export const perkShop = {
     increment: 2,
     description:
       "Dilation autobuyers buy twice as many Dilation Upgrades at once.",
-    effect: (bought) => Decimal.pow(2, bought),
-    formatEffect: (value) => formatX(value, 2),
-    formatCost: (value) => format(value, 2),
+    effect: bought => Decimal.pow(2, bought),
+    formatEffect: value => formatX(value, 2),
+    formatCost: value => format(value, 2),
     costCap: () => (Ra.unlocks.perkShopIncrease.canBeApplied ? 1638400 : 1600),
     cap: () => (Ra.unlocks.perkShopIncrease.canBeApplied ? 16384 : 16),
   }),
@@ -69,9 +69,9 @@ export const perkShop = {
     description: () =>
       `Infinity Dimension, Time Dimension, Dilation,
       and Replicanti autobuyers are ${formatX(2)} faster.`,
-    effect: (bought) => Decimal.pow(2, bought).toNumber(),
-    formatEffect: (value) => formatX(value, 2),
-    formatCost: (value) => format(value, 2),
+    effect: bought => Decimal.pow(2, bought).toNumber(),
+    formatEffect: value => formatX(value, 2),
+    formatCost: value => format(value, 2),
     costCap: () => (Ra.unlocks.perkShopIncrease.canBeApplied ? 64000 : 4000),
     cap: () => (Ra.unlocks.perkShopIncrease.canBeApplied ? 64 : 4),
   }),
@@ -83,7 +83,7 @@ export const perkShop = {
       } of your highest level.
       (Try clicking it!)`,
     cost: () => 1,
-    formatCost: (value) => formatInt(value),
+    formatCost: value => formatInt(value),
     costCap: () => Number.MAX_VALUE,
     cap: () => Number.MAX_VALUE,
   }),
@@ -94,7 +94,7 @@ export const perkShop = {
       "Fill all empty slots in your inventory with Music Glyphs",
     cost: () => Math.clampMin(GameCache.glyphInventorySpace.value, 1),
     otherReq: () => GameCache.glyphInventorySpace.value > 0,
-    formatCost: (value) => formatInt(value),
+    formatCost: value => formatInt(value),
     costCap: () => Number.MAX_VALUE,
     cap: () => Number.MAX_VALUE,
   }),

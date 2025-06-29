@@ -3,8 +3,8 @@ export const confirmationTypes = [
     name: "Dimension Boost",
     option: "dimensionBoost",
     isUnlocked: () =>
-      PlayerProgress.infinityUnlocked() || player.galaxies.gt(0) ||
-      player.dimensionBoosts.gt(0),
+      PlayerProgress.infinityUnlocked() || player.galaxies.gt(0)
+      || player.dimensionBoosts.gt(0),
   },
   {
     name: "Antimatter Galaxy",

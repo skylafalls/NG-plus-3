@@ -287,9 +287,11 @@ export const Tickspeed = {
 
 export const FreeTickspeed = {
   BASE_SOFTCAP: new Decimal(3e5),
-  GROWTH_RATE: new Decimal(6e-6).add(1),
+  get GROWTH_RATE() {
+    return new Decimal(6e-6).dividedByEffectOf(QuantumChallenge(7).reward).add(1);
+  },
   GROWTH_EXP: DC.D2,
-  tickmult: () => DC.D1.add(Effects.min(1.33, TimeStudy(171)).sub(1)).minusEffectOf(QuantumChallenge(7).reward),
+  tickmult: () => DC.D1.add(Effects.min(1.33, TimeStudy(171)).sub(1)),
 
   get amount() {
     return player.totalTickGained;

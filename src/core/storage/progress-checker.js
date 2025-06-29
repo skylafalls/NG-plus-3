@@ -39,7 +39,7 @@ class CatchupResource extends GameMechanicState {
 
 export const CatchupResources = mapGameDataToObject(
   GameDatabase.catchupResources,
-  (config) => new CatchupResource(config),
+  config => new CatchupResource(config),
 );
 
 export const ProgressChecker = {
@@ -64,8 +64,8 @@ export const ProgressChecker = {
 
   // Returns -1 or 1 when one save is very likely to be farther than the other, otherwise returns 0 if they're close
   compareSaveProgress(first, second) {
-    const progressDifference = this.getCompositeProgress(first) -
-      this.getCompositeProgress(second);
+    const progressDifference = this.getCompositeProgress(first)
+      - this.getCompositeProgress(second);
     if (progressDifference > 0.05) {
       return -1;
     }
@@ -80,8 +80,8 @@ export const ProgressChecker = {
     if (!first || !second) {
       return 0;
     }
-    const timeDifference = first.records?.realTimePlayed -
-      second.records?.realTimePlayed;
+    const timeDifference = first.records?.realTimePlayed
+      - second.records?.realTimePlayed;
     if (timeDifference >= 0) {
       return -1;
     }

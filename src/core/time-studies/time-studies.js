@@ -1,8 +1,8 @@
 import { GameMechanicState } from "../game-mechanics";
 
 function showSecondPreferredWarning(currTree) {
-  const canPickSecond = currTree.allowedDimPathCount === 2 &&
-    currTree.currDimPathCount < 2;
+  const canPickSecond = currTree.allowedDimPathCount === 2
+    && currTree.currDimPathCount < 2;
   // Show a warning if the player can choose the second preferred dimension path and hasn't yet done so.
   if (canPickSecond && TimeStudy.preferredPaths.dimension.path.length < 2) {
     GameUI.notify.error(
@@ -22,7 +22,7 @@ export function buyStudiesUntil(id, ec = -1) {
   const currTree = GameCache.currentStudyTree.value;
   // Makes an array [start, start+1, ... , end], empty if end < start
   const range = (start, end) =>
-    [...Array(Math.clampMin(end - start + 1, 0)).keys()].map((i) => i + start);
+    [...Array(Math.clampMin(end - start + 1, 0)).keys()].map(i => i + start);
   const ecHasRequirement = !Perk.studyECRequirement.isBought;
 
   // If the player tries to buy a study which is immediately buyable, we try to buy it first in case buying other
@@ -51,7 +51,7 @@ export function buyStudiesUntil(id, ec = -1) {
   // - Otherwise we do nothing (stops buying)
   if (id < 111) {
     studyArray.push(
-      ...NormalTimeStudies.paths[requestedPath].filter((s) => (s <= id)),
+      ...NormalTimeStudies.paths[requestedPath].filter(s => (s <= id)),
     );
     return studyArray;
   }
@@ -59,18 +59,18 @@ export function buyStudiesUntil(id, ec = -1) {
   if (ec === 11 && ecHasRequirement) {
     studyArray.push(
       ...NormalTimeStudies.paths[TIME_STUDY_PATH.ANTIMATTER_DIM].filter(
-        (s) => (s <= id),
+        s => (s <= id),
       ),
     );
   } else if (ec === 12 && ecHasRequirement) {
     studyArray.push(
       ...NormalTimeStudies.paths[TIME_STUDY_PATH.TIME_DIM].filter(
-        (s) => (s <= id),
+        s => (s <= id),
       ),
     );
   } else if (
-    currTree.currDimPathCount === currTree.allowedDimPathCount ||
-    currTree.allowedDimPathCount === 3
+    currTree.currDimPathCount === currTree.allowedDimPathCount
+    || currTree.allowedDimPathCount === 3
   ) {
     studyArray.push(...TimeStudy.preferredPaths.dimension.studies);
     studyArray.push(...range(71, 103));
@@ -104,14 +104,14 @@ export function buyStudiesUntil(id, ec = -1) {
 
   if (id < 151) {
     studyArray.push(
-      ...NormalTimeStudies.paths[TimeStudy(id).path].filter((s) => (s <= id)),
+      ...NormalTimeStudies.paths[TimeStudy(id).path].filter(s => (s <= id)),
     );
     return studyArray;
   }
 
   const pacePaths = currTree.pacePaths
-    .map((pathName) =>
-      NormalTimeStudies.pathList.find((p) => p.name === pathName).path
+    .map(pathName =>
+      NormalTimeStudies.pathList.find(p => p.name === pathName).path,
     );
   if (V.isFullyCompleted && !Pelle.isDoomed) {
     const allPace = NormalTimeStudies.paths[TIME_STUDY_PATH.ACTIVE]

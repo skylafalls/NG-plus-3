@@ -26,7 +26,7 @@ window.Async = {
     }
     return 0;
   },
-  sleepPromise: (ms) => new Promise((resolve) => setTimeout(resolve, ms)),
+  sleepPromise: ms => new Promise(resolve => setTimeout(resolve, ms)),
   /**
    * Asynchronously run the specified function maxIter times, letting the event
    * loop run periodically. The function is run in chunks of config.batchSize;
@@ -56,9 +56,9 @@ window.Async = {
       const runResult = this._run(fun, maxIter, config);
       return config.then
         ? runResult.then(() => {
-          config.then();
-          this.enabled = true;
-        })
+            config.then();
+            this.enabled = true;
+          })
         : runResult;
     }
     for (let i = 0; i < maxIter; ++i) {

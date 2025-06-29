@@ -108,8 +108,8 @@ class SingularityMilestoneState extends GameMechanicState {
   }
 
   get isMaxed() {
-    return (this.isUnique && this.isUnlocked) ||
-      (this.completions.gte(this.limit));
+    return (this.isUnique && this.isUnlocked)
+      || (this.completions.gte(this.limit));
   }
 
   get effectDisplay() {
@@ -134,7 +134,7 @@ class SingularityMilestoneState extends GameMechanicState {
 
 export const SingularityMilestone = mapGameDataToObject(
   GameDatabase.celestials.singularityMilestones,
-  (config) => new SingularityMilestoneState(config),
+  config => new SingularityMilestoneState(config),
 );
 
 export const SingularityMilestones = {
@@ -143,7 +143,7 @@ export const SingularityMilestones = {
 
   get sorted() {
     return this.all.sort((a, b) =>
-      Decimal.compare(a.remainingSingularities, b.remainingSingularities)
+      Decimal.compare(a.remainingSingularities, b.remainingSingularities),
     );
   },
 
@@ -248,13 +248,13 @@ export const SingularityMilestones = {
     }
 
     // Compose the functions together; possibly reverse the final order and bring new milestones to the top
-    const isNew = (m) => ((m.previousGoal.gt(
-        player.celestials.laitela.lastCheckedMilestones,
-      ) && moveNewToTop)
+    const isNew = m => ((m.previousGoal.gt(
+      player.celestials.laitela.lastCheckedMilestones,
+    ) && moveNewToTop)
       ? 20
       : 0);
 
-    const compFn = (m) =>
+    const compFn = m =>
       Decimal.add(
         options.sortOrder ? sortFn(m) : sortFn(m).neg(),
         isNew(m) + (m.isMaxed ? completedVal : 0),
@@ -263,7 +263,7 @@ export const SingularityMilestones = {
   },
 
   get nextMilestoneGroup() {
-    return this.sortedForCompletions(false).filter((m) => !m.isMaxed).slice(
+    return this.sortedForCompletions(false).filter(m => !m.isMaxed).slice(
       0,
       6,
     );
@@ -272,8 +272,8 @@ export const SingularityMilestones = {
   get unseenMilestones() {
     const laitela = player.celestials.laitela;
     return SingularityMilestoneThresholds
-      .filter((s) =>
-        laitela.lastCheckedMilestones.lt(s) && Currency.singularities.gte(s)
+      .filter(s =>
+        laitela.lastCheckedMilestones.lt(s) && Currency.singularities.gte(s),
       );
   },
 
@@ -283,27 +283,27 @@ export const SingularityMilestones = {
   },
 
   get unnotifiedMilestones() {
-    return SingularityMilestoneThresholds.filter((s) =>
-      this.dumbgt(s, this.lastNotified) && Currency.singularities.gte(s)
+    return SingularityMilestoneThresholds.filter(s =>
+      this.dumbgt(s, this.lastNotified) && Currency.singularities.gte(s),
     );
   },
 };
 
 // Sorted list of all the values where a singularity milestone exists, used for "new milestone" styling
-const SingularityMilestoneThresholds = function () {
+const SingularityMilestoneThresholds = (function () {
   return SingularityMilestones.all
-    .map((m) =>
+    .map(m =>
       Array.range(0, Math.min(50, m.limit))
-        .filter((r) =>
-          !m.increaseThreshold || r <= m.increaseThreshold ||
-          (r > m.increaseThreshold && ((r - m.increaseThreshold) % 3) === 2)
+        .filter(r =>
+          !m.increaseThreshold || r <= m.increaseThreshold
+          || (r > m.increaseThreshold && ((r - m.increaseThreshold) % 3) === 2),
         )
-        .map((r) => m.start * Math.pow(m.repeat, r))
+        .map(r => m.start * Math.pow(m.repeat, r)),
     )
     .flat(Infinity)
-    .filter((n) => n < 1e100)
+    .filter(n => n < 1e100)
     .sort((a, b) => a - b);
-}();
+}());
 
 export const Singularity = {
   get cap() {

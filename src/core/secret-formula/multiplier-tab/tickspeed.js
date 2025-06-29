@@ -41,7 +41,7 @@ export const tickspeed = {
     },
     multValue: () =>
       new Decimal.pow10(MultiplierTabHelper.decomposeTickspeed().base.mul(100)),
-    isActive: () => [36, 45, 66, 83].some((a) => Achievement(a).canBeApplied),
+    isActive: () => [36, 45, 66, 83].some(a => Achievement(a).canBeApplied),
     icon: MultiplierTabIcons.ACHIEVEMENT,
   },
   upgrades: {

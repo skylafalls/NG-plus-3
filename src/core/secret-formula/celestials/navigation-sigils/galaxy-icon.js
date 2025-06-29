@@ -126,4 +126,4 @@ for (let arcIndex = 0; arcIndex < arcSegments; arcIndex++) {
 }
 
 export const galaxyIcon = Object.values(Shapes)
-  .mapToObject((key, idx) => `galaxy-icon-${idx}`, (val) => val);
+  .mapToObject((key, idx) => `galaxy-icon-${idx}`, val => val);

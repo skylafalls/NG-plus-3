@@ -16,23 +16,19 @@ export const ID = {
       }
       return "Infinity Power Production";
     },
-    displayOverride: (
-      dim,
-    ) => (dim
+    displayOverride: dim => (dim
       ? formatX(InfinityDimension(dim).multiplier, 2)
       : `${format(InfinityDimension(1).productionPerSecond, 2)}/sec`),
-    multValue: (
-      dim,
-    ) => (dim ? InfinityDimension(dim).multiplier : InfinityDimensions.all
-      .filter((id) => id.isProducing)
-      .map((id) => id.multiplier)
-      .reduce((x, y) => x.times(y), DC.D1)),
-    isActive: (
-      dim,
-    ) => (dim
+    multValue: dim => (dim
+      ? InfinityDimension(dim).multiplier
+      : InfinityDimensions.all
+          .filter(id => id.isProducing)
+          .map(id => id.multiplier)
+          .reduce((x, y) => x.times(y), DC.D1)),
+    isActive: dim => (dim
       ? InfinityDimension(dim).isProducing
-      : (PlayerProgress.eternityUnlocked() ||
-        InfinityDimension(1).isProducing)),
+      : (PlayerProgress.eternityUnlocked()
+        || InfinityDimension(1).isProducing)),
     dilationEffect: () => {
       const baseEff = player.dilation.active
         ? 0.75 * Effects.product(DilationUpgrade.dilationPenalty)
@@ -41,12 +37,12 @@ export const ID = {
     },
     isDilated: true,
     overlay: ["∞", "<i class='fa-solid fa-cube' />"],
-    icon: (dim) => MultiplierTabIcons.DIMENSION("ID", dim),
+    icon: dim => MultiplierTabIcons.DIMENSION("ID", dim),
   },
   purchase: {
-    name: (dim) => (dim ? `Purchased ID ${dim}` : "Purchases"),
+    name: dim => (dim ? `Purchased ID ${dim}` : "Purchases"),
     multValue: (dim) => {
-      const getMult = (id) =>
+      const getMult = id =>
         Decimal.pow(
           InfinityDimension(id).powerMultiplier,
           Math.floor(InfinityDimension(id).baseAmount / 10),
@@ -55,13 +51,13 @@ export const ID = {
         return getMult(dim);
       }
       return InfinityDimensions.all
-        .filter((id) => id.isProducing)
-        .map((id) => getMult(id.tier))
+        .filter(id => id.isProducing)
+        .map(id => getMult(id.tier))
         .reduce((x, y) => x.times(y), DC.D1);
     },
     isActive: () =>
       !EternityChallenge(2).isRunning && !EternityChallenge(10).isRunning,
-    icon: (dim) => MultiplierTabIcons.PURCHASE("ID", dim),
+    icon: dim => MultiplierTabIcons.PURCHASE("ID", dim),
   },
   highestDim: {
     name: () => "Amount of highest Dimension",
@@ -82,9 +78,9 @@ export const ID = {
         const purchases = id === 8
           ? Math.floor(InfinityDimension(id).baseAmount / 10)
           : Math.min(
-            InfinityDimensions.HARDCAP_PURCHASES,
-            Math.floor(InfinityDimension(id).baseAmount / 10),
-          );
+              InfinityDimensions.HARDCAP_PURCHASES,
+              Math.floor(InfinityDimension(id).baseAmount / 10),
+            );
         const baseMult = InfinityDimension(id)._powerMultiplier;
         return Decimal.pow(baseMult, purchases);
       };
@@ -92,8 +88,8 @@ export const ID = {
         return getMult(dim);
       }
       return InfinityDimensions.all
-        .filter((id) => id.isProducing)
-        .map((id) => getMult(id.tier))
+        .filter(id => id.isProducing)
+        .map(id => getMult(id.tier))
         .reduce((x, y) => x.times(y), DC.D1);
     },
     isActive: true,
@@ -116,8 +112,8 @@ export const ID = {
         return getMult(dim);
       }
       return InfinityDimensions.all
-        .filter((id) => id.isProducing)
-        .map((id) => getMult(id.tier))
+        .filter(id => id.isProducing)
+        .map(id => getMult(id.tier))
         .reduce((x, y) => x.times(y), DC.D1);
     },
     isActive: () => Tesseracts.bought > 0,
@@ -127,9 +123,9 @@ export const ID = {
     name: "Infinity Glyph sacrifice",
     multValue: () => (InfinityDimension(8).isProducing
       ? Decimal.pow(
-        GlyphSacrifice.infinity.effectValue,
-        Math.floor(InfinityDimension(8).baseAmount / 10),
-      )
+          GlyphSacrifice.infinity.effectValue,
+          Math.floor(InfinityDimension(8).baseAmount / 10),
+        )
       : DC.D1),
     isActive: () => GlyphSacrifice.infinity.effectValue > 1,
     icon: MultiplierTabIcons.SACRIFICE("infinity"),
@@ -143,7 +139,7 @@ export const ID = {
 
   replicanti: {
     name: "Replicanti Multiplier",
-    multValue: (dim) =>
+    multValue: dim =>
       Decimal.pow(
         replicantiMult(),
         dim ? 1 : MultiplierTabHelper.activeDimCount("ID"),
@@ -153,7 +149,7 @@ export const ID = {
   },
   achievementMult: {
     name: "Achievement Multiplier",
-    multValue: (dim) =>
+    multValue: dim =>
       Decimal.pow(
         Achievements.power,
         dim ? 1 : MultiplierTabHelper.activeDimCount("ID"),
@@ -164,14 +160,12 @@ export const ID = {
   achievement: {
     // Note: This only applies to ID1
     name: () => "Achievement 94",
-    multValue: (
-      dim,
-    ) => ((dim ?? 1) === 1 ? Achievement(94).effectOrDefault(1) : 1),
+    multValue: dim => ((dim ?? 1) === 1 ? Achievement(94).effectOrDefault(1) : 1),
     isActive: () => Achievement(94).canBeApplied,
     icon: MultiplierTabIcons.ACHIEVEMENT,
   },
   timeStudy: {
-    name: (dim) => (dim ? `Time Studies (ID ${dim})` : "Time Studies"),
+    name: dim => (dim ? `Time Studies (ID ${dim})` : "Time Studies"),
     multValue: (dim) => {
       const allMult = DC.D1.timesEffectsOf(
         TimeStudy(82),
@@ -210,7 +204,7 @@ export const ID = {
 
   eu1: {
     name: () => "Unspent Eternity Points",
-    multValue: (dim) =>
+    multValue: dim =>
       Decimal.pow(
         EternityUpgrade.idMultEP.effectOrDefault(1),
         dim ? 1 : MultiplierTabHelper.activeDimCount("ID"),
@@ -220,7 +214,7 @@ export const ID = {
   },
   eu2: {
     name: () => "Eternity Count",
-    multValue: (dim) =>
+    multValue: dim =>
       Decimal.pow(
         EternityUpgrade.idMultEternities.effectOrDefault(1),
         dim ? 1 : MultiplierTabHelper.activeDimCount("ID"),
@@ -230,7 +224,7 @@ export const ID = {
   },
   eu3: {
     name: () => "Infinity Challenge Records",
-    multValue: (dim) =>
+    multValue: dim =>
       Decimal.pow(
         EternityUpgrade.idMultICRecords.effectOrDefault(1),
         dim ? 1 : MultiplierTabHelper.activeDimCount("ID"),
@@ -255,9 +249,7 @@ export const ID = {
     icon: MultiplierTabIcons.CHALLENGE("infinity"),
   },
   eternityChallenge: {
-    name: (
-      dim,
-    ) => (dim ? `Eternity Challenges (ID ${dim})` : " Eternity Challenges"),
+    name: dim => (dim ? `Eternity Challenges (ID ${dim})` : " Eternity Challenges"),
     multValue: (dim) => {
       const allMult = DC.D1.timesEffectsOf(
         EternityChallenge(4).reward,
@@ -299,14 +291,14 @@ export const ID = {
     name: "Glyph Effects",
     multValue: () => 1,
     powValue: () =>
-      getAdjustedGlyphEffect("infinitypow") *
-      getAdjustedGlyphEffect("effarigdimensions"),
+      getAdjustedGlyphEffect("infinitypow")
+      * getAdjustedGlyphEffect("effarigdimensions"),
     isActive: () => PlayerProgress.realityUnlocked(),
     icon: MultiplierTabIcons.GENERIC_GLYPH,
   },
   alchemy: {
     name: "Glyph Alchemy",
-    multValue: (dim) =>
+    multValue: dim =>
       Decimal.pow(
         AlchemyResource.dimensionality.effectOrDefault(1),
         dim ? 1 : MultiplierTabHelper.activeDimCount("ID"),
@@ -318,7 +310,7 @@ export const ID = {
   },
   imaginaryUpgrade: {
     name: "Imaginary Upgrade - Hyperbolic Apeirogon",
-    multValue: (dim) =>
+    multValue: dim =>
       Decimal.pow(
         ImaginaryUpgrade(8).effectOrDefault(1),
         dim ? 1 : MultiplierTabHelper.activeDimCount("ID"),

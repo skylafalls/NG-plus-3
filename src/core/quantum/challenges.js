@@ -20,10 +20,6 @@ class QuantumChallengeState extends GameMechanicState {
     this._reward = new QuantumChallengeRewardState(config.reward, this);
   }
 
-  get unlockAM() {
-    return this.config.unlockAM;
-  }
-
   get isUnlocked() {
     if (this.id === 1) {
       return TimeStudy.quantumChallenges.isBought;
@@ -137,3 +133,96 @@ export const QuantumChallenges = {
     return QuantumChallenges.all.filter(qc => qc.isCompleted);
   },
 };
+
+/// PAIRED CHALLENGES
+
+class PairedChallengeRewardState extends GameMechanicState {
+  constructor(challenge) {
+    super({});
+    this._challenge = challenge;
+  }
+
+  get isEffectActive() {
+    return this._challenge.isCompleted;
+  }
+}
+class PairedChallengeState extends GameMechanicState {
+  /**
+   * @param {object} config
+   * @param {[number, number]} config.pairing
+   * @param {Decimal} config.amRequired
+   * @param {Decimal} config.maRequired
+   */
+  constructor(config) {
+    super(config);
+    this._reward = new PairedChallengeRewardState(this);
+  }
+
+  get isUnlocked() {
+    return TimeStudy.pairedhallenges.isBought;
+  }
+
+  get isRunning() {
+    return player.challenge.pairedQC.isActive;
+  }
+
+  requestStart() {
+    if (!this.isUnlocked) {
+      return;
+    }
+    if (GameEnd.creditsEverClosed) {
+      return;
+    }
+    if (!player.options.confirmations.challenges) {
+      this.start();
+      return;
+    }
+    Modal.startQuantumChallenge.show(this.id);
+  }
+
+  start() {
+    if (!this.isUnlocked || this.isRunning) {
+      return;
+    }
+    quantumReset(true);
+    player.challenge.pairedQCs.isActive = true;
+  }
+
+  get isCompleted() {
+    return player.challenge.pairedQCs.pairs.includes(this.config.pairing);
+  }
+
+  complete() {
+    player.challenge.pairedQCs.isActive = false;
+    player.challenge.pairedQCs.pairs.push(this.config.pairing);
+  }
+
+  get isEffectActive() {
+    return this.isRunning;
+  }
+
+  /**
+   * @returns {QuantumChallengeRewardState}
+   */
+  get reward() {
+    return this._reward;
+  }
+
+  get goal() {
+    return this.config.goal;
+  }
+
+  exit() {
+    player.challenge.pairedQCs.isActive = false;
+    quantumReset(true);
+  }
+
+  createAccessor(configs) {
+    /**
+     * @param {number} qc1
+     * @param {number} qc2
+     * @returns {PairedChallengeState}
+     */
+    const accessor = (qc1, qc2) => {};
+  }
+}

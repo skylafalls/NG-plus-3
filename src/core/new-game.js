@@ -28,8 +28,8 @@ export const NG = {
       // For the sake of keeping a bounded savefile size, we only keep a queue of the last 100 full runs. The earliest
       // this will feasibly become an issue from nonstop speedruns is around 2030; I guess we can revisit it at that
       // point if we really need to, but I suspect this limit should be high enough
-      const prevRunIndices = Object.keys(speedrun.previousRuns).map((k) =>
-        Number(k)
+      const prevRunIndices = Object.keys(speedrun.previousRuns).map(k =>
+        Number(k),
       );
       if (prevRunIndices.length > 100) {
         player.speedrun.previousRuns[prevRunIndices.min()] = undefined;
@@ -75,7 +75,7 @@ export const NG = {
     const hasSpeedrun = player.speedrun.isUnlocked;
     const presets = JSON.stringify(player.timestudy.presets);
     const companions = JSON.stringify(
-      Glyphs.allGlyphs.filter((g) => g.type === "companion"),
+      Glyphs.allGlyphs.filter(g => g.type === "companion"),
     );
     Modal.hideAll();
     Quote.clearAll();
@@ -103,12 +103,12 @@ export const NG = {
     JSON.parse(companions).forEach((g) => {
       Glyphs.addToInventory(g);
     });
-    Notations.all.find((n) => n.name === player.options.notation)
+    Notations.all.find(n => n.name === player.options.notation)
       .setAsCurrent();
-    ADNotations.Settings.exponentCommas.min = 10 **
-      player.options.notationDigits.comma;
-    ADNotations.Settings.exponentCommas.max = 10 **
-      player.options.notationDigits.notation;
+    ADNotations.Settings.exponentCommas.min = 10
+      ** player.options.notationDigits.comma;
+    ADNotations.Settings.exponentCommas.max = 10
+      ** player.options.notationDigits.notation;
     player.lastUpdate = Date.now();
   },
 };

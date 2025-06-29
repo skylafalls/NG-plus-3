@@ -48,8 +48,8 @@ export const MachineHandler = {
   },
 
   get isIMUnlocked() {
-    return Currency.realityMachines.value.gte(this.hardcapRM) ||
-      Currency.imaginaryMachines.gt(0);
+    return Currency.realityMachines.value.gte(this.hardcapRM)
+      || Currency.imaginaryMachines.gt(0);
   },
 
   get baseIMCap() {
@@ -79,7 +79,7 @@ export const MachineHandler = {
     if (this.uncappedRM.gte(this.baseRMCap)) {
       if (this.baseIMCap.gt(player.reality.iMCap)) {
         player.records.bestReality.iMCapSet = Glyphs.copyForRecords(
-          Glyphs.active.filter((g) => g !== null),
+          Glyphs.active.filter(g => g !== null),
         );
         player.reality.iMCap = this.baseIMCap;
       }

@@ -72,11 +72,11 @@ export class InfinityUpgradeState extends SetPurchasableMechanicState {
   }
 
   get canCharge() {
-    return this.isBought &&
-      this.hasChargeEffect &&
-      !this.isCharged &&
-      Ra.chargesLeft !== 0 &&
-      !Pelle.isDisabled("chargedInfinityUpgrades");
+    return this.isBought
+      && this.hasChargeEffect
+      && !this.isCharged
+      && Ra.chargesLeft !== 0
+      && !Pelle.isDisabled("chargedInfinityUpgrades");
   }
 
   charge() {
@@ -184,8 +184,8 @@ class InfinityIPMultUpgrade extends GameMechanicState {
   }
 
   get canBeBought() {
-    return !Pelle.isDoomed && !this.isCapped &&
-      Currency.infinityPoints.gte(this.cost) && this.isRequirementSatisfied;
+    return !Pelle.isDoomed && !this.isCapped
+      && Currency.infinityPoints.gte(this.cost) && this.isRequirementSatisfied;
   }
 
   // This is only ever called with amount = 1 or within buyMax under conditions that ensure the scaling doesn't
@@ -247,9 +247,7 @@ class InfinityIPMultUpgrade extends GameMechanicState {
 
 export const InfinityUpgrade = mapGameDataToObject(
   GameDatabase.infinity.upgrades,
-  (
-    config,
-  ) => (config.id === "ipMult"
+  config => (config.id === "ipMult"
     ? new InfinityIPMultUpgrade(config)
     : new InfinityUpgradeState(config)),
 );

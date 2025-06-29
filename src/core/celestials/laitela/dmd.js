@@ -239,8 +239,8 @@ export class DarkMatterDimensionState extends DimensionState {
   }
 
   get canBuyInterval() {
-    return Currency.darkMatter.gte(this.intervalCost) &&
-      this.interval.gt(this.intervalPurchaseCap);
+    return Currency.darkMatter.gte(this.intervalCost)
+      && this.interval.gt(this.intervalPurchaseCap);
   }
 
   get canBuyPowerDM() {
@@ -420,8 +420,8 @@ export const DarkMatterDimensions = {
       }
     }
     if (
-      SingularityMilestone.dim4Generation.canBeApplied &&
-      Laitela.annihilationUnlocked
+      SingularityMilestone.dim4Generation.canBeApplied
+      && Laitela.annihilationUnlocked
     ) {
       DarkMatterDimension(4).amount = DarkMatterDimension(4).amount
         .plus(

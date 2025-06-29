@@ -64,8 +64,8 @@ class RealityUpgradeState extends BitPurchasableMechanicState {
 
   get isLockingMechanics() {
     const shouldBypass = this.config.bypassLock?.() ?? false;
-    return this.hasPlayerLock && this.isPossible && !shouldBypass &&
-      !this.isAvailableForPurchase;
+    return this.hasPlayerLock && this.isPossible && !shouldBypass
+      && !this.isAvailableForPurchase;
   }
 
   // Required to be changed this way to avoid direct prop mutation in Vue components
@@ -99,8 +99,8 @@ class RealityUpgradeState extends BitPurchasableMechanicState {
   tryUnlock() {
     const realityReached = isRealityAvailable();
     if (
-      !realityReached || this.isAvailableForPurchase ||
-      !this.config.checkRequirement()
+      !realityReached || this.isAvailableForPurchase
+      || !this.config.checkRequirement()
     ) {
       return;
     }
@@ -145,9 +145,7 @@ class RebuyableRealityUpgradeState extends RebuyableMechanicState {
 
 RealityUpgradeState.index = mapGameData(
   GameDatabase.reality.upgrades,
-  (
-    config,
-  ) => (config.id < 6
+  config => (config.id < 6
     ? new RebuyableRealityUpgradeState(config)
     : new RealityUpgradeState(config)),
 );
@@ -156,7 +154,7 @@ RealityUpgradeState.index = mapGameData(
  * @param {number} id
  * @return {RealityUpgradeState|RebuyableRealityUpgradeState}
  */
-export const RealityUpgrade = (id) => RealityUpgradeState.index[id];
+export const RealityUpgrade = id => RealityUpgradeState.index[id];
 
 export const RealityUpgrades = {
   /**
@@ -164,7 +162,7 @@ export const RealityUpgrades = {
    */
   all: RealityUpgradeState.index.compact(),
   get allBought() {
-    return (player.reality.upgradeBits >> 6) + 1 ===
-      1 << (GameDatabase.reality.upgrades.length - 5);
+    return (player.reality.upgradeBits >> 6) + 1
+      === 1 << (GameDatabase.reality.upgrades.length - 5);
   },
 };

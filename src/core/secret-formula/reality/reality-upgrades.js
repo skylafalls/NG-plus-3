@@ -27,8 +27,8 @@ const rebuyable = (props) => {
         ? format(effect)
         : format(ImaginaryUpgrade(props.id).effectValue.add(effect), 2, 2),
     );
-  props.formatEffect = (value) => formatX(value, 2, 0);
-  props.formatCost = (value) => format(value, 2, 0);
+  props.formatEffect = value => formatX(value, 2, 0);
+  props.formatCost = value => format(value, 2, 0);
   return props;
 };
 
@@ -82,17 +82,17 @@ export const realityUpgrades = [
     // Note that while noRG resets on eternity, the reality-level check will be false after the first eternity.
     // The noRG variable is eternity-level as it's also used for an achievement check
     hasFailed: () =>
-      !(player.requirementChecks.eternity.noRG &&
-        player.requirementChecks.reality.noEternities),
+      !(player.requirementChecks.eternity.noRG
+        && player.requirementChecks.reality.noEternities),
     checkRequirement: () =>
-      player.requirementChecks.eternity.noRG &&
-      player.requirementChecks.reality.noEternities,
+      player.requirementChecks.eternity.noRG
+      && player.requirementChecks.reality.noEternities,
     checkEvent: GAME_EVENT.ETERNITY_RESET_BEFORE,
     canLock: true,
     lockEvent: "gain a Replicanti Galaxy",
     description: "Replicanti speed is multiplied based on Replicanti Galaxies",
     effect: () => Replicanti.galaxies.total.div(50).add(1),
-    formatEffect: (value) => formatX(value, 2, 2),
+    formatEffect: value => formatX(value, 2, 2),
   },
   {
     name: "Innumerably Construct",
@@ -101,8 +101,8 @@ export const realityUpgrades = [
     requirement:
       "Complete your first Infinity with at most 1 Antimatter Galaxy",
     hasFailed: () =>
-      !(player.galaxies.lte(1) &&
-        player.requirementChecks.reality.noInfinities),
+      !(player.galaxies.lte(1)
+        && player.requirementChecks.reality.noInfinities),
     checkRequirement: () =>
       player.galaxies.lte(1) && player.requirementChecks.reality.noInfinities,
     checkEvent: GAME_EVENT.BIG_CRUNCH_BEFORE,
@@ -110,7 +110,7 @@ export const realityUpgrades = [
     lockEvent: "gain another Antimatter Galaxy",
     description: "Infinity gain is boosted from Antimatter Galaxy count",
     effect: () => player.galaxies.div(30).add(1),
-    formatEffect: (value) => formatX(value, 2, 2),
+    formatEffect: value => formatX(value, 2, 2),
   },
   {
     name: "Paradoxically Attain",
@@ -125,7 +125,7 @@ export const realityUpgrades = [
     description:
       "Tachyon Particle gain is boosted based on Achievement multiplier",
     effect: () => Decimal.sqrt(Achievements.power),
-    formatEffect: (value) => formatX(value, 2, 2),
+    formatEffect: value => formatX(value, 2, 2),
   },
   {
     name: "Linguistically Expand",
@@ -135,19 +135,19 @@ export const realityUpgrades = [
       `Eternity for ${format("1e4000")} Eternity Points using
       only a single Glyph which must be level ${formatInt(3)}+.`,
     hasFailed: () => {
-      const invalidEquippedGlyphs = Glyphs.activeWithoutCompanion.length > 1 ||
-        (Glyphs.activeWithoutCompanion.length === 1 &&
-          Glyphs.activeWithoutCompanion[0].level.lt(3));
-      const hasValidGlyphInInventory =
-        Glyphs.inventory.countWhere((g) => g && g.level.gte(3)) > 0;
-      return invalidEquippedGlyphs ||
-        (Glyphs.activeWithoutCompanion.length === 0 &&
-          !hasValidGlyphInInventory);
+      const invalidEquippedGlyphs = Glyphs.activeWithoutCompanion.length > 1
+        || (Glyphs.activeWithoutCompanion.length === 1
+          && Glyphs.activeWithoutCompanion[0].level.lt(3));
+      const hasValidGlyphInInventory
+        = Glyphs.inventory.countWhere(g => g && g.level.gte(3)) > 0;
+      return invalidEquippedGlyphs
+        || (Glyphs.activeWithoutCompanion.length === 0
+          && !hasValidGlyphInInventory);
     },
     checkRequirement: () =>
-      Currency.eternityPoints.value.max(1).log10().gte(4000) &&
-      Glyphs.activeWithoutCompanion.length === 1 &&
-      Glyphs.activeWithoutCompanion[0].level.gte(3),
+      Currency.eternityPoints.value.max(1).log10().gte(4000)
+      && Glyphs.activeWithoutCompanion.length === 1
+      && Glyphs.activeWithoutCompanion[0].level.gte(3),
     checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER,
     canLock: true,
     // There are two locking events - equipping a glyph with too low a level, and equipping a second glyph
@@ -164,8 +164,8 @@ export const realityUpgrades = [
       } Infinity Points`,
     hasFailed: () => !player.requirementChecks.reality.noEternities,
     checkRequirement: () =>
-      Currency.infinityPoints.gte("1e400") &&
-      player.requirementChecks.reality.noEternities,
+      Currency.infinityPoints.gte("1e400")
+      && player.requirementChecks.reality.noEternities,
     checkEvent: GAME_EVENT.ETERNITY_RESET_BEFORE,
     canLock: true,
     lockEvent: "Eternity",
@@ -196,7 +196,7 @@ export const realityUpgrades = [
     automatorPoints: 5,
     shortDescription: () => "Continuous Infinity generation",
     effect: () => gainedInfinities().times(0.1),
-    formatEffect: (value) => `${format(value)} per second`,
+    formatEffect: value => `${format(value)} per second`,
   },
   {
     name: "The Knowing Existence",
@@ -208,8 +208,8 @@ export const realityUpgrades = [
       } Eternity Points without completing Eternity Challenge 1`,
     hasFailed: () => EternityChallenge(1).completions !== 0,
     checkRequirement: () =>
-      Currency.eternityPoints.gte(1e70) &&
-      EternityChallenge(1).completions === 0,
+      Currency.eternityPoints.gte(1e70)
+      && EternityChallenge(1).completions === 0,
     checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER,
     canLock: true,
     lockEvent: "complete Eternity Challenge 1",
@@ -219,7 +219,7 @@ export const realityUpgrades = [
       Currency.timeTheorems.value
         .minus(DC.E3).clampMin(2)
         .pow(Currency.realities.value.clampMax(1e4).log(2)).clampMin(1),
-    formatEffect: (value) => formatX(value, 2, 2),
+    formatEffect: value => formatX(value, 2, 2),
   },
   {
     name: "The Telemechanical Process",
@@ -228,10 +228,10 @@ export const realityUpgrades = [
     requirement: () =>
       `Eternity for ${format(DC.E4000)} Eternity Points without Time Dim. 5-8`,
     hasFailed: () =>
-      !Array.range(5, 4).every((i) => TimeDimension(i).amount.equals(0)),
+      !Array.range(5, 4).every(i => TimeDimension(i).amount.equals(0)),
     checkRequirement: () =>
-      Currency.eternityPoints.value.max(1).log10().gte(4000) &&
-      Array.range(5, 4).every((i) => TimeDimension(i).amount.equals(0)),
+      Currency.eternityPoints.value.max(1).log10().gte(4000)
+      && Array.range(5, 4).every(i => TimeDimension(i).amount.equals(0)),
     checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER,
     canLock: true,
     lockEvent: "purchase a Time Dimension above the 4th TD",
@@ -261,7 +261,7 @@ export const realityUpgrades = [
       Currency.realities.value.mul(
         Ra.unlocks.continuousTTBoost.effects.eternity.effectOrDefault(1),
       ),
-    formatEffect: (value) => `${format(value)} per second`,
+    formatEffect: value => `${format(value)} per second`,
   },
   {
     name: "The Paradoxical Forever",
@@ -283,7 +283,7 @@ export const realityUpgrades = [
     effect: () =>
       Decimal.sqrt(Decimal.log10(EternityUpgrade.epMult.effectValue)).div(9)
         .max(1),
-    formatEffect: (value) => formatX(value, 2, 2),
+    formatEffect: value => formatX(value, 2, 2),
   },
   {
     name: "Disparity of Rarity",
@@ -292,27 +292,27 @@ export const realityUpgrades = [
     requirement: () =>
       `Reality with ${formatInt(4)} Glyphs equipped of uncommon or better rarity
       (${
-        formatInt(Glyphs.activeWithoutCompanion.countWhere((g) =>
-          g && g.strength.gte(1.5)
+        formatInt(Glyphs.activeWithoutCompanion.countWhere(g =>
+          g && g.strength.gte(1.5),
         ))
       } equipped)`,
     hasFailed: () => {
-      const availableGlyphs = Glyphs.inventory.countWhere((g) =>
-        g && g.strength.gte(1.5)
+      const availableGlyphs = Glyphs.inventory.countWhere(g =>
+        g && g.strength.gte(1.5),
       );
-      const equipped = Glyphs.activeWithoutCompanion.countWhere((g) =>
-        g.strength.gte(1.5)
+      const equipped = Glyphs.activeWithoutCompanion.countWhere(g =>
+        g.strength.gte(1.5),
       );
       const availableSlots = Glyphs.activeSlotCount - Glyphs.activeList.length;
       return equipped + Math.min(availableGlyphs, availableSlots) < 4;
     },
     checkRequirement: () =>
-      Glyphs.activeWithoutCompanion.countWhere((g) => g.strength.gte(1.5)) ===
-        4,
+      Glyphs.activeWithoutCompanion.countWhere(g => g.strength.gte(1.5))
+      === 4,
     checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
     description: "Improve the Glyph rarity formula",
     effect: new Decimal(1.3),
-    formatCost: (value) => format(value, 1, 0),
+    formatCost: value => format(value, 1, 0),
   },
   {
     name: "Duplicity of Potency",
@@ -323,29 +323,29 @@ export const realityUpgrades = [
         formatInt(2)
       } effects
       (${
-        formatInt(Glyphs.activeWithoutCompanion.countWhere((g) =>
-          g && g.effects.length >= 2
+        formatInt(Glyphs.activeWithoutCompanion.countWhere(g =>
+          g && g.effects.length >= 2,
         ))
       }
       equipped)`,
     hasFailed: () => {
-      const availableGlyphs = Glyphs.inventory.countWhere((g) =>
-        g && g.effects.length >= 2
+      const availableGlyphs = Glyphs.inventory.countWhere(g =>
+        g && g.effects.length >= 2,
       );
-      const equipped = Glyphs.activeWithoutCompanion.countWhere((g) =>
-        g.effects.length >= 2
+      const equipped = Glyphs.activeWithoutCompanion.countWhere(g =>
+        g.effects.length >= 2,
       );
       const availableSlots = Glyphs.activeSlotCount - Glyphs.activeList.length;
       return equipped + Math.min(availableGlyphs, availableSlots) < 4;
     },
     checkRequirement: () =>
-      Glyphs.activeWithoutCompanion.countWhere((g) => g.effects.length >= 2) ===
-        4,
+      Glyphs.activeWithoutCompanion.countWhere(g => g.effects.length >= 2)
+      === 4,
     checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
     description: () =>
       `${formatPercents(0.5)} chance to get an additional effect on Glyphs`,
     effect: DC.D0_5,
-    formatCost: (value) => format(value, 1, 0),
+    formatCost: value => format(value, 1, 0),
   },
   {
     name: "Measure of Forever",
@@ -356,27 +356,27 @@ export const realityUpgrades = [
         formatInt(10)
       } or higher
       (${
-        formatInt(Glyphs.activeWithoutCompanion.countWhere((g) =>
-          g && g.level.gte(10)
+        formatInt(Glyphs.activeWithoutCompanion.countWhere(g =>
+          g && g.level.gte(10),
         ))
       } equipped)`,
     hasFailed: () => {
-      const availableGlyphs = Glyphs.inventory.countWhere((g) =>
-        g && g.level.gte(10)
+      const availableGlyphs = Glyphs.inventory.countWhere(g =>
+        g && g.level.gte(10),
       );
-      const equipped = Glyphs.activeWithoutCompanion.countWhere((g) =>
-        g.level.gte(10)
+      const equipped = Glyphs.activeWithoutCompanion.countWhere(g =>
+        g.level.gte(10),
       );
       const availableSlots = Glyphs.activeSlotCount - Glyphs.activeList.length;
       return equipped + Math.min(availableGlyphs, availableSlots) < 4;
     },
     checkRequirement: () =>
-      Glyphs.activeWithoutCompanion.countWhere((g) => g.level.gte(10)) === 4,
+      Glyphs.activeWithoutCompanion.countWhere(g => g.level.gte(10)) === 4,
     checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
     description: "Eternity count boosts Glyph level",
     effect: () =>
       Decimal.sqrt(Currency.eternities.value.plus(1).log10()).mul(0.45).max(1),
-    formatCost: (value) => format(value, 1, 0),
+    formatCost: value => format(value, 1, 0),
   },
   {
     name: "Scour to Empower",
@@ -385,16 +385,16 @@ export const realityUpgrades = [
     requirement: () =>
       `Have a total of ${formatInt(30)} or more Glyphs at once
       (You have ${
-        formatInt(Glyphs.allGlyphs.countWhere((g) => g.type !== "companion"))
+        formatInt(Glyphs.allGlyphs.countWhere(g => g.type !== "companion"))
       })`,
     hasFailed: () =>
-      Glyphs.allGlyphs.countWhere((g) => g.type !== "companion") < 30,
+      Glyphs.allGlyphs.countWhere(g => g.type !== "companion") < 30,
     checkRequirement: () =>
-      Glyphs.allGlyphs.countWhere((g) => g.type !== "companion") >= 30,
+      Glyphs.allGlyphs.countWhere(g => g.type !== "companion") >= 30,
     checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
     description:
       "You can sacrifice Glyphs for permanent bonuses (Shift + click)",
-    formatCost: (value) => format(value, 1, 0),
+    formatCost: value => format(value, 1, 0),
   },
   {
     name: "Parity of Singularity",
@@ -411,7 +411,7 @@ export const realityUpgrades = [
     description: "Unlock another Black Hole",
     automatorPoints: 10,
     shortDescription: () => "Second Black Hole",
-    formatCost: (value) => format(value, 1, 0),
+    formatCost: value => format(value, 1, 0),
   },
   {
     name: "Cosmic Conglomerate",
@@ -452,7 +452,7 @@ export const realityUpgrades = [
         Decimal.log10(Time.thisReality.totalDays.add(1)).mul(2).add(1),
         1.6,
       ).pow10(),
-    formatEffect: (value) => formatX(value, 2, 2),
+    formatEffect: value => formatX(value, 2, 2),
   },
   {
     name: "Replicative Rapidity",
@@ -469,7 +469,7 @@ export const realityUpgrades = [
     effect: () =>
       new Decimal(15).div(Time.bestReality.totalMinutes.clamp(1 / 12, 15)),
     cap: 180,
-    formatEffect: (value) => formatX(value, 2, 2),
+    formatEffect: value => formatX(value, 2, 2),
   },
   {
     name: "Synthetic Symbolism",
@@ -479,8 +479,8 @@ export const realityUpgrades = [
       `Reality for ${formatInt(5000)} Reality Machines without equipped Glyphs`,
     hasFailed: () => Glyphs.activeWithoutCompanion.length > 0,
     checkRequirement: () =>
-      MachineHandler.gainedRealityMachines.gte(5000) &&
-      Glyphs.activeWithoutCompanion.length === 0,
+      MachineHandler.gainedRealityMachines.gte(5000)
+      && Glyphs.activeWithoutCompanion.length === 0,
     canLock: true,
     lockEvent: "equip a non-Companion Glyph",
     checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,

@@ -17,7 +17,7 @@ export const eternityChallenges = [
       effect: completions =>
         Decimal.pow(
           Decimal.max(player.records.thisEternity.time.div(10), 0.9),
-          0.3 + (completions * 0.05),
+          0.5 + (completions * 0.5),
         ),
       formatEffect: value => formatX(value, 2, 1),
     },
@@ -35,7 +35,7 @@ export const eternityChallenges = [
       effect: completions =>
         Currency.infinityPower.value.pow(1.5 / (700 - completions * 100))
           .clampMin(1),
-      cap: DC.E100,
+      cap: DC.E10000,
       formatEffect: value => formatX(value, 2, 1),
     },
   },
@@ -47,11 +47,8 @@ export const eternityChallenges = [
     pelleGoal: DC.E925,
     goalIncrease: DC.E75,
     reward: {
-      description: () =>
-        `Increase the multiplier for buying ${
-          formatInt(10)
-        } Antimatter Dimensions`,
-      effect: completions => completions * 0.72,
+      description: () => `Increase the multiplier for buying ${formatInt(10)} Antimatter Dimensions`,
+      effect: completions => completions ** 2,
       formatEffect: value => `+${format(value, 2, 2)}`,
     },
   },
@@ -72,23 +69,21 @@ export const eternityChallenges = [
       description: "Infinity Dimension multiplier based on unspent IP",
       effect: completions =>
         Currency.infinityPoints.value.pow(0.003 + completions * 0.002),
-      cap: DC.E200,
+      cap: DC.E100000,
       formatEffect: value => formatX(value, 2, 1),
     },
   },
   {
     id: 5,
     description: () =>
-      `Antimatter Galaxy cost increase scaling starts immediately (normally at ${
-        formatInt(100)
-      }
+      `Antimatter Galaxy cost increase scaling starts immediately (normally at ${formatInt(100)}
       Galaxies). Dimension Boost costs scaling is massively increased.`,
     goal: DC.E750,
     pelleGoal: DC.E1400,
     goalIncrease: DC.E400,
     reward: {
       description: "Distant Galaxy cost scaling starts later",
-      effect: completions => completions * 5,
+      effect: completions => Math.pow(3, completions),
       formatEffect: value => `${formatInt(value)} AG later`,
     },
   },
@@ -132,7 +127,7 @@ export const eternityChallenges = [
     reward: {
       description: "1st Time Dimension produces 8th Infinity Dimensions",
       effect: completions =>
-        TimeDimension(1).productionPerSecond.pow(completions * 0.2).minus(1)
+        TimeDimension(1).productionPerSecond.pow(completions * 0.25).minus(1)
           .clampMin(0),
       formatEffect: value => `${format(value, 2, 1)} per second`,
     },
@@ -152,17 +147,15 @@ export const eternityChallenges = [
     reward: {
       description: "Infinity Power strengthens Replicanti Galaxies",
       effect: (completions) => {
-        const infinityPower = Currency.infinityPower.value.add(1).max(1).log10()
-          .add(1).log10();
-        return Decimal.pow(infinityPower, 0.03 * completions).sub(1).max(0);
+        const infinityPower = Currency.infinityPower.value.add(1).max(1).log10().add(1).log10();
+        return Decimal.pow(infinityPower, 0.04 * completions).sub(1).max(0);
       },
       formatEffect: value => formatPercents(value, 2),
     },
   },
   {
     id: 9,
-    description: () =>
-      `you cannot buy Tickspeed upgrades. Infinity Power instead multiplies
+    description: () => `you cannot buy Tickspeed upgrades. Infinity Power instead multiplies
       Time Dimensions with greatly reduced effect. ${specialInfinityGlyphDisabledEffectText()}`,
     goal: DC.E1750,
     pelleGoal: DC.E2900,
@@ -171,18 +164,15 @@ export const eternityChallenges = [
       description: "Infinity Dimension multiplier based on Time Shards",
       effect: completions =>
         Currency.timeShards.value.pow(completions * 0.1).clampMin(1),
-      cap: DC.E400,
+      cap: DC.E11200,
       formatEffect: value => formatX(value, 2, 1),
     },
   },
   {
     id: 10,
     description: () => {
-      let description
-        = `Time Dimensions and Infinity Dimensions are disabled. You gain an immense boost from
-        Infinities to Antimatter Dimensions (Infinities${
-          formatPow(950)
-        }). ${specialInfinityGlyphDisabledEffectText()}`;
+      let description = `Time Dimensions and Infinity Dimensions are disabled. You gain an immense boost from
+        Infinities to Antimatter Dimensions (Infinities${formatPow(950)}). ${specialInfinityGlyphDisabledEffectText()}`;
       EternityChallenge(10).applyEffect(v =>
         description += ` Currently: ${formatX(v, 2, 1)}`,
       );
@@ -198,9 +188,7 @@ export const eternityChallenges = [
     reward: {
       description: "Time Dimension multiplier based on Infinities",
       effect: (completions) => {
-        const mult = Currency.infinitiesTotal.value.times(2.783e-6).pow(
-          0.4 + 0.1 * completions,
-        ).clampMin(1);
+        const mult = Currency.infinitiesTotal.value.pow(1 + 0.5 * completions).clampMin(1);
         return mult.powEffectOf(TimeStudy(31));
       },
       formatEffect: (value) => {
@@ -238,9 +226,7 @@ export const eternityChallenges = [
     id: 12,
     description:
       () => (PlayerProgress.realityUnlocked()
-        ? `the game runs ×${
-          formatInt(1000)
-        } slower; all other game speed effects are disabled. The goal must be reached
+        ? `the game runs ×${formatInt(1000)} slower; all other game speed effects are disabled. The goal must be reached
         within a certain amount of time or you will fail the Challenge. ${specialInfinityGlyphDisabledEffectText()}`
         : `the game runs ×${formatInt(1000)} slower. The goal must be reached
         within a certain amount of time or you will fail the Challenge.`),
@@ -255,7 +241,7 @@ export const eternityChallenges = [
     failedRestriction: "(Too slow for more)",
     reward: {
       description: "Infinity Dimension cost multipliers are reduced",
-      effect: completions => 1 - completions * 0.008,
+      effect: completions => 1 - completions * 0.01,
       formatEffect: value => `x${formatPow(value, 3, 3)}`,
     },
   },

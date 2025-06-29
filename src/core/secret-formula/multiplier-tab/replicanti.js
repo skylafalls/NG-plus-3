@@ -16,17 +16,17 @@ export const replicanti = {
     // This is explicitly 2 in the replicanti code as well, inside of a replicanti amount check
     multValue: 2,
     isActive: () =>
-      Achievement(134).canBeApplied && Replicanti.amount.lte(replicantiCap()) &&
-      !Pelle.isDoomed,
+      Achievement(134).canBeApplied && Replicanti.amount.lte(replicantiCap())
+      && !Pelle.isDoomed,
     icon: MultiplierTabIcons.ACHIEVEMENT,
   },
   timeStudy: {
     name: "Time Studies",
     multValue: () => {
-      const preReality = Effects.product(TimeStudy(62), TimeStudy(213)) *
-        (TimeStudy(132).isBought ? 1.5 : 1);
-      return preReality *
-        (Perk.studyPassive.isBought && TimeStudy(132).isBought ? 2 : 1);
+      const preReality = Effects.product(TimeStudy(62), TimeStudy(213))
+        * (TimeStudy(132).isBought ? 1.5 : 1);
+      return preReality
+        * (Perk.studyPassive.isBought && TimeStudy(132).isBought ? 2 : 1);
     },
     isActive: () => PlayerProgress.eternityUnlocked() && !Pelle.isDoomed,
     icon: MultiplierTabIcons.TIME_STUDY,
@@ -34,12 +34,12 @@ export const replicanti = {
   glyph: {
     name: "Glyph Effects",
     multValue: () => {
-      const baseEffect =
-        (Pelle.isDoomed ? DC.D1 : getAdjustedGlyphEffect("replicationspeed"))
+      const baseEffect
+        = (Pelle.isDoomed ? DC.D1 : getAdjustedGlyphEffect("replicationspeed"))
           .times(Pelle.specialGlyphEffect.replication);
       const alteredEffect = Math.clampMin(
-        Decimal.log10(Replicanti.amount) *
-          getSecondaryGlyphEffect("replicationdtgain"),
+        Decimal.log10(Replicanti.amount)
+        * getSecondaryGlyphEffect("replicationdtgain"),
         1,
       );
       return GlyphAlteration.isAdded("replication")
@@ -47,8 +47,8 @@ export const replicanti = {
         : baseEffect;
     },
     isActive: () =>
-      PlayerProgress.realityUnlocked() &&
-      (!Pelle.isDoomed || Pelle.specialGlyphEffect.replication > 1),
+      PlayerProgress.realityUnlocked()
+      && (!Pelle.isDoomed || Pelle.specialGlyphEffect.replication > 1),
     icon: MultiplierTabIcons.GENERIC_GLYPH,
   },
   amplifierRep: {

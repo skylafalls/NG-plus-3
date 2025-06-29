@@ -20,9 +20,13 @@ export const GameSaveSerializer = {
     if (typeof data !== "string") {
       return;
     }
-    const json = this.decodeText(data, "savefile");
+    try {
+      const json = this.decodeText(data, "savefile");
 
-    return JSON.parse(json, (k, v) => ((v === Infinity) ? "Infinity" : v));
+      return JSON.parse(json, (k, v) => ((v === Infinity) ? "Infinity" : v));
+    } catch {
+      return;
+    }
   },
   // These are magic strings that savefiles/automator scripts should start with.
   // Due to the way atob/btoa work, old saves (before the reality update and for

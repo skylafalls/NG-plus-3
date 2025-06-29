@@ -3,9 +3,9 @@ import { compile } from "./compiler";
 import { parser } from "./parser";
 
 function walkSuggestion(suggestion, prefix, output) {
-  const hasAutocomplete = suggestion.$autocomplete &&
-    suggestion.$autocomplete.startsWith(prefix) &&
-    suggestion.$autocomplete !== prefix;
+  const hasAutocomplete = suggestion.$autocomplete
+    && suggestion.$autocomplete.startsWith(prefix)
+    && suggestion.$autocomplete !== prefix;
   const isUnlocked = suggestion.$unlocked ? suggestion.$unlocked() : true;
   if (hasAutocomplete && isUnlocked) {
     output.add(suggestion.$autocomplete);
@@ -18,7 +18,7 @@ function walkSuggestion(suggestion, prefix, output) {
 CodeMirror.registerHelper("lint", "automato", (contents, _, editor) => {
   const doc = editor.getDoc();
   const errors = compile(contents, true).errors;
-  return errors.map((e) => ({
+  return errors.map(e => ({
     message: e.info,
     severity: "error",
     from: doc.posFromIndex(e.startOffset),

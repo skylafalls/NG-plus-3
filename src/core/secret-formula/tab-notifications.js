@@ -14,9 +14,9 @@ export const tabNotifications = {
       },
     ],
     condition: () =>
-      !PlayerProgress.realityUnlocked() &&
-      !PlayerProgress.eternityUnlocked() &&
-      !PlayerProgress.infinityUnlocked(),
+      !PlayerProgress.realityUnlocked()
+      && !PlayerProgress.eternityUnlocked()
+      && !PlayerProgress.infinityUnlocked(),
     events: [GAME_EVENT.BIG_CRUNCH_BEFORE],
   },
   breakInfinity: {
@@ -28,9 +28,9 @@ export const tabNotifications = {
       },
     ],
     condition: () =>
-      !PlayerProgress.realityUnlocked() &&
-      !PlayerProgress.eternityUnlocked() &&
-      Autobuyer.bigCrunch.hasMaxedInterval,
+      !PlayerProgress.realityUnlocked()
+      && !PlayerProgress.eternityUnlocked()
+      && Autobuyer.bigCrunch.hasMaxedInterval,
   },
   IDUnlock: {
     id: 2,
@@ -41,8 +41,8 @@ export const tabNotifications = {
       },
     ],
     condition: () =>
-      !PlayerProgress.realityUnlocked() &&
-      !PlayerProgress.eternityUnlocked() && !InfinityDimension(2).isUnlocked,
+      !PlayerProgress.realityUnlocked()
+      && !PlayerProgress.eternityUnlocked() && !InfinityDimension(2).isUnlocked,
   },
   ICUnlock: {
     id: 3,
@@ -53,8 +53,8 @@ export const tabNotifications = {
       },
     ],
     condition: () =>
-      !PlayerProgress.realityUnlocked() &&
-      !PlayerProgress.eternityUnlocked(),
+      !PlayerProgress.realityUnlocked()
+      && !PlayerProgress.eternityUnlocked(),
   },
   replicanti: {
     id: 4,
@@ -65,9 +65,9 @@ export const tabNotifications = {
       },
     ],
     condition: () =>
-      !PlayerProgress.realityUnlocked() &&
-      !PlayerProgress.eternityUnlocked() &&
-      Currency.infinityPoints.gte(DC.E140),
+      !PlayerProgress.realityUnlocked()
+      && !PlayerProgress.eternityUnlocked()
+      && Currency.infinityPoints.gte(DC.E140),
     events: [GAME_EVENT.BIG_CRUNCH_AFTER],
   },
   firstEternity: {
@@ -91,8 +91,8 @@ export const tabNotifications = {
       },
     ],
     condition: () =>
-      !PlayerProgress.realityUnlocked() &&
-      !PlayerProgress.eternityUnlocked(),
+      !PlayerProgress.realityUnlocked()
+      && !PlayerProgress.eternityUnlocked(),
     events: [GAME_EVENT.ETERNITY_RESET_BEFORE],
   },
   dilationAfterUnlock: {

@@ -22,8 +22,8 @@ export const DT = {
     multValue: () =>
       getDilationGainPerSecond().times(getGameSpeedupForDisplay()),
     isActive: () =>
-      PlayerProgress.realityUnlocked() ||
-      (PlayerProgress.dilationUnlocked() && getDilationGainPerSecond().gt(0)),
+      PlayerProgress.realityUnlocked()
+      || (PlayerProgress.dilationUnlocked() && getDilationGainPerSecond().gt(0)),
     dilationEffect: () => (Enslaved.isRunning ? 0.85 : 1),
     isDilated: true,
     overlay: ["Ψ"],
@@ -33,8 +33,8 @@ export const DT = {
     multValue: () =>
       Achievement(132).effectOrDefault(1) * Achievement(137).effectOrDefault(1),
     isActive: () =>
-      (Achievement(132).canBeApplied || Achievement(137).canBeApplied) &&
-      getDilationGainPerSecond().neq(0),
+      (Achievement(132).canBeApplied || Achievement(137).canBeApplied)
+      && getDilationGainPerSecond().neq(0),
     icon: MultiplierTabIcons.ACHIEVEMENT,
   },
   dilation: {
@@ -57,8 +57,8 @@ export const DT = {
     name: "Reality Upgrade - Temporal Amplifier",
     multValue: () => RealityUpgrade(1).effectOrDefault(1),
     isActive: () =>
-      RealityUpgrade(1).canBeApplied && getDilationGainPerSecond().neq(0) &&
-      !Pelle.isDoomed,
+      RealityUpgrade(1).canBeApplied && getDilationGainPerSecond().neq(0)
+      && !Pelle.isDoomed,
     icon: MultiplierTabIcons.UPGRADE("reality"),
   },
   glyph: {
@@ -69,10 +69,10 @@ export const DT = {
       );
       const repliDT = Replicanti.areUnlocked
         ? Math.clampMin(
-          Decimal.log10(Replicanti.amount) *
-            getAdjustedGlyphEffect("replicationdtgain"),
-          1,
-        )
+            Decimal.log10(Replicanti.amount)
+            * getAdjustedGlyphEffect("replicationdtgain"),
+            1,
+          )
         : DC.D1;
       return dtMult.times(repliDT);
     },
@@ -99,8 +99,8 @@ export const DT = {
     name: "Glyph Alchemy",
     multValue: () => AlchemyResource.dilation.effectOrDefault(1),
     isActive: () =>
-      Ra.unlocks.unlockGlyphAlchemy.canBeApplied &&
-      getDilationGainPerSecond().neq(0),
+      Ra.unlocks.unlockGlyphAlchemy.canBeApplied
+      && getDilationGainPerSecond().neq(0),
     icon: MultiplierTabIcons.ALCHEMY,
   },
   iap: {

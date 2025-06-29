@@ -19,13 +19,13 @@ class GlyphEffectState {
 
 export const GlyphEffect = {
   dimBoostPower: new GlyphEffectState("powerdimboost", {
-    adjustApply: (value) => Decimal.max(1, value),
+    adjustApply: value => Decimal.max(1, value),
   }),
   ipMult: new GlyphEffectState("infinityIP", {
-    adjustApply: (value) => Decimal.max(1, value),
+    adjustApply: value => Decimal.max(1, value),
   }),
   epMult: new GlyphEffectState("timeEP", {
-    adjustApply: (value) => Decimal.max(1, value),
+    adjustApply: value => Decimal.max(1, value),
   }),
 };
 
@@ -69,8 +69,8 @@ export function getGlyphEffectValues(effectKey) {
     throw new Error(`Unknown Glyph effect requested "${effectKey}"'`);
   }
   const r = player.reality.glyphs.active
-    .filter((glyph) => glyph.effects.includes(effectKey))
-    .map((glyph) => getSingleGlyphEffectFromBitmask(effectKey, glyph));
+    .filter(glyph => glyph.effects.includes(effectKey))
+    .map(glyph => getSingleGlyphEffectFromBitmask(effectKey, glyph));
   return r;
 }
 
@@ -87,8 +87,8 @@ export function separateEffectKey(effectKey) {
   let effect = "";
   for (let i = 0; i < GlyphInfo.glyphTypes.length; i++) {
     if (
-      effectKey.slice(0, GlyphInfo.glyphTypes[i].length) ===
-        GlyphInfo.glyphTypes[i]
+      effectKey.slice(0, GlyphInfo.glyphTypes[i].length)
+      === GlyphInfo.glyphTypes[i]
     ) {
       type = GlyphInfo.glyphTypes[i];
       effect = effectKey.slice(GlyphInfo.glyphTypes[i].length);
@@ -113,7 +113,7 @@ export function getGlyphEffectValuesFromBitmask(
     ? Pelle.glyphStrength
     : baseStrength;
   return getGlyphEffectsFromBitmask(bitmask)
-    .map((effect) => ({
+    .map(effect => ({
       id: effect.id,
       value: effect.effect(level, strength),
     }));
@@ -129,7 +129,7 @@ export function getGlyphEffectValuesFromArray(
     ? Pelle.glyphStrength
     : baseStrength;
   return getGlyphEffectsFromArray(array)
-    .map((effect) => ({
+    .map(effect => ({
       id: effect.id,
       value: effect.effect(level, strength),
     }));
@@ -161,13 +161,13 @@ export function countValuesFromBitmask(bitmask) {
 // Returns both effect value and softcap status
 export function getActiveGlyphEffects() {
   let effectValues = orderedEffectList
-    .map((effect) => ({ effect, values: getGlyphEffectValues(effect) }))
-    .filter((ev) => ev.values.length > 0)
-    .map((ev) => ({
+    .map(effect => ({ effect, values: getGlyphEffectValues(effect) }))
+    .filter(ev => ev.values.length > 0)
+    .map(ev => ({
       id: ev.effect,
       value: GlyphEffects[ev.effect].combine(ev.values),
     }));
-  const effectNames = new Set(effectValues.map((e) => e.id));
+  const effectNames = new Set(effectValues.map(e => e.id));
 
   // Numerically combine cursed effects with other glyph effects which directly conflict with them
   const cursedEffects = ["cursedgalaxies", "curseddimensions", "cursedEP"];
@@ -179,22 +179,22 @@ export function getActiveGlyphEffects() {
   ];
   for (let i = 0; i < cursedEffects.length; i++) {
     if (
-      effectNames.has(cursedEffects[i]) &&
-      effectNames.has(conflictingEffects[i])
+      effectNames.has(cursedEffects[i])
+      && effectNames.has(conflictingEffects[i])
     ) {
       const combined = combineFunction[i]([
         getAdjustedGlyphEffect(cursedEffects[i]),
         getAdjustedGlyphEffect(conflictingEffects[i]),
       ]);
       if (Decimal.lt(combined, 1)) {
-        effectValues = effectValues.filter((e) =>
-          e.id !== conflictingEffects[i]
+        effectValues = effectValues.filter(e =>
+          e.id !== conflictingEffects[i],
         );
-        effectValues.filter((e) => e.id === cursedEffects[i])[0].value.value =
-          combined;
+        effectValues.filter(e => e.id === cursedEffects[i])[0].value.value
+          = combined;
       } else {
-        effectValues = effectValues.filter((e) => e.id !== cursedEffects[i]);
-        effectValues.filter((e) => e.id === conflictingEffects[i])[0].value
+        effectValues = effectValues.filter(e => e.id !== cursedEffects[i]);
+        effectValues.filter(e => e.id === conflictingEffects[i])[0].value
           .value = combined;
       }
     }

@@ -1155,7 +1155,7 @@ if you eternitied while changing it.</li>
   },
   {
     date: [2017, 12, 1],
-    name: '"Eternity" update',
+    name: "\"Eternity\" update",
     info: `
 <ul>
 <li>Time studies tree with free respec</li>

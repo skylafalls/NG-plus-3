@@ -85,10 +85,10 @@ export class ECTimeStudyState extends TimeStudyState {
       return false;
     }
     if (
-      !this.config.requirement.some((s) =>
+      !this.config.requirement.some(s =>
         typeof s === "string"
           ? MasteryStudy(s.slice(1, 3)).isBought
-          : TimeStudy(s).isBought
+          : TimeStudy(s).isBought,
       )
     ) {
       return false;
@@ -125,13 +125,13 @@ export class ECTimeStudyState extends TimeStudyState {
   }
 
   get allSecondaryRequirementsMet() {
-    return Perk.studyECRequirement.isBought ||
-      !this.hasForbiddenStudies && this.isEntryGoalMet;
+    return Perk.studyECRequirement.isBought
+      || !this.hasForbiddenStudies && this.isEntryGoalMet;
   }
 
   get hasForbiddenStudies() {
-    return this.config.secondary.forbiddenStudies?.some((s) =>
-      TimeStudy(s).isBought
+    return this.config.secondary.forbiddenStudies?.some(s =>
+      TimeStudy(s).isBought,
     );
   }
 
@@ -161,7 +161,7 @@ export class ECTimeStudyState extends TimeStudyState {
 
 ECTimeStudyState.studies = mapGameData(
   GameDatabase.eternity.timeStudies.ec,
-  (config) => new ECTimeStudyState(config),
+  config => new ECTimeStudyState(config),
 );
 
 /**
@@ -182,5 +182,5 @@ TimeStudy.eternityChallenge.current = function () {
 };
 
 ECTimeStudyState.invalidateCachedRequirements = function () {
-  ECTimeStudyState.studies.forEach((study) => study.invalidateRequirement());
+  ECTimeStudyState.studies.forEach(study => study.invalidateRequirement());
 };

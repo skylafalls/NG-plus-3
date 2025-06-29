@@ -1,9 +1,9 @@
 import { DC } from "../../constants";
 
 function rebuyable(config) {
-  const effectFunction = config.effect || ((x) => x);
-  const { id, maxUpgrades, description, isDisabled, noLabel, onPurchased } =
-    config;
+  const effectFunction = config.effect || (x => x);
+  const { id, maxUpgrades, description, isDisabled, noLabel, onPurchased }
+    = config;
   return {
     rebuyable: true,
     id,
@@ -17,8 +17,8 @@ function rebuyable(config) {
     isDisabled,
     // There isn't enough room in the button to fit the EC reduction and "Next:" at the same time while still
     // presenting all the information in an understandable way, so we only show it if the upgrade is maxed
-    formatEffect: config.formatEffect ||
-      ((value) => {
+    formatEffect: config.formatEffect
+      || ((value) => {
         const afterECText = config.afterEC ? config.afterEC() : "";
         return value.gte(config.maxUpgrades)
           ? `Currently: ${formatX(DC.E1.sub(value))} ${afterECText}`
@@ -26,7 +26,7 @@ function rebuyable(config) {
             formatX(DC.E1.sub(value).sub(1))
           }`;
       }),
-    formatCost: (value) => format(value, 2, 0),
+    formatCost: value => format(value, 2, 0),
     noLabel,
     onPurchased,
   };
@@ -40,7 +40,7 @@ export const breakInfinityUpgrades = {
       "Antimatter Dimensions gain a multiplier based on total antimatter produced",
     effect: () =>
       Decimal.pow(player.records.totalAntimatter.max(1).log10().add(1), 0.5),
-    formatEffect: (value) => formatX(value, 2, 2),
+    formatEffect: value => formatX(value, 2, 2),
   },
   currentAMMult: {
     id: "currentMult",
@@ -49,7 +49,7 @@ export const breakInfinityUpgrades = {
       "Antimatter Dimensions gain a multiplier based on current antimatter",
     effect: () =>
       Decimal.pow(Currency.antimatter.value.max(1).log10().add(1), 0.5),
-    formatEffect: (value) => formatX(value, 2, 2),
+    formatEffect: value => formatX(value, 2, 2),
   },
   galaxyBoost: {
     id: "postGalaxy",
@@ -63,7 +63,7 @@ export const breakInfinityUpgrades = {
     description: "Antimatter Dimensions gain a multiplier based on Infinities",
     effect: () =>
       Currency.infinitiesTotal.value.max(1).absLog10().times(10).add(1),
-    formatEffect: (value) => formatX(value, 2, 2),
+    formatEffect: value => formatX(value, 2, 2),
   },
   achievementMult: {
     id: "achievementMult",
@@ -72,7 +72,7 @@ export const breakInfinityUpgrades = {
       "Antimatter Dimensions gain a multiplier based on Achievements completed",
     effect: () =>
       Math.max(Math.pow(Achievements.effectiveCount - 30, 3) / 40, 1),
-    formatEffect: (value) => formatX(value, 2, 2),
+    formatEffect: value => formatX(value, 2, 2),
   },
   slowestChallengeMult: {
     id: "challengeMult",
@@ -84,7 +84,7 @@ export const breakInfinityUpgrades = {
         new Decimal(50).div(Time.worstChallenge.totalMinutes),
         1,
       ),
-    formatEffect: (value) => formatX(value, 2, 2),
+    formatEffect: value => formatX(value, 2, 2),
     hasCap: true,
     cap: DC.D3E4,
   },
@@ -156,7 +156,7 @@ export const breakInfinityUpgrades = {
     initialCost: new Decimal(1e7),
     costIncrease: DC.E1,
     maxUpgrades: DC.E1,
-    effect: (value) => Player.bestRunIPPM.times(value.div(20)),
+    effect: value => Player.bestRunIPPM.times(value.div(20)),
     description: () => {
       let generation = `Generate ${
         format(player.infinityRebuyables[2].mul(5))
@@ -168,8 +168,8 @@ export const breakInfinityUpgrades = {
       }
       return `${generation} of your best IP/min from your last 10 Infinities`;
     },
-    isDisabled: (effect) => effect.eq(0),
-    formatEffect: (value) => `${format(value, 2, 1)} IP/min`,
+    isDisabled: effect => effect.eq(0),
+    formatEffect: value => `${format(value, 2, 1)} IP/min`,
     noLabel: false,
   }),
 };

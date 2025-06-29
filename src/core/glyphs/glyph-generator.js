@@ -177,7 +177,7 @@ export const GlyphGenerator = {
 
   cursedGlyph() {
     const str = rarityToStrength(100);
-    const effects = GlyphInfo.cursed.effects().map((n) => n.id);
+    const effects = GlyphInfo.cursed.effects().map(n => n.id);
     return {
       id: undefined,
       idx: null,
@@ -192,7 +192,7 @@ export const GlyphGenerator = {
   // These Glyphs are given on entering Doomed to prevent the player
   // from having none of each basic glyphs which are requied to beat pelle
   doomedGlyph(type) {
-    const effects = GlyphEffects.all.filter((e) => e.id.startsWith(type));
+    const effects = GlyphEffects.all.filter(e => e.id.startsWith(type));
     effects.push(GlyphEffects.timespeed);
     const glyphLevel = Decimal.max(player.records.bestReality.glyphLevel, 5000);
     return {
@@ -257,8 +257,8 @@ export const GlyphGenerator = {
     let result = GlyphGenerator.strengthMultiplier.mul(
       GlyphGenerator.gaussianBellCurve(rng),
     );
-    const relicShardFactor =
-      Ra.unlocks.extraGlyphChoicesAndRelicShardRarityAlwaysMax.canBeApplied
+    const relicShardFactor
+      = Ra.unlocks.extraGlyphChoicesAndRelicShardRarityAlwaysMax.canBeApplied
         ? new Decimal(1)
         : rng.uniform();
     const increasedRarity = Effarig.maxRarityBoost.mul(relicShardFactor)
@@ -281,13 +281,13 @@ export const GlyphGenerator = {
     const random1 = rng.uniform();
     const random2 = rng.uniform();
     if (
-      GlyphInfo[type].effects().length <= 4 &&
-      Ra.unlocks.glyphEffectCount.canBeApplied
+      GlyphInfo[type].effects().length <= 4
+      && Ra.unlocks.glyphEffectCount.canBeApplied
     ) {
       return GlyphInfo[type].effects().length;
     }
-    const maxEffects =
-      !Ra.unlocks.glyphEffectCount.canBeApplied && type === "effarig"
+    const maxEffects
+      = !Ra.unlocks.glyphEffectCount.canBeApplied && type === "effarig"
         ? 4
         : GlyphInfo[type].effects().length;
     let num = Decimal.min(
@@ -303,8 +303,8 @@ export const GlyphGenerator = {
     // If we do decide to add anything else that boosts chance of an extra effect, keeping the code like this
     // makes it easier to do (add it to the Effects.max).
     if (
-      RealityUpgrade(17).isBought &&
-      random2 < Effects.max(0, RealityUpgrade(17)).toNumber()
+      RealityUpgrade(17).isBought
+      && random2 < Effects.max(0, RealityUpgrade(17)).toNumber()
     ) {
       num = Math.min(num + 1, maxEffects);
     }
@@ -313,18 +313,18 @@ export const GlyphGenerator = {
 
   // Populate a list of reality glyph effects based on level
   generateRealityEffects(level) {
-    const numberOfEffects =
-      realityGlyphEffectLevelThresholds.filter((lv) => level.gte(lv)).length;
+    const numberOfEffects
+      = realityGlyphEffectLevelThresholds.filter(lv => level.gte(lv)).length;
     const sortedRealityEffects = GlyphInfo.reality.effects()
       .sort((a, b) => a.intID - b.intID)
-      .map((eff) => eff.id);
+      .map(eff => eff.id);
     return sortedRealityEffects.slice(0, numberOfEffects);
   },
 
   generateEffects(type, count, rng, guarenteedEffects = []) {
     const glyphTypeEffects = GlyphInfo[type].effects();
     const effectValues = glyphTypeEffects.mapToObject(
-      (x) => x.intID,
+      x => x.intID,
       () => rng.uniform(),
     );
     // Get a bunch of random numbers so that we always use 250 here. Can be increased if you *really* need to
@@ -343,8 +343,8 @@ export const GlyphGenerator = {
 
     for (let i = 0; i < guarenteedEffects.length; i++) {
       effectValues[
-        GlyphInfo[type].effects().filter((e) =>
-          e.id === guarenteedEffects[i]
+        GlyphInfo[type].effects().filter(e =>
+          e.id === guarenteedEffects[i],
         )[0].intID
       ] = 2;
     }
@@ -354,7 +354,7 @@ export const GlyphGenerator = {
     }
     // Sort from highest to lowest value.
     const effects = Object.keys(effectValues).sort((a, b) =>
-      effectValues[b] - effectValues[a]
+      effectValues[b] - effectValues[a],
     ).slice(0, count);
     // Revert intIds to the regular ids, which are strings
     for (let i = 0; i !== effects.length; i++) {
@@ -364,22 +364,22 @@ export const GlyphGenerator = {
   },
 
   randomType(rng, typesSoFar = []) {
-    const generatable = generatedTypes.filter((x) =>
-      (GlyphInfo[x].isGenerated ?? false) &&
-      (GlyphInfo[x].generationRequirement
+    const generatable = generatedTypes.filter(x =>
+      (GlyphInfo[x].isGenerated ?? false)
+      && (GlyphInfo[x].generationRequirement
         ? GlyphInfo[x].generationRequirement()
-        : true)
+        : true),
     );
-    const maxOfSameTypeSoFar = generatable.map((x) =>
-      typesSoFar.countWhere((y) => y === x)
+    const maxOfSameTypeSoFar = generatable.map(x =>
+      typesSoFar.countWhere(y => y === x),
     ).max();
     const blacklisted = typesSoFar.length === 0
       ? []
-      : generatable.filter((x) =>
-        typesSoFar.countWhere((y) => y === x) === maxOfSameTypeSoFar
-      );
+      : generatable.filter(x =>
+          typesSoFar.countWhere(y => y === x) === maxOfSameTypeSoFar,
+        );
     const types = generatedTypes.filter(
-      (x) => generatable.includes(x) && !blacklisted.includes(x),
+      x => generatable.includes(x) && !blacklisted.includes(x),
     );
     return types[Math.floor(rng.uniform() * types.length)];
   },
@@ -458,9 +458,9 @@ export const GlyphGenerator = {
     // The function here is an approximation of ^0.65, here is the old code:
     //     return Math.pow(Math.max(rng.normal() + 1, 1), 0.65);
     const x = Math.sqrt(Math.abs(rng.normal(), 0) + 1);
-    return -0.111749606737 +
-      x *
-        (0.900603878243551 + x * (0.229108274476697 + x * -0.017962545983249));
+    return -0.111749606737
+      + x
+      * (0.900603878243551 + x * (0.229108274476697 + x * -0.017962545983249));
   },
 
   copy(glyph) {

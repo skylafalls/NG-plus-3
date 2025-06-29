@@ -57,7 +57,7 @@ export const Cloud = {
 
     await signInWithEmailAndPassword(this.auth, email, pass)
       .catch(() => createUserWithEmailAndPassword(this.auth, email, pass))
-      .catch((x) => error = x);
+      .catch(x => error = x);
 
     if (error !== undefined) {
       console.log(`Firebase Login Error: ${error}`);
@@ -126,9 +126,9 @@ export const Cloud = {
       // Bring up the modal if cloud saving will overwrite a cloud save which is older or possibly farther
       const hasBoth = cloudSave && localSave;
       // NOTE THIS CHECK IS INTENTIONALLY DIFFERENT FROM THE LOAD CHECK
-      const hasConflict = hasBoth && saveComparison &&
-        (saveComparison.older === -1 || saveComparison.farther === -1 ||
-          saveComparison.differentName || saveComparison.hashMismatch);
+      const hasConflict = hasBoth && saveComparison
+        && (saveComparison.older === -1 || saveComparison.farther === -1
+          || saveComparison.differentName || saveComparison.hashMismatch);
       if (forceModal || (hasConflict && player.options.showCloudModal)) {
         Modal.addCloudConflict(
           saveId,
@@ -242,9 +242,9 @@ export const Cloud = {
 
       // Bring up the modal if cloud loading will overwrite a local save which is older or possibly farther
       const hasBoth = cloudSave && localSave;
-      const hasConflict = hasBoth &&
-        (saveComparison.older === 1 || saveComparison.farther !== -1 ||
-          saveComparison.differentName);
+      const hasConflict = hasBoth
+        && (saveComparison.older === 1 || saveComparison.farther !== -1
+          || saveComparison.differentName);
       if (hasConflict) {
         Modal.addCloudConflict(
           saveId,

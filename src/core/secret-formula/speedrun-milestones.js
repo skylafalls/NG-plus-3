@@ -37,7 +37,7 @@ export const speedrunMilestones = [
     name: "All Normal Challenges",
     description: "Complete all Normal Challenges",
     checkRequirement: () =>
-      NormalChallenges.all.countWhere((c) => !c.isCompleted) === 0,
+      NormalChallenges.all.countWhere(c => !c.isCompleted) === 0,
     checkEvent: GAME_EVENT.BIG_CRUNCH_AFTER,
   },
   {
@@ -88,7 +88,7 @@ export const speedrunMilestones = [
     key: "allEternityMilestones",
     name: "All Eternity Milestones",
     description: "Unlock all Eternity Milestones",
-    checkRequirement: () => EternityMilestone.all.every((m) => m.isReached),
+    checkRequirement: () => EternityMilestone.all.every(m => m.isReached),
     checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER,
   },
   {

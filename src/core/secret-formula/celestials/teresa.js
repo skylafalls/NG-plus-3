@@ -26,7 +26,7 @@ export const teresa = {
     undo: {
       id: 4,
       price: 1e10,
-      description: 'Unlock "Undo" of equipping a Glyph.',
+      description: "Unlock \"Undo\" of equipping a Glyph.",
       isDisabledInDoomed: true,
     },
     startEU: {

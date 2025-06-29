@@ -48,7 +48,7 @@ class AutomatorParser extends Parser {
       "EOF",
       `
       return () => $.OR($.c1 || ($.c1 = [
-        ${commandAlts.map((e) => `{ ALT: () => ${e} },`).join("\n")}]));
+        ${commandAlts.map(e => `{ ALT: () => ${e} },`).join("\n")}]));
     `,
     );
 

@@ -11,7 +11,7 @@ export const GalaxyGenerator = {
 
   get generationCaps() {
     return PelleRifts.all
-      .map((x) => ({
+      .map(x => ({
         rift: x.config.key,
         cap: x.config.galaxyGeneratorThreshold,
       }))
@@ -92,18 +92,18 @@ export const GalaxyGenerator = {
           Pelle.quotes.end.show();
         }
       }
-      PelleRifts.all.forEach((x) => x.checkMilestoneStates());
+      PelleRifts.all.forEach(x => x.checkMilestoneStates());
 
       // Force-unequip glyphs when the player loses the respective milestone. We call the respec option as normally
       // except for one particular case - when we want to respec into protected slots but have no room to do so. In
       // that case, we force-respec into the inventory instead
       if (
-        !PelleRifts.vacuum.milestones[0].canBeApplied &&
-        Glyphs.active.some((g) => g).length > 0
+        !PelleRifts.vacuum.milestones[0].canBeApplied
+        && Glyphs.active.some(g => g).length > 0
       ) {
         Glyphs.unequipAll(
-          player.options.respecIntoProtected &&
-            Glyphs.findFreeIndex(true) === -1,
+          player.options.respecIntoProtected
+          && Glyphs.findFreeIndex(true) === -1,
         );
         Glyphs.refreshActive();
       }
@@ -118,13 +118,13 @@ export const GalaxyGenerator = {
     );
 
     if (!this.capRift) {
-      PelleRifts.all.forEach((r) =>
+      PelleRifts.all.forEach(r =>
         r.reducedTo = diff.div(1e5).mul(3).add(r.reducedTo).clampMax(2)
-          .toNumber()
+          .toNumber(),
       );
       if (
-        PelleRifts.vacuum.milestones[0].canBeApplied &&
-        !this.hasReturnedGlyphSlot
+        PelleRifts.vacuum.milestones[0].canBeApplied
+        && !this.hasReturnedGlyphSlot
       ) {
         Glyphs.refreshActive();
         EventHub.dispatch(GAME_EVENT.GLYPHS_EQUIPPED_CHANGED);
@@ -158,5 +158,5 @@ export class GalaxyGeneratorUpgrade extends RebuyableMechanicState {
 
 export const GalaxyGeneratorUpgrades = mapGameDataToObject(
   GameDatabase.celestials.pelle.galaxyGeneratorUpgrades,
-  (config) => new GalaxyGeneratorUpgrade(config),
+  config => new GalaxyGeneratorUpgrade(config),
 );

@@ -20,22 +20,22 @@ export const automatorTemplates = {
         const preset = str.match(/^(NAME (.{1,4})|ID (\d))$/u);
         const validPreset = preset
           ? (
-            player.timestudy.presets.some((p) => p.name === preset[2]) ||
-            (Number(preset[3]) > 0 && Number(preset[3]) < 7)
-          )
+              player.timestudy.presets.some(p => p.name === preset[2])
+              || (Number(preset[3]) > 0 && Number(preset[3]) < 7)
+            )
           : false;
         return validImport || validPreset;
       },
     },
     {
       name: "integer",
-      isValidString: (str) => AutobuyerInputFunctions.int.tryParse(str),
-      map: (x) => Math.round(parseInt(x, 10)),
+      isValidString: str => AutobuyerInputFunctions.int.tryParse(str),
+      map: x => Math.round(parseInt(x, 10)),
     },
     {
       name: "decimal",
-      isValidString: (str) => AutobuyerInputFunctions.decimal.tryParse(str),
-      map: (x) => AutobuyerInputFunctions.decimal.tryParse(x),
+      isValidString: str => AutobuyerInputFunctions.decimal.tryParse(str),
+      map: x => AutobuyerInputFunctions.decimal.tryParse(x),
     },
     {
       name: "boolean",
@@ -48,7 +48,7 @@ export const automatorTemplates = {
     {
       name: "mode",
       boolDisplay: ["X times highest", "Seconds since last"],
-      map: (x) => (x ? "mult" : "time"),
+      map: x => (x ? "mult" : "time"),
     },
   ],
   /**

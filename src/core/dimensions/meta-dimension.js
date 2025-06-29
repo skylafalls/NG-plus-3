@@ -433,7 +433,7 @@ export const MetaDimensions = {
 
   maxAll() {
     for (let tier = 1; tier < 9; tier++) {
-      this.buyMax(tier)
+      this.buyMax(tier);
     }
   },
 

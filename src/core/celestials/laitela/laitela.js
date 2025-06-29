@@ -96,8 +96,8 @@ export const Laitela = {
     return 1e60;
   },
   get canAnnihilate() {
-    return Laitela.annihilationUnlocked &&
-      Currency.darkMatter.gte(this.annihilationDMRequirement);
+    return Laitela.annihilationUnlocked
+      && Currency.darkMatter.gte(this.annihilationDMRequirement);
   },
   annihilate(force) {
     if (!force && !this.canAnnihilate) {
@@ -115,7 +115,7 @@ export const Laitela = {
   maxAllDMDimensions(maxTier) {
     // Note that tier is 1-indexed
     const unlockedDimensions = DarkMatterDimensions.all
-      .filter((d) => d.isUnlocked && d.tier <= maxTier);
+      .filter(d => d.isUnlocked && d.tier <= maxTier);
     for (let i = 0; i < maxTier; i++) {
       unlockedDimensions[i].buyManyInterval(Infinity);
     }

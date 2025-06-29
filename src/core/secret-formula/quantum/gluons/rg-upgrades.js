@@ -16,7 +16,7 @@ export const rgGluonUpgrades = [
     id: 3,
     cost: () => new Decimal(5),
     description: () => "Dimension Boosts boosts 1st Meta Dimensions.",
-    effect: () => DimBoost.totalBoosts.plus(1).pow(8),
+    effect: () => DimBoost.totalBoosts.plus(1).pow(8).powEffectOf(Achievement(164)),
     formatEffect: value => formatX(value, 2),
   },
   {

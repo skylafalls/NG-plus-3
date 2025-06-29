@@ -133,14 +133,14 @@ export const secretAchievements = [
       } seconds.`;
     },
     checkRequirement: () =>
-      Time.bestInfinity.totalMilliseconds.lte(1) ||
-      Time.bestEternity.totalMilliseconds.lte(1),
+      Time.bestInfinity.totalMilliseconds.lte(1)
+      || Time.bestEternity.totalMilliseconds.lte(1),
     checkEvent: [GAME_EVENT.BIG_CRUNCH_AFTER, GAME_EVENT.ETERNITY_RESET_AFTER],
   },
   {
     id: 33,
     name: "A sound financial decision",
-    description: 'Import "Shop" (temporary req)',
+    description: "Import \"Shop\" (temporary req)",
   },
   {
     id: 34,
@@ -187,8 +187,8 @@ export const secretAchievements = [
     name: "A cacophonous chorus",
     description: "Have all equipped Glyphs be Music Glyphs.",
     checkRequirement: () =>
-      Glyphs.active.length &&
-      Glyphs.active.every((x) => Glyphs.isMusicGlyph(x)),
+      Glyphs.active.length
+      && Glyphs.active.every(x => Glyphs.isMusicGlyph(x)),
     checkEvent: GAME_EVENT.GLYPHS_EQUIPPED_CHANGED,
   },
   {

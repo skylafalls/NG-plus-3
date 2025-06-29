@@ -162,21 +162,26 @@ export const dilationUpgrades = {
     cost: 5e7,
     description:
       "Antimatter Dimension multiplier based on Dilated Time, unaffected by Time Dilation",
-    effect: () => Currency.dilatedTime.value.pow(308).clampMin(1),
+    effect: () => Currency.dilatedTime.value.plus(1).pow(888).logPow(1.3).clampMin(1),
     formatEffect: value => formatX(value, 2, 1),
   },
   dilatedTimeToReplicanti: {
     id: 8,
     cost: 1e20,
     description: "Replicanti increases faster based on Dilated Time",
-    effect: () => Currency.dilatedTime.value.clampMin(1).pow(0.05),
+    effect: () => softcap({
+      baseResource: Currency.dilatedTime.value.clampMin(1).pow(0.1),
+      softcapStart: 1e80,
+      softcapPower: 0.5,
+      softcapType: SOFTCAP_MODES.POLYNOMIAL,
+    }),
     formatEffect: value => formatX(value, 2, 1),
   },
   ipMultDT: {
     id: 9,
     cost: 2e12,
     description: "Gain a multiplier to Infinity Points based on Dilated Time",
-    effect: () => Currency.dilatedTime.value.clampMin(1).pow(500),
+    effect: () => Currency.dilatedTime.value.clampMin(1).pow(1337).logPow(1.2),
     formatEffect: value => formatX(value, 2, 1),
   },
   timeStudySplit: {

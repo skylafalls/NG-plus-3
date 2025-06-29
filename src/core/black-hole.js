@@ -4,8 +4,8 @@ import { DC } from "./constants";
 
 class BlackHoleUpgradeState {
   constructor(config) {
-    const { getAmount, setAmount, calculateValue, initialCost, costMult } =
-      config;
+    const { getAmount, setAmount, calculateValue, initialCost, costMult }
+      = config;
     this.incrementAmount = () => setAmount(getAmount().add(1));
     this._lazyValue = new Lazy(() => calculateValue(getAmount()));
     this._lazyCost = new Lazy(() =>
@@ -18,7 +18,7 @@ class BlackHoleUpgradeState {
         DC.E310,
         DC.E5,
         DC.E1,
-      )
+      ),
     );
     this.id = config.id;
     this.hasAutobuyer = config.hasAutobuyer;
@@ -81,8 +81,8 @@ class BlackHoleState {
     this.intervalUpgrade = new BlackHoleUpgradeState({
       id: this.id,
       getAmount: () => this._data.intervalUpgrades,
-      setAmount: (amount) => this._data.intervalUpgrades = amount,
-      calculateValue: (amount) =>
+      setAmount: amount => this._data.intervalUpgrades = amount,
+      calculateValue: amount =>
         Decimal.pow(0.8, amount).mul(Decimal.div(3600, Decimal.pow(10, id))),
       initialCost: blackHoleCostMultipliers[id].mul(15),
       costMult: new Decimal(3.5),
@@ -97,8 +97,8 @@ class BlackHoleState {
     this.powerUpgrade = new BlackHoleUpgradeState({
       id: this.id,
       getAmount: () => this._data.powerUpgrades,
-      setAmount: (amount) => this._data.powerUpgrades = amount,
-      calculateValue: (amount) =>
+      setAmount: amount => this._data.powerUpgrades = amount,
+      calculateValue: amount =>
         Decimal.pow(1.35, amount).mul(Decimal.div(180, Decimal.pow(2, id))),
       initialCost: blackHoleCostMultipliers[id].mul(20),
       costMult: DC.D2,
@@ -108,8 +108,8 @@ class BlackHoleState {
     this.durationUpgrade = new BlackHoleUpgradeState({
       id: this.id,
       getAmount: () => this._data.durationUpgrades,
-      setAmount: (amount) => this._data.durationUpgrades = amount,
-      calculateValue: (amount) =>
+      setAmount: amount => this._data.durationUpgrades = amount,
+      calculateValue: amount =>
         Decimal.pow(1.3, amount).mul(DC.E1.sub(id * 3)),
       initialCost: blackHoleCostMultipliers[id].mul(10),
       costMult: DC.D4,
@@ -153,8 +153,8 @@ class BlackHoleState {
   }
 
   get isUnlocked() {
-    return this._data.unlocked && !Enslaved.isRunning &&
-      !Pelle.isDisabled("blackhole");
+    return this._data.unlocked && !Enslaved.isRunning
+      && !Pelle.isDisabled("blackhole");
   }
 
   get isCharged() {
@@ -223,25 +223,25 @@ class BlackHoleState {
   // The logic to determine what state the black hole is in for displaying is nontrivial and used in multiple places
   get displayState() {
     if (Pelle.isDisabled("blackhole")) {
-      return '<i class="fas fa-ban"></i> Disabled';
+      return "<i class=\"fas fa-ban\"></i> Disabled";
     }
     if (Enslaved.isAutoReleasing) {
       if (Enslaved.autoReleaseTick < 3) {
-        return '<i class="fas fa-compress-arrows-alt u-fa-padding"></i> Pulsing';
+        return "<i class=\"fas fa-compress-arrows-alt u-fa-padding\"></i> Pulsing";
       }
-      return '<i class="fas fa-expand-arrows-alt u-fa-padding"></i> Pulsing';
+      return "<i class=\"fas fa-expand-arrows-alt u-fa-padding\"></i> Pulsing";
     }
     if (Enslaved.isStoringGameTime) {
-      return '<i class="fas fa-compress-arrows-alt"></i> Charging';
+      return "<i class=\"fas fa-compress-arrows-alt\"></i> Charging";
     }
     if (BlackHoles.areNegative) {
-      return '<i class="fas fa-caret-left"></i> Inverted';
+      return "<i class=\"fas fa-caret-left\"></i> Inverted";
     }
     if (BlackHoles.arePaused) {
-      return '<i class="fas fa-pause"></i> Paused';
+      return "<i class=\"fas fa-pause\"></i> Paused";
     }
     if (this.isPermanent) {
-      return '<i class="fas fa-infinity"></i> Permanent';
+      return "<i class=\"fas fa-infinity\"></i> Permanent";
     }
 
     const timeString = TimeSpan.fromSeconds(
@@ -254,9 +254,9 @@ class BlackHoleState {
   }
 
   get isActive() {
-    return this.isCharged &&
-      (this.id === 1 || BlackHole(this.id - 1).isActive) &&
-      !Pelle.isDisabled("blackhole");
+    return this.isCharged
+      && (this.id === 1 || BlackHole(this.id - 1).isActive)
+      && !Pelle.isDisabled("blackhole");
   }
 
   // Proportion of active time, scaled 0 to 1
@@ -373,7 +373,7 @@ class BlackHoleState {
   }
 }
 
-BlackHoleState.list = Array.range(0, 2).map((id) => new BlackHoleState(id));
+BlackHoleState.list = Array.range(0, 2).map(id => new BlackHoleState(id));
 
 /**
  * @param {number} id
@@ -458,12 +458,12 @@ export const BlackHoles = {
   },
 
   get areNegative() {
-    return this.arePaused && !Enslaved.isRunning && !Laitela.isRunning &&
-      player.blackHoleNegative.lt(1);
+    return this.arePaused && !Enslaved.isRunning && !Laitela.isRunning
+      && player.blackHoleNegative.lt(1);
   },
 
   get arePermanent() {
-    return BlackHoles.list.every((bh) => bh.isPermanent);
+    return BlackHoles.list.every(bh => bh.isPermanent);
   },
 
   updatePhases(blackHoleDiff) {
@@ -537,7 +537,7 @@ export const BlackHoles = {
     const realTickTime = this.binarySearch(
       0,
       totalRealTime,
-      (x) =>
+      x =>
         this.calculateGameTimeFromRealTime(x, speedups).mul(numberOfTicks).div(
           totalGameTime,
         ),
@@ -711,8 +711,8 @@ export const BlackHoles = {
     // if both intervals are 3 seconds (so the next pause would be when they happen to align,
     // which is rare and will probably lead to a full 100 steps).
     if (
-      intervals[0].lte(BlackHoles.ACCELERATION_TIME) &&
-      intervals[1].lte(BlackHoles.ACCELERATION_TIME)
+      intervals[0].lte(BlackHoles.ACCELERATION_TIME)
+      && intervals[1].lte(BlackHoles.ACCELERATION_TIME)
     ) {
       return null;
     }

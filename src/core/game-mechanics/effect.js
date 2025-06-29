@@ -3,10 +3,10 @@ export class Effect {
     if (effect === undefined || this.isCustomEffect) {
       return;
     }
-    const isFunction = (v) => typeof v === "function";
-    const isNumber = (v) => typeof v === "number";
-    const isDecimal = (v) => v instanceof Decimal;
-    const isConstant = (v) => isNumber(v) || isDecimal(v);
+    const isFunction = v => typeof v === "function";
+    const isNumber = v => typeof v === "number";
+    const isDecimal = v => v instanceof Decimal;
+    const isConstant = v => isNumber(v) || isDecimal(v);
     if (!isFunction(effect) && !isConstant(effect)) {
       throw new Error("Unknown effect value type.");
     }

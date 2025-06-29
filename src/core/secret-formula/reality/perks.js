@@ -147,12 +147,12 @@ export const perks = {
       return `Improve Time Study 122 to ${formatX(50)} Eternity Points and
         Time Study 142 to ${formatX(DC.E50)} Infinity Points.
         ${
-        Pelle.isDoomed
-          ? ""
-          : `In addition, Time Study 132 also makes Replicanti ${
-            format(3)
-          } times faster.`
-      }`;
+          Pelle.isDoomed
+            ? ""
+            : `In addition, Time Study 132 also makes Replicanti ${
+              format(3)
+            } times faster.`
+        }`;
     },
     layoutPosList: [67054, 79400, 80999, 80202, 78594, 52589],
   },
@@ -243,8 +243,8 @@ export const perks = {
     label: "DILR",
     family: PERK_FAMILY.DILATION,
     description:
-      "Remove the Eternity Challenge 11, Eternity Challenge 12, and total Time Theorem " +
-      "requirements from Time Dilation unlock.",
+      "Remove the Eternity Challenge 11, Eternity Challenge 12, and total Time Theorem "
+      + "requirements from Time Dilation unlock.",
     automatorPoints: 5,
     shortDescription: () => "Unlocking Dilation only requires TT",
     layoutPosList: [129011, 81802, 80203, 80198, 80600, 109116],
@@ -372,8 +372,8 @@ export const perks = {
     get description() {
       return `When buying the 3rd rebuyable Dilation Upgrade,
         multiply your current Tachyon Particle amount by ${
-        formatFloat(1.5, 1)
-      }.`;
+          formatFloat(1.5, 1)
+        }.`;
     },
     effect: 1.5,
     layoutPosList: [111739, 81799, 79800, 79797, 81403, 115434],
@@ -396,8 +396,8 @@ export const perks = {
     get description() {
       return `When buying the 3rd rebuyable Dilation Upgrade,
         multiply your current Tachyon Particle amount by ${
-        formatFloat(2.5, 1)
-      }.`;
+          formatFloat(2.5, 1)
+        }.`;
     },
     effect: 2.5,
     layoutPosList: [96175, 82599, 79400, 80195, 81409, 116540],
@@ -563,7 +563,7 @@ export const perks = {
   },
 };
 
-export const perkConnections = function () {
+export const perkConnections = (function () {
   const p = perks;
   // First item is the start, other items are the ends
   const groups = [
@@ -620,17 +620,17 @@ export const perkConnections = function () {
   const connections = {};
   for (const perk of Object.values(perks)) {
     const connectedPerks = [];
-    const directConnections = groups.find((g) => g[0] === perk);
+    const directConnections = groups.find(g => g[0] === perk);
     if (directConnections !== undefined) {
       connectedPerks.push(...directConnections.slice(1));
     }
     const indirectConnections = groups
-      .filter((g) => g.slice(1).some((groupPerk) => groupPerk === perk))
-      .map((g) => g[0]);
+      .filter(g => g.slice(1).some(groupPerk => groupPerk === perk))
+      .map(g => g[0]);
     connectedPerks.push(...indirectConnections);
     connections[perk.id] = [
-      ...new Set(connectedPerks.map((connectedPerk) => connectedPerk.id)),
+      ...new Set(connectedPerks.map(connectedPerk => connectedPerk.id)),
     ];
   }
   return connections;
-}();
+}());

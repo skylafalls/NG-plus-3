@@ -48,8 +48,8 @@ class GlyphEffectConfig {
     /** @type {string} See info about setup, above */
     this._totalDesc = setup.totalDesc ?? setup.singleDesc;
     /** @type {string} description of the effect without a specific value */
-    this._genericDesc = setup.genericDesc ??
-      setup.singleDesc.replace("{value}", "x");
+    this._genericDesc = setup.genericDesc
+      ?? setup.singleDesc.replace("{value}", "x");
     /** @type {string} shortened description for use in glyph choice info modal */
     this._shortDesc = setup.shortDesc;
     /**
@@ -61,7 +61,7 @@ class GlyphEffectConfig {
      * @type {function(Decimal): string} formatting function for the effect
      * (just the number conversion). Combined with the description strings to make descriptions
      */
-    this.formatEffect = setup.formatEffect ?? ((x) => format(x, 3, 3));
+    this.formatEffect = setup.formatEffect ?? (x => format(x, 3, 3));
     /** @type {function(Decimal): string} See info about setup, above */
     this.formatSingleEffect = setup.formatSingleEffect || this.formatEffect;
     /**
@@ -75,11 +75,11 @@ class GlyphEffectConfig {
      * @type {function(Decimal): string} formatSecondaryEffect formatting function for
      * the secondary effect (if there is one)
      */
-    this.formatSecondaryEffect = setup.formatSecondaryEffect ||
-      ((x) => format(x, 3, 3));
+    this.formatSecondaryEffect = setup.formatSecondaryEffect
+      || (x => format(x, 3, 3));
     /** @type {function(Decimal): string} See info about setup, above */
-    this.formatSingleSecondaryEffect = setup.formatSingleSecondaryEffect ||
-      this.formatSecondaryEffect;
+    this.formatSingleSecondaryEffect = setup.formatSingleSecondaryEffect
+      || this.formatSecondaryEffect;
     /** @type {string} color to show numbers in glyph tooltips if boosted */
     this.alteredColor = setup.alteredColor;
     /** @type {number} string passed along to tooltip code to ensure proper formatting */
@@ -167,15 +167,15 @@ class GlyphEffectConfig {
       "shortDesc",
       "enabledInDoomed",
     ]);
-    const unknownField = Object.keys(setup).find((k) => !KNOWN_KEYS.has(k));
+    const unknownField = Object.keys(setup).find(k => !KNOWN_KEYS.has(k));
     if (unknownField !== undefined) {
       throw new Error(
         `Glyph effect "${setup.id}" includes unrecognized field "${unknownField}"`,
       );
     }
 
-    const unknownGlyphType = setup.glyphTypes.find((e) =>
-      !GlyphInfo.glyphTypes.includes(e())
+    const unknownGlyphType = setup.glyphTypes.find(e =>
+      !GlyphInfo.glyphTypes.includes(e()),
     );
     if (unknownGlyphType !== undefined) {
       throw new Error(
@@ -196,8 +196,8 @@ class GlyphEffectConfig {
       }
       if (setup.softcap) {
         throw new Error(
-          `The combine function for Glyph effect "${setup.id}" gives capped information, ` +
-            "but there's also a softcap method",
+          `The combine function for Glyph effect "${setup.id}" gives capped information, `
+          + "but there's also a softcap method",
         );
       }
     }
@@ -211,7 +211,7 @@ class GlyphEffectConfig {
     // No supplied capped indicator
     if (typeof emptyCombine === "number") {
       if (softcap === undefined) {
-        return (effects) => ({ value: combine(effects), capped: false });
+        return effects => ({ value: combine(effects), capped: false });
       }
       return (effects) => {
         const rawValue = combine(effects);
@@ -221,7 +221,7 @@ class GlyphEffectConfig {
     }
     if (emptyCombine instanceof Decimal) {
       if (softcap === undefined) {
-        return (effects) => ({ value: combine(effects), capped: false });
+        return effects => ({ value: combine(effects), capped: false });
       }
       const neqTest = emptyCombine.value instanceof Decimal
         ? (a, b) => a.neq(b)
@@ -244,7 +244,7 @@ export const realityGlyphEffectLevelThresholds = [0, 9000, 15000, 25000];
 
 export const GlyphEffects = mapGameDataToObject(
   GameDatabase.reality.glyphEffects,
-  (config) => new GlyphEffectConfig(config),
+  config => new GlyphEffectConfig(config),
 );
 
 export function makeGlyphEffectBitmask(effectList) {
@@ -260,10 +260,10 @@ export function getGlyphEffectsFromBitmask() {
 
 export function getGlyphEffectsFromArray(array) {
   return orderedEffectList
-    .map((effectName) => GlyphEffects[effectName])
-    .filter((effect) => array.includes(effect.id));
+    .map(effectName => GlyphEffects[effectName])
+    .filter(effect => array.includes(effect.id));
 }
 
 export function getGlyphIDsFromBitmask(bitmask) {
-  return getGlyphEffectsFromBitmask(bitmask).map((x) => x.id);
+  return getGlyphEffectsFromBitmask(bitmask).map(x => x.id);
 }

@@ -40,8 +40,8 @@ window.formatInt = function formatInt(value) {
   }
   return (!(value instanceof Decimal) || value.lt(1e9))
     ? formatWithCommas(
-      value instanceof Decimal ? value.toNumber().toFixed(0) : 1,
-    )
+        value instanceof Decimal ? value.toNumber().toFixed(0) : 1,
+      )
     : format(value, 2, 2);
 };
 
@@ -162,8 +162,8 @@ window.formatEffectPos = function formatEffectPos(
   val = new Decimal(effect);
   val.layer = 1;
 
-  return formatInt(Math.floor(effect.slog() - 1)) + "th Expo " +
-    formatPow(val, 2, 2);
+  return formatInt(Math.floor(effect.slog() - 1)) + "th Expo "
+    + formatPow(val, 2, 2);
 };
 
 // Does not take negative numbers fyi, just ints between 0-1 (excluding)
@@ -180,8 +180,8 @@ window.formatEffectNeg = function formatEffectNeg(effect, effectedValue) {
   val = new Decimal(effect);
   val.layer = 1;
 
-  return formatInt(Math.floor(effect.recip().slog().toNumber() - 1)) +
-    "th Expo " + formatPow(val, 2, 2);
+  return formatInt(Math.floor(effect.recip().slog().toNumber() - 1))
+    + "th Expo " + formatPow(val, 2, 2);
 };
 
 window.formatEffectAuto = function formatEffectAuto(value, effectedValue) {
@@ -350,9 +350,9 @@ window.formatWhole = function formatWhole(num) {
 window.formatSmall = function formatSmall(value, places = 2, placesUnder1000 = 3) {
   if (isEND()) return "END";
   if (!isDecimal(value)) value = new Decimal(value);
-  if(value.gte(1)) return format(value, places, placesUnder1000);
+  if (value.gte(1)) return format(value, places, placesUnder1000);
 
-  if(value.gte(0.01)) return format(value, 3, 3);
+  if (value.gte(0.01)) return format(value, 3, 3);
   value = invertOOM(value);
   const val = Notation.scientific.format(value, places, placesUnder1000);
   return val.replace(/([^(?:e|F| )]*)$/, "-$1");

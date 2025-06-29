@@ -1,4 +1,4 @@
-export const notify = function () {
+export const notify = (function () {
   const template = document.createElement("div");
   template.classList.add("o-notification");
   const enterAnimation = "a-notification--enter";
@@ -56,4 +56,4 @@ export const notify = function () {
       showNotification(text, "o-notification--strike", duration),
     showBlackHoles: true,
   };
-}();
+}());

@@ -127,7 +127,7 @@ class BasicAlchemyResourceState extends AlchemyResourceState {
 
 class AdvancedAlchemyResourceState extends AlchemyResourceState {
   get cap() {
-    const reagentCaps = this.reaction.reagents.map((x) => x.resource.cap);
+    const reagentCaps = this.reaction.reagents.map(x => x.resource.cap);
     return Decimal.min(...reagentCaps);
   }
 }
@@ -151,13 +151,13 @@ class AlchemyReaction {
   // product. This allows resources to be created quickly when its reaction is initially turned on with saved reagents.
   get reactionYield() {
     if (
-      !this._product.isUnlocked ||
-      this._reagents.some((r) => !r.resource.isUnlocked)
+      !this._product.isUnlocked
+      || this._reagents.some(r => !r.resource.isUnlocked)
     ) {
       return new Decimal();
     }
     let forcingFactor = this._reagents
-      .map((r) => r.resource.amount);
+      .map(r => r.resource.amount);
     while (forcingFactor.length > 1) {
       if (forcingFactor[0].gt(forcingFactor[1])) {
         forcingFactor.splice(1, 1);
@@ -169,7 +169,7 @@ class AlchemyReaction {
     forcingFactor = forcingFactor.sub(this._product.amount);
     forcingFactor = forcingFactor.div(100);
     const totalYield = this._reagents
-      .map((r) => r.resource.amount.div(r.cost));
+      .map(r => r.resource.amount.div(r.cost));
     while (totalYield.length > 1) {
       if (totalYield[0].gt(totalYield[1])) {
         totalYield.splice(1, 1);
@@ -278,33 +278,29 @@ class AlchemyReaction {
 
 export const AlchemyResource = mapGameDataToObject(
   GameDatabase.celestials.alchemy.resources,
-  (
-    config,
-  ) => (config.isBaseResource
+  config => (config.isBaseResource
     ? new BasicAlchemyResourceState(config)
     : new AdvancedAlchemyResourceState(config)),
 );
 
 export const AlchemyResources = {
   all: AlchemyResource.all,
-  base: AlchemyResource.all.filter((r) => r.isBaseResource),
+  base: AlchemyResource.all.filter(r => r.isBaseResource),
 };
 
-export const AlchemyReactions = function () {
+export const AlchemyReactions = (function () {
   // For convenience and readability, stuff is named differently in GameDatabase
   function mapReagents(resource) {
     return resource.config.reagents
-      .map((r) => ({
-        resource: AlchemyResources.all.find((x) => x.id === r.resource),
+      .map(r => ({
+        resource: AlchemyResources.all.find(x => x.id === r.resource),
         cost: r.amount,
       }));
   }
   return {
     all: AlchemyResources.all
       .map(
-        (
-          r,
-        ) => (r.isBaseResource ? null : new AlchemyReaction(r, mapReagents(r))),
+        r => (r.isBaseResource ? null : new AlchemyReaction(r, mapReagents(r))),
       ),
   };
-}();
+}());

@@ -252,7 +252,7 @@ export const TimeTheorems = {
 
   calculateTimeStudiesCost() {
     let totalCost = TimeStudy.boughtNormalTS()
-      .map((ts) => ts.cost)
+      .map(ts => ts.cost)
       .reduce(Decimal.sumReducer, new Decimal());
     const ecStudy = TimeStudy.eternityChallenge.current();
     if (ecStudy !== undefined) {

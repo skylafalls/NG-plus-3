@@ -36,7 +36,7 @@ import { DC } from "../../constants";
 // Its not perfect, you will likely still need to touch GlyphSetName.vue to implement new glyphs completely, but i tried my best :P
 
 const complexIncludes = (x, filterItem) =>
-  x.map((n) => n().includes(filterItem)).includes(true);
+  x.map(n => n().includes(filterItem)).includes(true);
 
 export const GlyphInfo = {
   glyphTypes: [
@@ -157,7 +157,7 @@ export const GlyphInfo = {
   cursed: {
     id: "cursed",
     effects: () =>
-      GlyphEffects.all.filter((e) => complexIncludes(e.glyphTypes, "cursed")),
+      GlyphEffects.all.filter(e => complexIncludes(e.glyphTypes, "cursed")),
     effectIDs: [
       "cursedgalaxies",
       "curseddimensions",
@@ -182,7 +182,7 @@ export const GlyphInfo = {
   reality: {
     id: "reality",
     effects: () =>
-      GlyphEffects.all.filter((e) => complexIncludes(e.glyphTypes, "reality")),
+      GlyphEffects.all.filter(e => complexIncludes(e.glyphTypes, "reality")),
     effectIDs: [
       "realityglyphlevel",
       "realitygalaxies",
@@ -205,7 +205,7 @@ export const GlyphInfo = {
         // This cap is only feasibly reached with the imaginary upgrade, but we still want to cap it at a nice number
         return Decimal.min(Decimal.sqrt(sac).div(15).add(1), 100);
       },
-      description: (amount) =>
+      description: amount =>
         `Multiply Memory Chunk gain by ${formatX(amount, 2, 3)}`,
       cap: () => GlyphSacrificeHandler.maxSacrificeForEffects,
     },
@@ -222,7 +222,7 @@ export const GlyphInfo = {
   effarig: {
     id: "effarig",
     effects: () =>
-      GlyphEffects.all.filter((e) => complexIncludes(e.glyphTypes, "effarig")),
+      GlyphEffects.all.filter(e => complexIncludes(e.glyphTypes, "effarig")),
     effectIDs: [
       "effarigrm",
       "effarigglyph",
@@ -258,7 +258,7 @@ export const GlyphInfo = {
         const capped = Decimal.min(sac, 1e70);
         return Decimal.log10(capped.div(1e20).add(1)).times(2);
       },
-      description: (amount) =>
+      description: amount =>
         `+${formatPercents(amount.div(100), 2)} additional Glyph rarity`,
       cap: () => 1e70,
     },
@@ -277,8 +277,8 @@ export const GlyphInfo = {
   companion: {
     id: "companion",
     effects: () =>
-      GlyphEffects.all.filter((e) =>
-        complexIncludes(e.glyphTypes, "companion")
+      GlyphEffects.all.filter(e =>
+        complexIncludes(e.glyphTypes, "companion"),
       ),
     effectIDs: ["companiondescription", "companionEP"],
     adjective: "Huggable",
@@ -299,7 +299,7 @@ export const GlyphInfo = {
   power: {
     id: "power",
     effects: () =>
-      GlyphEffects.all.filter((e) => complexIncludes(e.glyphTypes, "power")),
+      GlyphEffects.all.filter(e => complexIncludes(e.glyphTypes, "power")),
     adjective: { high: "Powerful", mid: "Mastered", low: "Potential" },
     effectIDs: ["powerpow", "powermult", "powerdimboost", "powerbuy10"],
     noun: "Power",
@@ -351,7 +351,7 @@ export const GlyphInfo = {
   infinity: {
     id: "infinity",
     effects: () =>
-      GlyphEffects.all.filter((e) => complexIncludes(e.glyphTypes, "infinity")),
+      GlyphEffects.all.filter(e => complexIncludes(e.glyphTypes, "infinity")),
     effectIDs: ["infinitypow", "infinityrate", "infinityIP", "infinityinfmult"],
     adjective: { high: "Infinite", mid: "Boundless", low: "Immense" },
     noun: "Infinity",
@@ -372,7 +372,7 @@ export const GlyphInfo = {
         );
         return Decimal.log10(Decimal.pow(capped, 0.2).div(100).add(1)).add(1);
       },
-      description: (amount) =>
+      description: amount =>
         `${
           formatX(amount, 2, 2)
         } bigger multiplier when buying 8th Infinity Dimension`,
@@ -391,8 +391,8 @@ export const GlyphInfo = {
   replication: {
     id: "replication",
     effects: () =>
-      GlyphEffects.all.filter((e) =>
-        complexIncludes(e.glyphTypes, "replication")
+      GlyphEffects.all.filter(e =>
+        complexIncludes(e.glyphTypes, "replication"),
       ),
     effectIDs: [
       "replicationspeed",
@@ -449,7 +449,7 @@ export const GlyphInfo = {
   time: {
     id: "time",
     effects: () =>
-      GlyphEffects.all.filter((e) => complexIncludes(e.glyphTypes, "time")),
+      GlyphEffects.all.filter(e => complexIncludes(e.glyphTypes, "time")),
     effectIDs: ["timepow", "timespeed", "timeetermult", "timeEP"],
     adjective: { high: "Temporal", mid: "Chronal", low: "Transient" },
     noun: "Time",
@@ -470,7 +470,7 @@ export const GlyphInfo = {
         );
         return Decimal.pow(Decimal.pow(capped, 0.2).div(100).add(1), 2);
       },
-      description: (amount) =>
+      description: amount =>
         `${
           formatX(amount, 2, 2)
         } bigger multiplier when buying 8th Time Dimension`,
@@ -489,7 +489,7 @@ export const GlyphInfo = {
   dilation: {
     id: "dilation",
     effects: () =>
-      GlyphEffects.all.filter((e) => complexIncludes(e.glyphTypes, "dilation")),
+      GlyphEffects.all.filter(e => complexIncludes(e.glyphTypes, "dilation")),
     effectIDs: [
       "dilationDT",
       "dilationgalaxyThreshold",
@@ -519,7 +519,7 @@ export const GlyphInfo = {
         ).mul(0.32);
         return Decimal.pow(Decimal.max(capped, 1), exponent);
       },
-      description: (amount) =>
+      description: amount =>
         `Multiply Tachyon Particle gain by ${formatX(amount, 2, 2)}`,
       cap: () => GlyphSacrificeHandler.maxSacrificeForEffects,
     },
@@ -546,7 +546,7 @@ export const cosmeticGlyphs = {
     symbol: "\uE010",
     color: "#E4B51A",
     preventBlur: true,
-    isUnlocked: () => Themes.available().map((t) => t.name).includes("S11"),
+    isUnlocked: () => Themes.available().map(t => t.name).includes("S11"),
     canCustomize: () => false,
   },
 };
