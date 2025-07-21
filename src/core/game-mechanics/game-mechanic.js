@@ -13,6 +13,7 @@ export class GameMechanicState extends Effect {
     if (config.effects !== undefined) {
       this.effects = {};
       for (const key in config.effects) {
+        if (!Object.hasOwn(config.effects, key)) continue;
         const nested = config.effects[key];
         let effect;
         if (

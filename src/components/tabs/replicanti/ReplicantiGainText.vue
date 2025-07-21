@@ -1,5 +1,7 @@
 <script>
-export default {
+import { defineComponent } from 'vue';
+
+export default defineComponent({
   name: "ReplicantiGainText",
   data() {
     return {
@@ -123,7 +125,7 @@ export default {
       }
     },
   },
-};
+});
 </script>
 
 <template>

@@ -442,7 +442,6 @@ export const MetaDimensions = {
       let boost = new Decimal(2);
       boost = boost.timesEffectsOf(
         DilationUpgrade.mdBuffDT,
-        QuantumChallenge(5).reward,
         MasteryStudy(82),
       );
       if (QuantumChallenge(4).isRunning || QuantumChallenge(8).isRunning) {

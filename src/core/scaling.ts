@@ -43,12 +43,12 @@ export function softcap(parameters: SoftcapParameters) {
   }
 
   switch (parameters.softcapType) {
-    case SOFTCAP_MODES.POLYNOMIAL: {
-      return parameters.baseResource.div(start).pow(power).mul(start);
-    }
-
     case SOFTCAP_MODES.MULTIPLICATIVE: {
       return parameters.baseResource.sub(start).div(power).plus(start);
+    }
+
+    case SOFTCAP_MODES.POLYNOMIAL: {
+      return parameters.baseResource.div(start).pow(power).mul(start);
     }
 
     case SOFTCAP_MODES.DILATION: {
@@ -153,6 +153,42 @@ export function scale(parameters: ScaleParameters) {
 
     default: {
       return parameters.baseResource;
+    }
+  }
+}
+
+interface SoftcapGradualParams {
+  start: Decimal | string | number
+  scalingStrength: Decimal | string | number
+  initialPower: Decimal | string | number
+  type: "polynomial" | "dilative"
+}
+
+/**
+ * This function takes in the resource, the softcap start, the scaling power, and the initial power
+ * and converts it into a softcap on the resource that gradually gets stronger the more
+ * of the the resource you accumlate.
+ *
+ * Currently only polynomial (x^y) and dilative (10^log10(x)^y) equations are supported
+ * but this function can be expanded to support more later down the line.
+ */
+export function softcapGradual(resource: Decimal, config: SoftcapGradualParams) {
+  const { type } = config;
+  const start = new Decimal(config.start);
+  const scale = new Decimal(config.scalingStrength);
+  const power = new Decimal(config.initialPower);
+  if (resource.lt(start)) return resource;
+  switch (type) {
+    case "polynomial": {
+      const exp = Decimal.div(power, resource.log10().div(start.log10()).pow(scale));
+      return resource.div(start).pow(exp).mul(start);
+    }
+    case "dilative": {
+      const exp = Decimal.div(power, resource.log10().max(1).log10().div(start.log10().max(1).log10()).pow(scale));
+      return Decimal.pow(10, resource.log10().div(start).pow(exp).mul(start));
+    }
+    default: {
+      throw new Error(`The ${type} softcap gradual type is not implemented.`);
     }
   }
 }

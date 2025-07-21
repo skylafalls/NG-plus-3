@@ -1,8 +1,9 @@
 <script>
-import NewTimeDimensionRow from "./ModernTimeDimensionRow";
-import PrimaryButton from "@/components/PrimaryButton";
+import { defineComponent } from "vue";
+import NewTimeDimensionRow from "./ModernTimeDimensionRow.vue";
+import PrimaryButton from "@/components/PrimaryButton.vue";
 
-export default {
+export default defineComponent({
   name: "NewTimeDimensionsTab",
   components: {
     PrimaryButton,
@@ -44,7 +45,7 @@ export default {
       toggleAllTimeDims();
     },
   },
-};
+});
 </script>
 
 <template>

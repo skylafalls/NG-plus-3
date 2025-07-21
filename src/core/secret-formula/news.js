@@ -592,7 +592,7 @@ export const news = [
   {
     id: "a112",
     text:
-      `What the f*ck did you just f*cking say about me, you little b*tch? I'll have you know I graduated top of my
+      `What the fuck did you just fucking say about me, you little bitch? I'll have you know I graduated top of my
       class in the Antimatter Seals, and I've been involved in numerous secret raids on the 9th Dimension, and I
       have over 300 NNnNeMI-NNnNe confirmed kills. I am trained in potato warfare and I'm the top sniper in the
       entire Antimatter Galactic armed forces. You are nothing to me but just another infinity. I will wipe you
@@ -606,7 +606,7 @@ export const news = [
       use it to its full extent to wipe your miserable ass off the face of the universe, you little shit. If only
       you could have known what unhevi retribution your little “clever” comment was about to bring down upon you,
       maybe you would have held your f*cking tongue. But you couldn't, you didn't, and now you're buying until 10,
-      you goddamn idiot. I will shit antimatter shit all over you and you will drown in it. You're f*cking dead,
+      you goddamn idiot. I will shit antimatter shit all over you and you will drown in it. You're fucking dead,
       kiddo.`,
   },
   {
@@ -729,6 +729,7 @@ export const news = [
     text: "Click this to unlock that one secret achievement.",
     // This next line is needed for this news ticker to unlock
     // the secret achievement.
+    // oxlint-disable-next-line no-empty-function
     onClick: () => {},
   },
   {
@@ -782,9 +783,7 @@ export const news = [
     id: "a138",
     get text() {
       return `Check out Avari's newly built actually infinite infinity pool! With an area of
-        ${
-          format(Number.MAX_VALUE, 2)
-        } square megametres, you'll be sure to have infinite fun!`;
+        ${format(Number.MAX_VALUE, 2)} square megametres, you'll be sure to have infinite fun!`;
     },
     isAdvertising: true,
   },
@@ -1143,8 +1142,7 @@ export const news = [
   },
   {
     id: "a197",
-    text:
-      "In order to reach Reality in half an R press, we have to first talk about parallel dimensions.",
+    text: "In order to reach Reality in half an R press, we have to first talk about parallel dimensions.",
   },
   {
     id: "a198",
@@ -1257,11 +1255,11 @@ export const news = [
         "That might as well be zero.",
         "Did you forget an exponent somewhere?",
         "Please, that's nothing.",
+        "Forgot to exponentiate it?",
+        "I think you didn't prestige.",
       ];
       const diss = disses.randomElement();
-      return `Only ${
-        format(Currency.antimatter.value, 2, 0)
-      } antimatter? ${diss}`;
+      return `Only ${format(Currency.antimatter.value, 2, 0)} antimatter? ${diss}`;
     },
   },
   {
@@ -1371,13 +1369,8 @@ export const news = [
   {
     id: "a230",
     get text() {
-      return `You started playing this game nearly
-        ${
-          TimeSpan.fromMilliseconds(
-            new Decimal(Date.now() - player.records.gameCreatedTime),
-          ).toString()
-        }
-        ago. Thank you for playing!`;
+      const timePlayed = TimeSpan.fromMilliseconds(new Decimal(Date.now() - player.records.gameCreatedTime)).toString();
+      return `You started playing this game nearly ${timePlayed} ago. Thank you for playing!`;
     },
     dynamic: true,
   },
@@ -1607,9 +1600,7 @@ export const news = [
   {
     id: "a252",
     get text() {
-      return `<span style='animation: a-text-stretch ${
-        newsAnimSpd(35)
-      }s 1 forwards'>This message is dilated.</span>`;
+      return `<span style='animation: a-text-stretch ${newsAnimSpd(35)}s 1 forwards'>This message is dilated.</span>`;
     },
     get unlocked() {
       return PlayerProgress.realityUnlocked()
@@ -1787,10 +1778,7 @@ export const news = [
     get text() {
       return `Coming soon to all good retailers- Antimatter Dimensions: The Board Game! Enjoy the thrill of watching
       huge numbers go up without the need for a PC or mobile phone. Comes complete with everything you need including a
-      mixed scientific calculator, ${
-        format(Number.MAX_VALUE, 2)
-      } antimatter counters, a high quality plastic
-      BUY MAX button, and over a
+      mixed scientific calculator, ${format(Number.MAX_VALUE, 2)} antimatter counters, a high quality plastic BUY MAX button, and over a
       thousand news message cards with all the irrelevant memes you know and love! You can finally enjoy AD the way
       it was meant to be played. AD: The Board Game is also available in travel size, so you can even experience
       the joy of calculating logarithmic growth while you're on the go! BUY AD: The Board Game TODAY! Warning: may
@@ -1936,9 +1924,7 @@ export const news = [
   {
     id: "a299",
     get text() {
-      return `Buy the new Antimatter Dimensions puzzle set now! With a combined ${
-        format(Number.MAX_VALUE, 2)
-      }
+      return `Buy the new Antimatter Dimensions puzzle set now! With a combined ${format(Number.MAX_VALUE, 2)}
         pieces, these puzzles are the perfect way to spend some quality time with your family!`;
     },
     isAdvertising: true,
@@ -2122,9 +2108,7 @@ export const news = [
   {
     id: "a317",
     get text() {
-      return `${
-        format(Number.MAX_VALUE, 2, 0)
-      }? Doesn't look like anything to me.`;
+      return `${format(Number.MAX_VALUE, 2, 0)}? Doesn't look like anything to me.`;
     },
   },
   {
@@ -2179,8 +2163,7 @@ export const news = [
   (function () {
     let wasClicked = false;
     const normal = "Click here to restart your device.";
-    const clicked
-      = "Please give Antimatter Dimensions admin access to your device.";
+    const clicked = "Please give Antimatter Dimensions admin access to your device.";
     return {
       id: "a327",
       get text() {
@@ -2308,14 +2291,9 @@ export const news = [
     get text() {
       const fakeProgress = Decimal.pow(player.records.realTimePlayed, 25);
       // Caps in ~68 years of real playtime then turns into "Infinite%"
-      return `Global Challenge - across all AD players, accumulate ${
-        format(Number.MAX_VALUE, 2)
-      } contest-paperclips
-        (noted by the
-        square ends), to receive an event-exclusive metal bagpipe, capable of giving +2 AM/s, as well as an extra
-        tickspeed while above ${
-          format(1e200)
-        } tickspeed upgrades! Current global progress -
+      return `Global Challenge - across all AD players, accumulate ${format(Number.MAX_VALUE, 2)} contest-paperclips
+        (noted by the square ends), to receive an event-exclusive metal bagpipe, capable of giving +2 AM/s, as well as an extra
+        tickspeed while above ${format(1e200)} tickspeed upgrades! Current global progress -
         ${format(fakeProgress)}/${format(Number.MAX_VALUE, 2)}
         (${
           formatPercents(
@@ -2415,9 +2393,7 @@ export const news = [
   {
     id: "a352",
     get text() {
-      return `<span style='opacity: 0; animation: a-disappear ${
-        newsAnimSpd(20)
-      }s 1'>
+      return `<span style='opacity: 0; animation: a-disappear ${newsAnimSpd(20)}s 1'>
       This news message is antimemetic. You will forget that it exists shortly.</span>`;
     },
   },
@@ -2679,9 +2655,7 @@ export const news = [
   {
     id: "a379",
     get text() {
-      return `THE ${format(Number.MAX_VALUE, 2)} PIECE! THE ${
-        format(Number.MAX_VALUE, 2)
-      } PIECE IS REAL!`;
+      return `THE ${format(Number.MAX_VALUE, 2)} PIECE! THE ${format(Number.MAX_VALUE, 2)} PIECE IS REAL!`;
     },
   },
   {
@@ -2939,9 +2913,7 @@ export const news = [
   {
     id: "l21",
     get text() {
-      return `I've got ${
-        format(Number.MAX_VALUE, 2)
-      } problems, but none of them antimatter.`;
+      return `I've got ${format(Number.MAX_VALUE, 2)} problems, but none of them antimatter.`;
     },
     get unlocked() {
       return Currency.infinities.gt(0) && !PlayerProgress.hasBroken();
@@ -3073,7 +3045,7 @@ export const news = [
   },
   {
     id: "l38",
-    text: "fucking hacker",
+    text: "Dude I said you can stop",
     get unlocked() {
       return NewsHandler.uniqueTickersSeen > GameDatabase.news.length;
     },
@@ -3136,7 +3108,7 @@ export const news = [
   },
   {
     id: "l46",
-    text: "Achievement Unlocked!",
+    text: "Achievement Unlocked: Breaking Achievements (Unlock more achievements then what the game has implemented.)",
     get unlocked() {
       return Achievements.effectiveCount
         >= GameDatabase.achievements.normal.length;
@@ -3205,6 +3177,9 @@ export const news = [
       if (PlayerProgress.dilationUnlocked()) {
         names.push("Dilation");
       }
+      if (PlayerProgress.quantumUnlocked()) {
+        names.push("Quantum");
+      }
       if (PlayerProgress.realityUnlocked()) {
         names.push("Reality");
       }
@@ -3230,6 +3205,9 @@ export const news = [
         "an antimatter cake: Gather some antimatter, place in oven, and <b>BOOM<b>.",
         "an Eternity cake: Gather some Eternity Points, place in oven, and wait...",
         "an Infinity cake: Gather some Infinity Points, place in oven, and watch them shatter spacetime.",
+        "a Quantum cake: Gather some Quarks, place in oven, and watch them achieve thermonuclear fusion.",
+        "a Fundament cake: Gather some Spectral Partciles, place in oven, and watch as your oven turns transcluent.",
+        "a Reality cake: Gather some Reality Machines, place in oven, and snap back to reality.",
       ];
       const recipe = recipes.randomElement();
       return `How to bake ${recipe}`;
@@ -3305,9 +3283,7 @@ export const news = [
   {
     id: "l60",
     get text() {
-      return `Breaking News! Time Shard mine collapses! ${
-        Math.floor(20 + Math.random() * 236)
-      } miners trapped inside!`;
+      return `Breaking News! Time Shard mine collapses! ${Math.floor(20 + Math.random() * 236)} miners trapped inside!`;
     },
     get unlocked() {
       return PlayerProgress.eternityUnlocked();
@@ -3451,9 +3427,7 @@ export const news = [
         coins or you will never see RealiTV again.</span>`,
         "we break down exactly what went wrong in the black hole powering our city yesterday.",
         "we go over our 10-day weather forcasts.",
-        `YOU MUST PAY ${
-          format(player.reality.realityMachines.times(10).max(10))
-        }
+        `YOU MUST PAY ${format(player.reality.realityMachines.times(10).max(10))}
         REALITY MACHINES TO CONTINUE VIEWING THIS PROGRAM.`,
         "we witness the release of the hypnodrones.",
         "our great and grand overlord lets us have a single antimatter.",
@@ -3543,13 +3517,9 @@ export const news = [
   {
     id: "l80",
     get text() {
-      return `"Average person produces ${
-        format("3e999999996", 2)
-      } antimatter a year" factoid actually just statistical
+      return `"Average person produces ${format("2e999999996", 2)} antimatter a year" factoid actually just statistical
       error. Average person produces 0 antimatter per year. "Developer Dimension" Georg, who lives in a cave &
-      produces over ${
-        format("1e1000000000", 2)
-      } each day, is an outlier and should not have been counted.`;
+      produces over ${format("1e1000000000", 2)} each day, is an outlier and should not have been counted.`;
     },
     get unlocked() {
       return PlayerProgress.hasBroken();
@@ -3570,10 +3540,7 @@ export const news = [
       return `The Great Scribes of Antia have labored intensively for years. They were given a mammoth task from the
       gods; write out an incomprehensibly long number. These scribes took turns, each writing out a few numbers a
       second, writing day and night, for what seemed like an eternity. At last, after
-      ${
-        TimeSpan.fromSeconds(Currency.antimatter.value.max(1).log10().div(3))
-          .toString()
-      }, they finally accomplished
+      ${TimeSpan.fromSeconds(Currency.antimatter.value.max(1).log10().div(3)).toString()}, they finally accomplished
       the impossible. That week, when they went to worship their gods, they sent them a simple message: "What was
       the purpose? What made our years of labor significant?" The gods responded duly: "We wanted to know how long
       it would take to write out, for a statistic in our game."`;
@@ -3689,9 +3656,7 @@ export const news = [
   {
     id: "ai5",
     get text() {
-      return `Local man finds ${
-        format(Number.MAX_VALUE, 2)
-      } Planck volumes in his freezer.`;
+      return `Local man finds ${format(Number.MAX_VALUE, 2)} Planck volumes in his freezer.`;
     },
   },
   {
@@ -4308,6 +4273,9 @@ export const news = [
   {
     id: "ai138",
     text: "click here to unlock the next update",
+    onClick() {
+      window.location.reload();
+    },
   },
   {
     id: "ai139",

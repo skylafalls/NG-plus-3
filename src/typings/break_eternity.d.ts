@@ -5,7 +5,7 @@ export type DecimalSource = Decimal | number | string;
 /**
  * The value of the Decimal is sign * 10^10^10...^mag, with (layer) 10s. If the layer is not 0, then negative mag means it's the reciprocal of the corresponding number with positive mag.
  */
-export default class Decimal {
+declare class Decimal {
   /**
    * Represents the number 0.
    */
@@ -1490,3 +1490,5 @@ export default class Decimal {
   dividedByEffectsOf(...effect: Effect[]): Decimal;
   copyFrom(value: Decimal): void;
 }
+
+export default Decimal;

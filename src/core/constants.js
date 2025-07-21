@@ -11,7 +11,7 @@ window.PRESTIGE_EVENT = {
 /**
  * @template T
  * @param {T} obj
- * @returns {import("utility-types").DeepReadonly<T>}
+ * @returns {import("ts-essentials").DeepReadonly<T>}
  */
 function deepFreeze(obj) {
   Object.keys(obj).forEach((prop) => {

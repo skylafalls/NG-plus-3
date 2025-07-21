@@ -420,10 +420,7 @@ export const glyphEffects = {
       () => (GlyphAlteration.isAdded("power")
         ? "AD power +{value} and AG cost ×{value2}"
         : "AD power +{value}"),
-    effect: (level, strength) =>
-      Decimal.pow(level, 0.2).times(Decimal.pow(strength, 0.4)).div(75).add(
-        1.015,
-      ),
+    effect: (level, strength) => Decimal.pow(level, 0.2).times(Decimal.pow(strength, 0.4)).div(75).add(1.015),
     formatEffect: x => format(x, 3, 3),
     formatSingleEffect: x => format(x.sub(1), 3, 3),
     combine: GlyphCombiner.addExponents,
@@ -439,10 +436,7 @@ export const glyphEffects = {
     glyphTypes: [() => "power"],
     singleDesc: "Antimatter Dimension multipliers ×{value}",
     shortDesc: "AD ×{value}",
-    effect: (
-      level,
-      strength,
-    ) => (GlyphAlteration.isEmpowered("power")
+    effect: (level, strength) => (GlyphAlteration.isEmpowered("power")
       ? DC.D11111.pow(level.times(220))
       : Decimal.tetrate(level.times(strength).times(10), 2)),
     formatEffect: x => formatPostBreak(x, 2, 0),
@@ -451,6 +445,7 @@ export const glyphEffects = {
     alterationType: ALTERATION_TYPE.EMPOWER,
     enabledInDoomed: true,
   },
+  // 2.51e154x
   powerdimboost: {
     id: "powerdimboost",
     intID: 18,
@@ -471,10 +466,7 @@ export const glyphEffects = {
     id: "powerbuy10",
     intID: 19,
     glyphTypes: [() => "power"],
-    singleDesc: () =>
-      `Increase the bonus from buying ${
-        formatInt(10)
-      } Antimatter Dimensions by {value}`,
+    singleDesc: () => `Increase the bonus from buying ${formatInt(10)} Antimatter Dimensions by {value}`,
     totalDesc: () => `Multiplier from "Buy ${formatInt(10)}" ×{value}`,
     genericDesc: () => `"Buy ${formatInt(10)}" bonus increase`,
     shortDesc: () => `AD "Buy ${formatInt(10)}" mult. ×{value}`,
@@ -676,6 +668,7 @@ export const glyphEffects = {
     formatEffect: x => format(x.reciprocal()),
     combine: GlyphCombiner.multiplyDecimal,
   },
+  // +1.27e155
   realityglyphlevel: {
     id: "realityglyphlevel",
     intID: 32,
@@ -688,6 +681,7 @@ export const glyphEffects = {
     formatEffect: x => formatInt(x),
     combine: GlyphCombiner.add,
   },
+  // +4.24e153%
   realitygalaxies: {
     id: "realitygalaxies",
     intID: 33,
@@ -699,6 +693,7 @@ export const glyphEffects = {
     formatEffect: x => formatPercents(x.sub(1), 2),
     combine: GlyphCombiner.multiply,
   },
+  // ^1.44e303
   realityrow1pow: {
     id: "realityrow1pow",
     intID: 34,
@@ -710,6 +705,7 @@ export const glyphEffects = {
     formatEffect: x => format(x, 3, 3),
     combine: GlyphCombiner.addExponents,
   },
+  // +8.48e150
   realityDTglyph: {
     id: "realityDTglyph",
     intID: 35,

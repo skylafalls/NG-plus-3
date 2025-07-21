@@ -112,6 +112,10 @@ TimeStudy.quantumChallenges = DilationTimeStudyState.studies[9];
  * @type {DilationTimeStudyState}
  */
 TimeStudy.pairedChallenges = DilationTimeStudyState.studies[10];
+/**
+ * @type {DilationTimeStudyState}
+ */
+TimeStudy.duplicants = DilationTimeStudyState.studies[11];
 
 TimeStudy.boughtDilationTS = function () {
   return player.dilation.studies.map(id =>

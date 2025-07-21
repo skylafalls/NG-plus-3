@@ -2,12 +2,14 @@
 import { defineComponent } from "vue";
 import DischargeGalaxiesButton from "./DischargeGalaxiesButton.vue";
 import PairProductionUpgradeRow from "./PairProductionUpgradeRow.vue";
+import PrimaryToggleButton from "@/components/PrimaryToggleButton.vue";
 
 export default defineComponent({
   name: "PairProductionTab",
   components: {
     DischargeGalaxiesButton,
     PairProductionUpgradeRow,
+    PrimaryToggleButton,
   },
   data: () => ({
     galaxies: new Decimal(0),
@@ -17,11 +19,17 @@ export default defineComponent({
     electronEffect: new Decimal(0),
     positronEffect: new Decimal(0),
     multPer10After: "",
+    isAutobuyerActive: false,
   }),
   computed: {
     dischargedGalaxiesText() {
       const percentile = this.discharged.div(this.galaxies);
       return `${formatInt(this.discharged)} / ${formatInt(this.galaxies)} ${pluralize("Antimatter Galaxy", this.discharged)} discharged (${formatPercents(percentile, 2)})`;
+    },
+  },
+  watch: {
+    isAutobuyerActive(newValue) {
+      Autobuyer.pairProduction.isActive = newValue;
     },
   },
   methods: {
@@ -33,6 +41,7 @@ export default defineComponent({
       this.multPer10After = formatX(AntimatterDimensions.buyTenMultiplier, 2, 2);
       this.discharged.copyFrom(player.quantum.pair.dischargedGalaxies);
       this.galaxies.copyFrom(player.galaxies);
+      this.isAutobuyerActive = Autobuyer.pairProduction.isActive;
     },
   },
 });
@@ -41,6 +50,12 @@ export default defineComponent({
 <template>
   <div>
     <DischargeGalaxiesButton />
+    <br>
+    <PrimaryToggleButton
+      v-model="isAutobuyerActive"
+      label="Auto Discharge"
+      class="l--spoon-btn-group__little-spoon o-primary-btn--small-spoon"
+    />
     <p>{{ dischargedGalaxiesText }}</p>
     <span
       style="font-size:35px"
@@ -56,7 +71,7 @@ export default defineComponent({
     <span
       style="font-size:15px"
       class="electron-text"
-    >{{ formatX(electronEffect, 3, 2) }}</span>,
+    >{{ formatX(electronEffect, 3, 3) }}</span>,
     <span
       style="font-size:15px"
       class="positron-text"

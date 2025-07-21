@@ -13,18 +13,21 @@ export default defineComponent({
     HeaderQuantumContainer,
     HeaderInfinityContainer,
   },
+  data: () => ({ extendedContainer: false }),
   computed: {
-    extendedContainer() {
-      if (Player.canStudyQuantum || PlayerProgress.quantumUnlocked()) {
-        return true;
-      }
-      return false;
-    },
     classObject() {
       return {
         "c-prestige-info-blocks": !this.extendedContainer,
         "c-prestige-info-blocks--extended": this.extendedContainer,
       };
+    },
+    percentile() {
+      return this.extendedContainer ? "45%" : "0%";
+    }
+  },
+  methods: {
+    update() {
+      this.extendedContainer = Player.canStudyQuantum || PlayerProgress.quantumUnlocked();
     },
   },
 });
@@ -33,9 +36,9 @@ export default defineComponent({
 <template>
   <div :class="classObject">
     <HeaderEternityContainer class="l-game-header__eternity" />
-    <HeaderCenterContainer class="l-game-header__center" />
     <HeaderQuantumContainer class="l-game-header__quantum" />
     <HeaderInfinityContainer class="l-game-header__infinity" />
+    <HeaderCenterContainer class="l-game-header__center" />
   </div>
 </template>
 
@@ -51,7 +54,7 @@ export default defineComponent({
 .c-prestige-info-blocks--extended {
   display: flex;
   flex-direction: row;
-  height: 23rem;
+  height: 25.5rem;
   width: 100%;
   color: var(--color-text);
 }
@@ -63,8 +66,9 @@ export default defineComponent({
 }
 
 .l-game-header__center {
-  position: absolute;
-  right: calc(50% - 25rem);
+  position: relative;
+  left: calc(50% - 25rem);
+  top: v-bind(percentile);
   width: 50rem;
 }
 
@@ -75,9 +79,8 @@ export default defineComponent({
 }
 
 .l-game-header__quantum {
-  position: relative;
-  left: calc(25% - 22rem);
-  top: calc(53%);
+  position: absolute;
+  left: calc(50% - 11rem);
   width: 22rem;
 }
 </style>

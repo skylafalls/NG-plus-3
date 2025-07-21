@@ -287,14 +287,18 @@ export const Tickspeed = {
 
 export const FreeTickspeed = {
   BASE_SOFTCAP: new Decimal(3e5),
-  get GROWTH_RATE() {
-    return new Decimal(6e-6).dividedByEffectOf(QuantumChallenge(7).reward).add(1);
-  },
+  GROWTH_RATE: new Decimal(6e-6),
   GROWTH_EXP: DC.D2,
   tickmult: () => DC.D1.add(Effects.min(1.33, TimeStudy(171)).sub(1)),
 
   get amount() {
     return player.totalTickGained;
+  },
+
+  get growthRate() {
+    let rate = this.GROWTH_RATE;
+    rate = rate.dividedByEffectOf(QuantumChallenge(7).reward);
+    return rate.add(1);
   },
 
   get softcap() {
@@ -307,7 +311,7 @@ export const FreeTickspeed = {
       return new Decimal(this.tickmult());
     }
     return this.tickmult().mul(
-      this.GROWTH_RATE.pow(this.amount.sub(this.softcap)),
+      this.growthRate.pow(this.amount.sub(this.softcap)),
     );
   },
 
@@ -315,7 +319,7 @@ export const FreeTickspeed = {
     return new ExponentialCostScaling({
       baseCost: DC.D1,
       baseIncrease: this.tickmult(),
-      costScale: FreeTickspeed.GROWTH_RATE,
+      costScale: this.growthRate,
       purchasesBeforeScaling: FreeTickspeed.softcap,
     });
   },

@@ -26,7 +26,7 @@ Math.clampMax = function (value, max) {
 Array.prototype.nextSiblingIndex = function (current) {
   const currentIndex = this.indexOf(current);
   if (currentIndex === -1) {
-    throw "Current item is not in array";
+    throw new TypeError("Current item is not in array");
   }
   return currentIndex === this.length - 1 ? 0 : currentIndex + 1;
 };
@@ -38,7 +38,7 @@ Array.prototype.nextSibling = function (current) {
 Array.prototype.previousSiblingIndex = function (current) {
   const currentIndex = this.indexOf(current);
   if (currentIndex === -1) {
-    throw "Current item is not in array";
+    throw new TypeError("Current item is not in array");
   }
   return currentIndex === 0 ? this.length - 1 : currentIndex - 1;
 };
@@ -98,23 +98,10 @@ Decimal.prototype.logRoot = function (decimal) {
   return Decimal.pow10(value);
 };
 
-window.copyToClipboard = (function () {
-  const el = document.createElement("textarea");
-  document.body.append(el);
-  el.style.position = "absolute";
-  el.style.left = "-9999999px";
-  el.setAttribute("readonly", "");
-  return function (str) {
-    try {
-      el.value = str;
-      el.select();
-      return document.execCommand("copy");
-    } catch (ex) {
-      console.log(ex);
-      return false;
-    }
-  };
-}());
+window.copyToClipboard = function copyToClipboard(str) {
+  Promise.resolve(navigator.clipboard.writeText(str))
+    .catch(error => console.error(error));
+};
 
 window.safeCall = function safeCall(fn) {
   if (fn) {
@@ -137,7 +124,7 @@ String.prototype.splice = function (start, delCount, newSubStr) {
  * @returns {number[]}
  */
 Array.range = function (start, count) {
-  return [...Array(count).keys()].map(i => i + start);
+  return [...new Array(count).keys()].map(i => i + start);
 };
 
 /**
@@ -146,7 +133,7 @@ Array.range = function (start, count) {
  * @returns {number[]}
  */
 Array.repeat = function (value, count) {
-  return Array.from({ length: count }).fill(value);
+  return new Array(count).fill(value);
 };
 
 /**
@@ -157,14 +144,14 @@ Array.prototype.first = function (predicate) {
     return this.length > 0 ? this[0] : undefined;
   }
   if (typeof predicate !== "function") {
-    throw "Predicate must be a function";
+    throw new TypeError("Predicate must be a function");
   }
   for (let i = 0; i < this.length; i++) {
     if (predicate(this[i]) === true) {
       return this[i];
     }
   }
-  throw "Array doesn't contain a matching item";
+  throw new Error("Array doesn't contain a matching item");
 };
 
 /**
@@ -175,14 +162,14 @@ Array.prototype.last = function (predicate) {
     return this.length > 0 ? this[this.length - 1] : undefined;
   }
   if (typeof predicate !== "function") {
-    throw "Predicate must be a function";
+    throw new TypeError("Predicate must be a function");
   }
   for (let i = this.length - 1; i >= 0; i--) {
     if (predicate(this[i]) === true) {
       return this[i];
     }
   }
-  throw "Array doesn't contain a matching item";
+  throw new Error("Array doesn't contain a matching item");
 };
 
 /**
@@ -192,7 +179,7 @@ Array.prototype.last = function (predicate) {
  */
 Array.prototype.mapToObject = function (keyFun, valueFun) {
   if (typeof keyFun !== "function" || typeof valueFun !== "function") {
-    throw "keyFun and valueFun must be functions";
+    throw new TypeError("keyFun and valueFun must be functions");
   }
   const out = {};
   for (let idx = 0; idx < this.length; ++idx) {

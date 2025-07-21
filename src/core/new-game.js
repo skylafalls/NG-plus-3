@@ -20,7 +20,7 @@ export const NG = {
         name: speedrun.name,
         offlineTimeUsed: speedrun.offlineTimeUsed,
         records: [...speedrun.records],
-        achievementTimes: JSON.parse(JSON.stringify(speedrun.achievementTimes)),
+        achievementTimes: structuredClone(speedrun.achievementTimes),
         seedSelection: speedrun.seedSelection,
         initialSeed: speedrun.initialSeed,
       };
@@ -28,9 +28,7 @@ export const NG = {
       // For the sake of keeping a bounded savefile size, we only keep a queue of the last 100 full runs. The earliest
       // this will feasibly become an issue from nonstop speedruns is around 2030; I guess we can revisit it at that
       // point if we really need to, but I suspect this limit should be high enough
-      const prevRunIndices = Object.keys(speedrun.previousRuns).map(k =>
-        Number(k),
-      );
+      const prevRunIndices = Object.keys(speedrun.previousRuns).map(Number);
       if (prevRunIndices.length > 100) {
         player.speedrun.previousRuns[prevRunIndices.min()] = undefined;
       }
@@ -54,7 +52,7 @@ export const NG = {
   restartWithCarryover() {
     const backUpOptions = JSON.stringify(player.options);
     // This can't be JSONed as it contains sets
-    const secretUnlocks = player.secretUnlocks;
+    const secretUnlocks = structuredClone(player.secretUnlocks);
     const secretAchievements = JSON.stringify(player.secretAchievementBits);
     // We don't backup the whole player.reality.automator object because it contains "state",
     // which could lead to some edge cases where it starts when it shouldn't (ie before it's unlocked)

@@ -10,6 +10,9 @@ export function resetPreQuantumResources() {
   for (const color of ["red", "green", "blue"]) {
     player.quantum.quarkPowers[color] = new Decimal(0);
   }
+  player.quantum.pair.dischargedGalaxies = new Decimal(0);
+  player.quantum.pair.electrons = new Decimal(0);
+  player.quantum.pair.positrons = new Decimal(0);
 
   // Stage Zero: Meta Dimensions & Mastery Studies (I forgot)
   if (!QuantumSpeedrunMilestone(17).isReached) player.meta.boosts = new Decimal(0);
@@ -118,7 +121,6 @@ export function resetPreQuantumResources() {
   // Stage Nine: Miscellaneous stuff
   if (!QuantumSpeedrunMilestone(1).isReached) Autobuyers.reset();
   AchievementTimers.marathon2.reset();
-  Tab.dimensions.antimatter.show();
   Lazy.invalidateAll();
 }
 
@@ -206,7 +208,7 @@ export function canPerformQuantumReset() {
  * @param {boolean} force If this is true, then don't give rewards and skip to resetting everything.
  */
 export function quantumReset(force = false) {
-  if (!force || !canPerformQuantumReset()) {
+  if (!canPerformQuantumReset() && !force) {
     return;
   }
   if (!force) {

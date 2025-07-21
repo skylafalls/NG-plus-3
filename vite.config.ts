@@ -1,8 +1,8 @@
-import { defineConfig, type UserConfig } from "vite";
+import { defineConfig } from "vite";
 import vue2 from "@vitejs/plugin-vue2";
 import { fileURLToPath } from "node:url";
 
-const config: UserConfig = defineConfig({
+const config = defineConfig({
   base: "/NG-plus-3",
   plugins: [vue2()],
   resolve: {

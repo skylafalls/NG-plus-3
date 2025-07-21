@@ -49,6 +49,7 @@ window.formatFloat = function formatFloat(value, digits) {
   if (isEND()) {
     return "END";
   }
+  if (Decimal.gte(value, 1e9)) return format(value, digits);
   return formatWithCommas(value.toFixed(digits));
 };
 

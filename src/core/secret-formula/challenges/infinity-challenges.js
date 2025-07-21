@@ -46,9 +46,7 @@ export const infinityChallenges = [
   {
     id: 3,
     description: () =>
-      `Tickspeed upgrades are always ${
-        formatX(1)
-      }. For every Tickspeed upgrade purchase, you instead get a static
+      `Tickspeed upgrades are always ${formatX(1)}. For every Tickspeed upgrade purchase, you instead get a static
       multiplier on all Antimatter Dimensions which increases based on Antimatter Galaxies.`,
     goal: DC.E5000,
     isQuickResettable: false,
@@ -64,6 +62,7 @@ export const infinityChallenges = [
       effect: () => {
         let exponentBase = player.galaxies.times(0.005).add(1.05);
         exponentBase = exponentBase.timesEffectOf(EternityChallenge(14).reward);
+        exponentBase = exponentBase.powEffectOf(QuantumChallenge(6).reward);
 
         let eff = Laitela.continuumActive
           ? Decimal.pow(exponentBase, Tickspeed.continuumValue)

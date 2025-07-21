@@ -1,3 +1,4 @@
+// oxlint-disable no-extend-native
 if (!String.prototype.includes) {
   String.prototype.includes = function (search, starting) {
     let start;
@@ -151,13 +152,14 @@ Object.invert = function (obj) {
 
 if (typeof Object.assign !== "function") {
   // Must be writable: true, enumerable: false, configurable: true
+  // oxlint-disable-next-line no-extend-native
   Object.defineProperty(Object, "assign", {
     value: function assign(target) { // .length of function is 2
       if (target === null) { // TypeError if undefined or null
         throw new TypeError("Cannot convert undefined or null to object");
       }
 
-      const to = Object(target);
+      const to = new Object(target);
 
       for (let index = 1; index < arguments.length; index++) {
         const nextSource = arguments[index];
@@ -173,6 +175,7 @@ if (typeof Object.assign !== "function") {
       }
       return to;
     },
+    enumerable: false,
     writable: true,
     configurable: true,
   });

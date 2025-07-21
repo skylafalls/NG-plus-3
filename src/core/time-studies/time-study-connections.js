@@ -213,6 +213,8 @@ MasteryStudy.allConnections = (function () {
     [MS(82), MS(73)],
     [MS(91), MS(81)],
     [MS(92), MS(82)],
+
+    [TimeStudy.duplicants, MS(72)],
   ].map(props => new TimeStudyConnection(props[0], props[1], props[2]));
 
   return connections;

@@ -236,11 +236,9 @@ window.player = {
     singularity: { isActive: false },
     ipMultBuyer: { isActive: false },
     epMultBuyer: { isActive: false },
-    electrons: { isActive: false },
     pairProduction: {
       isActive: false,
     },
-    positrons: { isActive: false },
     mdBoost: { isActive: false },
   },
   infinityPoints: DC.D0,
@@ -1205,11 +1203,11 @@ export const Player = {
   },
 };
 
-export function guardFromNaNValues(obj) {
-  const isObject = (ob) => {
-    return ob !== null && typeof ob === "object" && !(ob instanceof Decimal);
-  };
+const isObject = (ob) => {
+  return ob !== null && typeof ob === "object" && !(ob instanceof Decimal);
+};
 
+export function guardFromNaNValues(obj) {
   for (const key in obj) {
     if (!Object.hasOwn(obj, key)) {
       continue;

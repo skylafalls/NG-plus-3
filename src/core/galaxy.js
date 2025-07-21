@@ -50,15 +50,16 @@ export const Galaxy = {
     calculatedGalaxies = scale({
       baseResource: unscaledGalaxies,
       scaleStart: this.scalingStart[GALAXY_TYPE.DISTANT],
-      scalePower: Decimal.pow(1.8, this.scalingPower[GALAXY_TYPE.DISTANT]),
-      scaleMode: SCALING_TYPES.POLYNOMIAL,
+      // 5x worse scaling (to emulate NG+3 behavior)
+      scalePower: Decimal.pow(5, this.scalingPower[GALAXY_TYPE.DISTANT]),
+      scaleMode: SCALING_TYPES.MULTIPLICATIVE,
       isInverted: true,
     });
 
     calculatedGalaxies = scale({
       baseResource: calculatedGalaxies,
       scaleStart: this.scalingStart[GALAXY_TYPE.REMOTE],
-      scalePower: Decimal.pow(1.01, this.scalingPower[GALAXY_TYPE.REMOTE]),
+      scalePower: Decimal.pow(1.002, this.scalingPower[GALAXY_TYPE.REMOTE]),
       scaleMode: SCALING_TYPES.EXPONENTIAL,
       isInverted: true,
     });
@@ -87,12 +88,12 @@ export const Galaxy = {
       isInverted: true,
     });
 
-    return calculatedGalaxies.floor().add(1).max(minVal);
+    return calculatedGalaxies.ceil().add(1).max(minVal);
   },
 
   // The existing galaxy calculation was shit so i revamped it
   requirementAt(galaxies) {
-    let equivGal = new Decimal(galaxies).add(1);
+    let equivGal = new Decimal(galaxies);
 
     if (QuantumChallenge(5).isRunning) {
       return new GalaxyRequirement(this.requiredTier, this.baseCost
@@ -130,7 +131,7 @@ export const Galaxy = {
       equivGal = scale({
         baseResource: equivGal,
         scaleStart: this.scalingStart[GALAXY_TYPE.REMOTE],
-        scalePower: Decimal.pow(1.01, this.scalingPower[GALAXY_TYPE.REMOTE]),
+        scalePower: Decimal.pow(1.002, this.scalingPower[GALAXY_TYPE.REMOTE]),
         scaleMode: SCALING_TYPES.EXPONENTIAL,
       });
     }
@@ -141,8 +142,9 @@ export const Galaxy = {
       equivGal = scale({
         baseResource: equivGal,
         scaleStart: distantStart,
-        scalePower: Decimal.pow(1.8, distantPower),
-        scaleMode: SCALING_TYPES.POLYNOMIAL,
+        // 5x worse scaling (to emulate NG+3 behavior)
+        scalePower: Decimal.pow(5, distantPower),
+        scaleMode: SCALING_TYPES.MULTIPLICATIVE,
       });
     }
 
@@ -165,13 +167,13 @@ export const Galaxy = {
       MasteryStudy(21),
       MasteryStudy(22),
       MasteryStudy(23),
+      MasteryStudy(71),
     );
 
     let distantStart = DC.E2.plusEffectsOf(
       TimeStudy(223),
       TimeStudy(224),
       TimeStudy(302),
-      MasteryStudy(71),
       EternityChallenge(5).reward,
     ).add(GlyphInfo.power.sacrificeInfo.effect());
 

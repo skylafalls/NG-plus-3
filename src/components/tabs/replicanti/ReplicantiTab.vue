@@ -49,6 +49,8 @@ export default defineComponent({
       scrambledText: "",
       maxReplicanti: new Decimal(),
       estimateToMax: 0,
+      scaleFactor: 0,
+      scaleLogarithim: 0,
     };
   },
   computed: {
@@ -214,6 +216,8 @@ export default defineComponent({
         = Replicanti.galaxies.max.gte(1) || PlayerProgress.eternityUnlocked();
       this.maxReplicanti.copyFrom(player.records.thisReality.maxReplicanti);
       this.estimateToMax = this.calculateEstimate();
+      this.scaleFactor = ReplicantiGrowth.scaleFactor;
+      this.scaleLogarithim = ReplicantiGrowth.scaleLog10;
     },
     vacuumText() {
       return wordShift.wordCycle(PelleRifts.vacuum.name);
@@ -298,6 +302,8 @@ export default defineComponent({
       </div>
       <br><br>
       <ReplicantiGainText />
+      <br>
+      Replicanti increases by {{ formatX(scaleFactor, 2, 4) }} per {{ format(scaleLogarithim, 2, 2) }} OoM of Replicanti above {{ format(replicantiCap, 2) }}.
       <br>
       <ReplicantiGalaxyButton v-if="canSeeGalaxyButton" />
     </template>

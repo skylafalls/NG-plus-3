@@ -50,6 +50,9 @@ export default {
       if (this.id === 10) {
         return "Requirement: Beat Quantum Challenge 8";
       }
+      if (this.id === 11) {
+        return "Requirement: Complete Paired Challenge 4";
+      }
       return "";
     },
     theoremTimeEstimate() {

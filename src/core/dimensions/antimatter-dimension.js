@@ -841,6 +841,7 @@ export const AntimatterDimensions = {
       mult = mult.timesEffectsOf(
         InfinityUpgrade.buy10Mult,
         Achievement(58),
+        QuantumChallenge(5).reward,
         PairProduction.electronEffect,
       );
 

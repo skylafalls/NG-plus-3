@@ -90,4 +90,10 @@ export const dilationTimeStudies = [
     requirement: () =>
       QuantumChallenge(8).isCompleted,
   },
+  {
+    id: 11,
+    description: "Unlock Duplicants",
+    cost: new Decimal(1e112),
+    requirement: () => QuantumChallenge(8).isCompleted,
+  },
 ];

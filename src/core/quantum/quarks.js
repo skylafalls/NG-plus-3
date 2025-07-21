@@ -135,9 +135,11 @@ export const Quarks = {
 
   get gain() {
     const logDivisor = 616.5094311198335;
-    let baseGain = player.meta.antimatter.plus(1).log10().div(logDivisor).max(
-      0,
-    );
+    let logBaseGain = player.meta.antimatter.plus(1).log10().div(logDivisor).max(0);
+    if (logBaseGain.gte(2)) {
+      logBaseGain = logBaseGain.div(2).pow(1.5).mul(2);
+    }
+    let baseGain = Decimal.pow10(logBaseGain);
     baseGain = baseGain.timesEffectsOf(
       this.multiplierUpgrade,
       Achievement(156),

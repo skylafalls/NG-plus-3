@@ -4,7 +4,7 @@ import GlyphSetPreview from "@/components/GlyphSetPreview";
 import PrimaryButton from "@/components/PrimaryButton";
 import { V_REDUCTION_MODE } from "@/core/secret-formula";
 import VUnlockRequirement from "./VUnlockRequirement";
-import { Glyphs } from "../../../core/globals";
+import { Glyphs } from "@/core/glyphs/glyph-core.js";
 
 export default {
   name: "VTab",

@@ -19,7 +19,7 @@ export const quantumChallenges = [
     reward: {
       description: () => "Gain more Tachyonic Galaxies.",
       effect: completions => (completions * 0.25) + 1,
-      formatEffect: value => formatX(value, 0, 1),
+      formatEffect: value => formatX(value, 0, 2),
     },
   },
   {
@@ -32,7 +32,7 @@ export const quantumChallenges = [
         "Infinity Power also affects Meta Dimensions at a heavily reduced rate.",
       effect: completions =>
         Currency.infinityPower.value.plus(1).logPow(
-          (completions * 0.025) + 0.1,
+          (completions * 0.03) + 0.1,
         ),
       formatEffect: value => formatX(value, 2, 2),
     },
@@ -50,6 +50,7 @@ export const quantumChallenges = [
       effect: (completions) => {
         let multiplier = new Decimal(1);
         for (const tier of Array.range(0, 8)) {
+          if (tier % 2 === 0) continue;
           multiplier = multiplier.times(player.meta.dimensions[tier].amount);
         }
         multiplier = multiplier.max(1).logPow(0.2 + (completions * 0.1));
@@ -65,9 +66,8 @@ export const quantumChallenges = [
       also grow much faster and nullify the AD per-10 multiplier.`,
     goal: { am: new Decimal("e2.084e9"), ma: new Decimal("1.12e1122") },
     reward: {
-      description: () => "Antimatter affects the Meta-Dimension Boost multiplier at a reduced rate.",
-      effect: completions =>
-        player.antimatter.plus(1).log10().pow(0.1 + (completions * 0.015)),
+      description: () => "Dimension Boosts boosts the multiplier per-10 dimensions at a reduced rate.",
+      effect: completions => DimBoost.totalBoosts.plus(1).log10().times(completions + 1),
       formatEffect: value => formatX(value, 2, 2),
     },
   },
@@ -77,10 +77,9 @@ export const quantumChallenges = [
       "You are trapped in Infinity Challenges 2, 3, 6, 7, and 8 and you can't gain Dimension Boosts.",
     goal: { am: new Decimal("e1.124e9"), ma: new Decimal("3.6e1543") },
     reward: {
-      description: () => "Electrons are stronger based on Dimension Boosts.",
-      effect: completions =>
-        DimBoost.totalBoosts.pow(0.2 + (completions * 0.02)),
-      formatEffect: value => formatX(value, 2, 2),
+      description: () => "The IC3 base effect exponent is stronger.",
+      effect: completions => 2 ** completions,
+      formatEffect: value => formatPow(value),
     },
   },
   {

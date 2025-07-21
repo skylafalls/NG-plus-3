@@ -1444,7 +1444,7 @@ function achievementFix() {
 }
 
 export function init() {
-  console.log("🌌 Antimatter Dimensions: Reality Update 🌌");
+  console.log("⚛️ Antimatter Dimensions: NG+3 Reality Port ⚛️");
   if (DEV) {
     console.log("👨‍💻 Development Mode 👩‍💻");
   }

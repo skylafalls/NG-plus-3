@@ -68,7 +68,7 @@ export class MasteryStudyTreeLayout {
       normalRow(TimeStudy.pairedChallenges),
       normalRow(MS(61), MS(62)),
       normalRow(MS(71), MS(72), MS(73)),
-      normalRow(MS(81), null, MS(82)),
+      normalRow(MS(81), TimeStudy.duplicants, MS(82)),
       normalRow(MS(91), null, null, MS(92)),
     );
 

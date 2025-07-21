@@ -4,14 +4,21 @@ import { DC } from "./constants";
 // OoM past the cap (default is 308.25 (log10 of 1.8e308), 1.2, Number.MAX_VALUE)
 export const ReplicantiGrowth = {
   get scaleLog10() {
-    return Math.log10(Number.MAX_VALUE);
+    let scale = Math.log10(Number.MAX_VALUE);
+    if (DilationUpgrade.tdMultReplicanti) {
+      scale *= Math.min(Currency.dilatedTime.value.plus(1).log10().plus(1).pow(0.25).toNumber(), 2);
+    }
+    return scale;
   },
   get scaleFactor() {
-    let factor = 2;
+    let factor = 1;
     if (GluonUpgrade.greenBlue(2).isBought) {
-      factor = Math.pow(factor, GluonUpgrade.greenBlue(2).effectOrDefault(1));
+      factor *= GluonUpgrade.greenBlue(2).effectOrDefault(1);
     }
-    return factor;
+    if (DilationUpgrade.tdMultReplicanti) {
+      factor /= Currency.dilatedTime.value.plus(1).log10().plus(1).pow(0.5).toNumber();
+    }
+    return factor + 1;
   },
 };
 
@@ -225,6 +232,15 @@ export function replicantiCap() {
     : DC.NUMMAX;
 }
 
+// player.replicanti.amount = Decimal.exp(Replicanti.amount.ln().plus(
+//   getReplicantiInterval(true)
+//     .div(10)
+//     .mul(Math.log10(ReplicantiGrowth.scaleFactor) / ReplicantiGrowth.scaleLog10)
+//     .add(1)
+//     .div(Math.log10(ReplicantiGrowth.scaleFactor) / ReplicantiGrowth.scaleLog10)
+//     .ln(),
+// ));
+
 export function replicantiLoop(diff) {
   if (!player.replicanti.unl) {
     return;
@@ -257,26 +273,22 @@ export function replicantiLoop(diff) {
     // every replicanti tick is a good approximation and less intensive than distribution samples. This path will
     // always happen above 1000 replicanti due to how singleTickAvg is calculated, so the over-cap math is only
     // present on this path
-    let postScale = Decimal.log10(ReplicantiGrowth.scaleFactor).div(
-      ReplicantiGrowth.scaleLog10,
-    );
+    let postScale = Decimal.log10(ReplicantiGrowth.scaleFactor).div(ReplicantiGrowth.scaleLog10);
     if (V.isRunning) {
       postScale = postScale.mul(2);
     }
 
     // Note that remainingGain is in log10 terms.
-    let remainingGain = tickCount.times(Replicanti.chance.add(1).ln())
-      .times(LOG10_E);
+    let remainingGain = tickCount.times(Replicanti.chance.add(1).ln()).times(Math.LOG10E);
+
     // It is intended to be possible for both of the below conditionals to trigger.
     if (!isUncapped || Replicanti.amount.lte(replicantiCap())) {
       // Some of the gain is "used up" below e308, but if replicanti are uncapped
       // then some may be "left over" for increasing replicanti beyond their cap.
       remainingGain = fastReplicantiBelow308(remainingGain, areRGsBeingBought);
     }
-    if (
-      isUncapped && Replicanti.amount.gte(replicantiCap())
-      && remainingGain.gt(0)
-    ) {
+
+    if (isUncapped && Replicanti.amount.gte(replicantiCap()) && remainingGain.gt(0)) {
       // Recalculate the interval (it may have increased due to additional replicanti, or,
       // far less importantly, decreased due to Reality Upgrade 6 and additional RG).
       // Don't worry here about the lack of e2000 scaling in Pelle on the first tick
@@ -285,9 +297,9 @@ export function replicantiLoop(diff) {
       // in a single tick in Pelle.
       const intervalRatio = getReplicantiInterval(true).div(interval);
       remainingGain = remainingGain.div(intervalRatio);
-      Replicanti.amount = remainingGain.div(LOG10_E).times(postScale).plus(1)
+      Replicanti.amount = Decimal.exp(remainingGain.div(Math.LOG10E).times(postScale).plus(1)
         .ln().div(postScale)
-        .add(Replicanti.amount.clampMin(1).ln()).exp();
+        .add(Replicanti.amount.clampMin(1).ln()));
     }
   } else if (tickCount.gt(1)) {
     // Multiple ticks but "slow" gain: This happens at low replicanti chance and amount with a fast interval, which
@@ -829,9 +841,6 @@ export const Replicanti = {
   },
   set amount(value) {
     player.replicanti.amount = value;
-  },
-  get chance() {
-    return ReplicantiUpgrade.chance.value;
   },
   galaxies: {
     isPlayerHoldingR: false,

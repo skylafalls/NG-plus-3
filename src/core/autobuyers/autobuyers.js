@@ -25,6 +25,7 @@ import { TimeDimensionAutobuyerState } from "./time-dimension-autobuyer";
 import { TimeTheoremAutobuyerState } from "./time-theorem-autobuyer";
 import { MetaDimensionBoostAutobuyerState } from "./meta-dimension-boost-autobuyer";
 import { MetaDimensionAutobuyerState } from "./meta-dimension-autobuyer";
+import { DischargeGalaxyAutobuyerState } from "./discharge-galaxies-autobuyer";
 
 export const Autobuyer = {
   annihilation: new AnnihilationAutobuyerState(),
@@ -52,6 +53,7 @@ export const Autobuyer = {
   timeTheorem: new TimeTheoremAutobuyerState(),
   mdBoost: new MetaDimensionBoostAutobuyerState(),
   metaDimension: MetaDimensionAutobuyerState.createAccessor(),
+  pairProduction: new DischargeGalaxyAutobuyerState(),
 };
 
 export const Autobuyers = (function () {
@@ -75,6 +77,7 @@ export const Autobuyers = (function () {
     Autobuyer.ipMult,
     Autobuyer.epMult,
     Autobuyer.mdBoost,
+    Autobuyer.pairProduction,
     Autobuyer.darkMatterDims,
     Autobuyer.darkMatterDimsAscension,
     Autobuyer.singularity,
