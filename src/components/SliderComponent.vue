@@ -647,7 +647,7 @@ export default {
         });
         if (arr[0] > arr[1]) {
           this.focusSlider = this.focusSlider === 0 ? 1 : 0;
-          arr = arr.reverse();
+          arr = arr.toReversed();
         }
         this.setIndex(arr);
       } else {

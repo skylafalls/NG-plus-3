@@ -22,7 +22,7 @@ export default {
           return "Buys max";
         }
       }
-      throw "Unknown Dimension Autobuyer mode";
+      throw new Error("Unknown Dimension Autobuyer mode");
     },
   },
   methods: {

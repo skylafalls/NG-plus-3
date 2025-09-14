@@ -484,7 +484,7 @@ dev.testReplicantiCode = function (singleId, useDebugger = false) {
   }
   const hash = sha512_256(resultList.toString());
   console.log(hash);
-  if (useDebugger) {}
+  
   return hash;
 };
 

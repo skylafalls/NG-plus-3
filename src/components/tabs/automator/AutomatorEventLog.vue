@@ -20,7 +20,7 @@ export default {
             ? a.line - b.line
             : a.thisReality - b.thisReality)
         : a.timestamp - b.timestamp));
-      return this.newestFirst ? sorted.reverse() : sorted;
+      return this.newestFirst ? sorted.toReversed() : sorted;
     },
     clearTooltip() {
       return `Clear all entries (Max. ${this.maxEntries})`;

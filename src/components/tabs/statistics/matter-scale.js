@@ -71,7 +71,7 @@ export const MatterScale = {
         return scale;
       }
     }
-    throw "Cannot determine smallest antimatter scale";
+    throw new Error("Cannot determine smallest antimatter scale");
   },
 
   macroScale(matter) {

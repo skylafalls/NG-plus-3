@@ -78,10 +78,7 @@ export class ScriptTemplate {
   storeTreeData(params) {
     const nowaitStr = params.treeNowait ? " nowait" : "";
     if (params.treePreset) {
-      const presetObj = player.timestudy.presets.map((p, i) => ({
-        ...p,
-        id: i + 1,
-      }))
+      const presetObj = player.timestudy.presets.map((p, i) => (Object.assign(p, {id:i+1})))
         .find(
           p => (p.name === params.treePreset
             || p.id === Number(params.treePreset)),

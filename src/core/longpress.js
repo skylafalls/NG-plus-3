@@ -32,7 +32,7 @@ class LongPress {
 
   static addTo(obj, timeout, handlers) {
     if (! Object.hasOwn(handlers, "longPress")) {
-      throw "Need to specify a longPress handler";
+      throw new Error("Need to specify a longPress handler");
     }
     const begin = e =>
       LongPress._pressBegin(

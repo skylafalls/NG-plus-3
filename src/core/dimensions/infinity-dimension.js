@@ -511,7 +511,7 @@ export const InfinityDimensions = {
     );
 
     // Try to buy single from the highest affordable new dimensions
-    [...unlockedDimensions].reverse().forEach((dimension) => {
+    [...unlockedDimensions].toReversed().forEach((dimension) => {
       if (dimension.purchases === 0) {
         dimension.buySingle();
       }

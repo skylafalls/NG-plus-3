@@ -25,7 +25,7 @@ export default {
           return "Buys max";
         }
       }
-      throw "Unknown tickspeed autobuyer mode";
+      throw new Error("Unknown tickspeed autobuyer mode");
     },
   },
   methods: {

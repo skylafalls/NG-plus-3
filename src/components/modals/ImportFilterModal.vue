@@ -83,7 +83,7 @@ export default {
   },
   methods: {
     update() {
-      this.currentSettings = JSON.parse(JSON.stringify(player.reality.glyphs.filter));
+      this.currentSettings = structuredClone(player.reality.glyphs.filter);
     },
     changedValue(oldVal, newVal, applyFn) {
       if (oldVal === newVal) {
