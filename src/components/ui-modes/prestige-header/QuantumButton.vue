@@ -57,9 +57,9 @@ export default defineComponent({
       const stepRGB = [
         [255, 0, 0],
         [
-          parseInt(textHexCode.slice(0, 2), 16),
-          parseInt(textHexCode.slice(2, 4), 16),
-          parseInt(textHexCode.slice(4), 16),
+          Number.parseInt(textHexCode.slice(0, 2), 16),
+          Number.parseInt(textHexCode.slice(2, 4), 16),
+          Number.parseInt(textHexCode.slice(4), 16),
         ],
         [0, 255, 0],
       ];

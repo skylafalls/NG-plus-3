@@ -1,7 +1,8 @@
 // @ts-check
-import vue from "eslint-plugin-vue";
-import tseslint from "typescript-eslint";
+import oxlint from "eslint-plugin-oxlint";
 import stylistic from "@stylistic/eslint-plugin";
+import tseslint from "typescript-eslint";
+import vue from "eslint-plugin-vue";
 
 const config = tseslint.config(
   tseslint.configs.strict,
@@ -12,6 +13,7 @@ const config = tseslint.config(
       "@stylistic/quotes": ["error", "double"],
       "@stylistic/semi": ["error", "always"],
       "@stylistic/brace-style": ["error", "1tbs"],
+      "@typescript-eslint/no-explicit-any": "off",
     },
   },
   {
@@ -25,6 +27,7 @@ const config = tseslint.config(
       },
     },
   },
+  ...oxlint.buildFromOxlintConfigFile("./.oxlintrc.json"),
 );
 
 export default config;

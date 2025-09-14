@@ -11,6 +11,8 @@ function mergeIntoGlobal(object) {
       throw new Error(`Property ${key} already exists in global context`);
     }
 
+    console.info(`Merged ${key} into global scope`);
+
     window[key] = value;
   }
 }
@@ -22,16 +24,16 @@ mergeIntoGlobal(Utils);
 // any more globals to the component files
 
 import * as AutomatorBlockEditor from "@/components/tabs/automator/AutomatorBlockEditor.vue";
-mergeIntoGlobal(AutomatorBlockEditor);
+mergeIntoGlobal(await import("@/components/tabs/automator/AutomatorBlockEditor.vue"));
 
 import * as AutomatorBlocks from "@/components/tabs/automator/AutomatorBlocks.vue";
-mergeIntoGlobal(AutomatorBlocks);
+mergeIntoGlobal(await import("@/components/tabs/automator/AutomatorBlocks.vue"));
 
 import * as AutomatorTextEditor from "@/components/tabs/automator/AutomatorTextEditor.vue";
-mergeIntoGlobal(AutomatorTextEditor);
+mergeIntoGlobal(await import("@/components/tabs/automator/AutomatorTextEditor.vue"));
 
 import * as PerksTab from "@/components/tabs/perks/PerksTab.vue";
-mergeIntoGlobal(PerksTab);
+mergeIntoGlobal(await import("@/components/tabs/perks/PerksTab.vue"));
 
 // End of legacy stuff
 

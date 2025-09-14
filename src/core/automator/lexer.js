@@ -1,6 +1,6 @@
 // Note: chevrotain doesn't play well with unicode regex
 
-import { createToken, Lexer } from "chevrotain";
+import { Lexer, createToken } from "chevrotain";
 
 import { DC } from "../constants";
 
@@ -531,5 +531,5 @@ export const forbiddenConstantPatterns = lexer.lexerDefinition
   .filter(p => !ignoredPatterns.has(p.name))
   .map(p => p.PATTERN.source)
   .flatMap(
-    p => ((p.includes("(") || p.includes(")")) ? p : p.split("[ \\t]+")),
+    p => ((p.includes("(") || p.includes(")")) ? p : p.split(String.raw`[ \t]+`)),
   );

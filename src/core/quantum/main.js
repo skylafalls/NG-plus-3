@@ -151,6 +151,12 @@ function giveQuantumRewards() {
   if (QuantumChallenge.isRunning) {
     QuantumChallenge(player.challenge.quantum.current).complete();
   }
+  player.quantum.gluons.rg = player.quantum.gluons.rg.add(player.quantum.colors.red).add(player.quantum.colors.green);
+  player.quantum.gluons.gb = player.quantum.gluons.gb.add(player.quantum.colors.green).add(player.quantum.colors.blue);
+  player.quantum.gluons.br = player.quantum.gluons.br.add(player.quantum.colors.blue).add(player.quantum.colors.red);
+  player.quantum.colors.red = new Decimal(0);
+  player.quantum.colors.green = new Decimal(0);
+  player.quantum.colors.blue = new Decimal(0);
 }
 
 /**

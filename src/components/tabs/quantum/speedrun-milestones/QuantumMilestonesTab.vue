@@ -23,7 +23,7 @@ export default defineComponent({
   },
   methods: {
     update() {
-      this.bestTime.copyFrom(Time.bestQuantum);
+      this.bestTime = Time.bestQuantum;
     },
     getMilestone(row, column) {
       return () => QuantumSpeedrunMilestone(((row - 1) * 4 + column));

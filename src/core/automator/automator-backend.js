@@ -486,7 +486,7 @@ export const AutomatorBackend = {
   findRawScriptObject(id) {
     const scripts = player.reality.automator.scripts;
     const index = Object.values(scripts).findIndex(s => s.id === id);
-    return scripts[parseInt(Object.keys(scripts)[index], 10)];
+    return scripts[Number.parseInt(Object.keys(scripts)[index], 10)];
   },
 
   get currentRunningScript() {
@@ -1052,7 +1052,7 @@ export const AutomatorBackend = {
 
   initializeFromSave() {
     const scriptIds = Object.keys(player.reality.automator.scripts).map(id =>
-      parseInt(id, 10),
+      Number.parseInt(id, 10),
     );
     if (scriptIds.length === 0) {
       scriptIds.push(this._createDefaultScript());
@@ -1121,7 +1121,7 @@ export const AutomatorBackend = {
     );
     delete player.reality.automator
       .scripts[
-        parseInt(Object.keys(player.reality.automator.scripts)[saveId], 10)
+        Number.parseInt(Object.keys(player.reality.automator.scripts)[saveId], 10)
       ];
     const idx = this._scripts.findIndex(e => e.id === id);
     this._scripts.splice(idx, 1);

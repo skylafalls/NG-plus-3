@@ -415,7 +415,7 @@ export const devMigrations = {
     (player) => {
       const pets = player.celestials.ra.pets;
       for (const prop in pets) {
-        if (!Object.prototype.hasOwnProperty.call(pets, prop)) {
+        if (! Object.hasOwn(pets, prop)) {
           continue;
         }
         const pet = pets[prop];
@@ -430,7 +430,7 @@ export const devMigrations = {
     (player) => {
       const pets = player.celestials.ra.pets;
       for (const prop in pets) {
-        if (!Object.prototype.hasOwnProperty.call(pets, prop)) {
+        if (! Object.hasOwn(pets, prop)) {
           continue;
         }
         const pet = pets[prop];
@@ -1364,7 +1364,7 @@ export const devMigrations = {
       }
     },
     (player) => {
-      const triadRegex = new RegExp("T(\\d)", "gu");
+      const triadRegex = new RegExp(String.raw`T(\d)`, "gu");
       player.timestudy.presets.forEach(p =>
         p.studies = p.studies.replaceAll(triadRegex, "30$1"),
       );
@@ -1539,7 +1539,7 @@ export const devMigrations = {
     },
     (player) => {
       for (const script of Object.values(player.reality.automator.scripts)) {
-        script.id = parseInt(script.id, 10);
+        script.id = Number.parseInt(script.id, 10);
       }
     },
     (player) => {
@@ -1782,9 +1782,7 @@ export const devMigrations = {
       }
     },
     (player) => {
-      const allGlyphs = player.reality.glyphs.active.concat(
-        player.reality.glyphs.inventory,
-      );
+      const allGlyphs = [...player.reality.glyphs.active, ...player.reality.glyphs.inventory];
       for (const glyph of allGlyphs) {
         if (glyph.symbol === "key266b") {
           glyph.symbol = undefined;

@@ -52,7 +52,7 @@ export default {
       if (mode === this.choiceEnum.PLAYER && this.seedValue === 0) {
         return;
       }
-      Speedrun.modifySeed(mode, parseInt(seed, 10));
+      Speedrun.modifySeed(mode, Number.parseInt(seed, 10));
     },
     buttonClass(mode) {
       return {

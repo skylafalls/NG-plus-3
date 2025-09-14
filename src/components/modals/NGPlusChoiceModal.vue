@@ -8,9 +8,7 @@ export default defineComponent({
     ModalWrapperChoice,
   },
   methods: {
-    loadWithNGPlus() {
-
-    },
+    loadWithNGPlus() {},
   },
 });
 </script>

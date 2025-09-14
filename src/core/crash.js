@@ -1,11 +1,15 @@
-window.NotImplementedError = class NotImplementedError extends Error {
+function noop() {
+  return;
+}
+
+globalThis.NotImplementedError = class NotImplementedError extends Error {
   constructor() {
     super("The method is not implemented.");
     this.name = "NotImplementedError";
   }
 };
 
-window.GlobalErrorHandler = {
+globalThis.GlobalErrorHandler = {
   handled: false,
   cleanStart: false,
   onerror(event) {
@@ -25,7 +29,7 @@ window.GlobalErrorHandler = {
     GameKeyboard.disable();
     GameIntervals.stop();
     const clearHandles = (set, clear) => {
-      let id = set(new Function(), 9999);
+      let id = set(noop, 9999);
       while (id--) {
         clear(id);
       }
@@ -35,6 +39,7 @@ window.GlobalErrorHandler = {
     clearHandles(requestAnimationFrame, cancelAnimationFrame);
   },
   crash(message) {
+    console.error(`Error detected while running game: ${message}`);
     if (window.GameUI !== undefined && GameUI.initialized) {
       Modal.message.show(
         `${message}<br>Check the console for more details`,
@@ -48,5 +53,5 @@ window.GlobalErrorHandler = {
 };
 
 window.addEventListener("error", (event) => {
-  GlobalErrorHandler.onerror(event.message);
+  GlobalErrorHandler.onerror(event.error);
 });

@@ -258,6 +258,7 @@ export default {
 // and so that the difference from the original is small. It does this by finding the one
 // that's closest to an integer, rounding it, and then distributing that error to the others.
 function roundPreservingSum(data) {
+  // oxlint-disable-next-line prefer-for-of
   for (let idx = 0; idx < data.length; ++idx) {
     // Find the thing that's not an integer but is closest to an integer:
     let closest = -1;

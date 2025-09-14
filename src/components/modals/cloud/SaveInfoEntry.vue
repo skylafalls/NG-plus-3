@@ -84,7 +84,7 @@ export default {
 
     compareLayeredValues(propArray, nameArray, formatArray, fallbackString) {
       // Determine if they're on the same layer and if it's better or worse
-      let isSameLayer, isBetter;
+      let isBetter, isSameLayer;
       for (let index = 0; index < propArray.length; index++) {
         const prop = propArray[index];
         if (Decimal.eq(this.saveData[prop], 0) && Decimal.eq(this.otherData[prop], 0)) {

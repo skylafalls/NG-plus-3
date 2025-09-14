@@ -60,7 +60,7 @@ export const PerformanceStats = {
     function render(rootBlock) {
       indentLevel++;
       for (const blockName in rootBlock) {
-        if (!Object.prototype.hasOwnProperty.call(rootBlock, blockName)) {
+        if (! Object.hasOwn(rootBlock, blockName)) {
           continue;
         }
         const block = rootBlock[blockName];

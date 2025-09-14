@@ -1,8 +1,9 @@
 <script>
-import ClassicAntimatterDimensionsTab from "./ClassicAntimatterDimensionsTab";
-import ModernAntimatterDimensionsTab from "./ModernAntimatterDimensionsTab";
+import { defineComponent } from "vue";
+import ClassicAntimatterDimensionsTab from "./ClassicAntimatterDimensionsTab.vue";
+import ModernAntimatterDimensionsTab from "./ModernAntimatterDimensionsTab.vue";
 
-export default {
+export default defineComponent({
   name: "AntimatterDimensionsTab",
   components: {
     ClassicAntimatterDimensionsTab,
@@ -15,7 +16,7 @@ export default {
         : "ClassicAntimatterDimensionsTab";
     },
   },
-};
+});
 </script>
 
 <template>

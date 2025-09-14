@@ -15,22 +15,7 @@ const passiveIPMult = () => {
     : normalValue;
 };
 
-/**
- * List of time study specifications and attributes
- * {
- *  @property {Number} id                   Numerical ID shown for each time study in code and in-game
- *  @property {Number} cost                 Amount of available time theorems required to purchase
- *  @property {Number} STcost               Amount of available space theorems required to purchase if needed
- *  @property {Object[]} requirement   Array of Numbers or functions which are checked to determine purchasability
- *  @property {Number} reqType              Number specified by enum in TS_REQUIREMENT_TYPE for requirement behavior
- *  @property {Number[]} requiresST    Array of Numbers indicating which other studies will cause this particular
- *    study to also cost space theorems - in all cases this applies if ANY in the array are bought
- *  @property {function: @return String} description  Text to be shown in-game for the time study's effects
- *  @property {function: @return Number} effect       Numerical value for the effects of a study
- *  @property {String[]} cap     Hard-coded cap for studies which don't scale forever
- *  @property {String} formatEffect   Formatting function for effects, if the default formatting isn't appropriate
- * }
- */
+/** @type {import("./study").TimeStudyObject[]} */
 export const normalTimeStudies = [
   {
     id: 11,
@@ -629,10 +614,14 @@ export const normalTimeStudies = [
     requirement: [213],
     reqType: TS_REQUIREMENT_TYPE.AT_LEAST_ONE,
     requiresST: [226],
-    description:
-      "You gain extra Replicanti Galaxies based on Replicanti amount",
-    effect: () => Decimal.floor(Replicanti.amount.clampMin(1).log10().div(600)),
-    formatEffect: value => `+${formatInt(value)} RG`,
+    description: "You gain extra Replicanti Galaxies based on Replicanti amount",
+    effect: () => Decimal.floor(softcap({
+      baseResource: Replicanti.amount.clampMin(1).log10().div(600),
+      softcapPower: 1 / 3,
+      softcapStart: 1000,
+      softcapType: SOFTCAP_MODES.POLYNOMIAL,
+    })),
+    formatEffect: value => `+${formatInt(value)} RG${value.gte(1000) ? " (softcapped)" : ""}`,
   },
   {
     id: 226,

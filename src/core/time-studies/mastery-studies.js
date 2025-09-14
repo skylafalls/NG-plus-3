@@ -24,7 +24,7 @@ export class MasteryStudyState extends TimeStudyState {
         return this.config.requirement.every(r => check(r));
       }
       default: {
-        throw Error(`Unrecognized TS requirement type: ${this.reqType}`);
+        throw new Error(`Unrecognized TS requirement type: ${this.reqType}`);
       }
     }
   }

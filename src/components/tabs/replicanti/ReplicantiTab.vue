@@ -303,7 +303,7 @@ export default defineComponent({
       <br><br>
       <ReplicantiGainText />
       <br>
-      Replicanti increases by {{ formatX(scaleFactor, 2, 4) }} per {{ format(scaleLogarithim, 2, 2) }} OoM of Replicanti above {{ format(replicantiCap, 2) }}.
+      Replicanti slows down by {{ formatX(scaleFactor, 2, 4) }} per {{ format(scaleLogarithim, 2, 2) }} OoM of Replicanti above {{ format(replicantiCap, 2) }}.
       <br>
       <ReplicantiGalaxyButton v-if="canSeeGalaxyButton" />
     </template>

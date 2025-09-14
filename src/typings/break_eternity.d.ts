@@ -1,4 +1,4 @@
-import type { Effect } from "@/core/game-mechanics";
+import type  { Effect } from "@/core/game-mechanics";
 
 export type CompareResult = -1 | 0 | 1;
 export type DecimalSource = Decimal | number | string;

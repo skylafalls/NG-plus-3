@@ -1,9 +1,9 @@
 <script>
-import CelestialQuoteHistory from "@/components/CelestialQuoteHistory";
-import GlyphSetPreview from "@/components/GlyphSetPreview";
-import PrimaryButton from "@/components/PrimaryButton";
-import { V_REDUCTION_MODE } from "@/core/secret-formula";
-import VUnlockRequirement from "./VUnlockRequirement";
+import CelestialQuoteHistory from "@/components/CelestialQuoteHistory.vue";
+import GlyphSetPreview from "@/components/GlyphSetPreview.vue";
+import PrimaryButton from "@/components/PrimaryButton.vue";
+import { V_REDUCTION_MODE } from "@/core/secret-formula/index.js";
+import VUnlockRequirement from "./VUnlockRequirement.vue";
 import { Glyphs } from "@/core/glyphs/glyph-core.js";
 
 export default {

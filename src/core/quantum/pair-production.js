@@ -11,7 +11,7 @@ class ElectronsEffectState extends GameMechanicState {
 
   get effectValue() {
     let base = player.quantum.pair.electrons;
-    let exp = new Decimal(0.1);
+    let exp = new Decimal(0.2);
     let eff = base.plus(1).pow(exp);
     if (eff.gte(1e6)) {
       eff = eff.div(1e6).pow(0.5).mul(1e6);

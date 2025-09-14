@@ -50,7 +50,7 @@ export const ProgressChecker = {
         return db[stage];
       }
     }
-    throw Error("No valid progress stage found");
+    throw new Error("No valid progress stage found");
   },
 
   // Returns a value corresponding to keys in PROGRESS_STAGE, with a rough interpolation between stages

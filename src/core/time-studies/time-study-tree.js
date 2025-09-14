@@ -90,7 +90,7 @@ export class TimeStudyTree {
       return 0;
     }
     // Note: parseInt() seems to silently ignore the presence of "!"
-    return parseInt(parts[1], 10);
+    return Number.parseInt(parts[1], 10);
   }
 
   // THIS METHOD HAS LASTING CONSEQUENCES ON THE GAME STATE. STUDIES WILL ACTUALLY BE PURCHASED IF POSSIBLE.
@@ -145,7 +145,7 @@ export class TimeStudyTree {
       .replaceAll(" ", "")
       // Allows 11,,21 to be parsed as 11,21 and 11,|1 to be parsed as 11|1
       .replaceAll(/,{2,}/gu, ",")
-      .replaceAll(",\\|", "|");
+      .replaceAll(String.raw`,\|`, "|");
   }
 
   static formatStudyList(input) {
@@ -169,7 +169,7 @@ export class TimeStudyTree {
           ? this.studyRangeToArray(studyRangeSplit[0], studyRangeSplit[1])
           : studyRangeSplit;
         for (const study of studyArray) {
-          if (studyDB.has(parseInt(study, 10))) {
+          if (studyDB.has(Number.parseInt(study, 10))) {
             const tsObject = TimeStudy(study);
             this.selectedStudies.push(tsObject);
             output.push(tsObject);
@@ -188,7 +188,7 @@ export class TimeStudyTree {
       return output;
     }
     // Note: parseInt() seems to silently ignore the presence of "!"
-    const ecID = parseInt(ecString, 10);
+    const ecID = Number.parseInt(ecString, 10);
     const ecDB = GameDatabase.eternity.timeStudies.ec;
     // Specifically exclude 0 because saved presets will contain it by default
     if (!ecDB.map(c => c.id).includes(ecID) && ecID !== 0) {
@@ -216,7 +216,7 @@ export class TimeStudyTree {
   }
 
   checkTimeStudyNumber(token) {
-    const tsNumber = parseFloat(token);
+    const tsNumber = Number.parseFloat(token);
     if (
       !TimeStudy(tsNumber) || (TimeStudy(tsNumber).isTriad && !Ra.canBuyTriad)
     ) {

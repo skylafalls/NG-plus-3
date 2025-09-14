@@ -23,7 +23,7 @@ export default {
       hasEffectiveFill: false,
       selectedHoverMilestone: this.rift.milestones[0],
       // Converts 1 rem to number of px
-      remToPx: parseInt(getComputedStyle(document.documentElement).fontSize, 10),
+      remToPx: Number.parseInt(getComputedStyle(document.documentElement).fontSize, 10),
       effects: [],
       selectedMilestoneResourceText: "",
       selectedMilestoneDescriptionText: "",

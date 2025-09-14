@@ -712,7 +712,7 @@ export default defineComponent({
         numOfEffects += 1;
       }
       // Take the smallest power of 2, greater than the number of effects
-      const angle = (Math.PI / (numOfEffects / 2)) * (parseInt(id, 10) + (numOfEffects / 8));
+      const angle = (Math.PI / (numOfEffects / 2)) * (Number.parseInt(id, 10) + (numOfEffects / 8));
       const scale = 0.28 * this.size.replace("rem", "");
       const dx = -scale * Math.sin(angle);
       const dy = scale * (Math.cos(angle) + 0.15);

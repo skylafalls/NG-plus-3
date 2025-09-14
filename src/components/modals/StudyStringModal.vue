@@ -121,7 +121,7 @@ export default {
 
       for (const study of this.importedTree.invalidStudies) {
         const id = `${study}`.match(/(EC)?(\d+)/u);
-        const num = parseInt(id[2], 10);
+        const num = Number.parseInt(id[2], 10);
         switch (id[1]) {
           case "EC": {
             coloredString = coloredString.replaceAll(new RegExp(`\\|(${num})`, "gu"),

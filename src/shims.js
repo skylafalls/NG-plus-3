@@ -1,4 +1,4 @@
-import CodeMirror from "codemirror/lib/codemirror";
+import CodeMirror from "codemirror/lib/codemirror.js";
 import Decimal from "break_eternity.js";
 import Vue from "vue";
 

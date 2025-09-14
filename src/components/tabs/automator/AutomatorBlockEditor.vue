@@ -3,8 +3,9 @@ import draggable from "vuedraggable";
 
 import AutomatorBlockSingleRow from "./AutomatorBlockSingleRow";
 import { blockifyTextAutomator } from "@/core/automator";
+import { defineComponent } from "vue";
 
-export default {
+export default defineComponent({
   name: "AutomatorBlockEditor",
   components: {
     AutomatorBlockSingleRow,
@@ -58,7 +59,7 @@ export default {
       this.parseRequest();
     },
   },
-};
+});
 
 export const BlockAutomator = {
   editor: null,

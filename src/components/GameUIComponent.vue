@@ -1,14 +1,14 @@
-<script>
+<script lang="ts">
 import BackgroundAnimations from "@/components/BackgroundAnimations.vue";
 import ClassicUi from "@/components/ui-modes/classic/ClassicUi.vue";
 import GameUiComponentFixed from "@/components/GameUiComponentFixed.vue";
 import ModernUi from "@/components/ui-modes/modern/ModernUi.vue";
-import TabComponents from "@/components/tabs";
 
 import S12DesktopIcons from "@/components/ui-modes/s12/DesktopIcons.vue";
 import S12Ui from "@/components/ui-modes/s12/S12Ui.vue";
 import S12UiFixed from "@/components/ui-modes/s12/S12UiFixed.vue";
 import { defineComponent } from "vue";
+import TabComponents from "@/components/tabs/index.js";
 
 export default defineComponent({
   name: "GameUIComponent",

@@ -11,7 +11,7 @@ window.PRESTIGE_EVENT = {
 /**
  * @template T
  * @param {T} obj
- * @returns {import("ts-essentials").DeepReadonly<T>}
+ * @returns {import("type-fest").ReadonlyDeep<T>}
  */
 function deepFreeze(obj) {
   Object.keys(obj).forEach((prop) => {
@@ -120,6 +120,7 @@ export const DC = deepFreeze({
   E33: new Decimal("1e33"),
   E40: new Decimal("1e40"),
   E45: new Decimal("1e45"),
+  E49: new Decimal("1e49"),
   E50: new Decimal("1e50"),
   E55: new Decimal("1e55"),
   E58: new Decimal("1e58"),

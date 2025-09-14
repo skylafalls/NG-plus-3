@@ -1,14 +1,17 @@
-import type { PairProduction as PP } from "@/core/quantum";
-import type { MetaDimensions as MD, MetaDimension as MDSingle } from "@/core/dimensions/meta-dimension.js";
 import type { AntimatterDimensions as AD, AntimatterDimension as ADSingle } from "@/core/dimensions/antimatter-dimension.js";
-import type { TimeDimensions as TD, TimeDimension as TDSingle } from "@/core/dimensions/time-dimension.js";
 import type { InfinityDimensions as ID, InfinityDimension as IDSingle } from "@/core/dimensions/infinity-dimension.js";
+import type { MetaDimensions as MD, MetaDimension as MDSingle } from "@/core/dimensions/meta-dimension.js";
+import type { TimeDimensions as TD, TimeDimension as TDSingle } from "@/core/dimensions/time-dimension.js";
 import type {
   scale as scaleFun,
   softcap as softcapFun,
+  softcapGradual as softcapGradualFun,
 } from "@/core/scaling.js";
 import type { dev as D } from "@/core/devtools";
 import type DecimalBE from "./break_eternity";
+
+import type { PairProduction as PP } from "@/core/quantum";
+import type Lazy from "@/core/cache";
 
 declare global {
   /**
@@ -29,6 +32,7 @@ declare global {
   const dev: typeof D;
   const scale: typeof scaleFun;
   const softcap: typeof softcapFun;
+  const softcapGradual: typeof softcapGradualFun;
   enum SOFTCAP_MODES {
     MULTIPLICATIVE = 1,
     POLYNOMIAL = 2,
@@ -126,10 +130,28 @@ declare global {
     CLOSE_MODAL = "CLOSE_MODAL",
   }
 
+  enum SCALE_LEVEL {
+    NONE = 0,
+    DISTANT = 1,
+    FURTHER = 2,
+    REMOTE = 3,
+    OBSCURE = 4,
+    INVISIBLE = 5,
+    GHOSTLY = 6,
+    ETHEREAL = 7,
+  }
+
+  enum TS_REQUIREMENT_TYPE {
+    AT_LEAST_ONE = 0,
+    ALL = 1,
+    DIMENSION_PATH = 2,
+  }
+
   interface Window {
     Decimal: typeof DecimalBE
     scale: typeof scale
     softcap: typeof softcap
+    Lazy: typeof Lazy
   }
   interface ArrayConstructor {
     range(start: number, count: number): Array<number>

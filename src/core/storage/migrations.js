@@ -578,7 +578,7 @@ export const migrations = {
         return id;
       }
       wasFucked = true;
-      const legacyId = parseInt(id.slice(9), 10);
+      const legacyId = Number.parseInt(id.slice(9), 10);
       const config = GameDatabase.challenges.normal.find(c =>
         c.legacyId === legacyId,
       );
@@ -630,7 +630,7 @@ export const migrations = {
         player.achievements.add(achByName.id);
         continue;
       }
-      const newId = parseInt(oldId.slice(1), 10);
+      const newId = Number.parseInt(oldId.slice(1), 10);
       if (isNaN(newId)) {
         throw new TypeError(`Could not parse achievement id ${oldId}`);
       }
@@ -685,10 +685,10 @@ export const migrations = {
   moveChallengeInfo(player) {
     function parseChallengeName(name) {
       if (name.startsWith("challenge")) {
-        return { type: "normal", id: parseInt(name.slice(9), 10) };
+        return { type: "normal", id: Number.parseInt(name.slice(9), 10) };
       }
       if (name.startsWith("postc")) {
-        return { type: "infinity", id: parseInt(name.slice(5), 10) };
+        return { type: "infinity", id: Number.parseInt(name.slice(5), 10) };
       }
       if (name !== "") {
         throw new Error(`Unrecognized challenge ID ${name}`);
@@ -731,7 +731,7 @@ export const migrations = {
       const saved = player.currentEternityChall;
       delete player.currentEternityChall;
       if (saved.startsWith("eterc")) {
-        player.challenge.eternity.current = parseInt(saved.slice(5), 10);
+        player.challenge.eternity.current = Number.parseInt(saved.slice(5), 10);
       } else if (saved !== "") {
         throw new Error(`Unrecognized eternity challenge ${saved}`);
       }
@@ -1097,7 +1097,7 @@ export const migrations = {
     for (const id of oldNewsArray) {
       const groups = id.match(/([a-z]+)(\d+)/u);
       const type = groups[1];
-      const number = parseInt(groups[2], 10);
+      const number = Number.parseInt(groups[2], 10);
       if (!player.news.seen[type]) {
         player.news.seen[type] = [];
       }
