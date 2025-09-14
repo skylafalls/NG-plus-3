@@ -1,6 +1,6 @@
 import { getUserAgentRegExp } from "browserslist-useragent-regexp";
-import { resolve } from "path";
-import { writeFileSync } from "fs";
+import { resolve } from "node:path";
+import { writeFileSync } from "node:fs";
 
 const userAgentRegExp = getUserAgentRegExp({ allowHigherVersions: true });
 const checkFunction = `export const supportedBrowsers = ${userAgentRegExp};`;

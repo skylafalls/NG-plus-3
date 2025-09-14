@@ -1571,9 +1571,9 @@ export const normalAchievements = [
     id: 157,
     name: "Old age",
     get description() {
-      return `Gain ${format(DC.E1E12)} Antimatter.`;
+      return `Gain ${format(Decimal.pow10(3 * 86400 * 365.2425 * (new Date().getFullYear() || 2022)))} Antimatter.`;
     },
-    checkRequirement: () => Currency.antimatter.gte(DC.E1E12),
+    checkRequirement: () => Currency.antimatter.gte(Decimal.pow10(3 * 86400 * 365.2425 * (new Date().getFullYear() || 2022))),
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     get reward() {
       return "Gain a multiplier to 1st Meta Dimensions based on your total Antimatter.";
@@ -1681,7 +1681,7 @@ export const normalAchievements = [
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     reward:
       "Eighth Antimatter Dimensions are stronger based on your Antimatter Galaxies.",
-    effect: () => Decimal.pow(player.galaxies.pow(5), player.galaxies.pow(2)),
+    effect: () => Decimal.pow10(Decimal.pow(player.galaxies, player.galaxies.max(1).log10().sqrt().mul(1.35))),
     formatEffect: value => `${formatX(value, 2, 2)}`,
   },
   {

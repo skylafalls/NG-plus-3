@@ -73,6 +73,7 @@ export const dilationTimeStudies = [
     cost: new Decimal(1e90),
     requirement: () =>
       PlayerProgress.quantumUnlocked()
+      && Quarks.netTotal.gte(50)
       && EternityChallenge(14).isFullyCompleted
       && EternityChallenge(13).isFullyCompleted,
   },

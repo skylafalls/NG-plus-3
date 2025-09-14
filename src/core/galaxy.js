@@ -59,7 +59,7 @@ export const Galaxy = {
     calculatedGalaxies = scale({
       baseResource: calculatedGalaxies,
       scaleStart: this.scalingStart[GALAXY_TYPE.REMOTE],
-      scalePower: Decimal.pow(1.002, this.scalingPower[GALAXY_TYPE.REMOTE]),
+      scalePower: Decimal.pow(1.01, this.scalingPower[GALAXY_TYPE.REMOTE]),
       scaleMode: SCALING_TYPES.EXPONENTIAL,
       isInverted: true,
     });
@@ -131,7 +131,7 @@ export const Galaxy = {
       equivGal = scale({
         baseResource: equivGal,
         scaleStart: this.scalingStart[GALAXY_TYPE.REMOTE],
-        scalePower: Decimal.pow(1.002, this.scalingPower[GALAXY_TYPE.REMOTE]),
+        scalePower: Decimal.pow(1.01, this.scalingPower[GALAXY_TYPE.REMOTE]),
         scaleMode: SCALING_TYPES.EXPONENTIAL,
       });
     }

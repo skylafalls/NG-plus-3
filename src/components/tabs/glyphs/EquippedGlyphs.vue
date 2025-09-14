@@ -116,7 +116,7 @@ export default {
     },
     drop(event, idx) {
       this.dragoverIndex = -1;
-      const id = parseInt(event.dataTransfer.getData(GLYPH_MIME_TYPE), 10);
+      const id = Number.parseInt(event.dataTransfer.getData(GLYPH_MIME_TYPE), 10);
       if (isNaN(id)) {
         return;
       }

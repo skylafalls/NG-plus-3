@@ -10,6 +10,7 @@ export function metaDimensionCommonMultiplier() {
     MasteryStudy(32),
     MasteryStudy(52),
     MasteryStudy(73),
+    GluonUpgrade.blueRed(4),
     GluonUpgrade.blueRed(5),
     QuantumChallenge(3).reward,
   );

@@ -866,7 +866,7 @@ window.logFactorial = (function () {
   }
   return (x) => {
     if (typeof x !== "number" || x < 0) {
-      return NaN;
+      return Number.NaN;
     }
     if (x < TABLE.length) {
       return TABLE[x];
@@ -910,7 +910,7 @@ window.normalDistribution = (function () {
   let spare = 0;
   return (mean, stdDev) => {
     if (typeof mean !== "number" || typeof stdDev !== "number") {
-      return NaN;
+      return Number.NaN;
     }
     if (haveSpare) {
       haveSpare = false;
@@ -938,7 +938,7 @@ window.binomialGeneratorFC = (function () {
   );
   return (x) => {
     if (typeof x !== "number" || x < 0) {
-      return NaN;
+      return Number.NaN;
     }
     if (x < TABLE.length) {
       return TABLE[x];

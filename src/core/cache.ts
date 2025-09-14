@@ -1,5 +1,9 @@
-class Lazy {
-  constructor(getValue) {
+export default class Lazy<T extends NonNullable<unknown> = NonNullable<unknown>> {
+  private _getValue: () => T;
+  private _value: T | undefined;
+  private static _registrar: undefined | Lazy[];
+
+  constructor(getValue: () => T) {
     this._getValue = getValue;
     Lazy.registerLazy(this);
   }
@@ -11,7 +15,7 @@ class Lazy {
     return Lazy._registrar;
   }
 
-  static registerLazy(object) {
+  static registerLazy(object: Lazy) {
     Lazy.registrar.push(object);
   }
 
@@ -32,16 +36,16 @@ class Lazy {
     this._value = undefined;
   }
 
-  /**
-   * @return {Lazy}
-   */
-  invalidateOn(...events) {
+  invalidateOn(...events: GAME_EVENT[]): this {
     for (const event of events) {
-      EventHub.logic.on(event, () => this.invalidate());
+      EventHub.logic.on(event, () => {
+        this.invalidate();
+      });
     }
     return this;
   }
 }
+
 window.Lazy = Lazy;
 
 function highestInArray(array, isNum = false) {
@@ -177,3 +181,4 @@ GameCache.antimatterDimensionFinalMultipliers.invalidate = function () {
     x.invalidate();
   }
 };
+

@@ -18,7 +18,7 @@ let achievementNames = [];
 export const SteamRuntime = {
   initialize() {
     if (isInitialized) {
-      throw Error("Steam Runtime was initialized already.");
+      throw new Error("Steam Runtime was initialized already.");
     }
 
     isInitialized = true;
@@ -52,7 +52,7 @@ export const SteamRuntime = {
 
   get isActive() {
     if (!isInitialized) {
-      throw Error("Steam Runtime was called before init.");
+      throw new Error("Steam Runtime was called before init.");
     }
 
     return isActive;

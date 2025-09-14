@@ -39,9 +39,7 @@ declare namespace PlayFabModule {
   }
   export interface IPlayFabResultCommon extends IPlayFabError {}
 
-  export interface ApiCallback<TResult extends IPlayFabResultCommon> {
-    (result: SuccessContainer<TResult>, error: IPlayFabError): void
-  }
+  export type ApiCallback<TResult extends IPlayFabResultCommon> = (result: SuccessContainer<TResult>, error: IPlayFabError) => void;
 }
 
 declare let PlayFab: {

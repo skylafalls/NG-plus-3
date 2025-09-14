@@ -1,30 +1,44 @@
 // Deepmerge library modified for Antimatter Dimensions usage (mainly Decimal integration)
 // Source: https://github.com/TehShrike/deepmerge
 
-function emptyTarget(val) {
+import type { MergeDeep } from "type-fest"
+
+interface ArrayMergeOptions {
+  isMergeableObject(value: object): boolean
+  cloneUnlessOtherwiseSpecified(value: object, options?: Options): object
+}
+
+interface Options {
+  arrayMerge?(target: any[], source: any[], options?: ArrayMergeOptions): any[]
+  clone?: boolean
+  customMerge?: (key: string, options?: Options) => ((x: any, y: any) => any) | undefined
+  isMergeableObject?(value: object): boolean
+}
+
+function emptyTarget(val: unknown) {
   return Array.isArray(val) ? [] : {};
 }
 
-function cloneUnlessOtherwiseSpecified(value, options) {
+function cloneUnlessOtherwiseSpecified(value: object, options: Options): object {
   if (value instanceof Decimal) {
     return new Decimal(value);
   }
   if (value instanceof Set) {
     return new Set(value);
   }
-  return (options.clone !== false && options.isMergeableObject(value))
+  return (options.clone !== false && options.isMergeableObject?.(value))
     ? deepmerge(emptyTarget(value), value, options)
     : value;
 }
 
-function defaultArrayMerge(target, source, options) {
-  return target.concat(source).map(element =>
+function defaultArrayMerge(target: any[], source: any[], options: ArrayMergeOptions) {
+  return [...target, ...source].map(element =>
     cloneUnlessOtherwiseSpecified(element, options),
   );
 }
 
-function mergeObject(target, source, options) {
-  const destination = {};
+function mergeObject<T extends Record<PropertyKey, any>, V extends Record<PropertyKey, any>>(target: T, source: V, options: ArrayMergeOptions): T & V {
+  const destination: Record<PropertyKey, unknown> = {};
   if (options.isMergeableObject(target)) {
     Object.keys(target).forEach((key) => {
       destination[key] = cloneUnlessOtherwiseSpecified(target[key], options);
@@ -41,10 +55,11 @@ function mergeObject(target, source, options) {
       destination[key] = deepmerge(target[key], source[key], options);
     }
   });
-  return destination;
+  return destination as T & V;
 }
 
-export function deepmerge(target, source, options = {}) {
+export function deepmerge<T>(target: Partial<T>, source: Partial<T>, options: Options): T;
+export function deepmerge<T1, T2>(target: Partial<T1>, source: Partial<T2>, options: Options = {}): MergeDeep<T1, T2> {
   options.arrayMerge = options.arrayMerge || defaultArrayMerge;
   options.isMergeableObject = options.isMergeableObject || isMergeableObject;
 
@@ -71,7 +86,7 @@ export function deepmerge(target, source, options = {}) {
   return mergeObject(target, source, options);
 }
 
-export function deepmergeAll(array, options) {
+export function deepmergeAll(array: unknown[], options?: ArrayMergeOptions) {
   if (!Array.isArray(array)) {
     throw new TypeError("first argument should be an array");
   }
@@ -103,15 +118,15 @@ export function deepmergeAll(array, options) {
   return array.reduce((prev, next) => deepmerge(prev, next, options), {});
 }
 
-function isMergeableObject(value) {
+function isMergeableObject(value: unknown) {
   return isNonNullObject(value) && !isSpecial(value);
 }
 
-function isNonNullObject(value) {
+function isNonNullObject(value: unknown): value is object {
   return Boolean(value) && typeof value === "object";
 }
 
-function isSpecial(value) {
+function isSpecial(value: unknown): value is RegExp | Date {
   const stringValue = Object.prototype.toString.call(value);
   return stringValue === "[object RegExp]" || stringValue === "[object Date]";
 }

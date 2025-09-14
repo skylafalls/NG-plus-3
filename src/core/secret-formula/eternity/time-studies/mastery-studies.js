@@ -1,5 +1,6 @@
 import { DC } from "@/core/constants";
 
+/** @type {import("./study").MasteryStudyObject[]} */
 export const masteryStudies = [
   {
     id: "M11",
@@ -142,7 +143,7 @@ export const masteryStudies = [
   },
   {
     id: "M61",
-    cost: new Decimal("1e108"),
+    cost: new Decimal("1e107"),
     requirement: [() => TimeStudy.pairedChallenges],
     reqType: TS_REQUIREMENT_TYPE.AT_LEAST_ONE,
     description: () => "You gain 100% of your EP gained on Eternity per second.",
@@ -151,14 +152,14 @@ export const masteryStudies = [
   },
   {
     id: "M62",
-    cost: new Decimal("1e108"),
+    cost: new Decimal("1e107"),
     requirement: [() => TimeStudy.pairedChallenges],
     reqType: TS_REQUIREMENT_TYPE.AT_LEAST_ONE,
     description: () => "You passively gain Tachyon Particles while dilating.",
   },
   {
     id: "M71",
-    cost: new Decimal("1e109"),
+    cost: new Decimal("1e108"),
     requirement: [61],
     reqType: TS_REQUIREMENT_TYPE.AT_LEAST_ONE,
     description: () => `Remote Antimatter Galaxy scaling starts later per ${formatFloat(4.15, 2)} extra Replicated Galaxies.`,
@@ -167,14 +168,14 @@ export const masteryStudies = [
   },
   {
     id: "M72",
-    cost: new Decimal("1e109"),
+    cost: new Decimal("1e108"),
     requirement: [() => TimeStudy.pairedChallenges],
     reqType: TS_REQUIREMENT_TYPE.ALL,
     description: () => "You can buy all regular Time Studies.",
   },
   {
     id: "M73",
-    cost: new Decimal("1e109"),
+    cost: new Decimal("1e108"),
     requirement: [62],
     reqType: TS_REQUIREMENT_TYPE.AT_LEAST_ONE,
     description: () => "Antimatter Galaxies boost Meta Dimensions.",

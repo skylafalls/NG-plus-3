@@ -593,9 +593,9 @@ export function gameLoop(passedDiff, options = {}) {
     return;
   }
   const thisUpdate = Date.now();
-  const passDiff = passedDiff === undefined
+  const passDiff = (passedDiff === undefined
     ? Math.clamp(thisUpdate - player.lastUpdate, 1, 8.64e7)
-    : passedDiff;
+    : passedDiff) * dev.speedUp;
   // This is really, really bad but we dont want 0 getting passed into every function on the fucking earth
   let diff = new Decimal(passDiff);
   const trueDiff = passDiff === undefined

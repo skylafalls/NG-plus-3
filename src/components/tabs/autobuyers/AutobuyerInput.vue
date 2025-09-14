@@ -106,7 +106,7 @@ export const AutobuyerInputFunctions = {
         let decimal;
         if (/^e\d*[.]?\d+$/u.test(input.replaceAll(",", ""))) {
           // Logarithm Notation
-          decimal = Decimal.pow10(parseFloat(input.replaceAll(",", "").slice(1)));
+          decimal = Decimal.pow10(Number.parseFloat(input.replaceAll(",", "").slice(1)));
         } else {
           // Scientific notation; internals of break-eternity will gladly strip extraneous letters before parsing, but
           // since this is largely uncommunicated to the user, we instead explicitly check for formatting and reject
@@ -126,7 +126,7 @@ export const AutobuyerInputFunctions = {
     formatValue: value => value.toString(),
     copyValue: value => value,
     tryParse: (input) => {
-      const float = parseFloat(input);
+      const float = Number.parseFloat(input);
       return isNaN(float) ? undefined : float;
     },
   },
@@ -143,7 +143,7 @@ export const AutobuyerInputFunctions = {
       if (!/^\d+$/u.test(input.replaceAll(",", ""))) {
         return;
       }
-      const int = parseInt(input, 10);
+      const int = Number.parseInt(input, 10);
       return isNaN(int) || !Number.isInteger(int) ? undefined : int;
     },
   },

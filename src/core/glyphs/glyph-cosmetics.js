@@ -128,9 +128,9 @@ export const GlyphAppearanceHandler = {
           const parts = hex.split("#");
           const color = parts[1];
           const rgb = [
-            parseInt(color.slice(0, 2), 16) / 255,
-            parseInt(color.slice(2, 4), 16) / 255,
-            parseInt(color.slice(4), 16) / 255,
+            Number.parseInt(color.slice(0, 2), 16) / 255,
+            Number.parseInt(color.slice(2, 4), 16) / 255,
+            Number.parseInt(color.slice(4), 16) / 255,
           ];
           const min = Math.min(...rgb), max = Math.max(...rgb);
           if (max - min < 0.3) {

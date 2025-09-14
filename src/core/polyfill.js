@@ -167,7 +167,7 @@ if (typeof Object.assign !== "function") {
         if (nextSource !== null) { // Skip over if undefined or null
           for (const nextKey in nextSource) {
             // Avoid bugs when hasOwnProperty is shadowed
-            if (Object.prototype.hasOwnProperty.call(nextSource, nextKey)) {
+            if (Object.hasOwn(nextSource, nextKey)) {
               to[nextKey] = nextSource[nextKey];
             }
           }

@@ -1,4 +1,4 @@
-import { standardizeAutomatorValues, tokenMap as T } from "./lexer";
+import { tokenMap as T, standardizeAutomatorValues } from "./lexer";
 
 /**
  * Note: the $ shorthand for the parser object is required by Chevrotain. Don't mess with it.
@@ -98,7 +98,7 @@ function findLastPrestigeRecord(layer) {
       return `${format(player.records.recentRealities[0][1], 2)} RM`;
     }
     default: {
-      throw Error(`Unrecognized prestige ${layer} in Automator event log`);
+      throw new Error(`Unrecognized prestige ${layer} in Automator event log`);
     }
   }
 }
@@ -940,7 +940,7 @@ export const AutomatorCommands = [
           return false;
         }
 
-        const id = parseInt(split[1], 10);
+        const id = Number.parseInt(split[1], 10);
         if (id < 1 || id > 6) {
           V.addError(
             ctx.Id[0],
@@ -1186,7 +1186,7 @@ export const AutomatorCommands = [
           break;
         }
         default: {
-          throw Error("Unrecognized prestige layer in until loop");
+          throw new Error("Unrecognized prestige layer in until loop");
         }
       }
       return {

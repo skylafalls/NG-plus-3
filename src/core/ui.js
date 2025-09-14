@@ -100,7 +100,7 @@ function makeRecomputable(watcher, key, recomputed) {
 // Why is reactivity a bad thing?
 const ReactivityComplainer = {
   complain() {
-    this.checkReactivity(player, "player");
+    // this.checkReactivity(player, "player");
   },
   checkReactivity(obj, path) {
     if (obj === undefined || obj === null) {
@@ -191,6 +191,7 @@ Vue.use(VTooltip);
 (function () {
   const methodStrategy = Vue.config.optionMergeStrategies.methods;
 
+  // oxlint-disable-next-line consistent-function-scoping
   Vue.config.optionMergeStrategies.methods = (parentVal, childVal, vm, key) => {
     const result = methodStrategy(parentVal, childVal, vm, key);
     const hasUpdate = val => val && val.update;

@@ -423,7 +423,6 @@ class TimeDimensionState extends DimensionState {
           ? GlyphInfo.time.sacrificeInfo.effect()
           : new Decimal(1),
       )
-      .timesEffectOf(GluonUpgrade.blueRed(4))
       .pow(ImaginaryUpgrade(14).effectOrDefault(1));
   }
 

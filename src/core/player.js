@@ -1122,7 +1122,7 @@ export const Player = {
 
   get infinityLimit() {
     const challenge = NormalChallenge.current || InfinityChallenge.current;
-    return challenge === undefined ? DC.BIMAX : challenge.goal;
+    return challenge === undefined ? DC.BEMAX : challenge.goal;
   },
 
   get eternityGoal() {
@@ -1197,7 +1197,7 @@ export const Player = {
         break;
       }
       default: {
-        throw Error("Unrecognized prestige layer for requirement reset");
+        throw new Error("Unrecognized prestige layer for requirement reset");
       }
     }
   },

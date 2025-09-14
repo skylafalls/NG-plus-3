@@ -38,7 +38,7 @@ class QuarkMultUpgrade extends RebuyableMechanicState {
   }
 
   get isAvailableForPurchase() {
-    return true;
+    return PlayerProgress.quantumUnlocked();
   }
 
   purchase(amount = 1) {
@@ -85,9 +85,8 @@ export const Quarks = {
 
   get netTotal() {
     let total = Currency.quarks.value;
-    total = total.plus(Quarks.amount.red).plus(Quarks.amount.green).plus(
-      Quarks.amount.blue,
-    );
+    total = total.plus(this.red.amount).plus(this.green.amount)
+      .plus(this.blue.amount);
     return total;
   },
 
@@ -96,8 +95,8 @@ export const Quarks = {
       amount: player.quantum.colors.red,
       powers: player.quantum.quarkPowers.red,
       effect: () => softcap({
-        baseResource: player.quantum.quarkPowers.red.plus(1).log10().sqrt().div(30).plus(1),
-        softcapStart: 1.5,
+        baseResource: player.quantum.quarkPowers.red.plus(1).log10().sqrt().div(10).plus(1),
+        softcapStart: 2.3,
         softcapPower: 0.1,
         softcapType: SOFTCAP_MODES.MULTIPLICATIVE,
       }),
@@ -124,12 +123,12 @@ export const Quarks = {
       amount: player.quantum.colors.blue,
       powers: player.quantum.quarkPowers.blue,
       effect: () => scale({
-        baseResource: player.quantum.quarkPowers.blue.plus(1).logPow(0.75),
-        scaleStart: 1e15,
+        baseResource: player.quantum.quarkPowers.blue.plus(1).logPow(0.8),
+        scaleStart: 1e6,
         scalePower: 1.5,
         scaleMode: SCALING_TYPES.DILATION,
       }),
-      gain: () => player.quantum.colors.blue.pow(0.6),
+      gain: () => player.quantum.colors.blue.pow(0.75),
     };
   },
 
@@ -174,5 +173,13 @@ export const Quarks = {
         throw new TypeError("Unrecongized Quark color");
       }
     }
+  },
+
+  distribute(percent = 0.1) {
+    const quarks = player.quantum.quarks;
+    this.assortTo(quarks.mul(percent), QUARK_TYPES.RED);
+    this.assortTo(quarks.mul(percent), QUARK_TYPES.GREEN);
+    this.assortTo(quarks.mul(percent), QUARK_TYPES.BLUE);
+    player.quantum.quarks = player.quantum.quarks.sub(quarks.mul(percent).mul(3));
   },
 };

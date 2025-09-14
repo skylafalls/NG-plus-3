@@ -1,4 +1,4 @@
-import { lexer, tokenMap as T } from "./lexer";
+import { tokenMap as T, lexer } from "./lexer";
 import { AutomatorCommands } from "./automator-commands";
 import { parser } from "./parser";
 
@@ -125,7 +125,7 @@ class Validator extends BaseVisitor {
     }
     for (const k in ctx) {
       if (
-        !Object.prototype.hasOwnProperty.call(ctx, k) || !Array.isArray(ctx[k])
+        ! Object.hasOwn(ctx, k) || !Array.isArray(ctx[k])
       ) {
         continue;
       }
@@ -221,7 +221,7 @@ class Validator extends BaseVisitor {
   }
 
   checkTimeStudyNumber(token) {
-    const tsNumber = parseFloat(token.image);
+    const tsNumber = Number.parseFloat(token.image);
     if (
       !TimeStudy(tsNumber) || (TimeStudy(tsNumber).isTriad && !Ra.canBuyTriad)
     ) {
@@ -265,7 +265,7 @@ class Validator extends BaseVisitor {
         break;
       }
       case AUTOMATOR_VAR_TYPES.DURATION: {
-        varInfo.value = parseInt(1000 * value, 10);
+        varInfo.value = Number.parseInt(1000 * value, 10);
         break;
       }
       default: {
@@ -294,7 +294,7 @@ class Validator extends BaseVisitor {
         return TimeStudyTree.isValidImportString(value);
       }
       case AUTOMATOR_VAR_TYPES.DURATION: {
-        return !Number.isNaN(parseInt(1000 * value, 10));
+        return !Number.isNaN(Number.parseInt(1000 * value, 10));
       }
       default: {
         throw new Error(
@@ -316,7 +316,7 @@ class Validator extends BaseVisitor {
       );
       return;
     }
-    const value = parseFloat(ctx.NumberLiteral[0].image)
+    const value = Number.parseFloat(ctx.NumberLiteral[0].image)
       * ctx.TimeUnit[0].tokenType.$scale;
     if (isNaN(value)) {
       this.addError(
@@ -439,7 +439,7 @@ class Validator extends BaseVisitor {
           "Specify which Eternity Challenge is being referred to",
         );
       }
-      const ecNumber = parseFloat(ctx.ECNumber[0].image);
+      const ecNumber = Number.parseFloat(ctx.ECNumber[0].image);
       if (!Number.isInteger(ecNumber) || ecNumber < 0 || ecNumber > 12) {
         this.addError(
           ctx.ECNumber,
@@ -529,10 +529,10 @@ class Validator extends BaseVisitor {
   eternityChallenge(ctx) {
     let errToken, ecNumber;
     if (ctx.ECLiteral) {
-      ecNumber = parseFloat(ctx.ECLiteral[0].image.slice(2));
+      ecNumber = Number.parseFloat(ctx.ECLiteral[0].image.slice(2));
       errToken = ctx.ECLiteral[0];
     } else if (ctx.NumberLiteral) {
-      ecNumber = parseFloat(ctx.NumberLiteral[0].image);
+      ecNumber = Number.parseFloat(ctx.NumberLiteral[0].image);
       errToken = ctx.NumberLiteral[0];
     } else {
       this.addError(

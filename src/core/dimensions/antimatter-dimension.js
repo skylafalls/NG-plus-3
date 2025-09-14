@@ -144,6 +144,7 @@ function applyNDMultipliers(mult, tier) {
 
   multiplier = multiplier.timesEffectsOf(
     tier === 8 ? Achievement(23) : null,
+    tier === 8 ? Achievement(167) : null,
     tier < 8 ? Achievement(34) : null,
     tier <= 4 ? Achievement(64) : null,
     tier < 8 ? TimeStudy(71) : null,
@@ -787,6 +788,14 @@ class AntimatterDimensionState extends DimensionState {
         );
       }
     }
+
+    production = softcapGradual(production, {
+      initialPower: 1,
+      scalingStrength: 0.25,
+      start: "e9e15",
+      type: "polynomial",
+    });
+
     production = production.min(this.cappedProductionInNormalChallenges);
     return production;
   }

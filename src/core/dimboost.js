@@ -115,6 +115,10 @@ export const DimBoost = {
     return QuantumChallenge(5).isRunning ? DC.D0 : new Decimal(560000);
   },
 
+  get metaiunalScalingStart() {
+    return new Decimal(1e8);
+  },
+
   bulkRequirement(bulk) {
     let targetResets = this.purchasedBoosts.plus(bulk);
     let amount = DC.D20;
@@ -130,7 +134,16 @@ export const DimBoost = {
       targetResets = targetResets.pow(3).floor();
     }
 
+    if (targetResets.gte(this.metaiunalScalingStart)) {
+      // ^3 worse scaling (cubic)
+      const supersonicScaling = 3;
+      targetResets = targetResets.sub(this.metaiunalScalingStart)
+        .pow(supersonicScaling)
+        .add(this.metaiunalScalingStart);
+    }
+
     if (targetResets.gte(this.supersonicScalingStart)) {
+      // 12x worse scaling (200x if in QC5)
       const supersonicScaling = QuantumChallenge(5).isRunning ? 200 : 12;
       targetResets = targetResets.sub(this.supersonicScalingStart)
         .mul(supersonicScaling)
@@ -398,6 +411,13 @@ function maxBuyDimBoosts() {
     calcBoosts = calcBoosts.sub(DimBoost.supersonicScalingStart).div(
       supersonicScaling,
     ).add(DimBoost.supersonicScalingStart);
+  }
+
+  if (calcBoosts.gte(DimBoost.metaiunalScalingStart)) {
+    const supersonicScaling = 2;
+    calcBoosts = calcBoosts.sub(DimBoost.metaiunalScalingStart).pow(
+      supersonicScaling,
+    ).add(DimBoost.metaiunalScalingStart);
   }
 
   calcBoosts = calcBoosts.add(NormalChallenge(10).isRunning ? 2 : 4);

@@ -23,8 +23,8 @@ export const brGluonUpgrades = [
   {
     id: 4,
     cost: () => new Decimal(100),
-    description: () => "Electrons boosts the Time Dimension per-purchase multiplier at a reduced rate.",
-    effect: () => player.quantum.pair.electrons.plus(1).pow(0.1),
+    description: () => "Electrons boosts Meta Dimensions.",
+    effect: () => player.quantum.pair.electrons.plus(1).pow(3),
     formatEffect: value => formatX(value, 2, 2),
   },
   {

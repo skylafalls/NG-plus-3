@@ -31,7 +31,7 @@ class LongPress {
   }
 
   static addTo(obj, timeout, handlers) {
-    if (!Object.prototype.hasOwnProperty.call(handlers, "longPress")) {
+    if (! Object.hasOwn(handlers, "longPress")) {
       throw "Need to specify a longPress handler";
     }
     const begin = e =>

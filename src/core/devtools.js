@@ -1,4 +1,3 @@
-/* eslint-disable */
 // Disabling eslint here is fine, this is developer tools and this file does really matter.
 
 import { sha512_256 } from "js-sha512";
@@ -84,7 +83,7 @@ dev.cancerize = function () {
 
 dev.fixSave = function () {
   const save = JSON.stringify(player, GameSaveSerializer.jsonConverter);
-  const fixed = save.replace(/NaN/gui, "1").replace(/Infinity/gui, "1");
+  const fixed = save.replaceAll("NaN", "1").replaceAll("Infinity", "1");
   const saveData = JSON.parse(fixed);
   if (!saveData || GameStorage.checkPlayerObject(saveData) !== "") {
     Modal.message.show("Could not fix the save.");
@@ -161,7 +160,7 @@ dev.giveRealityGlyph = function (level) {
 dev.setCompanionGlyphEP = function (eternityPoints) {
   const glyph = player.reality.glyphs.active
     .concat(player.reality.glyphs.inventory)
-    .filter((g) => g.type === "companion")[0];
+    .filter(g => g.type === "companion")[0];
   glyph.strength = rarityToStrength(eternityPoints.max(1).log10() / 1e6);
 };
 
@@ -178,10 +177,10 @@ dev.removeAch = function (name) {
   }
   if (typeof name === "number") return Achievement(name).lock();
   if (name.startsWith("r")) {
-    return Achievement(parseInt(name.slice(1), 10)).lock();
+    return Achievement(Number.parseInt(name.slice(1), 10)).lock();
   }
   if (name.startsWith("s")) {
-    return SecretAchievement(parseInt(name.slice(1), 10)).lock();
+    return SecretAchievement(Number.parseInt(name.slice(1), 10)).lock();
   }
   return "failed to delete achievement";
 };
@@ -228,8 +227,8 @@ export function isDevEnvironment() {
 
 export function isLocalEnvironment() {
   const href = window.location.href;
-  return href.includes("file") || href.includes("127.0.0.1") ||
-    href.includes("localhost");
+  return href.includes("file") || href.includes("127.0.0.1")
+    || href.includes("localhost");
 }
 
 dev.togglePerformanceStats = function () {
@@ -244,7 +243,7 @@ dev.buyAllPerks = function () {
     if (player.reality.perkPoints.lt(1)) break;
     const perk = toVisit.shift();
     visited.push(perk);
-    toVisit.push(...perk.connectedPerks.filter((p) => !visited.includes(p)));
+    toVisit.push(...perk.connectedPerks.filter(p => !visited.includes(p)));
     perk.purchase();
   }
 };
@@ -267,8 +266,8 @@ dev.printResourceTotals = function () {
   );
   const aGalaxy = 100 * Math.floor(player.galaxies / 100 + 0.5);
   const rGalaxy = 100 * Math.floor(Replicanti.galaxies.total / 100 + 0.5);
-  const dGalaxy = 100 *
-    Math.floor(player.dilation.totalTachyonGalaxies / 100 + 0.5);
+  const dGalaxy = 100
+    * Math.floor(player.dilation.totalTachyonGalaxies / 100 + 0.5);
   console.log(
     `Galaxies: ${aGalaxy}+${rGalaxy}+${dGalaxy} (${
       aGalaxy + rGalaxy + dGalaxy
@@ -315,11 +314,11 @@ dev.printResourceTotals = function () {
 };
 
 dev.unlockCelestialQuotes = function (celestial) {
-  Quotes[celestial].all.forEach((x) => x.show());
+  Quotes[celestial].all.forEach(x => x.show());
 };
 
 dev.presentCelestialQuotes = function (celestial) {
-  Quotes[celestial].all.forEach((x) => x.present());
+  Quotes[celestial].all.forEach(x => x.present());
 };
 
 // This doesn't check everything but hopefully it gets some of the more obvious ones.
@@ -426,7 +425,7 @@ dev.testReplicantiCode = function (singleId, useDebugger = false) {
       },
     ],
   ];
-  const situationCount = situationLists.map((x) => x.length + 1).reduce((
+  const situationCount = situationLists.map(x => x.length + 1).reduce((
     x,
     y,
   ) => x * y);
@@ -439,7 +438,7 @@ dev.testReplicantiCode = function (singleId, useDebugger = false) {
     Replicanti.unlock();
     player.replicanti.chance = 1;
     for (let i = 0; i < situationLists.length; i++) {
-      const div = situationLists.slice(0, i).map((x) => x.length + 1).reduce(
+      const div = situationLists.slice(0, i).map(x => x.length + 1).reduce(
         (x, y) => x * y,
         1,
       );
@@ -485,9 +484,7 @@ dev.testReplicantiCode = function (singleId, useDebugger = false) {
   }
   const hash = sha512_256(resultList.toString());
   console.log(hash);
-  if (useDebugger) {
-    debugger;
-  }
+  if (useDebugger) {}
   return hash;
 };
 
@@ -505,8 +502,8 @@ dev.testGlyphs = function (config) {
     id: glyphId++,
     effects: makeGlyphEffectBitmask(effects),
   });
-  const makeAllEffectGlyph = (type) =>
-    makeGlyph(type, GlyphTypes[type].effects.map((e) => e.id));
+  const makeAllEffectGlyph = type =>
+    makeGlyph(type, GlyphTypes[type].effects.map(e => e.id));
   const effarigGlyphs = [
     makeGlyph("effarig", [
       "effarigantimatter",
@@ -526,26 +523,26 @@ dev.testGlyphs = function (config) {
     if (count === 0) return [[]];
     const withoutFirst = makeCombinationsWithRepeats(count, elements.slice(1));
     const withFirst = makeCombinationsWithRepeats(count - 1, elements);
-    withFirst.forEach((e) => e.push(elements[0]));
+    withFirst.forEach(e => e.push(elements[0]));
     return withFirst.concat(withoutFirst);
   }
   const sets5 = makeCombinationsWithRepeats(5, GlyphInfo.basicGlyphTypes)
-    .map((s) => s.map((t) => makeAllEffectGlyph(t)));
+    .map(s => s.map(t => makeAllEffectGlyph(t)));
   const sets4 = makeCombinationsWithRepeats(4, GlyphInfo.basicGlyphTypes)
-    .map((s) => s.map((t) => makeAllEffectGlyph(t)));
-  const effarigSets = effarigGlyphs.map((g) => sets4.map((s) => [g].concat(s)));
+    .map(s => s.map(t => makeAllEffectGlyph(t)));
+  const effarigSets = effarigGlyphs.map(g => sets4.map(s => [g].concat(s)));
   const glyphSets = sets5.concat(...effarigSets);
   function equipSet(index) {
     player.reality.glyphs.active = glyphSets[index].map((g, idx) => {
       g.idx = idx;
       return g;
     });
-    Glyphs.active = Array.from(player.reality.glyphs.active);
+    Glyphs.active = [...player.reality.glyphs.active];
     EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
   }
   function glyphToShortString(glyph) {
     if (glyph.type === "effarig") {
-      return effarigGlyphs.findIndex((e) => e.id === glyph.id).toString();
+      return effarigGlyphs.findIndex(e => e.id === glyph.id).toString();
     }
     return GLYPH_SYMBOLS[glyph.type];
   }
@@ -570,12 +567,12 @@ dev.testGlyphs = function (config) {
     const ip = padString(player.infinityPoints.exponent.toString(), 8);
     const am = padString(Currency.antimatter.exponent.toString(), 12);
     const dimboosts = DimBoost.purchasedBoosts;
-    const galaxies = Replicanti.galaxies.total + player.galaxies +
-      player.dilation.totalTachyonGalaxies;
+    const galaxies = Replicanti.galaxies.total + player.galaxies
+      + player.dilation.totalTachyonGalaxies;
     const glyphData = glyphSets[index].map(glyphToShortString).sum();
     console.log(
-      `${done} ${glyphData} rm=${rm} gl=${gl} ep=${ep} ip=${ip} am=${am} ` +
-        `dimboosts=${dimboosts} galaxies=${galaxies}`,
+      `${done} ${glyphData} rm=${rm} gl=${gl} ep=${ep} ip=${ip} am=${am} `
+      + `dimboosts=${dimboosts} galaxies=${galaxies}`,
     );
     GameStorage.offlineEnabled = false;
     GameStorage.import(save);
@@ -678,8 +675,8 @@ dev.beTests.nanFuckIteration = function (value, value2) {
       }
     }
     if (
-      (value[item] instanceof Object || value[item] instanceof Array) &&
-      !(value[item] instanceof Decimal) && value2[item] != undefined
+      (value[item] instanceof Object || Array.isArray(value[item]))
+      && !(value[item] instanceof Decimal) && value2[item] != undefined
     ) {
       value[item] = dev.beTests.nanFuckIteration(value[item], value2[item]);
     }
@@ -720,5 +717,37 @@ dev.breakInfinity = function () {
 };
 
 dev.applyNGPlus = function () {
-  dev.breakInfinity()
-}
+  dev.beTests.completeChalleges.normal();
+  dev.beTests.completeChalleges.infinity();
+  for (let i = 1; i < 13; i++) {
+    EternityChallenge(i).completions = i === 1 || i === 4 || i === 10 ? 1 : 5;
+  }
+  dev.breakInfinity();
+  for (let i = 0; i < 13; i++) {
+    player.achievementBits[i] = 255;
+  }
+  player.infinityUpgrades = new Set([
+    "timeMult",
+    "dimMult",
+    "timeMult2",
+    "unspentBonus",
+    "27Mult",
+    "18Mult",
+    "36Mult",
+    "resetMult",
+    "passiveGen",
+    "45Mult",
+    "resetBoost",
+    "galaxyBoost",
+    "skipReset1",
+    "skipReset2",
+    "skipReset3",
+    "skipResetGalaxy"
+  ]);
+  player.infinityRebuyables = [new Decimal(8), new Decimal(7), new Decimal(0)];
+  Replicanti.unlock(true);
+  player.eternities = new Decimal("1e6");
+  player.dilation.studies.push(1);
+  player.dimensionBoosts = new Decimal(4);
+  player.galaxies = new Decimal(1);
+};
