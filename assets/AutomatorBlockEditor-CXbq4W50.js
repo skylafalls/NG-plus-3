@@ -1,0 +1,1 @@
+import"./vue.runtime.esm-DWHiGzmS.js";import"./constants-hHFhCqyo.js";import"./vuedraggable.umd-BCzFf3Wt.js";import{n as e,t}from"./AutomatorBlockEditor-Bkgm0KMW.js";import"./_plugin-vue2_normalizer-Djvn235C.js";export{e as BlockAutomator,t as default};
