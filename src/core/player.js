@@ -236,10 +236,9 @@ window.player = {
     singularity: { isActive: false },
     ipMultBuyer: { isActive: false },
     epMultBuyer: { isActive: false },
-    pairProduction: {
-      isActive: false,
-    },
+    pairProduction: { isActive: false },
     mdBoost: { isActive: false },
+    normalDuplicant: { isActive: false },
   },
   infinityPoints: DC.D0,
   infinities: DC.D0,
@@ -544,7 +543,7 @@ window.player = {
             score: 0,
             effectCount: 0,
             specifiedMask: [],
-            effectScores: [...Array(GlyphInfo[t].effectIDs.length).keys()]
+            effectScores: [...new Array(GlyphInfo[t].effectIDs.length).keys()]
               .mapToObject(e => GlyphInfo[t].effectIDs[e], () => 0),
           })),
       },
@@ -1046,6 +1045,17 @@ window.player = {
       dischargedGalaxies: DC.D0,
       positronUpgrades: Array.repeat(DC.D0, 4),
       electronUpgrades: Array.repeat(DC.D0, 4),
+    },
+    duplicants: {
+      normal: DC.D0,
+      normalRebuyable: DC.D0,
+      pilons: DC.D0,
+      workers: DC.D0,
+      babies: DC.D0,
+      food: DC.D0,
+      fedPercent: 0,
+      limitUpgrade: DC.D0,
+      eggons: DC.D0,
     },
     bigRip: {
       active: false,
