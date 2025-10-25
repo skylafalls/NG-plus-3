@@ -24,16 +24,16 @@ mergeIntoGlobal(Utils);
 // any more globals to the component files
 
 import * as AutomatorBlockEditor from "@/components/tabs/automator/AutomatorBlockEditor.vue";
-mergeIntoGlobal(await import("@/components/tabs/automator/AutomatorBlockEditor.vue"));
+mergeIntoGlobal(AutomatorBlockEditor);
 
 import * as AutomatorBlocks from "@/components/tabs/automator/AutomatorBlocks.vue";
-mergeIntoGlobal(await import("@/components/tabs/automator/AutomatorBlocks.vue"));
+mergeIntoGlobal(AutomatorBlocks);
 
 import * as AutomatorTextEditor from "@/components/tabs/automator/AutomatorTextEditor.vue";
-mergeIntoGlobal(await import("@/components/tabs/automator/AutomatorTextEditor.vue"));
+mergeIntoGlobal(AutomatorTextEditor);
 
 import * as PerksTab from "@/components/tabs/perks/PerksTab.vue";
-mergeIntoGlobal(await import("@/components/tabs/perks/PerksTab.vue"));
+mergeIntoGlobal(PerksTab);
 
 // End of legacy stuff
 

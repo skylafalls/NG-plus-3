@@ -43,13 +43,13 @@ import TimeDimensionsTab from "./time-dimensions/TimeDimensionsTab.vue";
 import TimeStudiesTab from "./time-studies/TimeStudiesTab.vue";
 import VTab from "./celestial-v/VTab.vue";
 
-const { default: MetaDimensionsTab } = await import("./meta-dimensions/MetaDimensionsTab.vue");
-const { default: MasteryStudiesTab } = await import("./time-studies/MasteryStudiesTab.vue");
-const { default: QuarksTab } = await import("./quantum/quarks/QuarksTab.vue");
-const { default: PairProductionTab } = await import("./quantum/pair-production/PairProductionTab.vue");
-const { default: QuantumChallengesTab } = await import("./quantum/quantum-challenges/QuantumChallengesTab.vue");
-const { default: GluonUpgradesTab } = await import("./quantum/gluon-upgrades/GluonUpgradesTab.vue");
-const { default: QuantumMilestonesTab } = await import("./quantum/speedrun-milestones/QuantumMilestonesTab.vue");
+import MetaDimensionsTab from "./meta-dimensions/MetaDimensionsTab.vue";
+import MasteryStudiesTab from "./time-studies/MasteryStudiesTab.vue";
+import QuarksTab from "./quantum/quarks/QuarksTab.vue";
+import PairProductionTab from "./quantum/pair-production/PairProductionTab.vue";
+import QuantumChallengesTab from "./quantum/quantum-challenges/QuantumChallengesTab.vue";
+import GluonUpgradesTab from "./quantum/gluon-upgrades/GluonUpgradesTab.vue";
+import QuantumMilestonesTab from "./quantum/speedrun-milestones/QuantumMilestonesTab.vue";
 
 const TabComponents = {
   AntimatterDimensionsTab,
