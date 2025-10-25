@@ -1,3 +1,4 @@
+// oxlint-disable max-classes-per-file
 import { DC } from "./constants";
 
 // Slowdown parameters for replicanti growth, interval will increase by scaleFactor for every scaleLog10
@@ -905,7 +906,7 @@ export const Replicanti = {
   },
 
   get chance() {
-    let chance = player.replicanti.chance.powEffectOf(MasteryStudy(43));
+    let chance = player.replicanti.chance.powEffectsOf(MasteryStudy(43));
     return chance;
   },
 };
