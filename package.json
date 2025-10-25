@@ -41,7 +41,7 @@
     "@types/bun": "^1.2.22",
     "@vitejs/plugin-vue2": "^2.3.3",
     "browserslist-useragent-regexp": "^3.0.2",
-    "esbuild": "^0.25.9",
+    "esbuild": "^0.25.11",
     "eslint": "^9.35.0",
     "eslint-plugin-oxlint": "^1.16.0",
     "eslint-plugin-vue": "^10.4.0",
