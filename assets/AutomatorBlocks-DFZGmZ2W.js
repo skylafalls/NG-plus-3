@@ -1,1 +1,0 @@
-import"./vuedraggable.umd-D85QxfcV.js";import"./_plugin-vue2_normalizer-Djvn235C.js";import{n as e,r as t,t as n}from"./AutomatorBlocks-24jozDES.js";export{e as automatorBlocks,t as automatorBlocksMap,n as default};
